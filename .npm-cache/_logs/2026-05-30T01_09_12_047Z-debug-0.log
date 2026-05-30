@@ -1,0 +1,13 @@
+0 verbose cli /usr/local/bin/node /usr/local/bin/npm
+1 info using npm@11.13.0
+2 info using node@v24.16.0
+3 silly config load:file:/usr/local/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/ayoubelamrani/Desktop/AssuTempo/.npmrc
+5 silly config load:file:/Users/ayoubelamrani/.npmrc
+6 silly config load:file:/usr/local/etc/npmrc
+7 verbose title npm run preview --host 0.0.0.0 --port 4174
+8 verbose argv "run" "preview" "--" "--host" "0.0.0.0" "--port" "4174"
+9 verbose logfile logs-max:10 dir:/Users/ayoubelamrani/Desktop/AssuTempo/.npm-cache/_logs/2026-05-30T01_09_12_047Z-
+10 verbose logfile /Users/ayoubelamrani/Desktop/AssuTempo/.npm-cache/_logs/2026-05-30T01_09_12_047Z-debug-0.log
+11 silly logfile start cleaning logs, removing 1 files
+12 silly logfile done cleaning log files
