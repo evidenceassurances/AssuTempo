@@ -1,204 +1,228 @@
 import { Link } from 'react-router-dom';
 
-const SEPARATOR_STYLE = {
-  height: 1,
-  background:
-    'linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.3) 20%, rgba(201,168,76,0.7) 50%, rgba(201,168,76,0.3) 80%, transparent 100%)',
-  boxShadow: '0 0 30px rgba(201,168,76,0.2), 0 0 60px rgba(201,168,76,0.1)',
+const navLinks = [
+  { label: 'Tarification', href: '/tarification' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
+];
+
+const colLabel = {
+  fontSize: 11,
+  fontWeight: 600,
+  color: 'var(--gold)',
+  textTransform: 'uppercase',
+  letterSpacing: '0.12em',
+  marginBottom: 16,
+  display: 'block',
 };
 
-const FOOTER_STYLE = {
-  background: 'linear-gradient(180deg, #080808 0%, #050505 100%)',
-  borderTop: 'none',
-  padding: '60px 0 30px',
-  color: 'var(--text-muted)',
-  position: 'relative',
-  overflow: 'hidden',
-};
+/* Lien footer : hover → --gold-light + trait qui se dessine */
+function FooterLink({ to, href, children, external }) {
+  const baseStyle = {
+    textDecoration: 'none',
+    fontSize: 14,
+    color: 'var(--text-muted)',
+    transition: 'color 0.2s',
+    position: 'relative',
+    paddingBottom: 3,
+    display: 'inline-block',
+  };
+
+  const handleEnter = (e) => {
+    e.currentTarget.style.color = 'var(--gold-light)';
+    const line = e.currentTarget.querySelector('.footer-link-line');
+    if (line) line.style.transform = 'scaleX(1)';
+  };
+  const handleLeave = (e) => {
+    e.currentTarget.style.color = 'var(--text-muted)';
+    const line = e.currentTarget.querySelector('.footer-link-line');
+    if (line) line.style.transform = 'scaleX(0)';
+  };
+
+  const inner = (
+    <>
+      {children}
+      <span
+        className="footer-link-line"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: 1,
+          background: 'var(--gold-light)',
+          transform: 'scaleX(0)',
+          transformOrigin: 'left',
+          transition: 'transform 0.25s var(--ease-out)',
+          display: 'block',
+        }}
+      />
+    </>
+  );
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={baseStyle}
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={to} style={baseStyle} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      {inner}
+    </Link>
+  );
+}
 
 function Footer() {
   return (
-    <div>
-      {/* Séparateur lumineux */}
-      <div style={SEPARATOR_STYLE} />
+    <footer
+      style={{
+        background: 'var(--footer-bg)',
+        padding: '56px 0 0',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Bordure haute — ligne dorée dégradée */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '10%',
+          right: '10%',
+          height: 1,
+          background: 'linear-gradient(to right, transparent, var(--gold-border), transparent)',
+        }}
+      />
 
-      <footer style={FOOTER_STYLE}>
-        {/* Orbe centré fond */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 600,
-            height: 200,
-            background:
-              'radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%)',
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        />
+      {/* Halo doré centré en bas — très discret */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 600,
+          height: 200,
+          background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: '0 auto',
-            padding: '0 32px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 48,
-            position: 'relative',
-            zIndex: 1,
-          }}
-          className="footer-grid"
-        >
-          {/* Colonne gauche */}
-          <div>
-            <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
-              <span style={{ color: '#fff' }}>Assu</span>
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: '0 auto',
+          padding: '0 32px',
+          display: 'grid',
+          gridTemplateColumns: '2fr 1fr 1fr',
+          gap: 48,
+          position: 'relative',
+        }}
+        className="footer-grid"
+      >
+        {/* Col 1 — Identité */}
+        <div>
+          <Link to="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: 16 }}>
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: 20,
+                letterSpacing: '-0.02em',
+                display: 'inline-flex',
+                alignItems: 'center',
+              }}
+            >
+              <span style={{ color: 'var(--text)' }}>Assu</span>
               <span style={{ color: 'var(--gold)' }}>Tempo</span>
-            </p>
-            <p
-              style={{
-                fontSize: 14,
-                lineHeight: 1.7,
-                marginBottom: 20,
-                color: 'var(--text-muted)',
-              }}
-            >
-              Démarche simple, attestation immédiate.
-            </p>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              {'©'} {new Date().getFullYear()} Evidence Assurances
-            </p>
-          </div>
-
-          {/* Colonne navigation */}
-          <div>
-            <p
-              style={{
-                fontSize: 11,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--gold)',
-                marginBottom: 20,
-              }}
-            >
-              Navigation
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[
-                { label: 'Tarification', to: '/tarification' },
-                { label: 'FAQ', to: '/faq' },
-                { label: 'Qui sommes-nous', to: '/qui-sommes-nous' },
-              ].map(({ label, to }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  style={{
-                    fontSize: 14,
-                    color: 'var(--text-muted)',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Colonne contact */}
-          <div>
-            <p
-              style={{
-                fontSize: 11,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--gold)',
-                marginBottom: 20,
-              }}
-            >
-              Contact
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
-              <a
-                href="tel:0974197820"
-                style={{
-                  color: 'var(--gold)',
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  fontSize: 16,
-                }}
-              >
-                📞 09 74 19 78 20
-              </a>
-              <p>Lun–Ven : 9h00 – 21h00</p>
-              <p>Samedi : 9h00 – 20h00</p>
-              <a
-                href="https://assutempo.fr/conditions-generales"
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  fontSize: 13,
-                  color: 'var(--text-muted)',
-                  textDecoration: 'none',
-                  marginTop: 8,
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
-              >
-                Conditions Générales
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Ligne séparatrice + signal de confiance */}
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: '40px auto 0',
-            padding: '0 32px',
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          <div
-            style={{
-              height: 1,
-              background:
-                'linear-gradient(90deg, transparent, rgba(201,168,76,0.25) 30%, rgba(201,168,76,0.25) 70%, transparent)',
-              marginBottom: 24,
-            }}
-          />
-          <p
-            style={{
-              fontSize: 12,
-              color: 'var(--text-muted)',
-              textAlign: 'center',
-              lineHeight: 1.8,
-            }}
-          >
-            🔒 Paiement sécurisé SSL &nbsp;•&nbsp; Données protégées RGPD &nbsp;•&nbsp;
-            Evidence Assurances — Cabinet de courtage enregistré ORIAS
+            </span>
+          </Link>
+          <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65, margin: '0 0 8px', maxWidth: 280 }}>
+            Démarche simple, attestation immédiate.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, maxWidth: 280, lineHeight: 1.6 }}>
+            Evidence Assurances — cabinet de courtage engagé RSE, 6 ans d&apos;expérience.
           </p>
         </div>
 
-        <style>{`
-          .footer-grid { }
-          @media (max-width: 768px) {
-            .footer-grid {
-              grid-template-columns: 1fr !important;
-              gap: 32px !important;
-            }
+        {/* Col 2 — Navigation */}
+        <div>
+          <span style={colLabel}>Navigation</span>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {navLinks.map((link) => (
+              <FooterLink key={link.href} to={link.href}>{link.label}</FooterLink>
+            ))}
+          </nav>
+        </div>
+
+        {/* Col 3 — Contact */}
+        <div>
+          <span style={colLabel}>Contact</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <a
+              href="tel:0974197820"
+              style={{
+                fontSize: 15,
+                fontWeight: 600,
+                color: 'var(--text)',
+                textDecoration: 'none',
+                transition: 'color 0.2s',
+                display: 'inline-block',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
+            >
+              📞 09 74 19 78 20
+            </a>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
+              Lun–Ven 9h–21h<br />Sam 9h–20h
+            </p>
+            <div style={{ marginTop: 8 }}>
+              <FooterLink href="https://assutempo.fr/conditions-generales" external style={{ fontSize: 13 }}>
+                Conditions Générales
+              </FooterLink>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Copyright bar */}
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: '48px auto 0',
+          padding: '20px 32px',
+          borderTop: '1px solid rgba(255,255,255,0.04)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
+        <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, textAlign: 'center' }}>
+          &copy; 2026 Evidence Assurances — Tous droits réservés
+        </p>
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
           }
-        `}</style>
-      </footer>
-    </div>
+        }
+      `}</style>
+    </footer>
   );
 }
 
