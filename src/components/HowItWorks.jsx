@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FileText, CreditCard, Download } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { fadeUp } from '../animations';
 
 const steps = [
@@ -122,6 +123,7 @@ const Arrow = () => (
 );
 
 function HowItWorks() {
+  const navigate = useNavigate();
   return (
     <section
       style={{
@@ -223,7 +225,7 @@ function HowItWorks() {
         >
           <button
             className="btn-gold"
-            onClick={() => window.open('https://assutempo.fr/tarification', '_blank')}
+            onClick={() => navigate('/tarification')}
             style={{ fontSize: 15, padding: '16px 40px' }}
           >
             Commencer maintenant →

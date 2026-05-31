@@ -7,7 +7,7 @@ export const siteConfig = {
   hero: {
     badge: 'ASSURANCE TEMPORAIRE EN LIGNE',
     title: 'Votre assurance temporaire en 2 clics',
-    subtitle: "De 1 à 60 jours • Sans relevé d'information • Attestation immédiate",
+    subtitle: "De 1 à 90 jours • Sans relevé d'information • Attestation immédiate",
     primaryCta: { label: 'Voir nos tarifs', href: '/tarification' },
     secondaryCta: { label: 'En savoir plus', href: '/qui-sommes-nous' },
     trust: [
@@ -17,7 +17,7 @@ export const siteConfig = {
     ],
   },
   stats: [
-    { label: "ANS D'EXPÉRIENCE", value: 10, suffix: '+' },
+    { label: "ANS D'EXPÉRIENCE", value: 6, suffix: '' },
     { label: 'MIN DE SOUSCRIPTION', value: 5, prefix: '<' },
     { label: 'PAYS COUVERTS', value: 34 },
     { label: 'JOURS', value: 60, prefix: '1→' },
@@ -70,14 +70,14 @@ export const siteConfig = {
     {
       name: 'Pro',
       price: '79€',
-      description: 'Formule 60 jours avec assistance étendue et suivi personnalisé.',
+      description: 'Formule 90 jours avec assistance étendue et suivi personnalisé.',
       features: ['Accompagnement 24/7', 'Sans surprise', 'Renouvelable'],
     },
   ],
   faqItems: [
     {
       question: 'Qu’est-ce qu’une assurance temporaire ?',
-      answer: 'Une assurance auto temporaire est une couverture de courte durée, de 1 à 60 jours, avec validité immédiate et sans relevé d’information.',
+      answer: ‘Une assurance auto temporaire est une couverture de courte durée, de 1 à 90 jours, avec validité immédiate et sans relevé d’information.’,
     },
     {
       question: 'Pourquoi souscrire une assurance temporaire ?',

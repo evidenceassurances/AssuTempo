@@ -1,94 +1,159 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useCountUp } from '../hooks/useCountUp';
-import { fadeUp } from '../animations';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const stats = [
-  { prefix: '', target: 100, suffix: '%', label: 'EN LIGNE' },
-  { prefix: '< ', target: 5, suffix: ' min', label: 'DE SOUSCRIPTION' },
-  { prefix: '', target: 34, suffix: ' pays', label: 'COUVERTS' },
-  { prefix: '1 à ', target: 60, suffix: ' jours', label: 'AU CHOIX' },
+  { value: 6, suffix: '', unit: 'ans', label: "années d'expérience" },
+  { value: 90, suffix: '', unit: 'jours', label: 'de couverture max' },
+  { value: 34, suffix: '', unit: 'pays', label: 'européens' },
+  { value: 5, suffix: '', unit: 'min', label: 'pour souscrire' },
 ];
 
-function StatItem({ stat, inView }) {
-  const count = useCountUp(stat.target, inView);
+function StatItem({ stat, inView, index }) {
+  const count = useCountUp(stat.value, inView);
+  const isLast = index === stats.length - 1;
+
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        padding: '32px 28px',
-        background: 'rgba(201,168,76,0.03)',
-        border: '1px solid rgba(201,168,76,0.12)',
-        borderRadius: 12,
-        transition: 'all 0.3s ease',
-        cursor: 'default',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'rgba(201,168,76,0.06)';
-        e.currentTarget.style.borderColor = 'rgba(201,168,76,0.25)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'rgba(201,168,76,0.03)';
-        e.currentTarget.style.borderColor = 'rgba(201,168,76,0.12)';
+        flex: 1,
+        textAlign: 'center',
+        padding: '32px 24px',
+        position: 'relative',
       }}
     >
-      <p
-        className="text-gold-gradient"
+      {/* Séparateur vertical entre blocs */}
+      {!isLast && (
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: '20%',
+            height: '60%',
+            width: 1,
+            background: 'linear-gradient(to bottom, transparent, var(--gold-border), transparent)',
+          }}
+          className="stat-sep"
+        />
+      )}
+
+      <div
         style={{
-          fontSize: 'clamp(48px, 6vw, 80px)',
-          fontWeight: 800,
-          lineHeight: 1,
-          letterSpacing: '-0.03em',
+          display: 'flex',
+          alignItems: 'baseline',
+          justifyContent: 'center',
+          gap: 4,
+          marginBottom: 8,
         }}
       >
-        {stat.prefix}{count}{stat.suffix}
-      </p>
-      <p style={{ fontSize: 11, letterSpacing: '0.15em', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: 12 }}>
+        <span
+          style={{
+            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+            fontWeight: 800,
+            color: 'var(--gold)',
+            lineHeight: 1,
+            letterSpacing: '-0.03em',
+          }}
+        >
+          {count}
+        </span>
+        <span
+          style={{
+            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+            fontWeight: 600,
+            color: 'var(--gold-deep)',
+            lineHeight: 1,
+          }}
+        >
+          {stat.unit}
+        </span>
+      </div>
+
+      <p
+        style={{
+          fontSize: 14,
+          color: 'var(--text-muted)',
+          margin: 0,
+          letterSpacing: '0.01em',
+        }}
+      >
         {stat.label}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
 function Stats() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px 0px -80px 0px' });
+  const inView = useInView(ref, { once: true, margin: '-60px 0px' });
+  const [headRef, headInView] = useScrollReveal();
 
   return (
     <section
-      ref={ref}
       style={{
-        background: 'var(--bg-card)',
-        borderTop: '1px solid var(--gold-border)',
-        borderBottom: '1px solid var(--gold-border)',
+        background: 'var(--bg)',
         padding: '100px 0',
       }}
     >
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
-          <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', textAlign: 'center', marginBottom: 12 }}>
-            CE QUE ÇA CHANGE POUR VOUS
-          </p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 12 }}>
-            Simple, rapide, et vraiment efficace.
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
+        {/* Heading */}
+        <motion.div
+          ref={headRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginBottom: 64 }}
+        >
+          <h2
+            style={{
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.025em',
+              color: 'var(--text)',
+              margin: '0 0 14px',
+            }}
+          >
+            AssuTempo en chiffres
           </h2>
-          <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 500, margin: '12px auto 60px', textAlign: 'center', lineHeight: 1.7 }}>
-            Pas de paperasse inutile, pas de délai. Juste ce qu'il vous faut, quand vous en avez besoin.
+          <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
+            Simple, rapide, et vraiment efficace.
           </p>
         </motion.div>
 
+        {/* Compteurs */}
         <div
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}
+          ref={ref}
+          style={{
+            display: 'flex',
+            alignItems: 'stretch',
+            background: 'var(--bg-2)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: 20,
+            overflow: 'hidden',
+          }}
           className="stats-grid"
         >
-          {stats.map((stat) => (
-            <StatItem key={stat.label} stat={stat} inView={inView} />
+          {stats.map((stat, i) => (
+            <StatItem key={stat.label} stat={stat} inView={inView} index={i} />
           ))}
         </div>
       </div>
 
       <style>{`
-        @media (max-width: 768px) {
-          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+        @media (max-width: 640px) {
+          .stats-grid {
+            flex-wrap: wrap !important;
+          }
+          .stats-grid > div {
+            flex-basis: 50% !important;
+          }
+          .stat-sep {
+            display: none !important;
+          }
         }
       `}</style>
     </section>

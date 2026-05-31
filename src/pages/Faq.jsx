@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: "Quelle est la durée maximum d'assurance ?",
-    a: "De 1 à 60 jours, au jour près, avec possibilité de renouvellement.",
+    a: "De 1 à 90 jours, au jour près, avec possibilité de renouvellement.",
   },
   {
     q: 'Quelle est la puissance maximale acceptée ?',

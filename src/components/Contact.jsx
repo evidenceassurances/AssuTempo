@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fadeUp, stagger } from '../animations';
 
 const docs = [
@@ -10,6 +10,7 @@ const docs = [
 ];
 
 function Contact() {
+  const navigate = useNavigate();
   return (
     <section
       style={{
@@ -191,7 +192,7 @@ function Contact() {
           <motion.div variants={fadeUp}>
             <button
               className="btn-gold"
-              onClick={() => window.open('https://assutempo.fr/tarification', '_blank')}
+              onClick={() => navigate('/tarification')}
               style={{ fontSize: 16, padding: '18px 48px' }}
             >
               Souscrire maintenant →

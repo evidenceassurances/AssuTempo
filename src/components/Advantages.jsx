@@ -1,105 +1,134 @@
 import { motion } from 'framer-motion';
-import { Shield, Globe, Zap } from 'lucide-react';
-import { fadeUp, stagger } from '../animations';
+import { Zap, Shield, Clock } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const cards = [
   {
-    Icon: Shield,
-    title: 'Certifié sans surprise',
-    text: "Prix fixe à l'euro près. Aucun frais caché, aucune mauvaise surprise. Ce que vous voyez est ce que vous payez.",
-  },
-  {
-    Icon: Globe,
-    title: 'Assistance partout en Europe',
-    text: 'Couverts en cas de panne ou accident dans 34 pays européens dès le premier jour de votre contrat.',
-  },
-  {
     Icon: Zap,
+    title: 'Prix fixe, zéro surprise',
+    body: 'Un tarif clair affiché dès le devis. Aucun frais caché, aucune surprise à la facturation.',
+  },
+  {
+    Icon: Shield,
+    title: 'Assistance Europe incluse',
+    body: 'Responsabilité civile, défense recours et assistance dépannage dès le premier jour, dans 34 pays.',
+  },
+  {
+    Icon: Clock,
     title: 'Attestation en 5 minutes',
-    text: 'Souscription 100% en ligne, disponible 24h/24 et 7j/7. Votre attestation téléchargeable immédiatement après paiement.',
+    body: 'Souscription 100% en ligne. Votre attestation arrive immédiatement par email, prête à présenter.',
   },
 ];
 
-function Advantages() {
+function AdvantageCard({ Icon, title, body, delay, inView }) {
   return (
-    <section
-      id="avantages"
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        background: 'var(--bg)',
-        padding: '120px 0',
-        position: 'relative',
-        overflow: 'hidden',
+        flex: 1,
+        padding: 32,
+        background: 'var(--glass)',
+        border: '1px solid var(--glass-border)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderRadius: 20,
+        cursor: 'default',
+      }}
+      whileHover={{
+        y: -6,
+        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--gold-border)';
+        e.currentTarget.style.boxShadow = '0 16px 48px -16px rgba(201,168,76,0.12)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--glass-border)';
+        e.currentTarget.style.boxShadow = 'none';
       }}
     >
-      {/* Fond radial bas de section */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(ellipse 100% 60% at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: 0,
+          width: 52,
+          height: 52,
+          borderRadius: 14,
+          background: 'var(--gold-glow)',
+          border: '1px solid var(--gold-border)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 20,
         }}
-      />
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', position: 'relative', zIndex: 1 }}>
+      >
+        <Icon size={24} color="var(--gold)" strokeWidth={1.5} />
+      </div>
+
+      <h3
+        style={{
+          fontSize: 18,
+          fontWeight: 600,
+          color: 'var(--text)',
+          margin: '0 0 10px',
+          letterSpacing: '-0.01em',
+        }}
+      >
+        {title}
+      </h3>
+      <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65 }}>
+        {body}
+      </p>
+    </motion.div>
+  );
+}
+
+function Advantages() {
+  const [ref, inView] = useScrollReveal();
+
+  return (
+    <section style={{ background: 'var(--bg-2)', padding: '100px 0' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          style={{ textAlign: 'center', marginBottom: 64 }}
+          ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginBottom: 56 }}
         >
-          <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 16 }}>
-            POURQUOI ASSUTEMPO
-          </p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, color: '#fff', marginBottom: 20 }}>
-            Certifié sans surprise, à chaque fois
+          <h2
+            style={{
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.025em',
+              color: 'var(--text)',
+              margin: '0 0 14px',
+            }}
+          >
+            Pourquoi AssuTempo ?
           </h2>
-          <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
-            Chaque option est pensée pour offrir une expérience haut de gamme, sans complexité et sans compromis.
+          <p
+            style={{
+              fontSize: 16,
+              color: 'var(--text-muted)',
+              margin: '0 auto',
+              maxWidth: 480,
+            }}
+          >
+            L&apos;assurance temporaire, sans les défauts de l&apos;assurance temporaire.
           </p>
         </motion.div>
 
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}
-          className="adv-grid"
-        >
-          {cards.map(({ Icon, title, text }) => (
-            <motion.div
-              key={title}
-              variants={fadeUp}
-              className="card-glass"
-              style={{ padding: 40 }}
-            >
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 14,
-                  background: 'rgba(201,168,76,0.08)',
-                  border: '1px solid var(--gold-border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 28,
-                }}
-              >
-                <Icon size={26} style={{ color: 'var(--gold)' }} />
-              </div>
-              <h3 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 14 }}>{title}</h3>
-              <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7 }}>{text}</p>
-            </motion.div>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'stretch' }} className="advantages-grid">
+          {cards.map((card, i) => (
+            <AdvantageCard key={card.title} {...card} delay={i * 0.12} inView={inView} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
-          .adv-grid { grid-template-columns: 1fr !important; }
+        @media (max-width: 768px) {
+          .advantages-grid { flex-direction: column !important; }
         }
       `}</style>
     </section>

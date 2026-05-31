@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { slideLeft, fadeUp, stagger } from '../animations';
 
 const items = [
@@ -12,6 +13,7 @@ const items = [
 ];
 
 function WhyUs() {
+  const navigate = useNavigate();
   return (
     <section style={{ background: '#0D0D0D', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
       {/* Ligne dorée haut */}
@@ -35,7 +37,7 @@ function WhyUs() {
           </p>
           <button
             className="btn-gold"
-            onClick={() => window.open('https://assutempo.fr/tarification', '_blank')}
+            onClick={() => navigate('/tarification')}
             style={{ fontSize: 15, padding: '16px 36px' }}
           >
             Voir nos tarifs

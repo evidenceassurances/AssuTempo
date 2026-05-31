@@ -1,27 +1,31 @@
 import Hero from '../components/Hero';
-import TrustBand from '../components/TrustBand';
-import VehicleCarousel from '../components/VehicleCarousel';
-import HowItWorks from '../components/HowItWorks';
+import VehicleMarquee from '../components/VehicleMarquee';
 import Stats from '../components/Stats';
 import Advantages from '../components/Advantages';
-import Testimonials from '../components/Testimonials';
-import WhyUs from '../components/WhyUs';
-import Contact from '../components/Contact';
+import Process from '../components/Process';
+import UseCases from '../components/UseCases';
 import Countries from '../components/Countries';
+import Faq from '../components/Faq';
+import FinalCTA from '../components/FinalCTA';
+import Footer from '../components/Footer';
+import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries } from '../components/CtaBanner';
 
 function Home() {
   return (
     <main style={{ overflow: 'hidden' }}>
       <Hero />
-      <TrustBand />
-      <VehicleCarousel />
-      <HowItWorks />
+      <VehicleMarquee />
+      <CtaAfterVehicles />
       <Stats />
       <Advantages />
-      <Testimonials />
-      <WhyUs />
-      <Contact />
+      <Process />
+      <CtaAfterProcess />
+      <UseCases />
       <Countries />
+      <CtaAfterCountries />
+      <Faq />
+      <FinalCTA />
+      <Footer />
     </main>
   );
 }

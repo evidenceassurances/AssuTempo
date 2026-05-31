@@ -1,280 +1,380 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 
-const line1Words = 'Vous avez besoin d\'une assurance maintenant.'.split(' ');
-const line2Words = 'AssuTempo. En 5 minutes. Sans paperasse.'.split(' ');
+const words1 = ['L\'assurance', 'temporaire'];
+const words2 = ['qui', 'change', 'tout.'];
 
 const wordVariant = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const staggerLine = (delay = 0) => ({
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: delay } },
-});
-
-function WordByWord({ words, delay }) {
-  return (
-    <motion.span
-      variants={staggerLine(delay)}
-      initial="hidden"
-      animate="visible"
-      style={{ display: 'inline' }}
-    >
-      {words.map((word, i) => (
-        <motion.span
-          key={`${word}-${i}`}
-          variants={wordVariant}
-          style={{ display: 'inline-block', marginRight: '0.28em' }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-}
-
 function Hero() {
-  const [showCTA, setShowCTA] = useState(false);
-
-  // line1 takes ~(words * 0.1 + 0.5)s ≈ 1.8s, then pause 0.8s
-  // line2 starts at 1.8+0.8=2.6s, takes ~1.6s → CTA at ~4.5s
-  useEffect(() => {
-    const t = setTimeout(() => setShowCTA(true), 4500);
-    return () => clearTimeout(t);
-  }, []);
-
-  const scrollToHow = () => {
-    const el = document.getElementById('comment-ca-marche');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    else {
-      const adv = document.getElementById('avantages');
-      if (adv) adv.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <section
       style={{
         minHeight: '100vh',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        paddingTop: 120,
-        paddingBottom: 80,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Texte géant cinématique */}
-      <span
-        aria-hidden
+      <GoldenRing />
+
+      {/* ── HAUT : Badge ── */}
+      <div
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%,-50%)',
-          fontSize: '20vw',
-          fontWeight: 900,
-          color: '#ffffff',
-          opacity: 0.03,
-          whiteSpace: 'nowrap',
-          letterSpacing: '-0.05em',
-          userSelect: 'none',
-          pointerEvents: 'none',
-          zIndex: 0,
+          paddingTop: 96,
+          paddingLeft: 24,
+          paddingRight: 24,
+          position: 'relative',
+          zIndex: 3,
+          flexShrink: 0,
         }}
       >
-        ASSURÉ
-      </span>
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            background: 'rgba(8,7,6,0.82)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid var(--gold-border)',
+            borderRadius: 100,
+            padding: '8px 18px',
+            fontSize: 'clamp(10px, 2.8vw, 12px)',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--gold)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <span
+            style={{
+              width: 7,
+              height: 7,
+              borderRadius: '50%',
+              background: 'var(--gold)',
+              flexShrink: 0,
+              animation: 'pulse-dot 2s ease-in-out infinite',
+            }}
+          />
+          Couverture immédiate &middot; 34 pays européens
+        </motion.div>
+      </div>
 
-      {/* Fond radial doré */}
+      {/* ── MILIEU : Titre + Sous-titre + CTAs ── */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background:
-            'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201,168,76,0.12) 0%, transparent 60%)',
-          zIndex: 0,
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          padding: '0 24px',
+          position: 'relative',
+          zIndex: 2,
         }}
-      />
+      >
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
 
-      {/* Orbe haut centre */}
-      <div
+          {/* H1 */}
+          <h1
+            style={{
+              fontSize: 'clamp(2.5rem, 7vw, 5rem)',
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              margin: '0 0 24px',
+              color: 'var(--text)',
+            }}
+          >
+            <motion.span
+              style={{ display: 'block' }}
+              initial="hidden"
+              animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } } }}
+            >
+              {words1.map((w, i) => (
+                <motion.span
+                  key={i}
+                  variants={wordVariant}
+                  style={{ display: 'inline-block', marginRight: '0.3em' }}
+                >
+                  {w}
+                </motion.span>
+              ))}
+            </motion.span>
+
+            <motion.span
+              style={{ display: 'block' }}
+              initial="hidden"
+              animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.38 } } }}
+            >
+              {words2.map((w, i) => (
+                <motion.span
+                  key={i}
+                  variants={wordVariant}
+                  style={{
+                    display: 'inline-block',
+                    marginRight: '0.3em',
+                    background: i === words2.length - 1
+                      ? 'linear-gradient(135deg, var(--gold), var(--gold-light))'
+                      : 'none',
+                    WebkitBackgroundClip: i === words2.length - 1 ? 'text' : 'unset',
+                    WebkitTextFillColor: i === words2.length - 1 ? 'transparent' : 'var(--text)',
+                    backgroundClip: i === words2.length - 1 ? 'text' : 'unset',
+                  }}
+                >
+                  {w}
+                </motion.span>
+              ))}
+            </motion.span>
+          </h1>
+
+          {/* Sous-titre */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            style={{
+              color: 'var(--text-muted)',
+              fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+              lineHeight: 1.6,
+              maxWidth: 480,
+              margin: '0 auto 32px',
+            }}
+          >
+            De 1 à 90 jours. Attestation en 5 minutes.
+            <br />
+            Sans engagement, sans mauvaise surprise.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+            style={{
+              display: 'flex',
+              gap: 16,
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: 24,
+            }}
+          >
+            <button
+              className="btn-gold"
+              onClick={() => navigate('/tarification')}
+              style={{ padding: '14px 28px', fontSize: 16 }}
+            >
+              Obtenir mon devis
+            </button>
+            <button
+              className="btn-glass"
+              onClick={() => navigate('/tarification')}
+              style={{ fontSize: 16 }}
+            >
+              Voir les tarifs
+            </button>
+          </motion.div>
+
+          {/* Ligne de confiance — discrète, secondaire, pas de conteneur */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 1.05 }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              gap: '4px 2px',
+              fontSize: 'clamp(11px, 2.5vw, 13px)',
+              color: 'var(--text-muted)',
+              margin: 0,
+              lineHeight: 1.6,
+            }}
+          >
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>⚡</span>
+            <span>Attestation immédiate</span>
+            <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>🌍</span>
+            <span>34 pays couverts</span>
+            <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>✓</span>
+            <span>Prix fixe, zéro surprise</span>
+          </motion.p>
+
+        </div>
+      </div>
+
+      {/* ── BAS : Espace bas + chevron ── */}
+      <div style={{ flexShrink: 0, height: 64 }} />
+
+      {/* Indicateur scroll */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 0.5 }}
         style={{
           position: 'absolute',
-          top: '-20%',
+          bottom: 20,
           left: '50%',
-          transform: 'translateX(-50%)',
-          width: 600,
-          height: 600,
-          background: 'radial-gradient(circle, rgba(201,168,76,0.10) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: 0,
+          animation: 'bounce-scroll 1.8s ease-in-out infinite',
+          color: 'var(--text-subtle)',
+          zIndex: 2,
         }}
-      />
+      >
+        <ChevronDown size={22} />
+      </motion.div>
 
-      {/* Grille de points */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'radial-gradient(rgba(201,168,76,0.15) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          WebkitMaskImage:
-            'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
-          maskImage:
-            'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
-          opacity: 0.35,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Scanline bas */}
+      {/* Fondu vers la section suivante */}
       <div
         style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: 1,
-          background:
-            'linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.6) 50%, transparent 100%)',
-          backgroundSize: '200% 100%',
-          animation: 'scanline 4s ease-in-out infinite',
+          height: 120,
+          background: 'linear-gradient(to bottom, transparent, var(--bg-2))',
           pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      <div
-        style={{
-          maxWidth: 860,
-          margin: '0 auto',
-          padding: '0 24px',
-          position: 'relative',
           zIndex: 1,
         }}
-      >
-        {/* TEMPS 1 — L'urgence */}
-        <h1
-          style={{
-            fontSize: 'clamp(30px, 5vw, 62px)',
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: '-0.03em',
-            color: 'var(--text-muted)',
-            marginBottom: 8,
-          }}
-        >
-          <WordByWord words={line1Words} delay={0.3} />
-        </h1>
-
-        {/* TEMPS 2 — La solution */}
-        <h2
-          style={{
-            fontSize: 'clamp(30px, 5vw, 62px)',
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: '-0.03em',
-            color: '#fff',
-            marginBottom: 0,
-          }}
-        >
-          <WordByWord words={line2Words} delay={2.6} />
-        </h2>
-
-        {/* TEMPS 3 — L'action */}
-        <AnimatePresence>
-          {showCTA && (
-            <>
-              {/* Badge EN LIGNE */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-                style={{ marginTop: 40, marginBottom: 36 }}
-              >
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    background: 'var(--gold-bg)',
-                    border: '1px solid var(--gold-border)',
-                    borderRadius: 999,
-                    padding: '8px 20px',
-                    fontSize: 12,
-                    letterSpacing: '0.12em',
-                    color: 'var(--gold)',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: '50%',
-                      background: 'var(--gold)',
-                      animation: 'pulse-dot 2s infinite',
-                      flexShrink: 0,
-                    }}
-                  />
-                  EN LIGNE MAINTENANT
-                </div>
-              </motion.div>
-
-              {/* Boutons */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.1, ease: 'easeOut' }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 16,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 16,
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  <button
-                    className="btn-gold"
-                    onClick={() =>
-                      window.open('https://assutempo.fr/tarification', '_blank')
-                    }
-                    style={{ fontSize: 16, padding: '18px 40px', fontWeight: 700 }}
-                  >
-                    Obtenir mon devis gratuit →
-                  </button>
-                  <button
-                    className="btn-outline-gold"
-                    onClick={scrollToHow}
-                    style={{ fontSize: 15, padding: '18px 32px' }}
-                  >
-                    Comment ça marche ?
-                  </button>
-                </div>
-
-                <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                  ⚡ Résultat en 30 secondes • Sans inscription
-                </p>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </div>
+      />
     </section>
+  );
+}
+
+/* Anneau lumineux doré — pièce maîtresse (aria-hidden, décoratif) */
+function GoldenRing() {
+  return (
+    <>
+      <div
+        aria-hidden
+        className="golden-ring-outer"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      >
+        {/* Halo flou */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: 440,
+            height: 440,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 65%)',
+            animation: 'halo-pulse 6s ease-in-out infinite',
+            willChange: 'transform',
+          }}
+        />
+
+        {/* Anneau principal — 520×520 rendu, viewBox 700×700 conservé */}
+        <svg
+          width="520"
+          height="520"
+          viewBox="0 0 700 700"
+          style={{
+            display: 'block',
+            animation: 'rotate-slow 40s linear infinite',
+            willChange: 'transform',
+          }}
+        >
+          <defs>
+            <linearGradient id="ring-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--gold-deep)" />
+              <stop offset="50%" stopColor="var(--gold-light)" />
+              <stop offset="100%" stopColor="var(--gold-deep)" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="350"
+            cy="350"
+            r="340"
+            fill="none"
+            stroke="url(#ring-grad-1)"
+            strokeWidth="1.5"
+            opacity="0.5"
+            strokeDasharray="60 24"
+          />
+        </svg>
+
+        {/* Second anneau concentrique */}
+        <svg
+          width="520"
+          height="520"
+          viewBox="0 0 700 700"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            display: 'block',
+            animation: 'rotate-slow-reverse 60s linear infinite',
+            willChange: 'transform',
+          }}
+        >
+          <defs>
+            <linearGradient id="ring-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--gold-deep)" />
+              <stop offset="100%" stopColor="var(--gold)" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="350"
+            cy="350"
+            r="290"
+            fill="none"
+            stroke="url(#ring-grad-2)"
+            strokeWidth="1"
+            opacity="0.25"
+            strokeDasharray="40 30"
+          />
+        </svg>
+      </div>
+
+      <style>{`
+        .golden-ring-outer {
+          transform: translate(-50%, -50%);
+        }
+        @media (max-height: 800px) {
+          .golden-ring-outer {
+            transform: translate(-50%, -50%) scale(0.8);
+          }
+        }
+        @media (max-height: 680px) {
+          .golden-ring-outer {
+            transform: translate(-50%, -50%) scale(0.62);
+          }
+        }
+        @media (max-width: 480px) {
+          .golden-ring-outer {
+            transform: translate(-50%, -50%) scale(0.68);
+          }
+        }
+        @media (max-width: 480px) and (max-height: 700px) {
+          .golden-ring-outer {
+            transform: translate(-50%, -50%) scale(0.52);
+          }
+        }
+      `}</style>
+    </>
   );
 }
 

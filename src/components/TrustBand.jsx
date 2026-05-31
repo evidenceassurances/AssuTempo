@@ -4,7 +4,7 @@ const items = [
   { icon: '✓', text: 'Sans engagement' },
   { icon: '🕐', text: 'Disponible 24h/24' },
   { icon: '🌍', text: '34 pays couverts' },
-  { icon: '📅', text: 'Depuis 2018' },
+  { icon: '📅', text: 'Depuis 2020' },
 ];
 
 const DOT = (

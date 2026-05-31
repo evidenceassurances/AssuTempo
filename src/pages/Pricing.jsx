@@ -44,7 +44,7 @@ function Pricing() {
             Tarification — Assurance Temporaire en Ligne
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 16, maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '0 24px 40px', lineHeight: 1.75 }}>
-            Obtenez votre devis d'assurance temporaire instantanément. De 1 à 60 jours, pour particuliers et professionnels. Souscription 100% en ligne, attestation immédiate.
+            Obtenez votre devis d'assurance temporaire instantanément. De 1 à 90 jours, pour particuliers et professionnels. Souscription 100% en ligne, attestation immédiate.
             <br /><br />
             Besoin d'aide ? Appelez-nous au{' '}
             <a href="tel:0974197820" style={{ color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>

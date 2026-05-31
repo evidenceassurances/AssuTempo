@@ -1,25 +1,37 @@
-import { useEffect, useState, useRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 const links = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'FAQ', href: '/faq' },
+  { label: 'Articles', href: '/articles' },
   { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
 ];
 
+const mobileMenuVariants = {
+  hidden: { opacity: 0, y: -8 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
+};
+
+const mobileLinkVariants = {
+  hidden: { opacity: 0, y: -10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } },
+};
+
 function Navbar() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
-  const [pulsing, setPulsing] = useState(false);
   const [open, setOpen] = useState(false);
-  const btnRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 60);
-      setPulsing(y > 300);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -31,12 +43,15 @@ function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 50,
-        borderBottom: '1px solid var(--gold-border)',
-        transition: 'background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease',
-        background: scrolled ? 'rgba(10,10,10,0.95)' : 'transparent',
+        zIndex: 100,
+        height: 68,
+        display: 'flex',
+        alignItems: 'center',
+        transition: 'background 0.4s ease-out, backdrop-filter 0.4s ease-out, border-color 0.4s ease-out',
+        background: scrolled ? 'rgba(8,7,6,0.7)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        boxShadow: scrolled ? '0 20px 60px -30px rgba(0,0,0,0.6)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+        borderBottom: `1px solid ${scrolled ? 'rgba(201,168,76,0.12)' : 'transparent'}`,
       }}
     >
       <div
@@ -44,17 +59,14 @@ function Navbar() {
           maxWidth: 1280,
           margin: '0 auto',
           padding: '0 32px',
+          width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: 72,
         }}
       >
         {/* Logo */}
-        <Link
-          to="/"
-          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
-        >
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
           <span
             style={{
               fontWeight: 700,
@@ -64,30 +76,19 @@ function Navbar() {
               alignItems: 'center',
             }}
           >
-            <span style={{ color: '#FFFFFF' }}>Assu</span>
+            <span style={{ color: 'var(--text)' }}>Assu</span>
             <span style={{ color: 'var(--gold)' }}>Tempo</span>
           </span>
         </Link>
 
         {/* Nav desktop */}
-        <nav
-          style={{ display: 'flex', alignItems: 'center', gap: 36 }}
-          className="hidden-mobile"
-        >
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="nav-desktop">
           {links.map((link) => (
             <NavLink
               key={link.href}
               to={link.href}
-              style={{
-                textDecoration: 'none',
-                fontSize: 14,
-                fontWeight: 500,
-                color: 'var(--text-muted)',
-                transition: 'color 0.2s',
-                position: 'relative',
-                paddingBottom: 4,
-              }}
               className="nav-link"
+              style={{ textDecoration: 'none', fontSize: 14, fontWeight: 500 }}
             >
               {link.label}
             </NavLink>
@@ -95,30 +96,30 @@ function Navbar() {
         </nav>
 
         {/* CTA desktop */}
-        <div className="hidden-mobile">
+        <div className="nav-desktop">
           <button
-            ref={btnRef}
-            onClick={() => window.open('https://assutempo.fr/tarification', '_blank')}
-            className={`btn-gold${pulsing ? ' nav-btn-pulse' : ''}`}
-            style={{ padding: '11px 22px', borderRadius: 8, fontSize: 14 }}
+            onClick={() => navigate('/tarification')}
+            className="btn-gold nav-cta shimmer-btn"
+            style={{ padding: '10px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600 }}
           >
-            Obtenir un devis
+            Obtenir mon devis
           </button>
         </div>
 
         {/* Hamburger mobile */}
         <button
           onClick={() => setOpen((v) => !v)}
-          aria-label="Menu"
-          className="show-mobile"
+          aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
+          className="nav-mobile"
           style={{
-            background: 'var(--bg-card)',
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'var(--glass)',
+            border: '1px solid var(--glass-border)',
             borderRadius: 8,
             padding: 10,
-            color: '#fff',
+            color: 'var(--text)',
             cursor: 'pointer',
             display: 'none',
+            lineHeight: 0,
           }}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
@@ -126,69 +127,109 @@ function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {open && (
-        <div
-          style={{
-            background: '#111111',
-            borderTop: '1px solid var(--gold-border)',
-            padding: '24px 32px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 20,
-          }}
-        >
-          {links.map((link) => (
-            <NavLink
-              key={link.href}
-              to={link.href}
-              onClick={() => setOpen(false)}
-              style={{
-                textDecoration: 'none',
-                fontSize: 16,
-                fontWeight: 500,
-                color: 'var(--text-muted)',
-                textAlign: 'center',
-                transition: 'color 0.2s',
-              }}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          <button
-            onClick={() => {
-              window.open('https://assutempo.fr/tarification', '_blank');
-              setOpen(false);
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            variants={mobileMenuVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            style={{
+              position: 'fixed',
+              top: 68,
+              left: 0,
+              right: 0,
+              background: 'rgba(8,7,6,0.97)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderTop: '1px solid var(--gold-border)',
+              padding: '32px 32px 40px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 24,
+              zIndex: 99,
             }}
-            className="btn-gold"
-            style={{ width: '100%', borderRadius: 8, fontSize: 15 }}
           >
-            Obtenir un devis
-          </button>
-        </div>
-      )}
+            {links.map((link) => (
+              <motion.div key={link.href} variants={mobileLinkVariants}>
+                <NavLink
+                  to={link.href}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    textDecoration: 'none',
+                    fontSize: 18,
+                    fontWeight: 500,
+                    color: 'var(--text-muted)',
+                    display: 'block',
+                    textAlign: 'center',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  {link.label}
+                </NavLink>
+              </motion.div>
+            ))}
+            <motion.div variants={mobileLinkVariants}>
+              <button
+                onClick={() => { navigate('/tarification'); setOpen(false); }}
+                className="btn-gold"
+                style={{ width: '100%', borderRadius: 10, fontSize: 16, padding: '14px 20px' }}
+              >
+                Obtenir mon devis
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style>{`
         @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
+          .nav-desktop { display: none !important; }
+          .nav-mobile { display: flex !important; }
         }
-        .nav-link:hover { color: #fff !important; }
+
+        .nav-link {
+          color: var(--text-muted);
+          position: relative;
+          padding-bottom: 4px;
+          transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--text) !important; }
+        .nav-link.active { color: var(--text) !important; }
+
         .nav-link::after {
           content: '';
           position: absolute;
-          bottom: 0; left: 0;
-          width: 0; height: 1px;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
           background: var(--gold);
-          transition: width 0.25s ease;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.25s var(--ease-out);
         }
-        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+          transform: scaleX(1);
+        }
 
-        @keyframes navPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
-          50%       { box-shadow: 0 0 0 8px rgba(201,168,76,0); }
+        .nav-cta {
+          position: relative;
+          overflow: hidden;
         }
-        .nav-btn-pulse {
-          animation: navPulse 2s ease-in-out infinite;
+        .nav-cta::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -120%;
+          width: 60%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          transform: skewX(-20deg);
+        }
+        .nav-cta:hover::before {
+          animation: shimmer 1.2s ease-in-out;
         }
       `}</style>
     </header>
