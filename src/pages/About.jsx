@@ -67,7 +67,7 @@ function Field({ label, error, children }) {
 function PartnerForm() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('idle'); // 'idle' | 'envoi' | 'succes' | 'erreur'
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -94,7 +94,7 @@ function PartnerForm() {
     return errs;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const errs = validate();
@@ -103,20 +103,36 @@ function PartnerForm() {
       return;
     }
 
-    // TODO: brancher l'envoi vers l'email (à configurer plus tard)
-    // Exemple futur : envoyer vers une API route /api/contact ou EmailJS / Formspree
-
     setErrors({});
-    setSubmitted(true);
-    setForm(EMPTY_FORM);
+    setStatus('envoi');
+
+    try {
+      const formData = new FormData(e.target);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus('succes');
+        setForm(EMPTY_FORM);
+      } else {
+        setStatus('erreur');
+      }
+    } catch {
+      setStatus('erreur');
+    }
   }
 
-  if (submitted) {
+  if (status === 'succes') {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        role="status"
+        aria-live="polite"
         style={{
           padding: '48px 32px',
           textAlign: 'center',
@@ -130,10 +146,10 @@ function PartnerForm() {
           Demande envoyée !
         </h3>
         <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.6 }}>
-          Merci, nous vous recontactons sous 24h.
+          Merci, votre demande a bien été envoyée. Nous vous recontactons sous 24h.
         </p>
         <button
-          onClick={() => setSubmitted(false)}
+          onClick={() => setStatus('idle')}
           style={{
             background: 'none',
             border: '1px solid var(--gold-border)',
@@ -156,9 +172,17 @@ function PartnerForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Champs cachés Web3Forms */}
+      <input type="hidden" name="access_key" value="7a4b9f4a-f77e-4f9b-8a16-7635bff791ed" />
+      <input type="hidden" name="subject" value="Nouvelle demande de partenariat — AssuTempo" />
+      <input type="hidden" name="from_name" value="Formulaire partenaires AssuTempo" />
+      {/* Honeypot anti-spam : rejeté silencieusement par Web3Forms si coché par un bot */}
+      <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
       {/* Type de structure */}
       <Field label="Type de structure *" error={errors.type}>
         <select
+          name="type_structure"
           value={form.type}
           onChange={set('type')}
           onFocus={focusStyle}
@@ -177,6 +201,7 @@ function PartnerForm() {
         <Field label="Nom de la société *" error={errors.societe}>
           <input
             type="text"
+            name="societe"
             placeholder="Garage Dupont SAS"
             value={form.societe}
             onChange={set('societe')}
@@ -188,6 +213,7 @@ function PartnerForm() {
         <Field label="Nom et prénom du contact *" error={errors.contact}>
           <input
             type="text"
+            name="contact"
             placeholder="Jean Dupont"
             value={form.contact}
             onChange={set('contact')}
@@ -202,6 +228,7 @@ function PartnerForm() {
         <Field label="Email professionnel *" error={errors.email}>
           <input
             type="email"
+            name="email"
             placeholder="contact@societe.fr"
             value={form.email}
             onChange={set('email')}
@@ -213,6 +240,7 @@ function PartnerForm() {
         <Field label="Téléphone *" error={errors.telephone}>
           <input
             type="tel"
+            name="telephone"
             placeholder="06 00 00 00 00"
             value={form.telephone}
             onChange={set('telephone')}
@@ -226,6 +254,7 @@ function PartnerForm() {
       {/* Message */}
       <Field label="Message / votre besoin">
         <textarea
+          name="message"
           placeholder="Décrivez votre activité et comment vous souhaitez proposer AssuTempo à vos clients..."
           value={form.message}
           onChange={set('message')}
@@ -236,14 +265,38 @@ function PartnerForm() {
         />
       </Field>
 
+      {/* Zone de statut accessible */}
+      <div aria-live="polite">
+        {status === 'erreur' && (
+          <p style={{
+            fontSize: 14,
+            color: '#e05c5c',
+            background: 'rgba(224,92,92,0.08)',
+            border: '1px solid rgba(224,92,92,0.25)',
+            borderRadius: 8,
+            padding: '12px 16px',
+            margin: 0,
+          }}>
+            Une erreur est survenue. Réessayez ou appelez-nous au 09 74 19 78 20.
+          </p>
+        )}
+      </div>
+
       <button
         type="submit"
         className="btn-gold"
-        style={{ padding: '14px 28px', fontSize: 15, alignSelf: 'flex-start' }}
-        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 28px var(--gold-strong)'; e.currentTarget.style.transform = 'scale(1.02)'; }}
+        disabled={status === 'envoi'}
+        style={{
+          padding: '14px 28px',
+          fontSize: 15,
+          alignSelf: 'flex-start',
+          opacity: status === 'envoi' ? 0.7 : 1,
+          cursor: status === 'envoi' ? 'not-allowed' : 'pointer',
+        }}
+        onMouseEnter={(e) => { if (status !== 'envoi') { e.currentTarget.style.boxShadow = '0 0 28px var(--gold-strong)'; e.currentTarget.style.transform = 'scale(1.02)'; } }}
         onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'scale(1)'; }}
       >
-        Envoyer ma demande
+        {status === 'envoi' ? 'Envoi en cours…' : 'Envoyer ma demande'}
       </button>
 
       <style>{`
