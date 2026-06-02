@@ -11,6 +11,7 @@ const Pricing = lazy(() => import('./pages/Pricing'));
 const About = lazy(() => import('./pages/About'));
 const Articles = lazy(() => import('./pages/Articles'));
 const VoitureImmobilisee = lazy(() => import('./pages/articles/VoitureImmobilisee'));
+const ControleSansAssurance = lazy(() => import('./pages/articles/ControleSansAssurance'));
 
 function LoadingSpinner() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <Route path="/qui-sommes-nous" element={<PageTransition><About /></PageTransition>} />
             <Route path="/articles" element={<PageTransition><Articles /></PageTransition>} />
             <Route path="/articles/voiture-immobilisee-defaut-assurance" element={<PageTransition><VoitureImmobilisee /></PageTransition>} />
+            <Route path="/articles/controle-sans-assurance-risques-amende" element={<PageTransition><ControleSansAssurance /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </Suspense>

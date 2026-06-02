@@ -13,6 +13,17 @@ export const articles = [
     featured: true,
   },
   {
+    slug: 'controle-sans-assurance-risques-amende',
+    titre: "Contrôlé sans assurance : risques, amende et que faire",
+    extrait:
+      "Amende de 500 € à 3 750 €, immobilisation possible, peines complémentaires… Les vrais risques du défaut d'assurance et comment se mettre en règle en 5 minutes.",
+    icone: AlertTriangle,
+    categorie: 'Urgence',
+    readTime: '4 min',
+    hasPage: true,
+    featured: false,
+  },
+  {
     slug: 'assurer-vehicule-achete-particulier',
     titre: 'Assurer un véhicule acheté chez un particulier',
     extrait:

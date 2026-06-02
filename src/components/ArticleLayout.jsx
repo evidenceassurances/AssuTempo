@@ -138,6 +138,31 @@ function RenderSection({ section, index }) {
                 {p}
               </p>
             ))}
+            {section.relatedLink && (
+              <Link
+                to={section.relatedLink.href}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginTop: 16,
+                  padding: '10px 16px',
+                  background: 'var(--gold-glow)',
+                  border: '1px solid var(--gold-border)',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: 'var(--gold)',
+                  textDecoration: 'none',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(201,168,76,0.12)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--gold-glow)')}
+              >
+                {section.relatedLink.text}
+                <ArrowRight size={14} strokeWidth={2} />
+              </Link>
+            )}
           </section>
         </Reveal>
       );
@@ -291,6 +316,11 @@ function RenderSection({ section, index }) {
             >
               {section.heading}
             </h2>
+            {section.intro && (
+              <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: '0 0 16px', lineHeight: 1.7 }}>
+                {section.intro}
+              </p>
+            )}
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {section.items.map((item, i) => (
                 <li

@@ -27,6 +27,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://assutempo.fr/articles/controle-sans-assurance-risques-amende</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://assutempo.fr/qui-sommes-nous</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
