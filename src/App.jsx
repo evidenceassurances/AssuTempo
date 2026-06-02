@@ -1,13 +1,36 @@
+import { lazy, Suspense } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import BackgroundFX from './components/BackgroundFX';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Faq from './pages/Faq';
-import Pricing from './pages/Pricing';
-import About from './pages/About';
-import Articles from './pages/Articles';
 import PageTransition from './components/blocks/PageTransition';
+
+const Home = lazy(() => import('./pages/Home'));
+const Faq = lazy(() => import('./pages/Faq'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const About = lazy(() => import('./pages/About'));
+const Articles = lazy(() => import('./pages/Articles'));
+
+function LoadingSpinner() {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: '#080706',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div style={{
+        width: '40px',
+        height: '40px',
+        border: '2px solid #C9A84C',
+        borderTopColor: 'transparent',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite'
+      }} />
+    </div>
+  );
+}
 
 function App() {
   const location = useLocation();
@@ -16,15 +39,17 @@ function App() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
       <BackgroundFX />
       <Navbar />
-      <AnimatePresence mode="wait" initial={false} onExitComplete={() => window.scrollTo(0, 0)}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-          <Route path="/faq" element={<PageTransition><Faq /></PageTransition>} />
-          <Route path="/tarification" element={<PageTransition><Pricing /></PageTransition>} />
-          <Route path="/qui-sommes-nous" element={<PageTransition><About /></PageTransition>} />
-          <Route path="/articles" element={<PageTransition><Articles /></PageTransition>} />
-        </Routes>
-      </AnimatePresence>
+      <Suspense fallback={<LoadingSpinner />}>
+        <AnimatePresence mode="wait" initial={false} onExitComplete={() => window.scrollTo(0, 0)}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+            <Route path="/faq" element={<PageTransition><Faq /></PageTransition>} />
+            <Route path="/tarification" element={<PageTransition><Pricing /></PageTransition>} />
+            <Route path="/qui-sommes-nous" element={<PageTransition><About /></PageTransition>} />
+            <Route path="/articles" element={<PageTransition><Articles /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 }
