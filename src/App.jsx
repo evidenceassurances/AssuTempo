@@ -10,6 +10,7 @@ const Faq = lazy(() => import('./pages/Faq'));
 const Pricing = lazy(() => import('./pages/Pricing'));
 const About = lazy(() => import('./pages/About'));
 const Articles = lazy(() => import('./pages/Articles'));
+const VoitureImmobilisee = lazy(() => import('./pages/articles/VoitureImmobilisee'));
 
 function LoadingSpinner() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/tarification" element={<PageTransition><Pricing /></PageTransition>} />
             <Route path="/qui-sommes-nous" element={<PageTransition><About /></PageTransition>} />
             <Route path="/articles" element={<PageTransition><Articles /></PageTransition>} />
+            <Route path="/articles/voiture-immobilisee-defaut-assurance" element={<PageTransition><VoitureImmobilisee /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </Suspense>

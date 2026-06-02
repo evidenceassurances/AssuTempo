@@ -1,0 +1,69 @@
+import { Car, FileText, Users, Truck, Clock, ShoppingCart, AlertTriangle } from 'lucide-react';
+
+export const articles = [
+  {
+    slug: 'voiture-immobilisee-defaut-assurance',
+    titre: "Voiture immobilisée pour défaut d'assurance : comment la récupérer",
+    extrait:
+      "Véhicule immobilisé ou en fourrière pour défaut d'assurance ? Assurez-vous en 5 minutes, attestation immédiate, et récupérez votre voiture légalement.",
+    icone: AlertTriangle,
+    categorie: 'Urgence',
+    readTime: '4 min',
+    hasPage: true,
+    featured: true,
+  },
+  {
+    slug: 'assurer-vehicule-achete-particulier',
+    titre: 'Assurer un véhicule acheté chez un particulier',
+    extrait:
+      "Vous venez d'acheter un véhicule entre particuliers ? Voici comment rouler assuré dès le premier trajet, sans attendre la carte grise.",
+    icone: ShoppingCart,
+    categorie: 'Achat véhicule',
+    hasPage: false,
+  },
+  {
+    slug: 'assurance-temporaire-retour-etranger',
+    titre: "Assurance temporaire pour un retour de l'étranger",
+    extrait:
+      "Permis ou véhicule d'origine étrangère ? Découvrez comment couvrir votre véhicule le temps de régulariser votre situation en France.",
+    icone: Car,
+    categorie: 'International',
+    hasPage: false,
+  },
+  {
+    slug: 'preter-emprunter-vehicule',
+    titre: 'Prêter ou emprunter un véhicule en toute sécurité',
+    extrait:
+      "Un ami vous prête sa voiture ou vous lui prêtez la vôtre ? L'assurance temporaire protège le conducteur désigné sans toucher à votre contrat annuel.",
+    icone: Users,
+    categorie: 'Prêt de véhicule',
+    hasPage: false,
+  },
+  {
+    slug: 'convoyage-professionnel-assurance',
+    titre: 'Convoyage professionnel : quelle assurance ?',
+    extrait:
+      "Mandataires, négociants, transporteurs : l'assurance temporaire est la solution pour couvrir chaque véhicule convoyé, sans contrat annuel inutile.",
+    icone: Truck,
+    categorie: 'Pro & convoyage',
+    hasPage: false,
+  },
+  {
+    slug: 'rouler-en-attendant-carte-grise',
+    titre: 'Rouler en attendant sa carte grise définitive',
+    extrait:
+      "Les délais de carte grise s'étirent ? Couvrez-vous pendant la période de transition avec une attestation immédiate, valable dès la souscription.",
+    icone: Clock,
+    categorie: 'Carte grise',
+    hasPage: false,
+  },
+  {
+    slug: 'essayer-vehicule-avant-achat',
+    titre: 'Essayer un véhicule avant achat, bien assuré',
+    extrait:
+      "Avant de signer, vous voulez l'essayer sur route ? Une assurance d'un jour suffit pour couvrir le test dans les règles.",
+    icone: FileText,
+    categorie: 'Essai & achat',
+    hasPage: false,
+  },
+];
