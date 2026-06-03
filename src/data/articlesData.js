@@ -1,4 +1,4 @@
-import { Car, FileText, Users, Truck, Clock, ShoppingCart, AlertTriangle, ParkingSquare } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare } from 'lucide-react';
 
 export const articles = [
   {
@@ -7,6 +7,7 @@ export const articles = [
     extrait:
       "Véhicule immobilisé ou en fourrière pour défaut d'assurance ? Assurez-vous en 5 minutes, attestation immédiate, et récupérez votre voiture légalement.",
     icone: AlertTriangle,
+    accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
     hasPage: true,
@@ -17,6 +18,7 @@ export const articles = [
     extrait:
       "Amende de 500 € à 3 750 €, immobilisation possible, peines complémentaires… Les vrais risques du défaut d'assurance et comment se mettre en règle en 5 minutes.",
     icone: AlertTriangle,
+    accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
     hasPage: true,
@@ -28,6 +30,7 @@ export const articles = [
     extrait:
       "Combien de jours d'assurance pour sortir une voiture de la fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate en ligne, dès 1 jour.",
     icone: ParkingSquare,
+    accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
     hasPage: true,
@@ -37,7 +40,8 @@ export const articles = [
     titre: 'Assurer un véhicule acheté chez un particulier',
     extrait:
       "Vous venez d'acheter un véhicule entre particuliers ? Voici comment rouler assuré dès le premier trajet, sans attendre la carte grise.",
-    icone: ShoppingCart,
+    icone: Handshake,
+    accent: '#C98A3C',
     categorie: 'Achat véhicule',
     readTime: '5 min',
     hasPage: true,
@@ -47,7 +51,8 @@ export const articles = [
     titre: "Véhicule ou permis étranger : assurance temporaire en France",
     extrait:
       "Véhicule à plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Attestation immédiate, 1 à 90 jours.",
-    icone: Car,
+    icone: Globe,
+    accent: '#5E7CA8',
     categorie: 'International',
     readTime: '5 min',
     hasPage: true,
@@ -58,6 +63,7 @@ export const articles = [
     extrait:
       "Un ami vous prête sa voiture ou vous lui prêtez la vôtre ? L'assurance temporaire protège le conducteur désigné sans toucher à votre contrat annuel.",
     icone: Users,
+    accent: '#7E9B79',
     categorie: 'Prêt de véhicule',
     hasPage: false,
   },
@@ -67,6 +73,7 @@ export const articles = [
     extrait:
       "Mandataires, négociants, transporteurs : l'assurance temporaire est la solution pour couvrir chaque véhicule convoyé, sans contrat annuel inutile.",
     icone: Truck,
+    accent: '#B0703F',
     categorie: 'Pro & convoyage',
     hasPage: false,
   },
@@ -75,7 +82,8 @@ export const articles = [
     titre: 'Rouler en attendant sa carte grise définitive',
     extrait:
       "Les délais de carte grise s'étirent ? Couvrez-vous pendant la période de transition avec une attestation immédiate, valable dès la souscription.",
-    icone: Clock,
+    icone: FileText,
+    accent: '#C9A84C',
     categorie: 'Carte grise',
     hasPage: false,
   },
@@ -84,7 +92,8 @@ export const articles = [
     titre: 'Essayer un véhicule avant achat, bien assuré',
     extrait:
       "Avant de signer, vous voulez l'essayer sur route ? Une assurance d'un jour suffit pour couvrir le test dans les règles.",
-    icone: FileText,
+    icone: Gauge,
+    accent: '#8A6B9E',
     categorie: 'Essai & achat',
     hasPage: false,
   },

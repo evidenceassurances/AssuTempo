@@ -176,6 +176,12 @@ function FeaturedCard({ article }) {
 /* ── Regular article card ── */
 function ArticleCard({ article, index, inView }) {
   const Icon = article.icone;
+  const accent = article.accent ?? '#C9A84C';
+  // Hex-alpha helpers (8-digit hex, supported by all modern browsers)
+  const halo   = `${accent}18`; // ~9 % — icon background
+  const border  = `${accent}44`; // ~27 % — top liseré base
+  const borderH = `${accent}88`; // ~53 % — top liseré on hover
+  const glow    = `${accent}22`; // ~13 % — hover box-shadow
 
   const inner = (
     <motion.div
@@ -185,48 +191,56 @@ function ArticleCard({ article, index, inView }) {
       style={{
         background: 'var(--bg-card)',
         border: '1px solid var(--glass-border)',
+        borderTop: `3px solid ${border}`,
         borderRadius: 16,
         padding: '28px 24px',
         display: 'flex',
         flexDirection: 'column',
         gap: 14,
         cursor: article.hasPage ? 'pointer' : 'default',
-        transition: 'border-color 0.3s, transform 0.3s var(--ease-out)',
+        transition: 'border-color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s',
         height: '100%',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--gold-border)';
+        e.currentTarget.style.borderColor = `${accent}44`;
+        e.currentTarget.style.borderTopColor = borderH;
         e.currentTarget.style.transform = 'translateY(-4px)';
+        e.currentTarget.style.boxShadow = `0 14px 36px ${glow}`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = 'var(--glass-border)';
+        e.currentTarget.style.borderTopColor = border;
         e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = 'none';
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      {/* Icon + category row */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Large icon with accent halo */}
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: 'var(--gold-glow)',
-              border: '1px solid var(--gold-border)',
+              width: 48,
+              height: 48,
+              borderRadius: 13,
+              background: halo,
+              border: `1px solid ${border}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
             }}
           >
-            <Icon size={18} color="var(--gold)" strokeWidth={1.5} />
+            <Icon size={24} color={accent} strokeWidth={1.5} />
           </div>
           <span
             style={{
               fontSize: 11,
-              color: 'var(--gold)',
-              fontWeight: 600,
+              color: accent,
+              fontWeight: 700,
               textTransform: 'uppercase',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.1em',
+              lineHeight: 1.2,
             }}
           >
             {article.categorie}
@@ -276,7 +290,7 @@ function ArticleCard({ article, index, inView }) {
       </p>
 
       {article.hasPage && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold)', fontWeight: 500, marginTop: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: accent, fontWeight: 500, marginTop: 4 }}>
           Lire <ArrowRight size={13} strokeWidth={2} />
         </div>
       )}
