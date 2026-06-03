@@ -10,7 +10,6 @@ export const articles = [
     categorie: 'Urgence',
     readTime: '4 min',
     hasPage: true,
-    featured: true,
   },
   {
     slug: 'controle-sans-assurance-risques-amende',
@@ -24,13 +23,14 @@ export const articles = [
     featured: false,
   },
   {
-    slug: 'assurer-vehicule-achete-particulier',
+    slug: 'assurer-vehicule-achete-chez-particulier',
     titre: 'Assurer un véhicule acheté chez un particulier',
     extrait:
       "Vous venez d'acheter un véhicule entre particuliers ? Voici comment rouler assuré dès le premier trajet, sans attendre la carte grise.",
     icone: ShoppingCart,
     categorie: 'Achat véhicule',
-    hasPage: false,
+    readTime: '5 min',
+    hasPage: true,
   },
   {
     slug: 'assurance-temporaire-retour-etranger',
