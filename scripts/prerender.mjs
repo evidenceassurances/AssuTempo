@@ -37,6 +37,7 @@ const ROUTES = [
   '/articles/assurer-vehicule-achete-chez-particulier',
   '/articles/combien-de-jours-assurance-sortir-fourriere',
   '/articles/assurance-temporaire-vehicule-etranger-france',
+  '/articles/assurance-temporaire-pret-de-vehicule',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
 ];

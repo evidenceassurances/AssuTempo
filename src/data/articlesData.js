@@ -58,14 +58,14 @@ export const articles = [
     hasPage: true,
   },
   {
-    slug: 'preter-emprunter-vehicule',
+    slug: 'assurance-temporaire-pret-de-vehicule',
     titre: 'Prêter ou emprunter un véhicule en toute sécurité',
     extrait:
-      "Un ami vous prête sa voiture ou vous lui prêtez la vôtre ? L'assurance temporaire protège le conducteur désigné sans toucher à votre contrat annuel.",
+      "Un ami vous prête sa voiture ou vous lui prêtez la vôtre ? L'assurance temporaire protège le conducteur désigné sans toucher au bonus-malus du propriétaire.",
     icone: Users,
     accent: '#7E9B79',
     categorie: 'Prêt de véhicule',
-    hasPage: false,
+    hasPage: true,
   },
   {
     slug: 'convoyage-professionnel-assurance',
