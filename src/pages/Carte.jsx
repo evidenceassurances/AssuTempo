@@ -600,7 +600,7 @@ function Carte() {
               >
                 {selectedCountry
                   ? selectedCountry.h1
-                  : 'Assurance temporaire en Europe : la carte des 34 pays couverts'}
+                  : 'Assurance temporaire : 34 pays européens couverts'}
               </motion.h1>
             </AnimatePresence>
           </motion.div>
