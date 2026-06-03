@@ -40,6 +40,7 @@ const ROUTES = [
   '/articles/assurance-temporaire-pret-de-vehicule',
   '/articles/assurance-temporaire-convoyage-professionnel',
   '/articles/assurance-temporaire-essai-vehicule-avant-achat',
+  '/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
 ];

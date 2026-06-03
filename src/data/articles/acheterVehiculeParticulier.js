@@ -170,6 +170,10 @@ export const articleData = {
       type: 'checklist',
       heading: 'Quels documents pour la carte grise ?',
       intro: "Dans le mois suivant l'achat, réunissez :",
+      relatedLink: {
+        text: 'Rouler en attendant sa carte grise définitive',
+        href: '/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
+      },
       items: [
         'Le certificat d\'immatriculation barré, daté et signé "vendu le…" par le vendeur',
         'Le certificat de cession (Cerfa 15776)',

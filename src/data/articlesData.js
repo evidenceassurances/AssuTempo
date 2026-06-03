@@ -78,14 +78,15 @@ export const articles = [
     hasPage: true,
   },
   {
-    slug: 'rouler-en-attendant-carte-grise',
+    slug: 'assurance-temporaire-rouler-en-attendant-carte-grise',
     titre: 'Rouler en attendant sa carte grise définitive',
     extrait:
-      "Les délais de carte grise s'étirent ? Couvrez-vous pendant la période de transition avec une attestation immédiate, valable dès la souscription.",
+      "Les délais de carte grise s'étirent ? Le CPI vous autorise à rouler 1 mois en France. Couvrez-vous pendant la période de transition avec une attestation immédiate, valable dès la souscription.",
     icone: FileText,
     accent: '#C9A84C',
     categorie: 'Carte grise',
-    hasPage: false,
+    readTime: '4 min',
+    hasPage: true,
   },
   {
     slug: 'assurance-temporaire-essai-vehicule-avant-achat',
