@@ -49,7 +49,7 @@ function Particle({ p, scrollYProgress }) {
   );
 }
 
-/* Couche particules — 20 max, will-change sur le conteneur */
+/* Couche particules - 20 max, will-change sur le conteneur */
 function ScrollParticles() {
   const { scrollYProgress } = useScroll();
 
@@ -94,7 +94,7 @@ function StaticParticles() {
   );
 }
 
-/* BackgroundFX — fond atmosphérique 5 couches + particules scroll */
+/* BackgroundFX - fond atmosphérique 5 couches + particules scroll */
 function BackgroundFX() {
   const prefersReduced = typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -110,7 +110,7 @@ function BackgroundFX() {
         overflow: 'hidden',
       }}
     >
-      {/* COUCHE 1 — Dégradé radial de base */}
+      {/* COUCHE 1 - Dégradé radial de base */}
       <div
         style={{
           position: 'absolute',
@@ -119,7 +119,7 @@ function BackgroundFX() {
         }}
       />
 
-      {/* COUCHE 2 — 3 orbes lumineux flous */}
+      {/* COUCHE 2 - 3 orbes lumineux flous */}
       <div
         style={{
           position: 'absolute',
@@ -163,13 +163,13 @@ function BackgroundFX() {
         }}
       />
 
-      {/* COUCHE 3 — Champ d'étoiles (CSS pur) */}
+      {/* COUCHE 3 - Champ d'étoiles (CSS pur) */}
       <Stars />
 
-      {/* COUCHE 3b — Particules dorées au scroll */}
+      {/* COUCHE 3b - Particules dorées au scroll */}
       {prefersReduced ? <StaticParticles /> : <ScrollParticles />}
 
-      {/* COUCHE 4 — Grille technique */}
+      {/* COUCHE 4 - Grille technique */}
       <div
         style={{
           position: 'absolute',
@@ -184,7 +184,7 @@ function BackgroundFX() {
         }}
       />
 
-      {/* COUCHE 5 — Grain filmique */}
+      {/* COUCHE 5 - Grain filmique */}
       <div
         style={{
           position: 'absolute',

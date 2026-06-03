@@ -41,7 +41,7 @@ function Pricing() {
             SOUSCRIPTION EN LIGNE
           </p>
           <h1 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', marginBottom: 24 }}>
-            Tarification — Assurance Temporaire en Ligne
+            Tarification - Assurance Temporaire en Ligne
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 16, maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '0 24px 40px', lineHeight: 1.75 }}>
             Obtenez votre devis d'assurance temporaire instantanément. De 1 à 90 jours, pour particuliers et professionnels. Souscription 100% en ligne, attestation immédiate.
@@ -111,7 +111,7 @@ function Pricing() {
             📞 09 74 19 78 20
           </a>
           <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-            Lun–Ven 9h–21h | Sam 9h–20h
+            Lun-Ven 9h-21h | Sam 9h-20h
           </p>
         </motion.div>
       </div>

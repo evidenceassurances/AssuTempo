@@ -189,7 +189,7 @@ function Hero() {
             </button>
           </motion.div>
 
-          {/* Ligne de confiance — discrète, secondaire, pas de conteneur */}
+          {/* Ligne de confiance - discrète, secondaire, pas de conteneur */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -256,7 +256,7 @@ function Hero() {
   );
 }
 
-/* Anneau lumineux doré — pièce maîtresse (aria-hidden, décoratif) */
+/* Anneau lumineux doré - pièce maîtresse (aria-hidden, décoratif) */
 function GoldenRing() {
   return (
     <>
@@ -286,7 +286,7 @@ function GoldenRing() {
           }}
         />
 
-        {/* Anneau principal — 520×520 rendu, viewBox 700×700 conservé */}
+        {/* Anneau principal - 520×520 rendu, viewBox 700×700 conservé */}
         <svg
           width="520"
           height="520"

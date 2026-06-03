@@ -17,6 +17,7 @@ import { useScrollProgress } from '../hooks/useScrollProgress';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import AccordionItem from './ui/AccordionItem';
 import Footer from './Footer';
+import StepFlow from './StepFlow';
 import { articles } from '../data/articlesData';
 
 /* ─── Motion wrapper that respects prefers-reduced-motion ─── */
@@ -359,6 +360,13 @@ function RenderSection({ section, index }) {
         </Reveal>
       );
 
+    case 'stepflow':
+      return (
+        <Reveal delay={delay}>
+          <StepFlow steps={section.steps} ariaLabel={section.ariaLabel} />
+        </Reveal>
+      );
+
     default:
       return null;
   }
@@ -423,7 +431,7 @@ function ArticleCTABlock() {
         </a>
       </div>
       <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: '14px 0 0' }}>
-        Lun–Ven 9h–21h · Sam 9h–20h
+        Lun-Ven 9h-21h · Sam 9h-20h
       </p>
     </motion.div>
   );
@@ -785,7 +793,7 @@ function ArticleLayout({ data }) {
                     margin: '0 0 10px',
                   }}
                 >
-                  Réponse immédiate
+                  {data.immediateAnswerLabel ?? 'Réponse immédiate'}
                 </p>
                 <p
                   style={{
@@ -894,7 +902,7 @@ function ArticleLayout({ data }) {
                 </a>
               </div>
               <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
-                Lun–Ven 9h–21h · Sam 9h–20h
+                Lun-Ven 9h-21h · Sam 9h-20h
               </p>
             </div>
           </Reveal>

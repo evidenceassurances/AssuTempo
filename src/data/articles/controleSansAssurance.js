@@ -102,7 +102,7 @@ export const articleData = {
   headline:
     "Contrôlé sans assurance : risques, amende et que faire tout de suite",
   immediateAnswer:
-    "Vous venez d'être contrôlé sans assurance, ou vous craignez de l'être ? Soyons clairs : rouler sans assurance est un délit, et la facture peut grimper de 500 € à 3 750 €. Mais la situation se règle vite. En souscrivant une assurance temporaire en ligne, vous obtenez une attestation immédiate, présentable sur-le-champ — et vous évitez l'essentiel des conséquences. Voici ce que vous risquez exactement, et quoi faire dans la foulée.",
+    "Vous venez d'être contrôlé sans assurance, ou vous craignez de l'être ? Soyons clairs : rouler sans assurance est un délit, et la facture peut grimper de 500 € à 3 750 €. Mais la situation se règle vite. En souscrivant une assurance temporaire en ligne, vous obtenez une attestation immédiate, présentable sur-le-champ - et vous évitez l'essentiel des conséquences. Voici ce que vous risquez exactement, et quoi faire dans la foulée.",
   sections: [
     {
       type: 'text',
@@ -128,7 +128,7 @@ export const articleData = {
       type: 'text',
       heading: 'Et votre véhicule ? Immobilisation et fourrière',
       paragraphs: [
-        "Lors du contrôle, les forces de l'ordre peuvent immobiliser le véhicule sur-le-champ et vous remettre une fiche d'immobilisation. Sans régularisation, il peut partir en fourrière au bout de 48 heures — et les frais tombent chaque jour.",
+        "Lors du contrôle, les forces de l'ordre peuvent immobiliser le véhicule sur-le-champ et vous remettre une fiche d'immobilisation. Sans régularisation, il peut partir en fourrière au bout de 48 heures - et les frais tombent chaque jour.",
       ],
       relatedLink: {
         text: "Voiture immobilisée ? Suivez notre guide complet pour la récupérer",

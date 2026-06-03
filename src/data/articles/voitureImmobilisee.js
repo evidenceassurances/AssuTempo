@@ -116,13 +116,13 @@ export const articleData = {
   headline:
     "Voiture immobilisée pour défaut d'assurance : comment la récupérer (vite et légalement)",
   immediateAnswer:
-    "Vous venez d'être contrôlé sans assurance, votre voiture est immobilisée — peut-être déjà partie en fourrière — et les questions se bousculent. Respirez. La sortie tient en une phrase : pour récupérer votre véhicule, il faut présenter une attestation d'assurance valide. Et ça, vous pouvez l'obtenir en ligne en moins de 5 minutes, avec une attestation immédiate par email, présentable sur-le-champ à l'agent ou au commissariat. On vous explique exactement quoi faire, dans le bon ordre.",
+    "Vous venez d'être contrôlé sans assurance, votre voiture est immobilisée - peut-être déjà partie en fourrière - et les questions se bousculent. Respirez. La sortie tient en une phrase : pour récupérer votre véhicule, il faut présenter une attestation d'assurance valide. Et ça, vous pouvez l'obtenir en ligne en moins de 5 minutes, avec une attestation immédiate par email, présentable sur-le-champ à l'agent ou au commissariat. On vous explique exactement quoi faire, dans le bon ordre.",
   sections: [
     {
       type: 'text',
       heading: "Ce qui se passe quand on est contrôlé sans assurance",
       paragraphs: [
-        "En France, rouler sans assurance n'est pas une simple étourderie : c'est un délit. Lors d'un contrôle sans attestation valide, les forces de l'ordre peuvent immobiliser votre véhicule sur-le-champ. Vous recevez une fiche d'immobilisation — gardez-la, c'est elle qui ouvre la suite des démarches. Sans régularisation, le véhicule peut partir en fourrière au bout de 48 heures, et les frais tombent chaque jour.",
+        "En France, rouler sans assurance n'est pas une simple étourderie : c'est un délit. Lors d'un contrôle sans attestation valide, les forces de l'ordre peuvent immobiliser votre véhicule sur-le-champ. Vous recevez une fiche d'immobilisation - gardez-la, c'est elle qui ouvre la suite des démarches. Sans régularisation, le véhicule peut partir en fourrière au bout de 48 heures, et les frais tombent chaque jour.",
       ],
     },
     {
@@ -133,13 +133,13 @@ export const articleData = {
         "Suspension du permis, immobilisation ou confiscation du véhicule possibles",
         "Inscription au fichier AGIRA",
       ],
-      note: "La plupart de ces conséquences s'évitent en régularisant immédiatement — c'est l'objet de ce guide.",
+      note: "La plupart de ces conséquences s'évitent en régularisant immédiatement - c'est l'objet de ce guide.",
     },
     {
       type: 'text',
       heading: "La bonne nouvelle : vous pouvez être assuré en 5 minutes",
       paragraphs: [
-        "Pas besoin de signer un contrat à l'année dans la précipitation. Une assurance auto temporaire couvre votre véhicule de 1 à 90 jours, avec la responsabilité civile obligatoire — exactement ce qu'exige la loi. Souscription 100 % en ligne, en quelques minutes, attestation immédiate par email. Vous la présentez tout de suite : à l'agent, au commissariat ou à la gendarmerie.",
+        "Pas besoin de signer un contrat à l'année dans la précipitation. Une assurance auto temporaire couvre votre véhicule de 1 à 90 jours, avec la responsabilité civile obligatoire - exactement ce qu'exige la loi. Souscription 100 % en ligne, en quelques minutes, attestation immédiate par email. Vous la présentez tout de suite : à l'agent, au commissariat ou à la gendarmerie.",
       ],
     },
     {
@@ -198,7 +198,7 @@ export const articleData = {
       type: 'text',
       heading: 'Combien ça coûte ?',
       paragraphs: [
-        "Deux postes : les frais de fourrière (enlèvement + gardiennage par jour) varient selon la commune et augmentent chaque jour — d'où l'intérêt d'agir vite. L'assurance temporaire, elle, est à prix fixe et transparent, affiché dès le devis selon le véhicule et la durée. Aucune surprise.",
+        "Deux postes : les frais de fourrière (enlèvement + gardiennage par jour) varient selon la commune et augmentent chaque jour - d'où l'intérêt d'agir vite. L'assurance temporaire, elle, est à prix fixe et transparent, affiché dès le devis selon le véhicule et la durée. Aucune surprise.",
       ],
     },
     {
@@ -212,8 +212,12 @@ export const articleData = {
       type: 'text',
       heading: 'En résumé',
       paragraphs: [
-        "Une voiture immobilisée pour défaut d'assurance, ce n'est pas une impasse : c'est une formalité à régler dans le bon ordre. Récupérez la fiche, souscrivez une temporaire pour l'attestation immédiate, présentez vos documents, payez les frais — et repartez. Le plus tôt vous agissez, le moins ça coûte.",
+        "Une voiture immobilisée pour défaut d'assurance, ce n'est pas une impasse : c'est une formalité à régler dans le bon ordre. Récupérez la fiche, souscrivez une temporaire pour l'attestation immédiate, présentez vos documents, payez les frais - et repartez. Le plus tôt vous agissez, le moins ça coûte.",
       ],
+      relatedLink: {
+        text: "Combien de jours d'assurance pour sortir de fourrière ?",
+        href: '/articles/combien-de-jours-assurance-sortir-fourriere',
+      },
     },
   ],
   faqItems: [

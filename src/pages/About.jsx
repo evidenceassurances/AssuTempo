@@ -174,7 +174,7 @@ function PartnerForm() {
     <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Champs cachés Web3Forms */}
       <input type="hidden" name="access_key" value="7a4b9f4a-f77e-4f9b-8a16-7635bff791ed" />
-      <input type="hidden" name="subject" value="Nouvelle demande de partenariat — AssuTempo" />
+      <input type="hidden" name="subject" value="Nouvelle demande de partenariat - AssuTempo" />
       <input type="hidden" name="from_name" value="Formulaire partenaires AssuTempo" />
       {/* Honeypot anti-spam : rejeté silencieusement par Web3Forms si coché par un bot */}
       <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
@@ -380,7 +380,7 @@ function About() {
             style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}
             className="about-grid"
           >
-            {/* Colonne gauche — Notre histoire */}
+            {/* Colonne gauche - Notre histoire */}
             <motion.div
               variants={slideLeft}
               initial="hidden"
@@ -458,7 +458,7 @@ function About() {
               </div>
             </motion.div>
 
-            {/* Colonne droite — Valeurs */}
+            {/* Colonne droite - Valeurs */}
             <motion.div
               variants={stagger}
               initial="hidden"

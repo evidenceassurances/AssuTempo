@@ -1,4 +1,4 @@
-import { Car, FileText, Users, Truck, Clock, ShoppingCart, AlertTriangle } from 'lucide-react';
+import { Car, FileText, Users, Truck, Clock, ShoppingCart, AlertTriangle, ParkingSquare } from 'lucide-react';
 
 export const articles = [
   {
@@ -21,6 +21,16 @@ export const articles = [
     readTime: '4 min',
     hasPage: true,
     featured: false,
+  },
+  {
+    slug: 'combien-de-jours-assurance-sortir-fourriere',
+    titre: "Sortie de fourrière : combien de jours d'assurance faut-il souscrire ?",
+    extrait:
+      "Combien de jours d'assurance pour sortir une voiture de la fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate en ligne, dès 1 jour.",
+    icone: ParkingSquare,
+    categorie: 'Urgence',
+    readTime: '4 min',
+    hasPage: true,
   },
   {
     slug: 'assurer-vehicule-achete-chez-particulier',

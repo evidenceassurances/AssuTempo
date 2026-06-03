@@ -40,7 +40,7 @@ function ProcessStep({ step, index, inView }) {
         padding: '0 16px',
       }}
     >
-      {/* Numéro — flux normal, jamais en position absolute */}
+      {/* Numéro - flux normal, jamais en position absolute */}
       <div
         style={{
           fontSize: 12,
@@ -110,7 +110,7 @@ function ProcessStep({ step, index, inView }) {
   );
 }
 
-/* Ligne de connexion — uniquement desktop */
+/* Ligne de connexion - uniquement desktop */
 function ConnectingLine({ inView }) {
   return (
     <div

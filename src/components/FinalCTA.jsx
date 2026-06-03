@@ -28,7 +28,7 @@ function FinalCTA() {
         }}
       />
 
-      {/* Anneau principal — sens horaire */}
+      {/* Anneau principal - sens horaire */}
       <div
         aria-hidden
         style={{
@@ -54,7 +54,7 @@ function FinalCTA() {
           <circle cx="240" cy="240" r="230" fill="none" stroke="url(#cta-ring-1)" strokeWidth="1.2" strokeDasharray="55 22" />
         </svg>
 
-        {/* Second anneau — sens inverse */}
+        {/* Second anneau - sens inverse */}
         <svg
           width="480"
           height="480"
@@ -140,7 +140,7 @@ function FinalCTA() {
               📞 09 74 19 78 20
             </a>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0 }}>
-              Lun–Ven 9h–21h &middot; Sam 9h–20h
+              Lun-Ven 9h-21h &middot; Sam 9h-20h
             </p>
 
             {/* Ligne séparatrice dorée dégradée */}
@@ -154,7 +154,7 @@ function FinalCTA() {
             />
 
             <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: 0, letterSpacing: '0.05em' }}>
-              Portail accessible 24h/24 — 7j/7
+              Portail accessible 24h/24 - 7j/7
             </p>
 
             {/* Pills documents */}

@@ -92,7 +92,7 @@ function Footer() {
         overflow: 'hidden',
       }}
     >
-      {/* Bordure haute — ligne dorée dégradée */}
+      {/* Bordure haute - ligne dorée dégradée */}
       <div
         style={{
           position: 'absolute',
@@ -104,7 +104,7 @@ function Footer() {
         }}
       />
 
-      {/* Halo doré centré en bas — très discret */}
+      {/* Halo doré centré en bas - très discret */}
       <div
         aria-hidden
         style={{
@@ -131,7 +131,7 @@ function Footer() {
         }}
         className="footer-grid"
       >
-        {/* Col 1 — Identité */}
+        {/* Col 1 - Identité */}
         <div>
           <Link to="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: 16 }}>
             <span
@@ -151,11 +151,11 @@ function Footer() {
             Démarche simple, attestation immédiate.
           </p>
           <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, maxWidth: 280, lineHeight: 1.6 }}>
-            Evidence Assurances — cabinet de courtage engagé RSE, 6 ans d&apos;expérience.
+            Evidence Assurances - cabinet de courtage engagé RSE, 6 ans d&apos;expérience.
           </p>
         </div>
 
-        {/* Col 2 — Navigation */}
+        {/* Col 2 - Navigation */}
         <div>
           <span style={colLabel}>Navigation</span>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -165,7 +165,7 @@ function Footer() {
           </nav>
         </div>
 
-        {/* Col 3 — Contact */}
+        {/* Col 3 - Contact */}
         <div>
           <span style={colLabel}>Contact</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -185,7 +185,7 @@ function Footer() {
               📞 09 74 19 78 20
             </a>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
-              Lun–Ven 9h–21h<br />Sam 9h–20h
+              Lun-Ven 9h-21h<br />Sam 9h-20h
             </p>
             <div style={{ marginTop: 8 }}>
               <FooterLink href="https://assutempo.fr/conditions-generales" external style={{ fontSize: 13 }}>
@@ -210,7 +210,7 @@ function Footer() {
         }}
       >
         <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, textAlign: 'center' }}>
-          &copy; 2026 Evidence Assurances — Tous droits réservés
+          &copy; 2026 Evidence Assurances - Tous droits réservés
         </p>
       </div>
 

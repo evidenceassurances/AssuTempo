@@ -102,14 +102,14 @@ export const articleData = {
   headline:
     "Assurer un véhicule acheté chez un particulier : comment rouler dès le premier trajet",
   immediateAnswer:
-    "Vous venez d'acheter une voiture à un particulier et vous voulez la ramener tout de suite ? Bonne nouvelle : c'est possible, à une condition — être assuré dès que vous prenez le volant. Ne comptez pas sur l'assurance du vendeur, qui est suspendue à la vente. La solution la plus simple : souscrire une assurance temporaire en ligne et recevoir une attestation immédiate, valable même si la carte grise n'est pas encore à votre nom. On vous explique tout.",
+    "Vous venez d'acheter une voiture à un particulier et vous voulez la ramener tout de suite ? Bonne nouvelle : c'est possible, à une condition - être assuré dès que vous prenez le volant. Ne comptez pas sur l'assurance du vendeur, qui est suspendue à la vente. La solution la plus simple : souscrire une assurance temporaire en ligne et recevoir une attestation immédiate, valable même si la carte grise n'est pas encore à votre nom. On vous explique tout.",
   sections: [
     {
       type: 'text',
       heading: "Devez-vous être assuré dès l'achat ? Oui, immédiatement",
       paragraphs: [
         "La loi est claire : la responsabilité civile est obligatoire dès la prise de possession du véhicule (article L211-1 du Code des assurances). Autrement dit, dès que le vendeur vous remet les clés et que vous roulez, vous devez être assuré au minimum au tiers.",
-        "Et attention : l'assurance du vendeur ne vous protège pas de façon fiable — son contrat est en principe suspendu à la vente. Rouler sans votre propre assurance, c'est un défaut d'assurance, un délit passible de 500 € à 3 750 € d'amende. En cas d'accident, le Fonds de garantie (FGAO) indemnise les victimes puis se retourne contre vous pour récupérer l'intégralité des sommes.",
+        "Et attention : l'assurance du vendeur ne vous protège pas de façon fiable - son contrat est en principe suspendu à la vente. Rouler sans votre propre assurance, c'est un défaut d'assurance, un délit passible de 500 € à 3 750 € d'amende. En cas d'accident, le Fonds de garantie (FGAO) indemnise les victimes puis se retourne contre vous pour récupérer l'intégralité des sommes.",
       ],
       relatedLink: {
         text: "Contrôlé sans assurance : risques, amende et que faire",
@@ -127,7 +127,7 @@ export const articleData = {
       type: 'text',
       heading: "Pourquoi l'assurance temporaire est idéale après un achat",
       paragraphs: [
-        "Elle est pensée pour ce moment précis : ramener le véhicule chez vous (surtout si vous l'avez acheté loin, un week-end ou un jour férié), le temps de finaliser et comparer un contrat annuel à tête reposée, ou couvrir un véhicule que vous n'utiliserez que ponctuellement. De 1 à 90 jours, attestation immédiate, sans engagement — vous ajustez au plus juste sans payer une année entière pour quelques jours.",
+        "Elle est pensée pour ce moment précis : ramener le véhicule chez vous (surtout si vous l'avez acheté loin, un week-end ou un jour férié), le temps de finaliser et comparer un contrat annuel à tête reposée, ou couvrir un véhicule que vous n'utiliserez que ponctuellement. De 1 à 90 jours, attestation immédiate, sans engagement - vous ajustez au plus juste sans payer une année entière pour quelques jours.",
       ],
     },
     {
@@ -177,7 +177,7 @@ export const articleData = {
       type: 'text',
       heading: 'En résumé',
       paragraphs: [
-        "Acheter chez un particulier n'oblige pas à attendre pour rouler. Assurez-vous dès la prise de possession — une temporaire suffit, avec attestation immédiate — et vous prenez la route légalement le jour même, carte grise à régulariser sous 30 jours.",
+        "Acheter chez un particulier n'oblige pas à attendre pour rouler. Assurez-vous dès la prise de possession - une temporaire suffit, avec attestation immédiate - et vous prenez la route légalement le jour même, carte grise à régulariser sous 30 jours.",
       ],
     },
   ],

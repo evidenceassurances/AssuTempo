@@ -1,0 +1,44 @@
+# AssuTempo
+
+AssuTempo est la plateforme en ligne d'assurance auto temporaire d'Evidence Assurances (cabinet de courtage, 6 ans d'expérience). Couverture de 1 à 90 jours, responsabilité civile obligatoire, attestation immédiate par email, 100 % en ligne, assistance dans 34 pays européens.
+
+Contact : 09 74 19 78 20 - Lun-Ven 9h-21h, Sam 9h-20h.
+
+---
+
+## Pages principales
+
+- **Accueil** — https://assutempo.fr/
+  Présentation du service, avantages, cas d'usage et formulaire de souscription.
+
+- **Tarification** — https://assutempo.fr/tarification
+  Grille tarifaire transparente selon la durée et le type de véhicule.
+
+- **FAQ** — https://assutempo.fr/faq
+  Réponses aux questions fréquentes : éligibilité, documents, couverture, rétractation.
+
+- **Qui sommes-nous** — https://assutempo.fr/qui-sommes-nous
+  Présentation d'Evidence Assurances et formulaire de contact partenariat.
+
+- **Articles et conseils** — https://assutempo.fr/articles
+  Hub de contenu SEO : guides pratiques sur l'assurance temporaire, situation par situation.
+
+---
+
+## Articles
+
+- **Voiture immobilisée pour défaut d'assurance : comment la récupérer**
+  https://assutempo.fr/articles/voiture-immobilisee-defaut-assurance
+  Guide complet pour récupérer un véhicule immobilisé ou en fourrière : étapes, documents, coûts.
+
+- **Contrôlé sans assurance : risques, amende et que faire**
+  https://assutempo.fr/articles/controle-sans-assurance-risques-amende
+  Montants des amendes (500 à 3 750 €), peines complémentaires, et démarche de régularisation immédiate.
+
+- **Sortie de fourrière : combien de jours d'assurance faut-il souscrire ?**
+  https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere
+  La fiche d'immobilisation fixe le minimum requis. Procédure pas à pas pour lever l'immobilisation.
+
+- **Assurer un véhicule acheté chez un particulier : comment rouler dès le premier trajet**
+  https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier
+  Obligations légales dès la prise de possession, rôle du certificat de cession, délai carte grise.

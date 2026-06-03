@@ -4,7 +4,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const TARGET = 'https://assutempo.fr/tarification';
 
-/* CTA #1 — Après VehicleMarquee : barre centrée sobre */
+/* CTA #1 - Après VehicleMarquee : barre centrée sobre */
 export function CtaAfterVehicles() {
   const [ref, inView] = useScrollReveal();
 
@@ -51,7 +51,7 @@ export function CtaAfterVehicles() {
   );
 }
 
-/* CTA #2 — Après Process : bandeau pleine largeur glass */
+/* CTA #2 - Après Process : bandeau pleine largeur glass */
 export function CtaAfterProcess() {
   const [ref, inView] = useScrollReveal();
 
@@ -131,7 +131,7 @@ export function CtaAfterProcess() {
   );
 }
 
-/* CTA #3 — Après Countries : centré, sobre, bouton outline */
+/* CTA #3 - Après Countries : centré, sobre, bouton outline */
 export function CtaAfterCountries() {
   const [ref, inView] = useScrollReveal();
 

@@ -95,7 +95,7 @@ function TestimonialCard({ review }) {
         </div>
         <div>
           <p style={{ fontSize: 13, color: '#888', fontStyle: 'italic' }}>
-            — {review.author}
+            - {review.author}
           </p>
           <p style={{ fontSize: 11, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 2 }}>
             {review.context}

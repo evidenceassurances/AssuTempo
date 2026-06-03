@@ -89,7 +89,7 @@ function Contact() {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
         >
-          {/* Badge disponibilité — vert pulsant */}
+          {/* Badge disponibilité - vert pulsant */}
           <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
             <div
               style={{
@@ -116,7 +116,7 @@ function Contact() {
                   flexShrink: 0,
                 }}
               />
-              Disponible maintenant • Lun–Sam
+              Disponible maintenant • Lun-Sam
             </div>
           </motion.div>
 
@@ -171,7 +171,7 @@ function Contact() {
               marginBottom: 48,
             }}
           >
-            {['Lundi – Vendredi : 9h00 – 21h00', 'Samedi : 9h00 – 20h00'].map((h) => (
+            {['Lundi - Vendredi : 9h00 - 21h00', 'Samedi : 9h00 - 20h00'].map((h) => (
               <p
                 key={h}
                 style={{
@@ -198,7 +198,7 @@ function Contact() {
               Souscrire maintenant →
             </button>
             <p style={{ marginTop: 14, fontSize: 13, color: 'var(--text-muted)' }}>
-              Portail de souscription accessible 24h/24 – 7j/7
+              Portail de souscription accessible 24h/24 - 7j/7
             </p>
 
             {/* Texte de réassurance */}
@@ -217,7 +217,7 @@ function Contact() {
             >
               <span style={{ color: 'var(--gold)' }}>✓</span> Sans engagement{'  '}
               <span style={{ color: 'var(--gold)' }}>✓</span> Attestation immédiate{'  '}
-              <span style={{ color: 'var(--gold)' }}>✓</span> Remboursement impossible légalement — vous êtes protégé dès le paiement
+              <span style={{ color: 'var(--gold)' }}>✓</span> Remboursement impossible légalement - vous êtes protégé dès le paiement
             </div>
           </motion.div>
 
