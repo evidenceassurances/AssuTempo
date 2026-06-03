@@ -93,7 +93,8 @@ function Reveal({ children, delay = 0 }) {
 /* ── Panneau pays animé ───────────────────────────────────────────────────── */
 function CountryPanel({ country }) {
   const reduce = useReducedMotion();
-  const { h1, intro, points, flag, nom, slug } = country;
+  const [openFaq, setOpenFaq] = useState(null);
+  const { h1, intro, points, flag, nom, slug, faq } = country;
 
   return (
     <motion.div
@@ -254,6 +255,32 @@ function CountryPanel({ country }) {
             09 74 19 78 20
           </a>
         </motion.div>
+
+        {/* FAQ pays — uniquement si des questions sont disponibles */}
+        {faq && faq.length > 0 && (
+          <motion.div variants={fadeUp} style={{ marginTop: 32 }}>
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: 'var(--gold)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.14em',
+                margin: '0 0 4px',
+              }}
+            >
+              Questions fréquentes
+            </p>
+            {faq.map((item, i) => (
+              <AccordionItem
+                key={item.q}
+                item={item}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );
