@@ -43,13 +43,14 @@ export const articles = [
     hasPage: true,
   },
   {
-    slug: 'assurance-temporaire-retour-etranger',
-    titre: "Assurance temporaire pour un retour de l'étranger",
+    slug: 'assurance-temporaire-vehicule-etranger-france',
+    titre: "Véhicule ou permis étranger : assurance temporaire en France",
     extrait:
-      "Permis ou véhicule d'origine étrangère ? Découvrez comment couvrir votre véhicule le temps de régulariser votre situation en France.",
+      "Véhicule à plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Attestation immédiate, 1 à 90 jours.",
     icone: Car,
     categorie: 'International',
-    hasPage: false,
+    readTime: '5 min',
+    hasPage: true,
   },
   {
     slug: 'preter-emprunter-vehicule',
