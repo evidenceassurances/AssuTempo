@@ -170,8 +170,15 @@ function Reveal({ children, delay = 0 }) {
 /* ── Carte SVG ── */
 function EuropeMap() {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
-  const [selected, setSelected] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
   const reduce = useReducedMotion();
+
+  /* Badge affiche le nom survolé pendant le survol, sinon le pays sélectionné */
+  const badgeName = tooltip.visible
+    ? tooltip.name
+    : selectedId !== null
+    ? COUNTRY_NAMES[selectedId]
+    : null;
 
   const handleEnter = (geoId, e) => {
     const name = COUNTRY_NAMES[geoId];
@@ -189,9 +196,8 @@ function EuropeMap() {
   };
 
   const handleClick = (geoId) => {
-    const name = COUNTRY_NAMES[geoId];
-    if (!name) return;
-    setSelected(name);
+    if (!COUNTRY_NAMES[geoId]) return;
+    setSelectedId((prev) => (prev === geoId ? null : geoId));
   };
 
   return (
@@ -231,8 +237,8 @@ function EuropeMap() {
           position: 'relative',
         }}
       >
-        {/* Badge pays sélectionné (mobile / tap) */}
-        {selected && (
+        {/* Badge : nom survolé pendant le hover, pays sélectionné au repos */}
+        {badgeName && (
           <div
             aria-live="polite"
             style={{
@@ -252,7 +258,7 @@ function EuropeMap() {
               pointerEvents: 'none',
             }}
           >
-            {selected}
+            {badgeName}
           </div>
         )}
 
@@ -271,19 +277,23 @@ function EuropeMap() {
                 const id = +geo.id;
                 const isCovered = COVERED.has(id);
                 const name = COUNTRY_NAMES[id];
+                const isSelected = selectedId === id;
+                /* Couleur de base : sélectionné → doré clair (token hover existant),
+                   couvert → doré standard, non couvert → fond sombre */
+                const baseFill = isSelected ? '#E8C97A' : isCovered ? '#C9A84C' : '#1C1A16';
 
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={isCovered ? '#C9A84C' : '#1C1A16'}
-                    stroke="#080706"
-                    strokeWidth={0.4}
+                    fill={baseFill}
+                    stroke={isSelected ? 'rgba(232,201,122,0.55)' : '#080706'}
+                    strokeWidth={isSelected ? 1.2 : 0.4}
                     aria-label={isCovered ? `${name} - pays couvert` : undefined}
                     tabIndex={isCovered ? 0 : -1}
                     role={isCovered ? 'img' : undefined}
                     style={{
-                      default: { outline: 'none', transition: reduce ? 'none' : 'fill 0.2s' },
+                      default: { outline: 'none', transition: reduce ? 'none' : 'fill 0.2s', fill: baseFill },
                       hover: {
                         fill: isCovered ? '#E8C97A' : '#222018',
                         outline: 'none',
