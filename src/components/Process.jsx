@@ -47,27 +47,11 @@ function ProcessStep({ step, index, inView }) {
           fontWeight: 700,
           color: 'var(--gold)',
           letterSpacing: '0.15em',
-          marginBottom: 8,
+          marginBottom: 24,
         }}
       >
         {step.num}
       </div>
-
-      {/* Trait doré */}
-      <div
-        style={{
-          width: 32,
-          height: 2,
-          background: 'var(--gold)',
-          borderRadius: 2,
-          marginBottom: 20,
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          alignSelf: 'center',
-          opacity: 0.6,
-          flexShrink: 0,
-        }}
-      />
 
       {/* Icône */}
       <div
