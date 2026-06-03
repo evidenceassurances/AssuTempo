@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useCountUp } from '../hooks/useCountUp';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import CompteurAttestations from './CompteurAttestations';
 
 const stats = [
   { value: 6, suffix: '', unit: 'ans', label: "d'expertise" },
@@ -123,6 +124,9 @@ function Stats() {
             Simple, rapide, et vraiment efficace.
           </p>
         </motion.div>
+
+        {/* Compteur attestations live */}
+        <CompteurAttestations />
 
         {/* Compteurs */}
         <div
