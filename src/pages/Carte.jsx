@@ -626,11 +626,8 @@ function Carte() {
                 }}
               >
                 Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile
-                obligatoire dans 34 pays européens, dès le premier jour. Depuis avril 2024,
-                la carte verte n&apos;existe plus : en France, la preuve d&apos;assurance se fait
-                directement à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre
-                contrat comprend votre Mémo Véhicule Assuré et votre carte internationale
-                d&apos;assurance automobile, valable dans les 34 pays cités.
+                dans 34 pays européens, dès le premier jour. Sélectionnez un pays sur la
+                carte pour le détail de votre couverture.
               </p>
             </div>
           </motion.div>
