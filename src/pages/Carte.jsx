@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { ArrowRight, Phone } from 'lucide-react';
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
@@ -15,7 +15,6 @@ import {
 
 /* ── Constantes géo ──────────────────────────────────────────────────────── */
 const GEO_URL = '/countries-110m.json';
-const DEFAULT_CENTER = [10, 54];
 
 const COVERED        = new Set(COUNTRIES.map(c => c.isoId));
 const COUNTRY_NAMES  = Object.fromEntries(COUNTRIES.map(c => [c.isoId, c.nom]));
@@ -364,12 +363,6 @@ function EuropeMap({ selectedId, onCountryClick }) {
           height={520}
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
-          <ZoomableGroup
-            center={DEFAULT_CENTER}
-            zoom={1}
-            disableZooming
-            disablePanning
-          >
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
                 geographies.map((geo) => {
@@ -418,7 +411,6 @@ function EuropeMap({ selectedId, onCountryClick }) {
                 })
               }
             </Geographies>
-          </ZoomableGroup>
         </ComposableMap>
 
         {/* Légende */}
