@@ -4,7 +4,7 @@ import { useCountUp } from '../hooks/useCountUp';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const stats = [
-  { value: 6, suffix: '', unit: 'ans', label: "années d'expérience" },
+  { value: 6, suffix: '', unit: 'ans', label: "d'expertise" },
   { value: 90, suffix: '', unit: 'jours', label: 'de couverture max' },
   { value: 34, suffix: '', unit: 'pays', label: 'européens' },
   { value: 5, suffix: '', unit: 'min', label: 'pour souscrire' },
