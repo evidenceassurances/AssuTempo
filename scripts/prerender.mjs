@@ -38,6 +38,7 @@ const ROUTES = [
   '/articles/combien-de-jours-assurance-sortir-fourriere',
   '/articles/assurance-temporaire-vehicule-etranger-france',
   '/articles/assurance-temporaire-pret-de-vehicule',
+  '/articles/assurance-temporaire-convoyage-professionnel',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
 ];

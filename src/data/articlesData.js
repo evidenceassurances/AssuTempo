@@ -68,14 +68,14 @@ export const articles = [
     hasPage: true,
   },
   {
-    slug: 'convoyage-professionnel-assurance',
+    slug: 'assurance-temporaire-convoyage-professionnel',
     titre: 'Convoyage professionnel : quelle assurance ?',
     extrait:
-      "Mandataires, négociants, transporteurs : l'assurance temporaire est la solution pour couvrir chaque véhicule convoyé, sans contrat annuel inutile.",
+      "Mandataires, négociants, transporteurs : assurez chaque véhicule convoyé (roulant) pour la durée exacte du trajet, sans contrat annuel inutile.",
     icone: Truck,
     accent: '#B0703F',
     categorie: 'Pro & convoyage',
-    hasPage: false,
+    hasPage: true,
   },
   {
     slug: 'rouler-en-attendant-carte-grise',

@@ -14,6 +14,7 @@ import AcheterVehiculeParticulier from './pages/articles/AcheterVehiculeParticul
 import CombienDeJoursAssurance from './pages/articles/CombienDeJoursAssurance';
 import AssuranceVehiculeEtranger from './pages/articles/AssuranceVehiculeEtranger';
 import PretVehicule from './pages/articles/PretVehicule';
+import ConvoyageProfessionnel from './pages/articles/ConvoyageProfessionnel';
 import Carte from './pages/Carte';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/articles/combien-de-jours-assurance-sortir-fourriere" element={<PageTransition><CombienDeJoursAssurance /></PageTransition>} />
           <Route path="/articles/assurance-temporaire-vehicule-etranger-france" element={<PageTransition><AssuranceVehiculeEtranger /></PageTransition>} />
           <Route path="/articles/assurance-temporaire-pret-de-vehicule" element={<PageTransition><PretVehicule /></PageTransition>} />
+          <Route path="/articles/assurance-temporaire-convoyage-professionnel" element={<PageTransition><ConvoyageProfessionnel /></PageTransition>} />
           <Route path="/carte" element={<PageTransition><Carte /></PageTransition>} />
           <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
         </Routes>
