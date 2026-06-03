@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
@@ -168,9 +168,9 @@ function Reveal({ children, delay = 0 }) {
 }
 
 /* ── Carte SVG ── */
-function EuropeMap() {
+function EuropeMap({ initialSelectedId = null }) {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(initialSelectedId);
   const reduce = useReducedMotion();
 
   /* Badge affiche le nom survolé pendant le survol, sinon le pays sélectionné */
@@ -341,6 +341,20 @@ function EuropeMap() {
 function Carte() {
   const [openFaq, setOpenFaq] = useState(null);
   const [pillsRef, pillsInView] = useScrollReveal();
+  const [searchParams] = useSearchParams();
+  const mapRef = useRef(null);
+
+  const rawPays = Number(searchParams.get('pays'));
+  const initialId = COVERED.has(rawPays) ? rawPays : null;
+
+  useEffect(() => {
+    if (!initialId || !mapRef.current) return;
+    const t = setTimeout(
+      () => mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+      500,
+    );
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -448,9 +462,9 @@ function Carte() {
       </section>
 
       {/* ── Carte SVG ── */}
-      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 64px' }}>
+      <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 64px' }}>
         <Reveal>
-          <EuropeMap />
+          <EuropeMap initialSelectedId={initialId} />
         </Reveal>
       </section>
 

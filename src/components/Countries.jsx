@@ -1,7 +1,23 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+
+/* ISO 3166-1 numérique — miroir de COUNTRY_NAMES dans Carte.jsx */
+const COUNTRY_ISO = {
+  'Autriche': 40, 'Belgique': 56, 'Bulgarie': 100, 'Chypre': 196,
+  'République tchèque': 203, 'Allemagne': 276, 'Danemark': 208,
+  'Espagne': 724, 'Estonie': 233, 'France': 250, 'Finlande': 246,
+  'Grèce': 300, 'Hongrie': 348, 'Croatie': 191, 'Italie': 380,
+  'Irlande': 372, 'Islande': 352, 'Luxembourg': 442, 'Lituanie': 440,
+  'Lettonie': 428, 'Malte': 470, 'Norvège': 578, 'Pays-Bas': 528,
+  'Portugal': 620, 'Pologne': 616, 'Roumanie': 642, 'Suède': 752,
+  'Slovaquie': 703, 'Slovénie': 705, 'Suisse': 756, 'Andorre': 20,
+  'Bosnie-Herzégovine': 70, 'Monténégro': 499, 'Royaume-Uni': 826,
+};
+
+/* Extrait "Autriche" de "🇦🇹 Autriche" (flag emoji = 4 chars JS) */
+const getName = (pill) => pill.substring(pill.indexOf(' ') + 1);
 
 const countries = [
   '🇦🇹 Autriche', '🇧🇪 Belgique', '🇧🇬 Bulgarie', '🇨🇾 Chypre',
@@ -17,6 +33,12 @@ const countries = [
 
 function Countries() {
   const [ref, inView] = useScrollReveal();
+  const navigate = useNavigate();
+
+  const goToMap = (pill) => {
+    const iso = COUNTRY_ISO[getName(pill)];
+    navigate(iso ? `/carte?pays=${iso}` : '/carte');
+  };
 
   return (
     <section style={{ background: 'var(--bg)', padding: '100px 0' }}>
@@ -53,8 +75,10 @@ function Countries() {
           }}
         >
           {countries.map((country, i) => (
-            <motion.div
+            <motion.button
+              type="button"
               key={country}
+              onClick={() => goToMap(country)}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.3, delay: i * 0.02, ease: [0.22, 1, 0.36, 1] }}
@@ -64,9 +88,10 @@ function Countries() {
                 border: '1px solid var(--glass-border)',
                 borderRadius: 999,
                 fontSize: 13,
+                fontFamily: 'inherit',
                 color: 'var(--text-muted)',
                 transition: 'border-color 0.25s, background 0.25s, color 0.25s',
-                cursor: 'default',
+                cursor: 'pointer',
                 whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
@@ -81,7 +106,7 @@ function Countries() {
               }}
             >
               {country}
-            </motion.div>
+            </motion.button>
           ))}
         </div>
 
