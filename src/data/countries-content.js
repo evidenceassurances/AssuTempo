@@ -1,6 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    countries-content.js — Données des 34 pays couverts par AssuTempo
-   Règle : aucune spécificité juridique locale non vérifiée.
 ───────────────────────────────────────────────────────────────────────────── */
 
 /* Gabarit générique — vrai, applicable à tous les pays couverts */
@@ -16,12 +15,14 @@ function generic(nom, flag, centreGeo) {
       `en règle dans ce pays comme dans les 33 autres pays couverts.`,
     points: [
       {
+        icon: 'Shield',
         titre: 'RC couverte dès J1',
         texte:
           'La responsabilité civile obligatoire est active dès le premier jour du contrat — ' +
           'aucun délai de carence pour votre couverture en ' + nom + '.',
       },
       {
+        icon: 'Globe',
         titre: 'Carte internationale d\'assurance automobile',
         texte:
           'Votre carte internationale d\'assurance automobile est le document officiel ' +
@@ -29,12 +30,14 @@ function generic(nom, flag, centreGeo) {
           '. Elle est délivrée immédiatement avec votre Mémo Véhicule Assuré.',
       },
       {
+        icon: 'MailCheck',
         titre: 'Attestation immédiate',
         texte:
           'La souscription prend moins de 5 minutes. Votre attestation est disponible ' +
           'instantanément, valable pour circuler sans attendre.',
       },
       {
+        icon: 'Info',
         titre: 'Spécificités pratiques',
         texte:
           'À compléter — conseils locaux, documents recommandés au voyage, ' +
@@ -44,16 +47,18 @@ function generic(nom, flag, centreGeo) {
   };
 }
 
-/* Helper — les 3 cartes communes conservées dans les overrides lot 1+ */
+/* Helper — les 3 cartes communes (avec icônes) conservées dans les overrides */
 function genericPoints(nom) {
   return [
     {
+      icon: 'Shield',
       titre: 'RC couverte dès J1',
       texte:
         `La responsabilité civile obligatoire est active dès le premier jour du contrat — ` +
         `aucun délai de carence pour votre couverture en ${nom}.`,
     },
     {
+      icon: 'Globe',
       titre: `Carte internationale d'assurance automobile`,
       texte:
         `Votre carte internationale d'assurance automobile est le document officiel ` +
@@ -61,6 +66,7 @@ function genericPoints(nom) {
         `Elle est délivrée immédiatement avec votre Mémo Véhicule Assuré.`,
     },
     {
+      icon: 'MailCheck',
       titre: 'Attestation immédiate',
       texte:
         `La souscription prend moins de 5 minutes. Votre attestation est disponible ` +
@@ -71,7 +77,7 @@ function genericPoints(nom) {
 
 /* ─── Liste complète des 34 pays ─────────────────────────────────────────── */
 const RAW = [
-  /* [slug, isoId, nom, flag, center[lng,lat], overrides?] */
+  /* [slug, isoId, nom, flag, center[lng,lat]] */
   ['autriche',            40,  'Autriche',             '🇦🇹', [14.5, 47.5]],
   ['belgique',            56,  'Belgique',             '🇧🇪', [4.5,  50.5]],
   ['bulgarie',           100,  'Bulgarie',             '🇧🇬', [25.5, 42.7]],
@@ -124,12 +130,14 @@ const FRANCE_OVERRIDE = {
     'internationale d\'assurance automobile (valable dans les 34 pays couverts).',
   points: [
     {
+      icon: 'Shield',
       titre: 'RC couverte dès J1',
       texte:
         'La responsabilité civile obligatoire est active dès le premier jour du contrat — ' +
         'aucun délai de carence, quelle que soit la durée choisie (1 à 90 jours).',
     },
     {
+      icon: 'FileSearch',
       titre: 'Le FVA remplace la carte verte en France',
       texte:
         'Depuis avril 2024, la carte verte n\'existe plus comme justificatif en France. ' +
@@ -137,6 +145,7 @@ const FRANCE_OVERRIDE = {
         'Assurés (FVA), mis à jour à votre souscription.',
     },
     {
+      icon: 'MailCheck',
       titre: 'Mémo Véhicule Assuré — immédiat',
       texte:
         'À la souscription, vous recevez votre Mémo Véhicule Assuré (document de ' +
@@ -144,6 +153,7 @@ const FRANCE_OVERRIDE = {
         '(pour les 34 pays européens couverts).',
     },
     {
+      icon: 'Car',
       titre: 'Cas d\'usage typiques',
       texte:
         'Achat d\'un véhicule d\'occasion, démarche de carte grise, rapatriement, export, ' +
@@ -158,46 +168,46 @@ const FRANCE_OVERRIDE = {
 const ALLEMAGNE_OVERRIDE = {
   title: `Assurance temporaire Allemagne | Carte verte & RC dès le 1er jour — AssuTempo`,
   metaDescription:
-    `Roulez assuré en Allemagne dès le premier jour : RC automobile, carte internationale d'assurance, attestation en 5 min. Autobahn, vignette environnementale et règles de conduite expliquées.`,
+    `Roulez assuré en Allemagne dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Autobahn, Umweltplakette et règles de conduite.`,
   h1: `Assurance temporaire en Allemagne : roulez couvert dès le 1er jour`,
   intro:
-    `Votre assurance temporaire AssuTempo couvre la responsabilité civile automobile obligatoire en Allemagne, dès le premier jour du contrat. Trajet ponctuel, importation d'un véhicule acheté outre-Rhin ou conduite d'un véhicule étranger : votre carte internationale d'assurance (carte verte) vous permet de circuler en règle, comme dans les 33 autres pays couverts.`,
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Allemagne dès le 1er jour : trajet ponctuel, import d'un véhicule acheté outre-Rhin ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
   points: [
     ...genericPoints('Allemagne'),
     {
+      icon: 'Gauge',
       titre: `L'Autobahn, mode d'emploi`,
-      texte:
-        `L'Allemagne reste le seul pays d'Europe où certaines portions d'autoroute n'ont aucune limite de vitesse : une vitesse conseillée de 130 km/h (Richtgeschwindigkeit) y sert de repère, sans être obligatoire. Ailleurs, les limites sont appliquées strictement, radars à l'appui. On ne double jamais par la droite, et la voie de gauche se libère dès qu'un véhicule plus rapide approche. Gilet, triangle et trousse de secours conforme restent obligatoires à bord.`,
+      texte: `Seul pays d'Europe avec des portions d'autoroute sans limite (130 km/h conseillés) ; ailleurs, radars stricts. On ne double jamais par la droite, on libère la gauche. Gilet, triangle et trousse de secours obligatoires.`,
     },
     {
+      icon: 'Siren',
       titre: `La Rettungsgasse, le couloir qui sauve`,
-      texte:
-        `Dès que le trafic se fige sur l'Autobahn, les conducteurs doivent former un couloir de secours (Rettungsgasse) entre les files pour laisser passer les secours, avant même d'entendre une sirène. Sur deux voies, on se range à gauche et à droite ; sur trois voies, le couloir se crée entre la file de gauche et les deux autres. Ne pas le former, ou l'emprunter soi-même, est lourdement sanctionné.`,
+      texte: `Trafic à l'arrêt sur l'Autobahn ? Les voitures forment aussitôt un couloir de secours, avant même la sirène : à gauche sur 2 voies, entre la 1re et les autres sur 3 voies. Ne pas le faire est lourdement sanctionné.`,
     },
     {
-      titre: `La vignette environnementale (Umweltplakette)`,
-      texte:
-        `Pour entrer dans le centre de plus de cinquante villes — Berlin, Munich, Stuttgart, Cologne… — votre véhicule doit afficher la pastille verte Umweltplakette sur le pare-brise. Elle s'achète une seule fois pour la durée de vie du véhicule et concerne aussi les voitures immatriculées à l'étranger. Circuler sans pastille dans une Umweltzone, même de passage, expose à une amende.`,
+      icon: 'Leaf',
+      titre: `Vignette environnementale (Umweltplakette)`,
+      texte: `Pour entrer au centre de 50+ villes (Berlin, Munich, Cologne…), la pastille verte est obligatoire sur le pare-brise, voitures étrangères comprises. Sans elle, amende — même de passage.`,
     },
     {
-      titre: `Le pays qui a inventé l'automobile`,
-      texte:
-        `C'est en Allemagne que tout a commencé : Carl Benz y dépose le brevet de la première automobile en 1886. Deux ans plus tard, son épouse Bertha Benz réalise le premier vrai road-trip de l'histoire, parcourant seule plus de 100 km entre Mannheim et Pforzheim, et prouvant au passage la fiabilité de l'invention. Aujourd'hui encore, la « route Bertha Benz » se parcourt comme un itinéraire touristique.`,
+      icon: 'History',
+      titre: `Le berceau de l'automobile`,
+      texte: `Tout est né ici : Carl Benz brevète la première voiture en 1886. En 1888, Bertha Benz signe le premier road-trip de l'histoire (100+ km, Mannheim–Pforzheim), aujourd'hui balisé comme itinéraire touristique.`,
     },
     {
-      titre: `Acheter ou importer un véhicule allemand`,
-      texte:
-        `Premier marché européen de la voiture d'occasion, l'Allemagne attire de nombreux acheteurs français : berlines premium, utilitaires, youngtimers. Le temps de rapatrier le véhicule et d'engager l'immatriculation française, l'assurance temporaire vous couvre dès la sortie du concessionnaire, sans contrat à l'année pour un trajet unique. Conservez la facture et le certificat de cession : ils vous seront demandés à l'immatriculation.`,
+      icon: 'ShoppingCart',
+      titre: `Acheter ou importer un véhicule`,
+      texte: `Premier marché européen de l'occasion : berlines premium, utilitaires, youngtimers. L'assurance temporaire couvre le rapatriement dès la sortie du concessionnaire. Gardez facture et certificat de cession.`,
     },
   ],
   faq: [
     {
-      q: `Faut-il une assurance spécifique pour rouler en Allemagne ?`,
-      a: `Non. Votre RC AssuTempo et la carte internationale d'assurance valent dans les 34 pays couverts, Allemagne comprise, dès le 1er jour.`,
+      q: `Faut-il une assurance spécifique pour l'Allemagne ?`,
+      a: `Non : votre RC et la carte verte valent dans les 34 pays, dès le 1er jour.`,
     },
     {
-      q: `Suis-je couvert sur l'Autobahn, même sans limite de vitesse ?`,
-      a: `Oui. La couverture est identique quelle que soit la vitesse autorisée, sur autoroute comme en ville.`,
+      q: `Couvert sur l'Autobahn sans limite ?`,
+      a: `Oui, la couverture est identique quelle que soit la vitesse autorisée.`,
     },
   ],
 };
@@ -206,51 +216,51 @@ const ALLEMAGNE_OVERRIDE = {
 const ESPAGNE_OVERRIDE = {
   title: `Assurance temporaire Espagne | Carte verte & balise V16 — AssuTempo`,
   metaDescription:
-    `Roulez couvert en Espagne dès le 1er jour : RC automobile, carte internationale d'assurance, attestation en 5 min. Balise V16, gilet obligatoire et zones à faibles émissions expliqués.`,
+    `Roulez couvert en Espagne dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Balise V16, gilet obligatoire et zones à faibles émissions.`,
   h1: `Assurance temporaire en Espagne : roulez couvert dès le 1er jour`,
   intro:
-    `Votre assurance temporaire AssuTempo couvre la responsabilité civile automobile obligatoire en Espagne, dès le premier jour du contrat. Que vous descendiez vers la Costa Brava, importiez un véhicule ou conduisiez une voiture étrangère, votre carte internationale d'assurance (carte verte) vous permet de circuler en règle dans le pays comme dans les 33 autres pays couverts.`,
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Espagne dès le 1er jour : descente vers la côte, import ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
   points: [
     ...genericPoints('Espagne'),
     {
+      icon: 'Lightbulb',
       titre: `La balise V16 remplace le triangle`,
-      texte:
-        `Depuis le 1er janvier 2026, l'Espagne impose la balise lumineuse connectée V16 — un feu orange visible à 360° et à plus d'un kilomètre, qui transmet la position du véhicule à la plateforme DGT 3.0 — à la place du triangle de présignalisation. Bonne nouvelle pour les voyageurs : l'obligation ne vise que les véhicules immatriculés en Espagne. Avec un véhicule étranger, vos deux triangles et votre gilet restent parfaitement valables.`,
+      texte: `Depuis le 1er janvier 2026, la balise connectée V16 (feu orange à 360°, géolocalisé via DGT 3.0) remplace le triangle — mais seulement pour les véhicules immatriculés en Espagne. En voiture étrangère, triangles et gilet restent valables.`,
     },
     {
-      titre: `Le gilet à portée de main, pas dans le coffre`,
-      texte:
-        `En Espagne, le gilet de haute visibilité doit se trouver dans l'habitacle, à portée de main, et non dans le coffre. La règle paraît anodine mais piège beaucoup d'étrangers : il faut pouvoir l'enfiler avant de descendre du véhicule en cas d'arrêt d'urgence. Deux triangles de présignalisation complètent l'équipement obligatoire pour les véhicules non immatriculés en Espagne.`,
+      icon: 'Shirt',
+      titre: `Le gilet à portée de main`,
+      texte: `Le gilet de haute visibilité se range dans l'habitacle, jamais dans le coffre : il faut l'enfiler avant de sortir. Deux triangles complètent l'équipement des véhicules non immatriculés en Espagne.`,
     },
     {
-      titre: `Le plus grand réseau autoroutier d'Europe`,
-      texte:
-        `Peu le savent : l'Espagne possède le plus long réseau d'autoroutes et de voies rapides du continent, devant l'Allemagne et la France. Autre bonne surprise, plusieurs grandes autoroutes à péage sont devenues gratuites ces dernières années à l'expiration de leurs concessions, dont l'AP-7 le long de la Méditerranée. De quoi relier la frontière à l'Andalousie en grande partie sans barrière de péage.`,
+      icon: 'Route',
+      titre: `Le plus grand réseau d'Europe`,
+      texte: `Surprise : l'Espagne possède le plus long réseau d'autoroutes du continent, devant l'Allemagne et la France. Et plusieurs grands axes à péage sont devenus gratuits, dont l'AP-7 méditerranéenne.`,
     },
     {
-      titre: `Les zones à faibles émissions (ZBE)`,
-      texte:
-        `Depuis 2023, toutes les villes espagnoles de plus de 50 000 habitants doivent instaurer une Zona de Bajas Emisiones. Madrid et Barcelone filtrent déjà l'accès au centre selon la vignette environnementale (etiqueta DGT). Renseignez-vous avant d'entrer dans une grande ville : les caméras à lecture de plaque verbalisent automatiquement les véhicules non autorisés.`,
+      icon: 'Wind',
+      titre: `Zones à faibles émissions (ZBE)`,
+      texte: `Depuis 2023, chaque ville de 50 000+ habitants a sa ZBE. Madrid et Barcelone filtrent le centre selon la vignette DGT ; les caméras verbalisent seules les véhicules non autorisés.`,
     },
     {
-      titre: `Ronds-points : restez sur la voie extérieure`,
-      texte:
-        `Au volant en Espagne, une règle surprend les Français : sur un rond-point à plusieurs voies, on circule sur la voie extérieure et l'on en sort par celle-ci, les voies intérieures servant surtout à dépasser. S'installer durablement à l'intérieur pour « couper » est non seulement mal vu mais verbalisable. Dans le doute, restez à droite et signalez clairement votre sortie.`,
+      icon: 'RotateCw',
+      titre: `Ronds-points : restez à l'extérieur`,
+      texte: `Règle qui piège les Français : on circule sur la voie extérieure et on en sort par celle-ci, l'intérieur servant à dépasser. Couper par l'intérieur est verbalisable.`,
     },
     {
+      icon: 'Car',
       titre: `Importer ou descendre depuis l'Espagne`,
-      texte:
-        `Frontière la plus franchie par les Français l'été, l'Espagne est aussi un marché d'achat de véhicules récents. Le temps de regagner la France et de finaliser la carte grise, l'assurance temporaire vous couvre dès la prise en main, sans engagement. Pour un long trajet, anticipez tout de même les autopistas à péage qui subsistent sur certains axes.`,
+      texte: `Frontière la plus franchie l'été, et marché de véhicules récents. L'assurance temporaire couvre dès la prise en main, le temps de finaliser la carte grise en France.`,
     },
   ],
   faq: [
     {
       q: `Dois-je acheter une balise V16 pour traverser l'Espagne ?`,
-      a: `Avec un véhicule immatriculé hors d'Espagne, non : vos triangles et votre gilet suffisent. La V16 n'est obligatoire que pour les véhicules immatriculés en Espagne.`,
+      a: `Non en véhicule étranger : triangles et gilet suffisent. La V16 ne vise que les véhicules immatriculés en Espagne.`,
     },
     {
-      q: `Mon assurance temporaire couvre-t-elle l'Espagne dès le départ ?`,
-      a: `Oui. La RC et la carte internationale d'assurance valent dès le 1er jour dans les 34 pays, Espagne incluse.`,
+      q: `Couvert dès le départ ?`,
+      a: `Oui : RC et carte verte valent dès le 1er jour dans les 34 pays.`,
     },
   ],
 };
@@ -259,51 +269,51 @@ const ESPAGNE_OVERRIDE = {
 const BELGIQUE_OVERRIDE = {
   title: `Assurance temporaire Belgique | Carte verte & RC dès le 1er jour — AssuTempo`,
   metaDescription:
-    `Roulez assuré en Belgique dès le premier jour : RC automobile, carte internationale d'assurance, attestation en 5 min. Priorité de droite, LEZ de Bruxelles et réseau autoroutier expliqués.`,
+    `Roulez assuré en Belgique dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Priorité de droite, LEZ de Bruxelles et réseau autoroutier.`,
   h1: `Assurance temporaire en Belgique : roulez couvert dès le 1er jour`,
   intro:
-    `Votre assurance temporaire AssuTempo couvre la responsabilité civile automobile obligatoire en Belgique, dès le premier jour du contrat. Trajet transfrontalier, achat d'un véhicule ou conduite d'une voiture étrangère : votre carte internationale d'assurance (carte verte) vous permet de circuler en règle dans le pays et dans les 33 autres pays couverts.`,
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Belgique dès le 1er jour : trajet transfrontalier, achat de véhicule ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
   points: [
     ...genericPoints('Belgique'),
     {
+      icon: 'CornerUpRight',
       titre: `La priorité de droite, reine des carrefours`,
-      texte:
-        `La Belgique applique la priorité de droite plus systématiquement qu'en France : à une intersection sans signalisation ni marquage au sol, le véhicule venant de droite passe, même lorsqu'il débouche d'une voie plus petite. C'est la première cause d'accrochages pour les conducteurs étrangers. Règle simple : en l'absence de panneau, on cède toujours à droite et on aborde les carrefours au ralenti.`,
+      texte: `Plus stricte qu'en France : sans panneau ni marquage, celui qui vient de droite passe, même d'une petite rue. Première cause d'accrochages pour les étrangers — au moindre doute, on cède et on ralentit.`,
     },
     {
+      icon: 'Camera',
       titre: `La Low Emission Zone (LEZ)`,
-      texte:
-        `Bruxelles, Anvers et Gand appliquent une zone de basses émissions qui interdit les véhicules les plus polluants. Avec une plaque étrangère, un enregistrement en ligne préalable est nécessaire avant d'entrer dans la LEZ de Bruxelles : faute de quoi les caméras verbalisent automatiquement, y compris pour un simple passage.`,
+      texte: `Bruxelles, Anvers et Gand interdisent les véhicules les plus polluants. Avec une plaque étrangère, l'enregistrement en ligne est obligatoire avant d'entrer à Bruxelles, sinon les caméras verbalisent — même de passage.`,
     },
     {
+      icon: 'Lightbulb',
       titre: `Un réseau gratuit… et longtemps illuminé`,
-      texte:
-        `La Belgique n'impose aucune vignette autoroutière aux voitures particulières, et son réseau, parmi les plus denses d'Europe, est gratuit. Il fut aussi l'un des plus éclairés au monde, au point d'alimenter la légende tenace d'autoroutes « visibles depuis l'espace ». L'éclairage a depuis été largement réduit pour des raisons d'économies d'énergie, mais l'anecdote a la vie dure.`,
+      texte: `Aucune vignette pour les voitures : le réseau, parmi les plus denses d'Europe, est gratuit. Et si éclairé qu'on le disait « visible depuis l'espace » — légende tenace, depuis largement éteinte par souci d'économie.`,
     },
     {
+      icon: 'GraduationCap',
       titre: `Le permis qui s'obtenait sans examen`,
-      texte:
-        `Curiosité historique souvent citée pour expliquer la réputation de ses carrefours : longtemps, le permis belge a pu s'obtenir sans examen pratique, devenu obligatoire seulement dans les années 1970. Les règles ont bien sûr été modernisées depuis, mais la prudence reste de mise, en particulier face à la priorité de droite.`,
+      texte: `Anecdote qui explique la réputation des carrefours : longtemps, le permis belge s'obtenait sans examen pratique, rendu obligatoire seulement dans les années 1970.`,
     },
     {
+      icon: 'Flag',
       titre: `Terre de sport automobile`,
-      texte:
-        `Impossible d'évoquer la Belgique sans Spa-Francorchamps, l'un des circuits les plus mythiques du calendrier, niché dans les Ardennes. Son enchaînement du Raidillon de l'Eau Rouge, avalé à pleine vitesse, fait partie des virages les plus impressionnants de la planète automobile. Un héritage qui imprègne la culture auto du pays bien au-delà du paddock.`,
+      texte: `Impossible d'ignorer Spa-Francorchamps, dans les Ardennes, et son Raidillon de l'Eau Rouge : l'un des virages les plus impressionnants du sport automobile mondial.`,
     },
     {
-      titre: `Documents, frontaliers et import`,
-      texte:
-        `Permis, carte grise et carte internationale d'assurance suffisent à un contrôle ; gilet et triangle restent obligatoires à bord. Pour les nombreux frontaliers et acheteurs de véhicules d'occasion, l'assurance temporaire couvre le trajet de rapatriement dès la sortie du parking vendeur, sans contrat annuel.`,
+      icon: 'FileText',
+      titre: `Documents et frontaliers`,
+      texte: `Permis, carte grise et carte verte suffisent ; gilet et triangle obligatoires. Pour les frontaliers et acheteurs d'occasion, l'assurance temporaire couvre le rapatriement dès le parking vendeur.`,
     },
   ],
   faq: [
     {
-      q: `Faut-il une vignette pour rouler en Belgique ?`,
-      a: `Non, le réseau autoroutier belge est gratuit pour les voitures particulières.`,
+      q: `Faut-il une vignette en Belgique ?`,
+      a: `Non, le réseau autoroutier est gratuit pour les voitures.`,
     },
     {
-      q: `Dois-je m'enregistrer pour entrer dans Bruxelles ?`,
-      a: `Oui, avec une plaque étrangère, l'enregistrement préalable à la LEZ de Bruxelles est obligatoire.`,
+      q: `Enregistrement pour Bruxelles ?`,
+      a: `Oui, obligatoire avant d'entrer dans la LEZ avec une plaque étrangère.`,
     },
   ],
 };
@@ -312,51 +322,51 @@ const BELGIQUE_OVERRIDE = {
 const SUISSE_OVERRIDE = {
   title: `Assurance temporaire Suisse | Carte verte & vignette — AssuTempo`,
   metaDescription:
-    `Roulez couvert en Suisse dès le 1er jour : RC automobile, carte internationale d'assurance, attestation en 5 min. Vignette autoroutière, amendes calculées au revenu et cols alpins expliqués.`,
+    `Roulez couvert en Suisse dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Vignette autoroutière, amendes au revenu et cols alpins.`,
   h1: `Assurance temporaire en Suisse : roulez couvert dès le 1er jour`,
   intro:
-    `Votre assurance temporaire AssuTempo couvre la responsabilité civile automobile obligatoire en Suisse, dès le premier jour du contrat. Que vous traversiez les Alpes, importiez un véhicule ou conduisiez une voiture étrangère, votre carte internationale d'assurance (carte verte) vous permet de circuler en règle. La Suisse n'appartient pas à l'Union européenne, mais figure bien parmi les 34 pays couverts.`,
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Suisse dès le 1er jour : traversée des Alpes, import ou conduite d'une voiture étrangère. Hors Union européenne, la Suisse fait bien partie des 34 pays couverts par votre carte verte.`,
   points: [
     ...genericPoints('Suisse'),
     {
+      icon: 'Sticker',
       titre: `La vignette autoroutière obligatoire`,
-      texte:
-        `Pour emprunter les autoroutes et semi-autoroutes suisses, une vignette annuelle est obligatoire, désormais disponible en version électronique (e-vignette) liée à la plaque, en plus de l'autocollant classique. Elle vaut pour l'année entière, quel que soit le nombre de passages : pour un simple transit, le coût à l'usage peut donc sembler élevé. Rouler sans vignette sur le réseau concerné expose à une amende forfaitaire, les contrôles étant fréquents.`,
+      texte: `Vignette annuelle obligatoire sur autoroutes et semi-autoroutes, désormais aussi en e-vignette liée à la plaque. Valable toute l'année, quel que soit le nombre de passages. Sans elle, amende — contrôles fréquents.`,
     },
     {
+      icon: 'Gavel',
       titre: `Des amendes parmi les plus sévères d'Europe`,
-      texte:
-        `La Suisse applique une tolérance quasi nulle aux excès de vitesse et calcule les amendes en fonction du revenu du contrevenant, d'où des sanctions pouvant atteindre des sommes record pour les conducteurs les plus fortunés. Pour les grands excès, la loi « Via sicura » prévoit la saisie du véhicule et des peines de prison. Respecter scrupuleusement les limites n'est pas une option ici.`,
+      texte: `Tolérance quasi nulle aux excès : les amendes sont calculées sur le revenu, d'où des sanctions record pour les plus fortunés. Pour les grands excès, la loi Via sicura prévoit saisie du véhicule et prison.`,
     },
     {
+      icon: 'Bus',
       titre: `Le car postal et son klaxon à trois tons`,
-      texte:
-        `Sur les routes de montagne, le car postal jaune (PostAuto) est roi : il a la priorité dans les passages étroits, et son célèbre klaxon à trois tons, emprunté à l'ouverture de Guillaume Tell de Rossini, prévient de son arrivée dans les virages sans visibilité. Quand vous l'entendez, serrez à droite et laissez-le passer : c'est la règle, et le bon sens en altitude.`,
+      texte: `En montagne, le car postal jaune est prioritaire dans les passages étroits. Son klaxon à trois tons, tiré de Guillaume Tell, annonce son arrivée en virage aveugle : serrez à droite et laissez passer.`,
     },
     {
+      icon: 'Mountain',
       titre: `Tunnels et cols alpins`,
-      texte:
-        `Le tunnel routier du Gothard, l'un des plus longs d'Europe, canalise une grande partie du trafic nord-sud et connaît de fortes affluences en période de vacances. En hiver, des équipements neige adaptés (pneus hiver, parfois chaînes) sont indispensables en montagne, et plusieurs cols ferment de novembre à mai. Vérifiez leur ouverture avant de planifier un itinéraire panoramique.`,
+      texte: `Le tunnel du Gothard, l'un des plus longs d'Europe, sature aux vacances. L'hiver, équipements neige indispensables (pneus, parfois chaînes) et plusieurs cols fermés de novembre à mai : vérifiez l'ouverture.`,
     },
     {
+      icon: 'Clapperboard',
       titre: `La Furka, virage de cinéma`,
-      texte:
-        `Les routes suisses ont leurs lettres de noblesse à l'écran : c'est sur le col de la Furka que fut tournée la légendaire poursuite en Aston Martin de James Bond dans Goldfinger, en 1964. Aujourd'hui, ses lacets spectaculaires figurent parmi les plus belles routes des Alpes, à savourer prudemment, vignette en règle et assurance valide.`,
+      texte: `C'est sur le col de la Furka qu'a été tournée la poursuite en Aston Martin de James Bond dans Goldfinger (1964). Ses lacets comptent parmi les plus belles routes des Alpes — vignette en règle et assurance valide.`,
     },
     {
+      icon: 'Car',
       titre: `Importer un véhicule depuis la Suisse`,
-      texte:
-        `Importer une voiture suisse en France suppose des démarches douanières, la Suisse étant hors Union européenne, et un passage par le dédouanement. Le temps d'acheminer le véhicule et de régulariser son immatriculation française, l'assurance temporaire vous couvre dès la prise en main, sans engagement à l'année.`,
+      texte: `Hors UE : importer une voiture suisse suppose dédouanement et démarches douanières. L'assurance temporaire couvre dès la prise en main, le temps de régulariser l'immatriculation française.`,
     },
   ],
   faq: [
     {
-      q: `Faut-il une vignette pour rouler en Suisse ?`,
-      a: `Oui, une vignette autoroutière (autocollant ou e-vignette) est obligatoire sur les autoroutes et semi-autoroutes.`,
+      q: `Faut-il une vignette en Suisse ?`,
+      a: `Oui, autocollant ou e-vignette, sur autoroutes et semi-autoroutes.`,
     },
     {
-      q: `La Suisse est-elle couverte par mon assurance temporaire ?`,
-      a: `Oui. Bien que hors Union européenne, la Suisse fait partie des 34 pays couverts par la carte internationale d'assurance, dès le 1er jour.`,
+      q: `La Suisse est-elle couverte ?`,
+      a: `Oui, hors UE mais parmi les 34 pays de la carte verte, dès le 1er jour.`,
     },
   ],
 };

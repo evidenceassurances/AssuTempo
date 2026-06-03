@@ -14,3 +14,9 @@
 13 http fetch GET 200 https://registry.npmjs.org/@21st-dev%2fmagic 189ms (cache revalidated)
 14 silly packumentCache heap:2348810240 maxSize:587202560 maxEntrySize:293601280
 15 silly packumentCache heap:2348810240 maxSize:587202560 maxEntrySize:293601280
+16 verbose cwd /Users/ayoubelamrani/Desktop/AssuTempo
+17 verbose os Darwin 24.6.0
+18 verbose node v24.16.0
+19 verbose npm  v11.13.0
+20 verbose exit 0
+21 info ok

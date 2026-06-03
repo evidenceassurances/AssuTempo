@@ -3,7 +3,23 @@ import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'reac
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
-import { ArrowRight, Phone } from 'lucide-react';
+import {
+  ArrowRight, Phone,
+  Shield, Globe, MailCheck, Info, FileSearch, Car,
+  Gauge, Siren, Leaf, History, ShoppingCart,
+  Lightbulb, Shirt, Route, Wind, RotateCw,
+  CornerUpRight, Camera, GraduationCap, Flag, FileText,
+  Sticker, Gavel, Bus, Mountain, Clapperboard,
+} from 'lucide-react';
+
+/* Résolution dynamique des icônes par nom (string stocké dans les données) */
+const ICON_MAP = {
+  Shield, Globe, MailCheck, Info, FileSearch, Car,
+  Gauge, Siren, Leaf, History, ShoppingCart,
+  Lightbulb, Shirt, Route, Wind, RotateCw,
+  CornerUpRight, Camera, GraduationCap, Flag, FileText,
+  Sticker, Gavel, Bus, Mountain, Clapperboard,
+};
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -164,58 +180,79 @@ function CountryPanel({ country }) {
           variants={stagger}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
             gap: 14,
             marginBottom: 36,
           }}
         >
-          {points.map((point, i) => (
-            <motion.div
-              key={i}
-              variants={cardVariant}
-              whileHover={
-                reduce
-                  ? {}
-                  : {
-                      y: -5,
-                      boxShadow: '0 10px 32px rgba(201,168,76,0.18)',
-                      borderColor: 'var(--gold-border)',
-                    }
-              }
-              transition={{ duration: 0.25 }}
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--glass-border)',
-                borderRadius: 14,
-                padding: '18px 20px',
-                cursor: 'default',
-                transition: 'border-color 0.25s',
-              }}
-            >
-              <p
+          {points.map((point, i) => {
+            const IconComp = point.icon ? ICON_MAP[point.icon] : null;
+            return (
+              <motion.div
+                key={i}
+                variants={cardVariant}
+                whileHover={
+                  reduce
+                    ? {}
+                    : {
+                        y: -4,
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+                        borderColor: 'rgba(201,168,76,0.45)',
+                      }
+                }
+                transition={{ duration: 0.22 }}
                 style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: 'var(--gold)',
-                  margin: '0 0 7px',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
+                  background:
+                    'linear-gradient(180deg, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.015) 100%), #0E0E0E',
+                  border: '1px solid rgba(201,168,76,0.18)',
+                  borderRadius: 16,
+                  padding: '20px 22px',
+                  cursor: 'default',
                 }}
               >
-                {point.titre}
-              </p>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: 'var(--text-muted)',
-                  margin: 0,
-                  lineHeight: 1.72,
-                }}
-              >
-                {point.texte}
-              </p>
-            </motion.div>
-          ))}
+                {IconComp && (
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: 'rgba(201,168,76,0.10)',
+                      border: '1px solid rgba(201,168,76,0.25)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: 14,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <IconComp size={18} color="#E8C97A" strokeWidth={1.8} />
+                  </div>
+                )}
+                <p
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: '#C9A84C',
+                    margin: '0 0 8px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {point.titre}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: '#A0A0A0',
+                    margin: 0,
+                    lineHeight: 1.75,
+                  }}
+                >
+                  {point.texte}
+                </p>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* CTA */}
