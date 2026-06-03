@@ -10,6 +10,7 @@ import {
   Lightbulb, Shirt, Route, Wind, RotateCw,
   CornerUpRight, Camera, GraduationCap, Flag, FileText,
   Sticker, Gavel, Bus, Mountain, Clapperboard,
+  Ticket, Trophy, AlertTriangle, ShieldCheck,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -19,6 +20,7 @@ const ICON_MAP = {
   Lightbulb, Shirt, Route, Wind, RotateCw,
   CornerUpRight, Camera, GraduationCap, Flag, FileText,
   Sticker, Gavel, Bus, Mountain, Clapperboard,
+  Ticket, Trophy, AlertTriangle, ShieldCheck,
 };
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';

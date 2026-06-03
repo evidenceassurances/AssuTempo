@@ -371,17 +371,125 @@ const SUISSE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Italie - lot 2 ─────────────────────────────────── */
+const ITALIE_OVERRIDE = {
+  title: `Assurance temporaire Italie | Carte verte, ZTL & péages - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Italie dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. ZTL, système Tutor et péages autoroutiers expliqués.`,
+  h1: `Assurance temporaire en Italie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Italie dès le 1er jour : trajet ponctuel, import d'un véhicule ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    ...genericPoints('Italie'),
+    {
+      icon: 'Camera',
+      titre: `Les ZTL, piège des centres historiques`,
+      texte: `Rome, Florence, Milan, Bologne, Naples... la plupart des centres historiques sont des Zones à Trafic Limité (ZTL), interdites aux non-autorisés et surveillées par caméras. L'amende tombe automatiquement, même pour un véhicule étranger. Repérez le panneau ZTL avant d'entrer.`,
+    },
+    {
+      icon: 'Gauge',
+      titre: `Le système Tutor mesure la moyenne`,
+      texte: `Sur autoroute, le système Tutor calcule votre vitesse moyenne entre deux points, pas seulement à un instant : ralentir pile au radar ne sert à rien. Gilet et triangle restent obligatoires à bord.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Péages : gardez votre ticket`,
+      texte: `Autoroutes à péage avec ticket à l'entrée et paiement à la sortie ; les voies Telepass sont réservées aux abonnés. Perdre le ticket fait payer le trajet maximal : conservez-le précieusement.`,
+    },
+    {
+      icon: 'History',
+      titre: `La première autoroute du monde`,
+      texte: `Fierté locale : l'autoroute Milan-lacs, inaugurée en 1924, fut la toute première au monde. L'Italie roulait déjà sur autoroute quand la plupart des pays n'avaient que des nationales.`,
+    },
+    {
+      icon: 'Trophy',
+      titre: `La Motor Valley`,
+      texte: `Autour de Modène et Bologne s'étend la Motor Valley : Ferrari, Lamborghini, Maserati, Pagani et Ducati y sont nés. Un concentré de passion automobile unique au monde, jalonné de musées à visiter.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Importer une voiture italienne`,
+      texte: `Fiat 500, Alfa Romeo, Lancia de collection : l'Italie est un terrain de chasse pour les amateurs. L'assurance temporaire couvre le rapatriement dès la prise en main, le temps de finaliser la carte grise en France.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Comment éviter une amende dans les ZTL ?`,
+      a: `Repérez les panneaux ZTL et n'entrez pas dans un centre historique sans autorisation : les caméras verbalisent automatiquement, même un véhicule étranger.`,
+    },
+    {
+      q: `L'Italie est-elle couverte dès le départ ?`,
+      a: `Oui : RC et carte verte valent dès le 1er jour dans les 34 pays, Italie incluse.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Royaume-Uni - lot 2 ────────────────────────────── */
+const ROYAUMEUNI_OVERRIDE = {
+  title: `Assurance temporaire Royaume-Uni | Carte verte & conduite à gauche - AssuTempo`,
+  metaDescription:
+    `Roulez couvert au Royaume-Uni dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Conduite à gauche, ULEZ de Londres et Brexit expliqués.`,
+  h1: `Assurance temporaire au Royaume-Uni : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire au Royaume-Uni dès le 1er jour : séjour ponctuel, import d'un véhicule ou conduite d'une voiture étrangère. Bien que hors Union européenne depuis le Brexit, le Royaume-Uni reste couvert, et votre carte internationale d'assurance y fait foi.`,
+  points: [
+    ...genericPoints('Royaume-Uni'),
+    {
+      icon: 'AlertTriangle',
+      titre: `Conduite à gauche : les bons réflexes`,
+      texte: `On roule à gauche, les ronds-points tournent dans le sens horaire, et distances comme vitesses sont en miles (autoroutes limitées à 70 mph). Pensez aux adhésifs déflecteurs de phares pour ne pas éblouir les véhicules en sens inverse.`,
+    },
+    {
+      icon: 'ShieldCheck',
+      titre: `Couvert malgré le Brexit`,
+      texte: `Bien que sorti de l'Union européenne, le Royaume-Uni reste l'un des 34 pays couverts. Votre carte internationale d'assurance (carte verte) y atteste votre couverture dès le 1er jour.`,
+    },
+    {
+      icon: 'Wind',
+      titre: `Londres : ULEZ et Congestion Charge`,
+      texte: `Londres applique l'ULEZ (péage des véhicules polluants, étendu à tout le Grand Londres) et la Congestion Charge au centre. Les véhicules étrangers doivent s'enregistrer et payer en ligne, sous peine d'amende.`,
+    },
+    {
+      icon: 'RotateCw',
+      titre: `Le rond-point, invention britannique`,
+      texte: `Le code britannique a façonné le rond-point moderne : on cède le passage à la circulation venant de droite. Curiosité, le Magic Roundabout de Swindon enchaîne cinq mini-ronds-points autour d'un central, casse-tête devenu célèbre.`,
+    },
+    {
+      icon: 'Flag',
+      titre: `Au coeur du sport automobile`,
+      texte: `L'Angleterre concentre la majorité des écuries de Formule 1, la fameuse Motorsport Valley. Silverstone a accueilli le tout premier Grand Prix du championnat du monde en 1950 ; Goodwood, Aston Martin, McLaren et Mini font le reste.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Importer une voiture britannique`,
+      texte: `Depuis le Brexit, importer une voiture du Royaume-Uni implique des formalités douanières (pays tiers), et le véhicule est à conduite à droite, à prendre en compte pour l'usage en France. L'assurance temporaire couvre le trajet de rapatriement.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il payer pour rouler dans Londres ?`,
+      a: `Oui : l'ULEZ et la Congestion Charge s'appliquent, y compris aux véhicules étrangers, qui doivent s'enregistrer et payer en ligne.`,
+    },
+    {
+      q: `Le Royaume-Uni est-il couvert malgré le Brexit ?`,
+      a: `Oui : il fait partie des 34 pays couverts, et votre carte internationale d'assurance y atteste votre couverture.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
 
   /* Overrides spécifiques */
   const over =
-    slug === 'france'    ? FRANCE_OVERRIDE    :
-    slug === 'allemagne' ? ALLEMAGNE_OVERRIDE :
-    slug === 'espagne'   ? ESPAGNE_OVERRIDE   :
-    slug === 'belgique'  ? BELGIQUE_OVERRIDE  :
-    slug === 'suisse'    ? SUISSE_OVERRIDE    :
+    slug === 'france'      ? FRANCE_OVERRIDE      :
+    slug === 'allemagne'   ? ALLEMAGNE_OVERRIDE   :
+    slug === 'espagne'     ? ESPAGNE_OVERRIDE     :
+    slug === 'belgique'    ? BELGIQUE_OVERRIDE    :
+    slug === 'suisse'      ? SUISSE_OVERRIDE      :
+    slug === 'italie'      ? ITALIE_OVERRIDE      :
+    slug === 'royaume-uni' ? ROYAUMEUNI_OVERRIDE  :
     {};
 
   return {
