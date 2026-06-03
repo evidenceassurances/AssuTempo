@@ -536,7 +536,7 @@ function Carte() {
       <section
         style={{
           paddingTop: 120,
-          paddingBottom: 56,
+          paddingBottom: 28,
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden',
@@ -582,7 +582,7 @@ function Carte() {
                   fontSize: 'clamp(1.75rem, 4.5vw, 2.8rem)',
                   fontWeight: 800,
                   color: 'var(--text)',
-                  margin: '0 0 32px',
+                  margin: 0,
                   letterSpacing: '-0.03em',
                   lineHeight: 1.15,
                 }}
@@ -592,44 +592,6 @@ function Carte() {
                   : 'Assurance temporaire en Europe : la carte des 34 pays couverts'}
               </motion.h1>
             </AnimatePresence>
-
-            {/* Encadré */}
-            <div
-              style={{
-                background: 'var(--gold-glow)',
-                border: '1px solid var(--gold-border)',
-                borderLeft: '3px solid var(--gold)',
-                borderRadius: '0 14px 14px 0',
-                padding: '20px 24px',
-                textAlign: 'left',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: 'var(--gold)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
-                  margin: '0 0 10px',
-                }}
-              >
-                L&apos;essentiel
-              </p>
-              <p
-                style={{
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: 'var(--text)',
-                  margin: 0,
-                  lineHeight: 1.75,
-                }}
-              >
-                Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile
-                dans 34 pays européens, dès le premier jour. Sélectionnez un pays sur la
-                carte pour le détail de votre couverture.
-              </p>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -638,6 +600,51 @@ function Carte() {
       <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
         <Reveal>
           <EuropeMap selectedId={selectedId} onCountryClick={handleCountryClick} />
+        </Reveal>
+      </section>
+
+      {/* ── Encadré L'essentiel ─────────────────────────────────────────── */}
+      <section style={{ maxWidth: 900, margin: '0 auto', padding: '24px 24px 0' }}>
+        <Reveal>
+          <div
+            style={{
+              background: 'var(--gold-glow)',
+              border: '1px solid var(--gold-border)',
+              borderLeft: '3px solid var(--gold)',
+              borderRadius: '0 14px 14px 0',
+              padding: '20px 24px',
+              textAlign: 'left',
+            }}
+          >
+            <p
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: 'var(--gold)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.12em',
+                margin: '0 0 10px',
+              }}
+            >
+              L&apos;essentiel
+            </p>
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 500,
+                color: 'var(--text)',
+                margin: 0,
+                lineHeight: 1.75,
+              }}
+            >
+              Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile
+              obligatoire dans 34 pays européens, dès le premier jour. Depuis avril 2024,
+              la carte verte n&apos;existe plus : en France, la preuve d&apos;assurance se fait
+              directement à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre
+              contrat comprend votre Mémo Véhicule Assuré et votre carte internationale
+              d&apos;assurance automobile, valable dans les 34 pays cités.
+            </p>
+          </div>
         </Reveal>
       </section>
 
