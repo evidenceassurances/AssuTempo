@@ -88,13 +88,13 @@ export const articles = [
     hasPage: false,
   },
   {
-    slug: 'essayer-vehicule-avant-achat',
+    slug: 'assurance-temporaire-essai-vehicule-avant-achat',
     titre: 'Essayer un véhicule avant achat, bien assuré',
     extrait:
-      "Avant de signer, vous voulez l'essayer sur route ? Une assurance d'un jour suffit pour couvrir le test dans les règles.",
+      "En concession vous êtes souvent couvert, chez un particulier c'est plus risqué. Une assurance d'un jour sécurise l'essai sans toucher au contrat du vendeur.",
     icone: Gauge,
     accent: '#8A6B9E',
     categorie: 'Essai & achat',
-    hasPage: false,
+    hasPage: true,
   },
 ];

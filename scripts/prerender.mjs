@@ -39,6 +39,7 @@ const ROUTES = [
   '/articles/assurance-temporaire-vehicule-etranger-france',
   '/articles/assurance-temporaire-pret-de-vehicule',
   '/articles/assurance-temporaire-convoyage-professionnel',
+  '/articles/assurance-temporaire-essai-vehicule-avant-achat',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
 ];

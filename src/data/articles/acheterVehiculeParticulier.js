@@ -196,6 +196,10 @@ export const articleData = {
       paragraphs: [
         "De 1 à 90 jours, au jour près. La plupart des acheteurs couvrent le temps de faire la carte grise et de souscrire leur assurance annuelle. Sans engagement.",
       ],
+      relatedLink: {
+        text: 'Essayer un véhicule avant achat, bien assuré',
+        href: '/articles/assurance-temporaire-essai-vehicule-avant-achat',
+      },
     },
     {
       type: 'text',

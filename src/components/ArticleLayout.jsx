@@ -18,6 +18,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 import AccordionItem from './ui/AccordionItem';
 import Footer from './Footer';
 import StepFlow from './StepFlow';
+import DecisionSplit from './DecisionSplit';
 import { articles } from '../data/articlesData';
 
 /* ─── Motion wrapper that respects prefers-reduced-motion ─── */
@@ -364,6 +365,17 @@ function RenderSection({ section, index }) {
       return (
         <Reveal delay={delay}>
           <StepFlow steps={section.steps} ariaLabel={section.ariaLabel} />
+        </Reveal>
+      );
+
+    case 'decisionsplit':
+      return (
+        <Reveal delay={delay}>
+          <DecisionSplit
+            question={section.question}
+            voies={section.voies}
+            ariaLabel={section.ariaLabel}
+          />
         </Reveal>
       );
 
