@@ -8,8 +8,8 @@ import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
-/* ── Données géographiques (world-atlas 110m via CDN jsdelivr) ── */
-const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+/* ── Données géographiques (bundlées en local pour éviter dépendance CDN) ── */
+const GEO_URL = '/countries-110m.json';
 
 /* ── ISO 3166-1 numérique des 34 pays couverts ── */
 const COVERED = new Set([
@@ -266,21 +266,8 @@ function EuropeMap() {
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
           <Geographies geography={GEO_URL}>
-            {({ geographies, loading }) => {
-              if (loading) {
-                return (
-                  <text
-                    x="400"
-                    y="260"
-                    textAnchor="middle"
-                    fill="rgba(139,132,122,0.5)"
-                    fontSize="14"
-                  >
-                    Chargement de la carte...
-                  </text>
-                );
-              }
-              return geographies.map((geo) => {
+            {({ geographies }) =>
+              geographies.map((geo) => {
                 const id = +geo.id;
                 const isCovered = COVERED.has(id);
                 const name = COUNTRY_NAMES[id];
@@ -311,8 +298,8 @@ function EuropeMap() {
                     onClick={() => handleClick(id)}
                   />
                 );
-              });
-            }}
+              })
+            }
           </Geographies>
         </ComposableMap>
 
