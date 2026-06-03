@@ -46,7 +46,6 @@ const FAQ_ITEMS = [
 
 /* ── Variants Framer Motion ──────────────────────────────────────────────── */
 const EASE = [0.22, 1, 0.36, 1];
-const SPRING = { type: 'spring', stiffness: 130, damping: 20 };
 
 const panelOuter = {
   hidden: { opacity: 0, height: 0 },
@@ -265,11 +264,6 @@ function EuropeMap({ selectedId, onCountryClick }) {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
   const reduce = useReducedMotion();
 
-  const selectedSlug    = selectedId ? ISO_TO_SLUG[selectedId] : null;
-  const selectedCountry = selectedSlug ? SLUG_TO_COUNTRY[selectedSlug] : null;
-  const mapCenter       = reduce ? DEFAULT_CENTER : (selectedCountry?.center ?? DEFAULT_CENTER);
-  const mapZoom         = selectedId && !reduce ? 1.18 : 1;
-
   const badgeName = tooltip.visible
     ? tooltip.name
     : selectedId != null
@@ -319,10 +313,8 @@ function EuropeMap({ selectedId, onCountryClick }) {
         </div>
       )}
 
-      {/* Carte container — léger zoom spring quand pays sélectionné */}
-      <motion.div
-        animate={selectedId && !reduce ? { scale: 1.014 } : { scale: 1 }}
-        transition={SPRING}
+      {/* Carte container — vue fixe, toute l'Europe visible */}
+      <div
         style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--glass-border)',
@@ -373,8 +365,8 @@ function EuropeMap({ selectedId, onCountryClick }) {
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
           <ZoomableGroup
-            center={mapCenter}
-            zoom={mapZoom}
+            center={DEFAULT_CENTER}
+            zoom={1}
             disableZooming
             disablePanning
           >
@@ -453,7 +445,7 @@ function EuropeMap({ selectedId, onCountryClick }) {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </>
   );
 }
