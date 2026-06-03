@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const countries = [
@@ -82,6 +84,30 @@ function Countries() {
             </motion.div>
           ))}
         </div>
+
+        {/* Lien vers la carte interactive */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginTop: 32 }}
+        >
+          <Link
+            to="/carte"
+            className="btn-glass"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '10px 20px',
+              fontSize: 14,
+            }}
+          >
+            Voir la carte interactive
+            <ArrowRight size={14} strokeWidth={2} />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

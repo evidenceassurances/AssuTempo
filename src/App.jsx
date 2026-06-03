@@ -15,6 +15,7 @@ const ControleSansAssurance = lazy(() => import('./pages/articles/ControleSansAs
 const AcheterVehiculeParticulier = lazy(() => import('./pages/articles/AcheterVehiculeParticulier'));
 const CombienDeJoursAssurance = lazy(() => import('./pages/articles/CombienDeJoursAssurance'));
 const AssuranceVehiculeEtranger = lazy(() => import('./pages/articles/AssuranceVehiculeEtranger'));
+const Carte = lazy(() => import('./pages/Carte'));
 
 function LoadingSpinner() {
   return (
@@ -57,6 +58,7 @@ function App() {
             <Route path="/articles/assurer-vehicule-achete-chez-particulier" element={<PageTransition><AcheterVehiculeParticulier /></PageTransition>} />
             <Route path="/articles/combien-de-jours-assurance-sortir-fourriere" element={<PageTransition><CombienDeJoursAssurance /></PageTransition>} />
             <Route path="/articles/assurance-temporaire-vehicule-etranger-france" element={<PageTransition><AssuranceVehiculeEtranger /></PageTransition>} />
+            <Route path="/carte" element={<PageTransition><Carte /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </Suspense>

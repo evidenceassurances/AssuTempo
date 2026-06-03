@@ -7,6 +7,7 @@ const links = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Articles', href: '/articles' },
+  { label: 'Carte', href: '/carte' },
   { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 
