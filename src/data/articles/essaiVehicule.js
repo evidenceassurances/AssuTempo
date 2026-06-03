@@ -142,7 +142,7 @@ export const articleData = {
       heading: "L'essentiel",
       items: [
         "Tout véhicule essayé sur la route doit avoir une RC en cours (art. L211-1), quel que soit le conducteur.",
-        "En concession/garage : l'assurance flotte du pro couvre généralement l'essai — vérifiez la franchise.",
+        "En concession/garage : l'assurance flotte du pro couvre généralement l'essai, vérifiez la franchise.",
         "Chez un particulier : c'est un prêt de volant ; un accident responsable impacte le bonus-malus du vendeur. Une assurance temporaire d'1 jour protège les deux.",
         "Attestation en 5 minutes, durée dès 1 jour.",
       ],
@@ -157,7 +157,7 @@ export const articleData = {
           icon: Store,
           titre: 'Essai en concession / chez un pro',
           verdict:
-            "Généralement couvert par l'assurance du professionnel. Pas d'obligation de prendre la vôtre — vérifiez juste la franchise.",
+            "Généralement couvert par l'assurance du professionnel. Pas d'obligation de prendre la vôtre, vérifiez juste la franchise.",
           statut: 'ok',
         },
         {
@@ -184,14 +184,14 @@ export const articleData = {
       type: 'text',
       heading: 'Essai en concession ou chez un professionnel',
       paragraphs: [
-        "Les professionnels (concessionnaires, garages, mandataires) disposent d'une assurance flotte/garage qui couvre leurs véhicules de démonstration et d'essai. Vous êtes donc généralement couvert pendant l'essai, sans souscrire votre propre assurance. Deux réflexes quand même : demandez les conditions, et vérifiez la franchise en cas d'accident responsable — elle est souvent majorée pour un conducteur non désigné au contrat.",
+        "Les professionnels (concessionnaires, garages, mandataires) disposent d'une assurance flotte/garage qui couvre leurs véhicules de démonstration et d'essai. Vous êtes donc généralement couvert pendant l'essai, sans souscrire votre propre assurance. Deux réflexes quand même : demandez les conditions, et vérifiez la franchise en cas d'accident responsable, elle est souvent majorée pour un conducteur non désigné au contrat.",
       ],
     },
     {
       type: 'text',
       heading: 'Essai chez un particulier',
       paragraphs: [
-        "Là, pas de filet automatique. Le vendeur vous prête le volant : son assurance peut vous couvrir si son contrat l'autorise, mais un accident responsable impactera SON bonus-malus, et certains contrats restreignent le prêt. Pour ne pas faire peser ce risque sur le vendeur — et rassurer un vendeur méfiant — une assurance temporaire d'un jour à votre nom est la solution propre : vous essayez couvert, sans toucher au contrat du vendeur.",
+        "Là, pas de filet automatique. Le vendeur vous prête le volant : son assurance peut vous couvrir si son contrat l'autorise, mais un accident responsable impactera SON bonus-malus, et certains contrats restreignent le prêt. Pour ne pas faire peser ce risque sur le vendeur, et rassurer un vendeur méfiant, une assurance temporaire d'un jour à votre nom est la solution propre : vous essayez couvert, sans toucher au contrat du vendeur.",
       ],
       relatedLink: {
         text: 'Prêter ou emprunter un véhicule : roulez assuré',

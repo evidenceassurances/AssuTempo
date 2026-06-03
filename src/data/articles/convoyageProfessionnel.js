@@ -137,7 +137,7 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline: 'Convoyage professionnel : quelle assurance ?',
   immediateAnswer:
-    "Pour convoyer un véhicule par la route, sur ses propres roues, il doit avoir une assurance responsabilité civile en cours — même pour un seul trajet. L'assurance temporaire couvre chaque véhicule convoyé pour la durée exacte du déplacement, sans souscrire de contrat annuel pour un véhicule qui ne fait que passer.",
+    "Pour convoyer un véhicule par la route, sur ses propres roues, il doit avoir une assurance responsabilité civile en cours, même pour un seul trajet. L'assurance temporaire couvre chaque véhicule convoyé pour la durée exacte du déplacement, sans souscrire de contrat annuel pour un véhicule qui ne fait que passer.",
   sections: [
     {
       type: 'alert',
@@ -186,14 +186,14 @@ export const articleData = {
       type: 'text',
       heading: 'Et la RC Pro du convoyeur ?',
       paragraphs: [
-        "À ne pas confondre. La RC Pro (responsabilité civile professionnelle) couvre VOTRE activité de convoyeur — les dommages causés aux tiers dans le cadre de vos missions, souvent exigée par les donneurs d'ordre. C'est un contrat distinct de l'assurance du véhicule convoyé. L'assurance temporaire assure le véhicule pour rouler ; les deux sont complémentaires.",
+        "À ne pas confondre. La RC Pro (responsabilité civile professionnelle) couvre VOTRE activité de convoyeur, les dommages causés aux tiers dans le cadre de vos missions, souvent exigée par les donneurs d'ordre. C'est un contrat distinct de l'assurance du véhicule convoyé. L'assurance temporaire assure le véhicule pour rouler ; les deux sont complémentaires.",
       ],
     },
     {
       type: 'text',
       heading: 'Pour quels professionnels ?',
       paragraphs: [
-        "Mandataires auto, négociants, garages, concessionnaires, transporteurs, professionnels de l'import-export. Dès que vous prenez le volant d'un véhicule à déplacer qui n'est pas déjà couvert, l'assurance temporaire répond au besoin — voiture, utilitaire comme poids lourd, avec le permis adapté.",
+        "Mandataires auto, négociants, garages, concessionnaires, transporteurs, professionnels de l'import-export. Dès que vous prenez le volant d'un véhicule à déplacer qui n'est pas déjà couvert, l'assurance temporaire répond au besoin, voiture, utilitaire comme poids lourd, avec le permis adapté.",
       ],
       relatedLink: {
         text: 'Devenir partenaire AssuTempo',
@@ -213,7 +213,7 @@ export const articleData = {
       type: 'text',
       heading: "Quels documents reçoit-on avec l'assurance ?",
       paragraphs: [
-        "Depuis avril 2024, la carte verte n'existe plus. En France, la preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA). Le contrat comprend le Mémo Véhicule Assuré et la carte internationale d'assurance automobile, valable dans les 34 pays — utile pour un convoyage transfrontalier.",
+        "Depuis avril 2024, la carte verte n'existe plus. En France, la preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA). Le contrat comprend le Mémo Véhicule Assuré et la carte internationale d'assurance automobile, valable dans les 34 pays, utile pour un convoyage transfrontalier.",
       ],
       relatedLink: {
         text: 'Véhicule ou permis étranger : assurance temporaire en France',

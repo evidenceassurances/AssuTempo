@@ -1,8 +1,8 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   countries-content.js — Données des 34 pays couverts par AssuTempo
+   countries-content.js, Données des 34 pays couverts par AssuTempo
 ───────────────────────────────────────────────────────────────────────────── */
 
-/* Gabarit générique — vrai, applicable à tous les pays couverts */
+/* Gabarit générique, vrai, applicable à tous les pays couverts */
 function generic(nom, flag, centreGeo) {
   return {
     flag,
@@ -18,7 +18,7 @@ function generic(nom, flag, centreGeo) {
         icon: 'Shield',
         titre: 'RC couverte dès J1',
         texte:
-          'La responsabilité civile obligatoire est active dès le premier jour du contrat — ' +
+          'La responsabilité civile obligatoire est active dès le premier jour du contrat, ' +
           'aucun délai de carence pour votre couverture en ' + nom + '.',
       },
       {
@@ -40,21 +40,21 @@ function generic(nom, flag, centreGeo) {
         icon: 'Info',
         titre: 'Spécificités pratiques',
         texte:
-          'À compléter — conseils locaux, documents recommandés au voyage, ' +
+          'À compléter, conseils locaux, documents recommandés au voyage, ' +
           'particularités du contrôle routier en ' + nom + ', etc.',
       },
     ],
   };
 }
 
-/* Helper — les 3 cartes communes (avec icônes) conservées dans les overrides */
+/* Helper, les 3 cartes communes (avec icônes) conservées dans les overrides */
 function genericPoints(nom) {
   return [
     {
       icon: 'Shield',
       titre: 'RC couverte dès J1',
       texte:
-        `La responsabilité civile obligatoire est active dès le premier jour du contrat — ` +
+        `La responsabilité civile obligatoire est active dès le premier jour du contrat, ` +
         `aucun délai de carence pour votre couverture en ${nom}.`,
     },
     {
@@ -116,7 +116,7 @@ const RAW = [
 
 /* ─── Contenu spécifique France ──────────────────────────────────────────── */
 const FRANCE_OVERRIDE = {
-  title: 'Assurance temporaire en France — Mémo Véhicule Assuré & FVA | AssuTempo',
+  title: 'Assurance temporaire en France, Mémo Véhicule Assuré & FVA | AssuTempo',
   metaDescription:
     'Assurance auto temporaire en France : RC couverte dès J1, Mémo Véhicule Assuré immédiat, ' +
     'FVA (fichier officiel depuis avril 2024). Attestation en moins de 5 minutes.',
@@ -133,7 +133,7 @@ const FRANCE_OVERRIDE = {
       icon: 'Shield',
       titre: 'RC couverte dès J1',
       texte:
-        'La responsabilité civile obligatoire est active dès le premier jour du contrat — ' +
+        'La responsabilité civile obligatoire est active dès le premier jour du contrat, ' +
         'aucun délai de carence, quelle que soit la durée choisie (1 à 90 jours).',
     },
     {
@@ -146,7 +146,7 @@ const FRANCE_OVERRIDE = {
     },
     {
       icon: 'MailCheck',
-      titre: 'Mémo Véhicule Assuré — immédiat',
+      titre: 'Mémo Véhicule Assuré, immédiat',
       texte:
         'À la souscription, vous recevez votre Mémo Véhicule Assuré (document de ' +
         'référence en France) et votre carte internationale d\'assurance automobile ' +
@@ -164,9 +164,9 @@ const FRANCE_OVERRIDE = {
   faq: null,
 };
 
-/* ─── Contenu spécifique Allemagne — lot 1 ──────────────────────────────── */
+/* ─── Contenu spécifique Allemagne, lot 1 ──────────────────────────────── */
 const ALLEMAGNE_OVERRIDE = {
-  title: `Assurance temporaire Allemagne | Carte verte & RC dès le 1er jour — AssuTempo`,
+  title: `Assurance temporaire Allemagne | Carte verte & RC dès le 1er jour, AssuTempo`,
   metaDescription:
     `Roulez assuré en Allemagne dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Autobahn, Umweltplakette et règles de conduite.`,
   h1: `Assurance temporaire en Allemagne : roulez couvert dès le 1er jour`,
@@ -187,7 +187,7 @@ const ALLEMAGNE_OVERRIDE = {
     {
       icon: 'Leaf',
       titre: `Vignette environnementale (Umweltplakette)`,
-      texte: `Pour entrer au centre de 50+ villes (Berlin, Munich, Cologne…), la pastille verte est obligatoire sur le pare-brise, voitures étrangères comprises. Sans elle, amende — même de passage.`,
+      texte: `Pour entrer au centre de 50+ villes (Berlin, Munich, Cologne…), la pastille verte est obligatoire sur le pare-brise, voitures étrangères comprises. Sans elle, amende, même de passage.`,
     },
     {
       icon: 'History',
@@ -212,9 +212,9 @@ const ALLEMAGNE_OVERRIDE = {
   ],
 };
 
-/* ─── Contenu spécifique Espagne — lot 1 ────────────────────────────────── */
+/* ─── Contenu spécifique Espagne, lot 1 ────────────────────────────────── */
 const ESPAGNE_OVERRIDE = {
-  title: `Assurance temporaire Espagne | Carte verte & balise V16 — AssuTempo`,
+  title: `Assurance temporaire Espagne | Carte verte & balise V16, AssuTempo`,
   metaDescription:
     `Roulez couvert en Espagne dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Balise V16, gilet obligatoire et zones à faibles émissions.`,
   h1: `Assurance temporaire en Espagne : roulez couvert dès le 1er jour`,
@@ -225,7 +225,7 @@ const ESPAGNE_OVERRIDE = {
     {
       icon: 'Lightbulb',
       titre: `La balise V16 remplace le triangle`,
-      texte: `Depuis le 1er janvier 2026, la balise connectée V16 (feu orange à 360°, géolocalisé via DGT 3.0) remplace le triangle — mais seulement pour les véhicules immatriculés en Espagne. En voiture étrangère, triangles et gilet restent valables.`,
+      texte: `Depuis le 1er janvier 2026, la balise connectée V16 (feu orange à 360°, géolocalisé via DGT 3.0) remplace le triangle, mais seulement pour les véhicules immatriculés en Espagne. En voiture étrangère, triangles et gilet restent valables.`,
     },
     {
       icon: 'Shirt',
@@ -265,9 +265,9 @@ const ESPAGNE_OVERRIDE = {
   ],
 };
 
-/* ─── Contenu spécifique Belgique — lot 1 ───────────────────────────────── */
+/* ─── Contenu spécifique Belgique, lot 1 ───────────────────────────────── */
 const BELGIQUE_OVERRIDE = {
-  title: `Assurance temporaire Belgique | Carte verte & RC dès le 1er jour — AssuTempo`,
+  title: `Assurance temporaire Belgique | Carte verte & RC dès le 1er jour, AssuTempo`,
   metaDescription:
     `Roulez assuré en Belgique dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Priorité de droite, LEZ de Bruxelles et réseau autoroutier.`,
   h1: `Assurance temporaire en Belgique : roulez couvert dès le 1er jour`,
@@ -278,17 +278,17 @@ const BELGIQUE_OVERRIDE = {
     {
       icon: 'CornerUpRight',
       titre: `La priorité de droite, reine des carrefours`,
-      texte: `Plus stricte qu'en France : sans panneau ni marquage, celui qui vient de droite passe, même d'une petite rue. Première cause d'accrochages pour les étrangers — au moindre doute, on cède et on ralentit.`,
+      texte: `Plus stricte qu'en France : sans panneau ni marquage, celui qui vient de droite passe, même d'une petite rue. Première cause d'accrochages pour les étrangers, au moindre doute, on cède et on ralentit.`,
     },
     {
       icon: 'Camera',
       titre: `La Low Emission Zone (LEZ)`,
-      texte: `Bruxelles, Anvers et Gand interdisent les véhicules les plus polluants. Avec une plaque étrangère, l'enregistrement en ligne est obligatoire avant d'entrer à Bruxelles, sinon les caméras verbalisent — même de passage.`,
+      texte: `Bruxelles, Anvers et Gand interdisent les véhicules les plus polluants. Avec une plaque étrangère, l'enregistrement en ligne est obligatoire avant d'entrer à Bruxelles, sinon les caméras verbalisent, même de passage.`,
     },
     {
       icon: 'Lightbulb',
       titre: `Un réseau gratuit… et longtemps illuminé`,
-      texte: `Aucune vignette pour les voitures : le réseau, parmi les plus denses d'Europe, est gratuit. Et si éclairé qu'on le disait « visible depuis l'espace » — légende tenace, depuis largement éteinte par souci d'économie.`,
+      texte: `Aucune vignette pour les voitures : le réseau, parmi les plus denses d'Europe, est gratuit. Et si éclairé qu'on le disait « visible depuis l'espace », légende tenace, depuis largement éteinte par souci d'économie.`,
     },
     {
       icon: 'GraduationCap',
@@ -318,9 +318,9 @@ const BELGIQUE_OVERRIDE = {
   ],
 };
 
-/* ─── Contenu spécifique Suisse — lot 1 ─────────────────────────────────── */
+/* ─── Contenu spécifique Suisse, lot 1 ─────────────────────────────────── */
 const SUISSE_OVERRIDE = {
-  title: `Assurance temporaire Suisse | Carte verte & vignette — AssuTempo`,
+  title: `Assurance temporaire Suisse | Carte verte & vignette, AssuTempo`,
   metaDescription:
     `Roulez couvert en Suisse dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Vignette autoroutière, amendes au revenu et cols alpins.`,
   h1: `Assurance temporaire en Suisse : roulez couvert dès le 1er jour`,
@@ -331,7 +331,7 @@ const SUISSE_OVERRIDE = {
     {
       icon: 'Sticker',
       titre: `La vignette autoroutière obligatoire`,
-      texte: `Vignette annuelle obligatoire sur autoroutes et semi-autoroutes, désormais aussi en e-vignette liée à la plaque. Valable toute l'année, quel que soit le nombre de passages. Sans elle, amende — contrôles fréquents.`,
+      texte: `Vignette annuelle obligatoire sur autoroutes et semi-autoroutes, désormais aussi en e-vignette liée à la plaque. Valable toute l'année, quel que soit le nombre de passages. Sans elle, amende, contrôles fréquents.`,
     },
     {
       icon: 'Gavel',
@@ -351,7 +351,7 @@ const SUISSE_OVERRIDE = {
     {
       icon: 'Clapperboard',
       titre: `La Furka, virage de cinéma`,
-      texte: `C'est sur le col de la Furka qu'a été tournée la poursuite en Aston Martin de James Bond dans Goldfinger (1964). Ses lacets comptent parmi les plus belles routes des Alpes — vignette en règle et assurance valide.`,
+      texte: `C'est sur le col de la Furka qu'a été tournée la poursuite en Aston Martin de James Bond dans Goldfinger (1964). Ses lacets comptent parmi les plus belles routes des Alpes, vignette en règle et assurance valide.`,
     },
     {
       icon: 'Car',
@@ -390,7 +390,7 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     nom,
     flag,
     center,
-    title:           over.title           ?? `Assurance temporaire en ${nom} — RC dès J1 | AssuTempo`,
+    title:           over.title           ?? `Assurance temporaire en ${nom}, RC dès J1 | AssuTempo`,
     metaDescription: over.metaDescription ?? (
       `Circulez en ${nom} avec l'assurance temporaire AssuTempo. Responsabilité civile couverte ` +
       `dès le premier jour, carte internationale d'assurance automobile, attestation en 5 min.`

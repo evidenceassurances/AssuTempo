@@ -149,7 +149,7 @@ function CountryPanel({ country }) {
           </h2>
         </motion.div>
 
-        {/* Filet doré — animation "dessin" */}
+        {/* Filet doré, animation "dessin" */}
         <motion.div
           variants={lineVariant}
           style={{
@@ -293,7 +293,7 @@ function CountryPanel({ country }) {
           </a>
         </motion.div>
 
-        {/* FAQ pays — uniquement si des questions sont disponibles */}
+        {/* FAQ pays, uniquement si des questions sont disponibles */}
         {faq && faq.length > 0 && (
           <motion.div variants={fadeUp} style={{ marginTop: 32 }}>
             <p
@@ -377,7 +377,7 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         </div>
       )}
 
-      {/* Carte container — vue fixe, toute l'Europe visible */}
+      {/* Carte container, vue fixe, toute l'Europe visible */}
       <div
         style={{
           background: 'var(--bg-card)',
@@ -452,7 +452,7 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
                       fill={baseFill}
                       stroke={isSelected ? 'rgba(232,201,122,0.55)' : '#080706'}
                       strokeWidth={isSelected ? 1.2 : 0.4}
-                      aria-label={isCovered ? `${name} — pays couvert` : undefined}
+                      aria-label={isCovered ? `${name}, pays couvert` : undefined}
                       tabIndex={isCovered ? 0 : -1}
                       role={isCovered ? 'button' : undefined}
                       style={{
@@ -645,7 +645,7 @@ function Carte() {
               COUVERTURE EUROPE
             </p>
 
-            {/* H1 — générique ou spécifique au pays */}
+            {/* H1, générique ou spécifique au pays */}
             <AnimatePresence mode="wait">
               <motion.h1
                 key={selectedCountry?.slug ?? 'default'}
@@ -771,7 +771,7 @@ function Carte() {
                 textAlign: 'center',
               }}
             >
-              Les 34 pays couverts — cliquez pour en savoir plus
+              Les 34 pays couverts, cliquez pour en savoir plus
             </h2>
           </Reveal>
           <div
@@ -868,7 +868,7 @@ function Carte() {
               d&apos;assurance se fait directement via le Fichier des Véhicules Assurés (FVA),
               consultable par les forces de l&apos;ordre à votre plaque. Pour circuler dans les 34
               pays européens couverts, votre carte internationale d&apos;assurance automobile fait
-              foi — elle est délivrée immédiatement avec votre Mémo Véhicule Assuré.
+              foi, elle est délivrée immédiatement avec votre Mémo Véhicule Assuré.
             </p>
           </div>
         </Reveal>

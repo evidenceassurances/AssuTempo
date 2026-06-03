@@ -178,10 +178,10 @@ function ArticleCard({ article, index, inView }) {
   const Icon = article.icone;
   const accent = article.accent ?? '#C9A84C';
   // Hex-alpha helpers (8-digit hex, supported by all modern browsers)
-  const halo   = `${accent}18`; // ~9 % — icon background
-  const border  = `${accent}44`; // ~27 % — top liseré base
-  const borderH = `${accent}88`; // ~53 % — top liseré on hover
-  const glow    = `${accent}22`; // ~13 % — hover box-shadow
+  const halo   = `${accent}18`; // ~9 %, icon background
+  const border  = `${accent}44`; // ~27 %, top liseré base
+  const borderH = `${accent}88`; // ~53 %, top liseré on hover
+  const glow    = `${accent}22`; // ~13 %, hover box-shadow
 
   const inner = (
     <motion.div

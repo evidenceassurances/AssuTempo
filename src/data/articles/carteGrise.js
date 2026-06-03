@@ -137,7 +137,7 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline: 'Rouler en attendant sa carte grise définitive',
   immediateAnswer:
-    "Entre votre demande de carte grise et la réception du titre définitif, vous pouvez rouler grâce au certificat provisoire d'immatriculation (CPI) — à condition d'être assuré dès le premier trajet. L'assurance temporaire couvre exactement cette période de transition, sans attendre votre contrat annuel.",
+    "Entre votre demande de carte grise et la réception du titre définitif, vous pouvez rouler grâce au certificat provisoire d'immatriculation (CPI), à condition d'être assuré dès le premier trajet. L'assurance temporaire couvre exactement cette période de transition, sans attendre votre contrat annuel.",
   sections: [
     {
       type: 'alert',
@@ -175,7 +175,7 @@ export const articleData = {
       type: 'text',
       heading: "L'assurance est-elle obligatoire avec un CPI ?",
       paragraphs: [
-        "Oui, et c'est indépendant de la carte grise. Tout véhicule qui circule doit avoir au minimum une responsabilité civile. Vous pouvez souscrire immédiatement avec votre CPI : votre attestation est émise tout de suite. C'est exactement le rôle de l'assurance temporaire — vous couvrir pendant la transition, en attendant de mettre en place votre assurance annuelle.",
+        "Oui, et c'est indépendant de la carte grise. Tout véhicule qui circule doit avoir au minimum une responsabilité civile. Vous pouvez souscrire immédiatement avec votre CPI : votre attestation est émise tout de suite. C'est exactement le rôle de l'assurance temporaire, vous couvrir pendant la transition, en attendant de mettre en place votre assurance annuelle.",
       ],
       relatedLink: {
         text: 'Contrôlé sans assurance : risques, amende et que faire',
