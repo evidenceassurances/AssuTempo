@@ -192,7 +192,7 @@ const ALLEMAGNE_OVERRIDE = {
     {
       icon: 'History',
       titre: `Le berceau de l'automobile`,
-      texte: `Tout est né ici : Carl Benz brevète la première voiture en 1886. En 1888, Bertha Benz signe le premier road-trip de l'histoire (100+ km, Mannheim–Pforzheim), aujourd'hui balisé comme itinéraire touristique.`,
+      texte: `Tout est né ici : Carl Benz brevète la première voiture en 1886. En 1888, Bertha Benz signe le premier road-trip de l'histoire (100+ km, Mannheim-Pforzheim), aujourd'hui balisé comme itinéraire touristique.`,
     },
     {
       icon: 'ShoppingCart',

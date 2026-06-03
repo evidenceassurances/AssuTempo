@@ -1,5 +1,5 @@
 /**
- * Prerender script — génère un index.html statique par route.
+ * Prerender script - génère un index.html statique par route.
  * Exécuté après `vite build` via `npm run build`.
  *
  * Flux :
@@ -21,7 +21,7 @@ const root = path.resolve(__dirname, '..');
 const distSsr = path.join(root, 'dist-ssr');
 
 // ── Routes à pré-rendre ──────────────────────────────────────────────────────
-// JSON lu via readFileSync (compatible CJS/ESM — évite le conflit "type":"commonjs")
+// JSON lu via readFileSync (compatible CJS/ESM - évite le conflit "type":"commonjs")
 const COUNTRY_SLUGS = JSON.parse(
   readFileSync(new URL('../src/data/country-slugs.json', import.meta.url)),
 );

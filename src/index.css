@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════
-   DESIGN SYSTEM — AssuTempo
+   DESIGN SYSTEM - AssuTempo
 ═══════════════════════════════════════════ */
 
 :root {
@@ -15,7 +15,7 @@
   --bg-card-hover: rgba(255,255,255,0.05);
   --footer-bg: #050403;
 
-  /* Or — l'accent signature */
+  /* Or - l'accent signature */
   --gold: #C9A84C;
   --gold-light: #E8C97A;
   --gold-deep: #A8862F;
