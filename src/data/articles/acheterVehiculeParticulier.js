@@ -157,7 +157,7 @@ export const articleData = {
         {
           num: 3,
           title: 'Recevez votre attestation immédiatement',
-          body: "Carte verte et attestation disponibles par email, immédiatement après la souscription.",
+          body: "Votre Mémo Véhicule Assuré et votre carte internationale d'assurance automobile disponibles par email, immédiatement après la souscription.",
         },
         {
           num: 4,

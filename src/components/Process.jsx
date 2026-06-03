@@ -20,7 +20,7 @@ const steps = [
     num: '03',
     Icon: Download,
     title: 'Recevez votre attestation',
-    body: 'Paiement sécurisé. Carte verte disponible immédiatement en téléchargement.',
+    body: "Paiement sécurisé. Votre Mémo Véhicule Assuré et votre carte internationale d'assurance automobile (valable dans les 34 pays cités) sont disponibles immédiatement en téléchargement.",
   },
 ];
 

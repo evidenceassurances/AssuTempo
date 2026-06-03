@@ -17,8 +17,8 @@ const items = [
     a: 'Responsabilité civile, défense recours suite à accident et assistance dépannage. Le vol et le bris de glace ne sont pas couverts.',
   },
   {
-    q: 'Quand vais-je recevoir ma carte verte ?',
-    a: 'Immédiatement après le paiement, en téléchargement direct depuis le site.',
+    q: 'Quand vais-je recevoir mon attestation et mon Mémo Véhicule Assuré ?',
+    a: "Dès la validation de votre paiement. Depuis avril 2024, la carte verte a été supprimée : votre véhicule est enregistré au Fichier des Véhicules Assurés (FVA), que les forces de l'ordre consultent directement via votre plaque d'immatriculation. Votre contrat comprend votre Mémo Véhicule Assuré (à conserver avec les papiers du véhicule) et votre carte internationale d'assurance automobile, valable dans les 34 pays couverts - les deux disponibles immédiatement en téléchargement.",
   },
   {
     q: "Faut-il un relevé d'information ?",

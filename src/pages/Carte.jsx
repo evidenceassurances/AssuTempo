@@ -61,8 +61,8 @@ const FAQ_ITEMS = [
     a: "Oui, dès le premier jour du contrat, avec une attestation délivrée immédiatement.",
   },
   {
-    q: "Qu'est-ce que la carte verte ?",
-    a: "Le document international qui atteste que le véhicule est assuré et indique les pays couverts. Elle est fournie immédiatement.",
+    q: "Qu'est-ce que la carte internationale d'assurance automobile ?",
+    a: "C'est le document qui atteste que votre véhicule est assuré et précise les pays couverts. Depuis avril 2024, la carte verte n'existe plus en France : la preuve d'assurance se fait via le Fichier des Véhicules Assurés (FVA). Votre carte internationale d'assurance automobile reste le document de référence pour circuler dans les 34 pays européens couverts.",
   },
 ];
 
@@ -144,8 +144,8 @@ const jsonLd = [
       },
       {
         '@type': 'Question',
-        name: "Qu'est-ce que la carte verte ?",
-        acceptedAnswer: { '@type': 'Answer', text: "Le document international qui atteste que le véhicule est assuré et indique les pays couverts. Elle est fournie immédiatement." },
+        name: "Qu'est-ce que la carte internationale d'assurance automobile ?",
+        acceptedAnswer: { '@type': 'Answer', text: "C'est le document qui atteste que votre véhicule est assuré et précise les pays couverts. Depuis avril 2024, la carte verte n'existe plus en France : la preuve d'assurance se fait via le Fichier des Véhicules Assurés (FVA). Votre carte internationale d'assurance automobile reste le document de référence pour circuler dans les 34 pays européens couverts." },
       },
     ],
   },
@@ -440,9 +440,7 @@ function Carte() {
                   lineHeight: 1.75,
                 }}
               >
-                Avec AssuTempo, votre carte verte est valable dans 34 pays européens. Votre
-                assurance temporaire y couvre la responsabilité civile obligatoire dès le premier
-                jour. Voici la carte interactive et la liste complète des pays couverts.
+                Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile obligatoire dans 34 pays européens, dès le premier jour. Depuis avril 2024, la carte verte n&apos;existe plus : en France, la preuve d&apos;assurance se fait directement à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre contrat comprend votre Mémo Véhicule Assuré et votre carte internationale d&apos;assurance automobile, valable dans les 34 pays cités. Voici la carte interactive et la liste complète des pays couverts.
               </p>
             </div>
           </motion.div>
@@ -534,10 +532,7 @@ function Carte() {
               Une couverture valable dans toute l&apos;Europe
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.8 }}>
-              Votre attestation et votre carte verte sont reconnues dans ces 34 pays. La
-              responsabilité civile obligatoire vous couvre dès le premier jour, et l&apos;assistance est
-              incluse. Que vous traversiez une frontière pour un trajet ponctuel ou que vous
-              rapatriiez un véhicule, vous roulez en règle.
+              Votre couverture est reconnue dans ces 34 pays grâce à votre carte internationale d&apos;assurance automobile. La responsabilité civile obligatoire vous couvre dès le premier jour, et l&apos;assistance est incluse. Que vous traversiez une frontière pour un trajet ponctuel ou que vous rapatriiez un véhicule, vous roulez en règle.
             </p>
           </div>
         </Reveal>
@@ -554,13 +549,14 @@ function Carte() {
                 lineHeight: 1.3,
               }}
             >
-              Qu&apos;est-ce que la carte verte ?
+              Carte internationale d&apos;assurance automobile
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.8 }}>
-              La carte verte, ou carte internationale d&apos;assurance, est le document qui atteste que
-              votre véhicule est assuré et précise les pays où la couverture s&apos;applique. Avec
-              AssuTempo, elle est délivrée immédiatement et couvre les 34 pays listés sur cette
-              page.
+              Depuis avril 2024, la carte verte physique n&apos;existe plus en France. En France, la preuve
+              d&apos;assurance se fait directement via le Fichier des Véhicules Assurés (FVA), consultable
+              par les forces de l&apos;ordre à votre plaque. Pour circuler dans les 34 pays européens couverts,
+              votre carte internationale d&apos;assurance automobile fait foi - elle est délivrée immédiatement
+              avec votre Mémo Véhicule Assuré.
             </p>
           </div>
         </Reveal>

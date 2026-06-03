@@ -41,8 +41,8 @@ const faqs = [
     a: "Carte bancaire uniquement. Aucune information bancaire n'est conservée sur le site pour votre sécurité.",
   },
   {
-    q: 'Quand reçois-je mon attestation ?',
-    a: "Immédiatement après le paiement, votre carte verte et votre contrat sont disponibles en téléchargement direct.",
+    q: 'Quand reçois-je mon Mémo Véhicule Assuré ?',
+    a: "Dès la validation de votre paiement. Depuis avril 2024, la carte verte a été supprimée : votre véhicule est enregistré au Fichier des Véhicules Assurés (FVA), que les forces de l'ordre consultent directement via votre plaque d'immatriculation. Votre contrat comprend votre Mémo Véhicule Assuré (à conserver avec les papiers du véhicule) et votre carte internationale d'assurance automobile, valable dans les 34 pays couverts - les deux disponibles immédiatement en téléchargement.",
   },
   {
     q: "Quelle est la durée maximum d'assurance ?",
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: 'Dans quels pays puis-je circuler ?',
-    a: "Dans les 34 pays indiqués sur votre carte verte : Autriche, Belgique, Bulgarie, Chypre, République tchèque, Allemagne, Danemark, Espagne, Estonie, France, Finlande, Grèce, Hongrie, Croatie, Italie, Irlande, Islande, Luxembourg, Lituanie, Lettonie, Malte, Norvège, Pays-Bas, Portugal, Pologne, Roumanie, Suède, Slovaquie, Slovénie, Suisse, Andorre, Bosnie-Herzégovine, Monténégro, Royaume-Uni.",
+    a: "Dans les 34 pays couverts par votre carte internationale d'assurance automobile : Autriche, Belgique, Bulgarie, Chypre, République tchèque, Allemagne, Danemark, Espagne, Estonie, France, Finlande, Grèce, Hongrie, Croatie, Italie, Irlande, Islande, Luxembourg, Lituanie, Lettonie, Malte, Norvège, Pays-Bas, Portugal, Pologne, Roumanie, Suède, Slovaquie, Slovénie, Suisse, Andorre, Bosnie-Herzégovine, Monténégro, Royaume-Uni.",
   },
 ];
 

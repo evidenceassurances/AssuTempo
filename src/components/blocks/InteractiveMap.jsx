@@ -9,7 +9,7 @@ function InteractiveMap({ countries }) {
       <div className="rounded-[2rem] border border-slate-200 bg-white/85 p-8 shadow-sm">
         <p className="text-sm uppercase tracking-[0.3em] text-mint">Couverture Europe</p>
         <h3 className="mt-4 text-3xl font-semibold text-slate-950">34 pays européens couverts</h3>
-        <p className="mt-4 text-sm leading-7 text-slate-600">La carte verte AssuTempo couvre 34 pays européens sans frais cachés, idéale pour les voyages et les démarches internationales.</p>
+        <p className="mt-4 text-sm leading-7 text-slate-600">L&apos;assurance temporaire AssuTempo couvre 34 pays européens sans frais cachés, idéale pour les voyages et les démarches internationales.</p>
         <div className="mt-8 rounded-[1.75rem] bg-slate-950/95 p-6 text-white shadow-glow">
           <p className="text-xs uppercase tracking-[0.3em] text-mint">Pays sélectionné</p>
           <p className="mt-4 text-2xl font-semibold">{active}</p>

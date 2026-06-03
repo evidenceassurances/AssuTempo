@@ -160,7 +160,7 @@ export const articleData = {
         {
           num: 2,
           title: 'Souscrivez une assurance temporaire en ligne',
-          body: "Choisissez une durée au moins égale à ce qu'indique la fiche. Vous recevez attestation et carte verte immédiatement.",
+          body: "Choisissez une durée au moins égale à ce qu'indique la fiche. Vous recevez votre Mémo Véhicule Assuré et votre carte internationale d'assurance automobile immédiatement.",
         },
         {
           num: 3,

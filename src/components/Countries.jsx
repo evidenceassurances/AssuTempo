@@ -40,7 +40,7 @@ function Countries() {
             Valable dans toute l&apos;Europe
           </h2>
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
-            34 pays couverts par votre carte verte.
+            34 pays européens couverts dès le premier jour.
           </p>
         </motion.div>
 
