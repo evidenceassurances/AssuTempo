@@ -17,6 +17,9 @@ import Carte from './pages/Carte';
 
 function App() {
   const location = useLocation();
+  /* Normalise la clé pour que la transition de page ne se déclenche pas
+     lors du changement de pays (/carte/france → /carte/espagne). */
+  const pageKey = location.pathname.replace(/^(\/carte)\/.+$/, '$1');
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
@@ -25,7 +28,7 @@ function App() {
       <AnimatePresence mode="wait" initial={false} onExitComplete={() => {
         if (typeof window !== 'undefined') window.scrollTo(0, 0);
       }}>
-        <Routes location={location} key={location.pathname}>
+        <Routes location={location} key={pageKey}>
           <Route path="/" element={<PageTransition><Home /></PageTransition>} />
           <Route path="/faq" element={<PageTransition><Faq /></PageTransition>} />
           <Route path="/tarification" element={<PageTransition><Pricing /></PageTransition>} />
@@ -37,6 +40,7 @@ function App() {
           <Route path="/articles/combien-de-jours-assurance-sortir-fourriere" element={<PageTransition><CombienDeJoursAssurance /></PageTransition>} />
           <Route path="/articles/assurance-temporaire-vehicule-etranger-france" element={<PageTransition><AssuranceVehiculeEtranger /></PageTransition>} />
           <Route path="/carte" element={<PageTransition><Carte /></PageTransition>} />
+          <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </div>

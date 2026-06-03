@@ -1,48 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion, useReducedMotion } from 'framer-motion';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import { ArrowRight, Phone } from 'lucide-react';
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import {
+  COUNTRIES,
+  SLUG_TO_COUNTRY,
+  ISO_TO_SLUG,
+} from '../data/countries-content';
 
-/* ── Données géographiques (bundlées en local pour éviter dépendance CDN) ── */
+/* ── Constantes géo ──────────────────────────────────────────────────────── */
 const GEO_URL = '/countries-110m.json';
+const DEFAULT_CENTER = [10, 54];
 
-/* ── ISO 3166-1 numérique des 34 pays couverts ── */
-const COVERED = new Set([
-  40, 56, 100, 196, 203, 276, 208, 724, 233, 250, 246, 300,
-  348, 191, 380, 372, 352, 442, 440, 428, 470, 578, 528, 620,
-  616, 642, 752, 703, 705, 756, 20, 70, 499, 826,
-]);
+const COVERED        = new Set(COUNTRIES.map(c => c.isoId));
+const COUNTRY_NAMES  = Object.fromEntries(COUNTRIES.map(c => [c.isoId, c.nom]));
 
-const COUNTRY_NAMES = {
-  40: 'Autriche', 56: 'Belgique', 100: 'Bulgarie', 196: 'Chypre',
-  203: 'République tchèque', 276: 'Allemagne', 208: 'Danemark',
-  724: 'Espagne', 233: 'Estonie', 250: 'France', 246: 'Finlande',
-  300: 'Grèce', 348: 'Hongrie', 191: 'Croatie', 380: 'Italie',
-  372: 'Irlande', 352: 'Islande', 442: 'Luxembourg', 440: 'Lituanie',
-  428: 'Lettonie', 470: 'Malte', 578: 'Norvège', 528: 'Pays-Bas',
-  620: 'Portugal', 616: 'Pologne', 642: 'Roumanie', 752: 'Suède',
-  703: 'Slovaquie', 705: 'Slovénie', 756: 'Suisse', 20: 'Andorre',
-  70: 'Bosnie-Herzégovine', 499: 'Monténégro', 826: 'Royaume-Uni',
-};
-
-/* ── Pills de pays (même style que Countries.jsx) ── */
-const COUNTRY_PILLS = [
-  '🇦🇹 Autriche', '🇧🇪 Belgique', '🇧🇬 Bulgarie', '🇨🇾 Chypre',
-  '🇨🇿 République tchèque', '🇩🇪 Allemagne', '🇩🇰 Danemark',
-  '🇪🇸 Espagne', '🇪🇪 Estonie', '🇫🇷 France', '🇫🇮 Finlande',
-  '🇬🇷 Grèce', '🇭🇺 Hongrie', '🇭🇷 Croatie', '🇮🇹 Italie',
-  '🇮🇪 Irlande', '🇮🇸 Islande', '🇱🇺 Luxembourg', '🇱🇹 Lituanie',
-  '🇱🇻 Lettonie', '🇲🇹 Malte', '🇳🇴 Norvège', '🇳🇱 Pays-Bas',
-  '🇵🇹 Portugal', '🇵🇱 Pologne', '🇷🇴 Roumanie', '🇸🇪 Suède',
-  '🇸🇰 Slovaquie', '🇸🇮 Slovénie', '🇨🇭 Suisse', '🇦🇩 Andorre',
-  '🇧🇦 Bosnie-Herzégovine', '🇲🇪 Monténégro', '🇬🇧 Royaume-Uni',
-];
-
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
 const FAQ_ITEMS = [
   {
     q: "Dans quels pays mon assurance temporaire est-elle valable ?",
@@ -66,92 +44,38 @@ const FAQ_ITEMS = [
   },
 ];
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: "Carte des 34 pays couverts : assurance temporaire en Europe",
-    description:
-      "Les 34 pays européens où l'assurance temporaire AssuTempo est valable. Carte interactive et liste complète.",
-    url: 'https://assutempo.fr/carte',
-    publisher: { '@type': 'Organization', name: 'AssuTempo' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: "Pays couverts par l'assurance temporaire AssuTempo",
-    numberOfItems: 34,
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Autriche' },
-      { '@type': 'ListItem', position: 2, name: 'Belgique' },
-      { '@type': 'ListItem', position: 3, name: 'Bulgarie' },
-      { '@type': 'ListItem', position: 4, name: 'Chypre' },
-      { '@type': 'ListItem', position: 5, name: 'République tchèque' },
-      { '@type': 'ListItem', position: 6, name: 'Allemagne' },
-      { '@type': 'ListItem', position: 7, name: 'Danemark' },
-      { '@type': 'ListItem', position: 8, name: 'Espagne' },
-      { '@type': 'ListItem', position: 9, name: 'Estonie' },
-      { '@type': 'ListItem', position: 10, name: 'France' },
-      { '@type': 'ListItem', position: 11, name: 'Finlande' },
-      { '@type': 'ListItem', position: 12, name: 'Grèce' },
-      { '@type': 'ListItem', position: 13, name: 'Hongrie' },
-      { '@type': 'ListItem', position: 14, name: 'Croatie' },
-      { '@type': 'ListItem', position: 15, name: 'Italie' },
-      { '@type': 'ListItem', position: 16, name: 'Irlande' },
-      { '@type': 'ListItem', position: 17, name: 'Islande' },
-      { '@type': 'ListItem', position: 18, name: 'Luxembourg' },
-      { '@type': 'ListItem', position: 19, name: 'Lituanie' },
-      { '@type': 'ListItem', position: 20, name: 'Lettonie' },
-      { '@type': 'ListItem', position: 21, name: 'Malte' },
-      { '@type': 'ListItem', position: 22, name: 'Norvège' },
-      { '@type': 'ListItem', position: 23, name: 'Pays-Bas' },
-      { '@type': 'ListItem', position: 24, name: 'Portugal' },
-      { '@type': 'ListItem', position: 25, name: 'Pologne' },
-      { '@type': 'ListItem', position: 26, name: 'Roumanie' },
-      { '@type': 'ListItem', position: 27, name: 'Suède' },
-      { '@type': 'ListItem', position: 28, name: 'Slovaquie' },
-      { '@type': 'ListItem', position: 29, name: 'Slovénie' },
-      { '@type': 'ListItem', position: 30, name: 'Suisse' },
-      { '@type': 'ListItem', position: 31, name: 'Andorre' },
-      { '@type': 'ListItem', position: 32, name: 'Bosnie-Herzégovine' },
-      { '@type': 'ListItem', position: 33, name: 'Monténégro' },
-      { '@type': 'ListItem', position: 34, name: 'Royaume-Uni' },
-    ],
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: "Dans quels pays mon assurance temporaire est-elle valable ?",
-        acceptedAnswer: { '@type': 'Answer', text: "Dans 34 pays européens, dont la liste complète figure sur cette page. La responsabilité civile y est couverte dès le premier jour." },
-      },
-      {
-        '@type': 'Question',
-        name: "L'assurance est-elle valable en Allemagne, en Espagne ou en Italie ?",
-        acceptedAnswer: { '@type': 'Answer', text: "Oui. L'Allemagne, l'Espagne et l'Italie font partie des 34 pays couverts." },
-      },
-      {
-        '@type': 'Question',
-        name: "Le Royaume-Uni et la Suisse sont-ils couverts ?",
-        acceptedAnswer: { '@type': 'Answer', text: "Oui. Le Royaume-Uni, la Suisse, l'Andorre, le Monténégro et la Bosnie-Herzégovine font partie des pays couverts." },
-      },
-      {
-        '@type': 'Question',
-        name: "La couverture est-elle immédiate à l'étranger ?",
-        acceptedAnswer: { '@type': 'Answer', text: "Oui, dès le premier jour du contrat, avec une attestation délivrée immédiatement." },
-      },
-      {
-        '@type': 'Question',
-        name: "Qu'est-ce que la carte internationale d'assurance automobile ?",
-        acceptedAnswer: { '@type': 'Answer', text: "C'est le document qui atteste que votre véhicule est assuré et précise les pays couverts. Depuis avril 2024, la carte verte n'existe plus en France : la preuve d'assurance se fait via le Fichier des Véhicules Assurés (FVA). Votre carte internationale d'assurance automobile reste le document de référence pour circuler dans les 34 pays européens couverts." },
-      },
-    ],
-  },
-];
+/* ── Variants Framer Motion ──────────────────────────────────────────────── */
+const EASE = [0.22, 1, 0.36, 1];
+const SPRING = { type: 'spring', stiffness: 130, damping: 20 };
 
-/* ── Reveal wrapper ── */
+const panelOuter = {
+  hidden: { opacity: 0, height: 0 },
+  visible: { opacity: 1, height: 'auto', transition: { duration: 0.45, ease: EASE } },
+  exit:    { opacity: 0, height: 0,    transition: { duration: 0.35, ease: EASE } },
+};
+const panelInner = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+  exit:   { opacity: 0, y: -14, transition: { duration: 0.28, ease: EASE } },
+};
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.42, ease: EASE } },
+};
+const lineVariant = {
+  hidden: { scaleX: 0 },
+  visible: { scaleX: 1, transition: { duration: 0.55, delay: 0.15, ease: EASE } },
+};
+const cardVariant = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+};
+
+/* ── Reveal scroll générique ─────────────────────────────────────────────── */
 function Reveal({ children, delay = 0 }) {
   const reduce = useReducedMotion();
   if (reduce) return <div>{children}</div>;
@@ -160,49 +84,216 @@ function Reveal({ children, delay = 0 }) {
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -60px 0px' }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ── Carte SVG ── */
-function EuropeMap({ initialSelectedId = null }) {
+/* ── Panneau pays animé ───────────────────────────────────────────────────── */
+function CountryPanel({ country }) {
+  const reduce = useReducedMotion();
+  const { h1, intro, points, flag, nom, slug } = country;
+
+  return (
+    <motion.div
+      key={slug}
+      variants={panelInner}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <motion.div variants={stagger} initial="hidden" animate="visible">
+        {/* En-tête */}
+        <motion.div variants={fadeUp} style={{ marginBottom: 8 }}>
+          <p
+            style={{
+              fontSize: 11,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--gold)',
+              margin: '0 0 10px',
+              fontWeight: 600,
+            }}
+          >
+            {flag}&nbsp; PAYS COUVERT
+          </p>
+          <h2
+            style={{
+              fontSize: 'clamp(1.35rem, 3vw, 1.95rem)',
+              fontWeight: 800,
+              color: 'var(--text)',
+              margin: 0,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.2,
+            }}
+          >
+            {h1}
+          </h2>
+        </motion.div>
+
+        {/* Filet doré — animation "dessin" */}
+        <motion.div
+          variants={lineVariant}
+          style={{
+            height: 1.5,
+            background: 'var(--gold)',
+            transformOrigin: 'left center',
+            borderRadius: 1,
+            margin: '18px 0 22px',
+          }}
+        />
+
+        {/* Intro */}
+        <motion.p
+          variants={fadeUp}
+          style={{
+            fontSize: 15,
+            color: 'var(--text-muted)',
+            lineHeight: 1.85,
+            margin: '0 0 32px',
+            maxWidth: 780,
+          }}
+        >
+          {intro}
+        </motion.p>
+
+        {/* Points clés */}
+        <motion.div
+          variants={stagger}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 14,
+            marginBottom: 36,
+          }}
+        >
+          {points.map((point, i) => (
+            <motion.div
+              key={i}
+              variants={cardVariant}
+              whileHover={
+                reduce
+                  ? {}
+                  : {
+                      y: -5,
+                      boxShadow: '0 10px 32px rgba(201,168,76,0.18)',
+                      borderColor: 'var(--gold-border)',
+                    }
+              }
+              transition={{ duration: 0.25 }}
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 14,
+                padding: '18px 20px',
+                cursor: 'default',
+                transition: 'border-color 0.25s',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: 'var(--gold)',
+                  margin: '0 0 7px',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {point.titre}
+              </p>
+              <p
+                style={{
+                  fontSize: 14,
+                  color: 'var(--text-muted)',
+                  margin: 0,
+                  lineHeight: 1.72,
+                }}
+              >
+                {point.texte}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          variants={fadeUp}
+          style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}
+        >
+          <Link
+            to="/tarification"
+            className="btn-gold"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '13px 26px',
+              fontSize: 14,
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            Obtenir mon devis pour {nom}
+            <ArrowRight size={14} strokeWidth={2} />
+          </Link>
+          <a
+            href="tel:0974197820"
+            className="btn-glass"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              fontSize: 14,
+            }}
+          >
+            <Phone size={14} strokeWidth={1.5} />
+            09 74 19 78 20
+          </a>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Carte SVG ────────────────────────────────────────────────────────────── */
+function EuropeMap({ selectedId, onCountryClick }) {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
-  const [selectedId, setSelectedId] = useState(initialSelectedId);
   const reduce = useReducedMotion();
 
-  /* Badge affiche le nom survolé pendant le survol, sinon le pays sélectionné */
+  const selectedSlug    = selectedId ? ISO_TO_SLUG[selectedId] : null;
+  const selectedCountry = selectedSlug ? SLUG_TO_COUNTRY[selectedSlug] : null;
+  const mapCenter       = reduce ? DEFAULT_CENTER : (selectedCountry?.center ?? DEFAULT_CENTER);
+  const mapZoom         = selectedId && !reduce ? 1.18 : 1;
+
   const badgeName = tooltip.visible
     ? tooltip.name
-    : selectedId !== null
+    : selectedId != null
     ? COUNTRY_NAMES[selectedId]
     : null;
 
-  const handleEnter = (geoId, e) => {
-    const name = COUNTRY_NAMES[geoId];
+  const handleEnter = (id, e) => {
+    const name = COUNTRY_NAMES[id];
     if (!name) return;
     setTooltip({ visible: true, name, x: e.clientX, y: e.clientY });
   };
-
-  const handleMove = (geoId, e) => {
-    if (!COUNTRY_NAMES[geoId]) return;
-    setTooltip((t) => ({ ...t, x: e.clientX, y: e.clientY }));
+  const handleMove = (id, e) => {
+    if (!COUNTRY_NAMES[id]) return;
+    setTooltip(t => ({ ...t, x: e.clientX, y: e.clientY }));
   };
-
-  const handleLeave = () => {
-    setTooltip((t) => ({ ...t, visible: false }));
-  };
-
-  const handleClick = (geoId) => {
-    if (!COUNTRY_NAMES[geoId]) return;
-    setSelectedId((prev) => (prev === geoId ? null : geoId));
+  const handleLeave = () => setTooltip(t => ({ ...t, visible: false }));
+  const handleClick = (id) => {
+    if (!COUNTRY_NAMES[id]) return;
+    onCountryClick(id);
   };
 
   return (
     <>
-      {/* Infobulle desktop (suit le curseur) */}
+      {/* Tooltip curseur */}
       {tooltip.visible && (
         <div
           aria-hidden="true"
@@ -228,7 +319,10 @@ function EuropeMap({ initialSelectedId = null }) {
         </div>
       )}
 
-      <div
+      {/* Carte container — léger zoom spring quand pays sélectionné */}
+      <motion.div
+        animate={selectedId && !reduce ? { scale: 1.014 } : { scale: 1 }}
+        transition={SPRING}
         style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--glass-border)',
@@ -237,30 +331,37 @@ function EuropeMap({ initialSelectedId = null }) {
           position: 'relative',
         }}
       >
-        {/* Badge : nom survolé pendant le hover, pays sélectionné au repos */}
-        {badgeName && (
-          <div
-            aria-live="polite"
-            style={{
-              position: 'absolute',
-              top: 12,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              background: 'rgba(8,7,6,0.9)',
-              border: '1px solid var(--gold-border)',
-              borderRadius: 999,
-              padding: '5px 16px',
-              fontSize: 13,
-              fontWeight: 600,
-              color: 'var(--gold)',
-              zIndex: 10,
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-            }}
-          >
-            {badgeName}
-          </div>
-        )}
+        {/* Badge nom pays */}
+        <AnimatePresence mode="wait">
+          {badgeName && (
+            <motion.div
+              key={badgeName}
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+              aria-live="polite"
+              style={{
+                position: 'absolute',
+                top: 12,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'rgba(8,7,6,0.9)',
+                border: '1px solid var(--gold-border)',
+                borderRadius: 999,
+                padding: '5px 16px',
+                fontSize: 13,
+                fontWeight: 600,
+                color: 'var(--gold)',
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none',
+              }}
+            >
+              {badgeName}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <ComposableMap
           role="img"
@@ -271,46 +372,61 @@ function EuropeMap({ initialSelectedId = null }) {
           height={520}
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                const id = +geo.id;
-                const isCovered = COVERED.has(id);
-                const name = COUNTRY_NAMES[id];
-                const isSelected = selectedId === id;
-                /* Couleur de base : sélectionné → doré clair (token hover existant),
-                   couvert → doré standard, non couvert → fond sombre */
-                const baseFill = isSelected ? '#E8C97A' : isCovered ? '#C9A84C' : '#1C1A16';
+          <ZoomableGroup
+            center={mapCenter}
+            zoom={mapZoom}
+            disableZooming
+            disablePanning
+          >
+            <Geographies geography={GEO_URL}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const id        = +geo.id;
+                  const isCovered = COVERED.has(id);
+                  const name      = COUNTRY_NAMES[id];
+                  const isSelected = selectedId === id;
+                  const baseFill  = isSelected ? '#E8C97A' : isCovered ? '#C9A84C' : '#1C1A16';
 
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill={baseFill}
-                    stroke={isSelected ? 'rgba(232,201,122,0.55)' : '#080706'}
-                    strokeWidth={isSelected ? 1.2 : 0.4}
-                    aria-label={isCovered ? `${name} - pays couvert` : undefined}
-                    tabIndex={isCovered ? 0 : -1}
-                    role={isCovered ? 'img' : undefined}
-                    style={{
-                      default: { outline: 'none', transition: reduce ? 'none' : 'fill 0.2s', fill: baseFill },
-                      hover: {
-                        fill: isCovered ? '#E8C97A' : '#222018',
-                        outline: 'none',
-                        cursor: isCovered ? 'pointer' : 'default',
-                        filter: isCovered ? 'drop-shadow(0 0 6px rgba(232,201,122,0.4))' : 'none',
-                      },
-                      pressed: { outline: 'none' },
-                    }}
-                    onMouseEnter={(e) => handleEnter(id, e)}
-                    onMouseMove={(e) => handleMove(id, e)}
-                    onMouseLeave={handleLeave}
-                    onClick={() => handleClick(id)}
-                  />
-                );
-              })
-            }
-          </Geographies>
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={baseFill}
+                      stroke={isSelected ? 'rgba(232,201,122,0.55)' : '#080706'}
+                      strokeWidth={isSelected ? 1.2 : 0.4}
+                      aria-label={isCovered ? `${name} — pays couvert` : undefined}
+                      tabIndex={isCovered ? 0 : -1}
+                      role={isCovered ? 'button' : undefined}
+                      style={{
+                        default: {
+                          outline: 'none',
+                          transition: reduce ? 'none' : 'fill 0.28s ease, filter 0.3s ease',
+                          fill: baseFill,
+                          filter: isSelected
+                            ? 'drop-shadow(0 0 9px rgba(232,201,122,0.55))'
+                            : 'none',
+                        },
+                        hover: {
+                          fill: isCovered ? '#E8C97A' : '#222018',
+                          outline: 'none',
+                          cursor: isCovered ? 'pointer' : 'default',
+                          filter: isCovered ? 'drop-shadow(0 0 7px rgba(232,201,122,0.45))' : 'none',
+                        },
+                        pressed: { outline: 'none' },
+                      }}
+                      onMouseEnter={(e) => handleEnter(id, e)}
+                      onMouseMove={(e)  => handleMove(id, e)}
+                      onMouseLeave={handleLeave}
+                      onClick={() => handleClick(id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') handleClick(id);
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+          </ZoomableGroup>
         </ComposableMap>
 
         {/* Légende */}
@@ -323,56 +439,116 @@ function EuropeMap({ initialSelectedId = null }) {
             borderTop: '1px solid var(--glass-border)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)' }}>
-            <div style={{ width: 14, height: 14, borderRadius: 3, background: '#C9A84C', flexShrink: 0 }} />
-            34 pays couverts
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)' }}>
-            <div style={{ width: 14, height: 14, borderRadius: 3, background: '#1C1A16', border: '1px solid #333', flexShrink: 0 }} />
-            Non couvert
-          </div>
+          {[
+            { bg: '#C9A84C', label: '34 pays couverts' },
+            { bg: '#E8C97A', border: 'none', label: 'Sélectionné' },
+            { bg: '#1C1A16', border: '1px solid #333', label: 'Non couvert' },
+          ].map(({ bg, border, label }) => (
+            <div
+              key={label}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)' }}
+            >
+              <div style={{ width: 14, height: 14, borderRadius: 3, background: bg, border, flexShrink: 0 }} />
+              {label}
+            </div>
+          ))}
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
 
-/* ── Page principale ── */
+/* ── Page principale ─────────────────────────────────────────────────────── */
 function Carte() {
+  const { pays: slugParam }  = useParams();
+  const [searchParams]       = useSearchParams();
+  const navigate             = useNavigate();
+  const { state }            = useLocation();
   const [openFaq, setOpenFaq] = useState(null);
   const [pillsRef, pillsInView] = useScrollReveal();
-  const [searchParams] = useSearchParams();
-  const mapRef = useRef(null);
+  const mapRef   = useRef(null);
+  const panelRef = useRef(null);
 
-  const rawPays = Number(searchParams.get('pays'));
-  const initialId = COVERED.has(rawPays) ? rawPays : null;
+  /* ── Résolution du pays sélectionné ────────────────────────────────────── */
+  const countryFromSlug = slugParam ? SLUG_TO_COUNTRY[slugParam] ?? null : null;
+
+  /* Compat ascendante : ?pays=<isoId> → redirect vers /carte/:slug */
+  const rawIso = Number(searchParams.get('pays'));
+  const slugFromSearch = rawIso ? ISO_TO_SLUG[rawIso] : null;
 
   useEffect(() => {
-    if (!initialId || !mapRef.current) return;
-    const t = setTimeout(
-      () => mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-      500,
-    );
-    return () => clearTimeout(t);
+    if (!slugParam && slugFromSearch) {
+      navigate(`/carte/${slugFromSearch}`, { replace: true });
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const selectedCountry = countryFromSlug;
+  const selectedId      = selectedCountry?.isoId ?? null;
+
+  /* ── Scroll depuis l'accueil ────────────────────────────────────────────── */
+  useEffect(() => {
+    if (state?.fromHome && mapRef.current) {
+      const t = setTimeout(
+        () => mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+        380,
+      );
+      return () => clearTimeout(t);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── Scroll vers panneau quand pays changé depuis la carte ─────────────── */
+  useEffect(() => {
+    if (selectedCountry && panelRef.current) {
+      const t = setTimeout(
+        () => panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }),
+        460,
+      );
+      return () => clearTimeout(t);
+    }
+  }, [selectedCountry?.slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── Clic sur la carte ──────────────────────────────────────────────────── */
+  const handleCountryClick = (isoId) => {
+    const slug = ISO_TO_SLUG[isoId];
+    if (!slug) return;
+    if (selectedId === isoId) {
+      navigate('/carte');
+    } else {
+      navigate(`/carte/${slug}`);
+    }
+  };
+
+  /* ── SEO ────────────────────────────────────────────────────────────────── */
+  const seoTitle = selectedCountry
+    ? selectedCountry.title
+    : 'Carte des 34 pays couverts : assurance temporaire en Europe';
+  const seoDesc = selectedCountry
+    ? selectedCountry.metaDescription
+    : "Découvrez les 34 pays européens où votre assurance temporaire AssuTempo est valable. Carte interactive et liste complète.";
+  const canonical = selectedCountry
+    ? `https://assutempo.fr/carte/${selectedCountry.slug}`
+    : 'https://assutempo.fr/carte';
+
+  /* ── JSON-LD (page générique) ───────────────────────────────────────────── */
+  const jsonLdBase = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: seoTitle,
+    description: seoDesc,
+    url: canonical,
+    publisher: { '@type': 'Organization', name: 'AssuTempo' },
+  };
 
   return (
     <>
       <Helmet>
-        <title>Carte des 34 pays couverts : assurance temporaire en Europe</title>
-        <meta
-          name="description"
-          content="Découvrez en un coup d'oeil les 34 pays européens où votre assurance temporaire AssuTempo est valable. Carte interactive et liste complète des pays couverts."
-        />
-        <link rel="canonical" href="https://assutempo.fr/carte" />
-        {jsonLd.map((schema, i) => (
-          <script key={i} type="application/ld+json">
-            {JSON.stringify(schema)}
-          </script>
-        ))}
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDesc} />
+        <link rel="canonical" href={canonical} />
+        <script type="application/ld+json">{JSON.stringify(jsonLdBase)}</script>
       </Helmet>
 
-      {/* ── Hero ── */}
+      {/* ── Hero ────────────────────────────────────────────────────────── */}
       <section
         style={{
           paddingTop: 120,
@@ -396,7 +572,7 @@ function Carte() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: EASE }}
           >
             <p
               style={{
@@ -409,20 +585,31 @@ function Carte() {
             >
               COUVERTURE EUROPE
             </p>
-            <h1
-              style={{
-                fontSize: 'clamp(1.75rem, 4.5vw, 2.8rem)',
-                fontWeight: 800,
-                color: 'var(--text)',
-                margin: '0 0 32px',
-                letterSpacing: '-0.03em',
-                lineHeight: 1.15,
-              }}
-            >
-              Assurance temporaire en Europe : la carte des 34 pays couverts
-            </h1>
 
-            {/* Encadré "L'essentiel" */}
+            {/* H1 — générique ou spécifique au pays */}
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={selectedCountry?.slug ?? 'default'}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease: EASE }}
+                style={{
+                  fontSize: 'clamp(1.75rem, 4.5vw, 2.8rem)',
+                  fontWeight: 800,
+                  color: 'var(--text)',
+                  margin: '0 0 32px',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1.15,
+                }}
+              >
+                {selectedCountry
+                  ? selectedCountry.h1
+                  : 'Assurance temporaire en Europe : la carte des 34 pays couverts'}
+              </motion.h1>
+            </AnimatePresence>
+
+            {/* Encadré */}
             <div
               style={{
                 background: 'var(--gold-glow)',
@@ -454,22 +641,61 @@ function Carte() {
                   lineHeight: 1.75,
                 }}
               >
-                Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile obligatoire dans 34 pays européens, dès le premier jour. Depuis avril 2024, la carte verte n&apos;existe plus : en France, la preuve d&apos;assurance se fait directement à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre contrat comprend votre Mémo Véhicule Assuré et votre carte internationale d&apos;assurance automobile, valable dans les 34 pays cités. Voici la carte interactive et la liste complète des pays couverts.
+                Avec AssuTempo, votre assurance temporaire couvre la responsabilité civile
+                obligatoire dans 34 pays européens, dès le premier jour. Depuis avril 2024,
+                la carte verte n&apos;existe plus : en France, la preuve d&apos;assurance se fait
+                directement à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre
+                contrat comprend votre Mémo Véhicule Assuré et votre carte internationale
+                d&apos;assurance automobile, valable dans les 34 pays cités.
               </p>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Carte SVG ── */}
-      <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 64px' }}>
+      {/* ── Carte SVG ───────────────────────────────────────────────────── */}
+      <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
         <Reveal>
-          <EuropeMap initialSelectedId={initialId} />
+          <EuropeMap selectedId={selectedId} onCountryClick={handleCountryClick} />
         </Reveal>
       </section>
 
-      {/* ── Liste pills des 34 pays ── */}
-      <section style={{ background: 'var(--bg)', padding: '0 0 72px' }}>
+      {/* ── Panneau pays ────────────────────────────────────────────────── */}
+      <section
+        ref={panelRef}
+        style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px' }}
+      >
+        <AnimatePresence mode="wait">
+          {selectedCountry && (
+            <motion.div
+              key="panel-wrapper"
+              variants={panelOuter}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              style={{ overflow: 'hidden' }}
+            >
+              <div
+                style={{
+                  marginTop: 32,
+                  padding: '36px 40px',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: 20,
+                  marginBottom: 32,
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  <CountryPanel key={selectedCountry.slug} country={selectedCountry} />
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
+
+      {/* ── Pills des 34 pays ───────────────────────────────────────────── */}
+      <section style={{ background: 'var(--bg)', padding: '40px 0 72px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
           <Reveal>
             <h2
@@ -482,54 +708,60 @@ function Carte() {
                 textAlign: 'center',
               }}
             >
-              Les 34 pays couverts
+              Les 34 pays couverts — cliquez pour en savoir plus
             </h2>
           </Reveal>
           <div
             ref={pillsRef}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 10,
-              justifyContent: 'center',
-            }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}
           >
-            {COUNTRY_PILLS.map((country, i) => (
-              <motion.div
-                key={country}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={pillsInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.3, delay: i * 0.02, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  padding: '8px 14px',
-                  background: 'var(--glass)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: 999,
-                  fontSize: 13,
-                  color: 'var(--text-muted)',
-                  transition: 'border-color 0.25s, background 0.25s, color 0.25s',
-                  cursor: 'default',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--gold-border)';
-                  e.currentTarget.style.background = 'var(--gold-glow)';
-                  e.currentTarget.style.color = 'var(--text)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--glass-border)';
-                  e.currentTarget.style.background = 'var(--glass)';
-                  e.currentTarget.style.color = 'var(--text-muted)';
-                }}
-              >
-                {country}
-              </motion.div>
-            ))}
+            {COUNTRIES.map((c, i) => {
+              const isActive = selectedCountry?.slug === c.slug;
+              return (
+                <motion.div
+                  key={c.slug}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={pillsInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.3, delay: i * 0.02, ease: EASE }}
+                >
+                  <Link
+                    to={isActive ? '/carte' : `/carte/${c.slug}`}
+                    style={{
+                      display: 'block',
+                      padding: '8px 14px',
+                      background: isActive ? 'var(--gold-dim)' : 'var(--glass)',
+                      border: `1px solid ${isActive ? 'var(--gold-border)' : 'var(--glass-border)'}`,
+                      borderRadius: 999,
+                      fontSize: 13,
+                      color: isActive ? 'var(--gold)' : 'var(--text-muted)',
+                      textDecoration: 'none',
+                      whiteSpace: 'nowrap',
+                      transition: 'border-color 0.25s, background 0.25s, color 0.25s',
+                      fontWeight: isActive ? 600 : 400,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isActive) return;
+                      e.currentTarget.style.borderColor = 'var(--gold-border)';
+                      e.currentTarget.style.background = 'var(--gold-glow)';
+                      e.currentTarget.style.color = 'var(--text)';
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isActive) return;
+                      e.currentTarget.style.borderColor = 'var(--glass-border)';
+                      e.currentTarget.style.background = 'var(--glass)';
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
+                  >
+                    {c.flag} {c.nom}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── Sections texte ── */}
+      {/* ── Sections texte ──────────────────────────────────────────────── */}
       <section style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px 80px' }}>
         <Reveal>
           <div style={{ marginBottom: 40 }}>
@@ -546,7 +778,10 @@ function Carte() {
               Une couverture valable dans toute l&apos;Europe
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.8 }}>
-              Votre couverture est reconnue dans ces 34 pays grâce à votre carte internationale d&apos;assurance automobile. La responsabilité civile obligatoire vous couvre dès le premier jour, et l&apos;assistance est incluse. Que vous traversiez une frontière pour un trajet ponctuel ou que vous rapatriiez un véhicule, vous roulez en règle.
+              Votre couverture est reconnue dans ces 34 pays grâce à votre carte internationale
+              d&apos;assurance automobile. La responsabilité civile obligatoire vous couvre dès le
+              premier jour, et l&apos;assistance est incluse. Que vous traversiez une frontière pour
+              un trajet ponctuel ou que vous rapatriiez un véhicule, vous roulez en règle.
             </p>
           </div>
         </Reveal>
@@ -566,16 +801,16 @@ function Carte() {
               Carte internationale d&apos;assurance automobile
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.8 }}>
-              Depuis avril 2024, la carte verte physique n&apos;existe plus en France. En France, la preuve
-              d&apos;assurance se fait directement via le Fichier des Véhicules Assurés (FVA), consultable
-              par les forces de l&apos;ordre à votre plaque. Pour circuler dans les 34 pays européens couverts,
-              votre carte internationale d&apos;assurance automobile fait foi - elle est délivrée immédiatement
-              avec votre Mémo Véhicule Assuré.
+              Depuis avril 2024, la carte verte physique n&apos;existe plus en France. La preuve
+              d&apos;assurance se fait directement via le Fichier des Véhicules Assurés (FVA),
+              consultable par les forces de l&apos;ordre à votre plaque. Pour circuler dans les 34
+              pays européens couverts, votre carte internationale d&apos;assurance automobile fait
+              foi — elle est délivrée immédiatement avec votre Mémo Véhicule Assuré.
             </p>
           </div>
         </Reveal>
 
-        {/* ── FAQ ── */}
+        {/* FAQ */}
         <Reveal>
           <section style={{ marginBottom: 56 }}>
             <h2
@@ -605,7 +840,7 @@ function Carte() {
           </section>
         </Reveal>
 
-        {/* ── CTA ── */}
+        {/* CTA global */}
         <Reveal>
           <div
             style={{
@@ -628,9 +863,7 @@ function Carte() {
             >
               Roulez assuré partout en Europe.
             </p>
-            <p
-              style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.6 }}
-            >
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.6 }}>
               34 pays couverts, attestation immédiate, de 1 à 90 jours.
             </p>
             <div

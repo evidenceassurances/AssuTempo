@@ -21,6 +21,11 @@ const root = path.resolve(__dirname, '..');
 const distSsr = path.join(root, 'dist-ssr');
 
 // ── Routes à pré-rendre ──────────────────────────────────────────────────────
+// JSON lu via readFileSync (compatible CJS/ESM — évite le conflit "type":"commonjs")
+const COUNTRY_SLUGS = JSON.parse(
+  readFileSync(new URL('../src/data/country-slugs.json', import.meta.url)),
+);
+
 const ROUTES = [
   '/',
   '/faq',
@@ -33,6 +38,7 @@ const ROUTES = [
   '/articles/combien-de-jours-assurance-sortir-fourriere',
   '/articles/assurance-temporaire-vehicule-etranger-france',
   '/carte',
+  ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
 ];
 
 // ── 1. Build SSR bundle ───────────────────────────────────────────────────────
@@ -81,23 +87,62 @@ for (const route of ROUTES) {
     process.exit(1);
   }
 
+  /* React 19 rend les balises <Helmet> (<title>, <meta>, <link>) directement
+     dans le HTML du composant (Document Metadata hoisting). Il faut les
+     extraire du body SSR et les hisser dans le <head> du template. */
+
+  // Extraire le <title> depuis le body et le retirer du body
+  const titleMatch = appHtml.match(/<title[^>]*>([^<]*)<\/title>/);
+  if (titleMatch) {
+    appHtml = appHtml.replace(/<title[^>]*>[^<]*<\/title>/g, '');
+  }
+
+  // Extraire la <meta name="description"> depuis le body
+  const descMatch = appHtml.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+  if (descMatch) {
+    appHtml = appHtml.replace(/<meta\s+name="description"[^>]*\/?>/gi, '');
+  }
+
+  // Extraire le <link rel="canonical"> depuis le body
+  const canonicalMatch = appHtml.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i);
+  if (canonicalMatch) {
+    appHtml = appHtml.replace(/<link\s+rel="canonical"[^>]*\/?>/gi, '');
+  }
+
+  // Extraire les <script type="application/ld+json"> depuis le body
+  const ldJsonTags = [];
+  appHtml = appHtml.replace(
+    /<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/gi,
+    (match) => { ldJsonTags.push(match); return ''; },
+  );
+
   // Injecter le contenu dans le template
   let pageHtml = template.replace('<!--ssr-outlet-->', appHtml);
 
-  // Injecter les balises <head> de react-helmet-async si présentes
-  if (helmet) {
-    if (helmet.title?.toString()) {
-      pageHtml = pageHtml.replace(
-        /<title>[^<]*<\/title>/,
-        helmet.title.toString(),
-      );
-    }
-    const headTags = [helmet.meta?.toString(), helmet.link?.toString()]
-      .filter((s) => s && s.trim())
-      .join('\n    ');
-    if (headTags) {
-      pageHtml = pageHtml.replace('</head>', `    ${headTags}\n  </head>`);
-    }
+  // Remplacer le <title> générique par le titre extrait
+  if (titleMatch) {
+    pageHtml = pageHtml.replace(
+      /<title>[^<]*<\/title>/,
+      `<title>${titleMatch[1]}</title>`,
+    );
+  }
+
+  // Remplacer la <meta description> générique
+  if (descMatch) {
+    pageHtml = pageHtml.replace(
+      /<meta\s+name="description"\s+content="[^"]*"/i,
+      `<meta name="description" content="${descMatch[1]}"`,
+    );
+  }
+
+  // Injecter le canonical et les ld+json avant </head>
+  const headExtras = [
+    canonicalMatch ? `<link rel="canonical" href="${canonicalMatch[1]}">` : '',
+    ...ldJsonTags,
+  ].filter(Boolean).join('\n    ');
+
+  if (headExtras) {
+    pageHtml = pageHtml.replace('</head>', `    ${headExtras}\n  </head>`);
   }
 
   // Écrire dans dist/<route>/index.html
