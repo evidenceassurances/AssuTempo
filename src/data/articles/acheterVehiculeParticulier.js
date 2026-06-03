@@ -1,11 +1,13 @@
+import { CalendarClock, Car, CreditCard, MailCheck } from 'lucide-react';
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline:
-      "Assurer un véhicule acheté chez un particulier : comment rouler dès le premier trajet",
+      'Assurer un véhicule acheté chez un particulier : roulez dès le premier trajet',
     description:
-      "Vous venez d'acheter une voiture chez un particulier ? Roulez assuré dès le premier trajet, attestation immédiate, sans attendre la carte grise.",
+      'Vous achetez une voiture à un particulier ? Vous devez être assuré avant le premier kilomètre. Assurance temporaire AssuTempo : attestation en 5 minutes, sans attendre la carte grise.',
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -14,7 +16,7 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier',
-    dateModified: '2026-06-02',
+    dateModified: '2026-06-03',
   },
   {
     '@context': 'https://schema.org',
@@ -32,54 +34,78 @@ const jsonLd = [
   },
   {
     '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: "Comment s'assurer après l'achat d'un véhicule entre particuliers",
+    totalTime: 'PT5M',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Choisissez la durée (1 à 90 j)',
+        text: 'Sélectionnez le nombre de jours dont vous avez besoin selon votre situation.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Renseignez le véhicule (carte grise + cession)',
+        text: "Indiquez les informations du véhicule à partir de la carte grise du vendeur et du certificat de cession.",
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Payez en ligne',
+        text: 'Paiement sécurisé par carte bancaire, sans engagement.',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: "Recevez l'attestation (5 min)",
+        text: "Votre Mémo Véhicule Assuré et votre carte internationale d'assurance automobile arrivent par email.",
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'Peut-on rouler immédiatement après avoir acheté une voiture à un particulier ?',
+        name: 'Dois-je attendre la carte grise pour m\'assurer ?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Oui, à condition d\'être assuré au minimum en responsabilité civile dès la prise de possession du véhicule.',
+          text: 'Non. Vous vous assurez immédiatement, avec la carte grise du vendeur et le certificat de cession.',
         },
       },
       {
         '@type': 'Question',
-        name: "L'assurance du vendeur me couvre-t-elle ?",
+        name: "Y a-t-il un délai pour s'assurer après l'achat ?",
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Ne comptez pas dessus : le contrat du vendeur est en principe suspendu à la vente. Vous devez avoir votre propre assurance avant de rouler.",
+          text: "Non, aucun délai de grâce : l'assurance est obligatoire dès le premier trajet.",
         },
       },
       {
         '@type': 'Question',
-        name: "Peut-on assurer une voiture dont la carte grise n'est pas encore à mon nom ?",
+        name: 'Combien de temps pour faire la carte grise ?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Oui, avec le certificat de cession et l'ancienne carte grise barrée. Vous avez 30 jours pour faire la carte grise à votre nom.",
+          text: 'Un mois à partir de la date du certificat de cession.',
         },
       },
       {
         '@type': 'Question',
-        name: "Combien de temps faut-il s'assurer ?",
+        name: "Quels documents pour souscrire l'assurance ?",
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'De 1 à 90 jours selon le besoin : ramener le véhicule, attendre le contrat annuel, ou usage ponctuel.',
+          text: "Permis, carte grise du véhicule, certificat de cession, moyen de paiement.",
         },
       },
       {
         '@type': 'Question',
-        name: 'Quels documents pour souscrire ?',
+        name: 'Reçois-je une carte verte ?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Permis valide, ancienne carte grise barrée ou certificat de cession, pièce d'identité, moyen de paiement.",
-        },
-      },
-      {
-        '@type': 'Question',
-        name: "Que risque-t-on à rouler sans assurance après l'achat ?",
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: "C'est un délit, avec une amende de 500 € à 3 750 €. En cas d'accident, le FGAO indemnise les victimes puis se retourne contre vous.",
+          text: "Non, elle a été supprimée en avril 2024. Vous recevez un Mémo Véhicule Assuré et une carte internationale d'assurance automobile (valable dans 34 pays) ; le contrôle se fait à la plaque via le FVA.",
         },
       },
     ],
@@ -89,122 +115,120 @@ const jsonLd = [
 export const articleData = {
   slug: 'assurer-vehicule-achete-chez-particulier',
   seo: {
-    title: 'Assurer un véhicule acheté chez un particulier : rouler vite',
+    title:
+      'Assurer un véhicule acheté chez un particulier : roulez dès le premier trajet',
     description:
-      "Vous venez d'acheter une voiture chez un particulier ? Roulez assuré dès le premier trajet, attestation immédiate, sans attendre la carte grise. Devis en ligne.",
-    canonical: 'https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier',
+      'Vous achetez une voiture à un particulier ? Vous devez être assuré avant le premier kilomètre. Assurance temporaire AssuTempo : attestation en 5 minutes, sans attendre la carte grise.',
+    canonical:
+      'https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier',
     jsonLd,
   },
   category: 'Achat véhicule',
   readTime: '5 min',
-  updatedDate: '2 juin 2026',
+  updatedDate: '3 juin 2026',
   author: 'Evidence Assurances',
-  headline:
-    "Assurer un véhicule acheté chez un particulier : comment rouler dès le premier trajet",
+  headline: 'Assurer un véhicule acheté chez un particulier',
   immediateAnswer:
-    "Vous venez d'acheter une voiture à un particulier et vous voulez la ramener tout de suite ? Bonne nouvelle : c'est possible, à une condition - être assuré dès que vous prenez le volant. Ne comptez pas sur l'assurance du vendeur, qui est suspendue à la vente. La solution la plus simple : souscrire une assurance temporaire en ligne et recevoir une attestation immédiate, valable même si la carte grise n'est pas encore à votre nom. On vous explique tout.",
+    "Quand vous achetez une voiture ou une moto à un particulier, vous devez être assuré avant le premier kilomètre : la loi ne prévoit aucun délai de grâce après la vente. L'assurance temporaire AssuTempo vous couvre immédiatement, sans attendre que la carte grise soit à votre nom.",
   sections: [
     {
-      type: 'text',
-      heading: "Devez-vous être assuré dès l'achat ? Oui, immédiatement",
-      paragraphs: [
-        "La loi est claire : la responsabilité civile est obligatoire dès la prise de possession du véhicule (article L211-1 du Code des assurances). Autrement dit, dès que le vendeur vous remet les clés et que vous roulez, vous devez être assuré au minimum au tiers.",
-        "Et attention : l'assurance du vendeur ne vous protège pas de façon fiable - son contrat est en principe suspendu à la vente. Rouler sans votre propre assurance, c'est un défaut d'assurance, un délit passible de 500 € à 3 750 € d'amende. En cas d'accident, le Fonds de garantie (FGAO) indemnise les victimes puis se retourne contre vous pour récupérer l'intégralité des sommes.",
-      ],
-      relatedLink: {
-        text: "Contrôlé sans assurance : risques, amende et que faire",
-        href: '/articles/controle-sans-assurance-risques-amende',
-      },
-    },
-    {
-      type: 'text',
-      heading: "Pas encore de carte grise à votre nom ? Vous pouvez quand même rouler",
-      paragraphs: [
-        "Vous disposez de 30 jours après l'achat pour faire établir la carte grise à votre nom (certificat d'immatriculation, via l'ANTS). En attendant, vous pouvez circuler légalement à condition d'avoir : une attestation d'assurance valide, l'ancienne carte grise barrée avec la mention « vendu le » et la date, et le certificat de cession signé par le vendeur. L'assurance se souscrit sans attendre la nouvelle carte grise.",
+      type: 'alert',
+      heading: "L'essentiel",
+      items: [
+        "Assurance obligatoire dès le premier trajet : aucun délai de grâce après l'achat (art. L211-1 du Code des assurances).",
+        "Pas besoin d'attendre la carte grise à votre nom pour vous assurer.",
+        "1 mois pour faire la carte grise, à partir de la date du certificat de cession.",
+        "Attestation en 5 minutes, durée de 1 à 90 jours.",
       ],
     },
     {
+      type: 'stepflow',
+      ariaLabel:
+        "Comment s'assurer après un achat entre particuliers en 4 étapes : durée, véhicule, paiement, attestation",
+      steps: [
+        { icon: CalendarClock, label: 'Choisissez la durée (1 à 90 j)' },
+        { icon: Car, label: 'Renseignez le véhicule (carte grise + cession)' },
+        { icon: CreditCard, label: 'Payez en ligne' },
+        { icon: MailCheck, label: "Recevez l'attestation (5 min)" },
+      ],
+    },
+    {
       type: 'text',
-      heading: "Pourquoi l'assurance temporaire est idéale après un achat",
+      heading: 'Faut-il assurer la voiture avant de la ramener ?',
       paragraphs: [
-        "Elle est pensée pour ce moment précis : ramener le véhicule chez vous (surtout si vous l'avez acheté loin, un week-end ou un jour férié), le temps de finaliser et comparer un contrat annuel à tête reposée, ou couvrir un véhicule que vous n'utiliserez que ponctuellement. De 1 à 90 jours, attestation immédiate, sans engagement - vous ajustez au plus juste sans payer une année entière pour quelques jours.",
+        "Oui, dès le premier mètre. Contrairement à une idée répandue, il n'existe aucun délai de grâce après l'achat : la responsabilité civile est obligatoire avant même le trajet de retour. Vous pouvez être couvert en quelques minutes avec une assurance temporaire, le temps de mettre en place votre contrat annuel.",
+      ],
+    },
+    {
+      type: 'text',
+      heading: "Peut-on s'assurer sans avoir la carte grise à son nom ?",
+      paragraphs: [
+        "Oui. La souscription se fait à partir de la carte grise du vendeur et du certificat de cession ; inutile d'attendre que la carte grise soit à votre nom. C'est précisément le rôle de l'assurance temporaire : vous couvrir pendant la transition.",
       ],
     },
     {
       type: 'checklist',
-      heading: 'Les documents pour souscrire',
+      heading: 'Quels documents pour la carte grise ?',
+      intro: "Dans le mois suivant l'achat, réunissez :",
       items: [
-        'Permis de conduire valide',
-        "Ancienne carte grise barrée (ou certificat de cession)",
-        "Pièce d'identité",
-        'Moyen de paiement (carte bancaire)',
-      ],
-    },
-    {
-      type: 'timeline',
-      heading: 'Comment ça marche',
-      steps: [
-        {
-          num: 1,
-          title: 'Faites votre devis en ligne',
-          body: "Indiquez le type de véhicule et la durée souhaitée (de 1 à 90 jours).",
-        },
-        {
-          num: 2,
-          title: 'Souscrivez',
-          body: "Paiement sécurisé par carte bancaire, sans engagement.",
-        },
-        {
-          num: 3,
-          title: 'Recevez votre attestation immédiatement',
-          body: "Votre Mémo Véhicule Assuré et votre carte internationale d'assurance automobile disponibles par email, immédiatement après la souscription.",
-        },
-        {
-          num: 4,
-          title: 'Roulez assuré dès le premier trajet',
-          body: "Finalisez ensuite votre carte grise auprès de l'ANTS sous 30 jours.",
-        },
+        'Le certificat d\'immatriculation barré, daté et signé "vendu le…" par le vendeur',
+        'Le certificat de cession (Cerfa 15776)',
+        "Le code de cession remis par le vendeur après sa déclaration sur l'ANTS",
+        "Le certificat de situation administrative (non-gage) de moins d'un mois",
+        "Le contrôle technique de moins de 6 mois si le véhicule a plus de 4 ans",
+        "Un justificatif de domicile et une pièce d'identité",
       ],
     },
     {
       type: 'text',
-      heading: 'Qui peut souscrire ?',
+      heading: "Quels documents reçoit-on avec l'assurance ?",
       paragraphs: [
-        "La grande majorité des acheteurs : conditions habituelles d'au moins 20 ans, permis depuis plus de 2 ans, profil sans antécédents lourds. Le devis affiche immédiatement votre éligibilité, et l'équipe répond au téléphone en cas de doute.",
+        "Depuis avril 2024, la carte verte n'existe plus. En France, la preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA). Votre contrat comprend votre Mémo Véhicule Assuré (à conserver avec les papiers du véhicule) et votre carte internationale d'assurance automobile, valable dans les 34 pays couverts.",
+      ],
+      relatedLink: {
+        text: 'Véhicule ou permis étranger : assurance temporaire en France',
+        href: '/articles/assurance-temporaire-vehicule-etranger-france',
+      },
+    },
+    {
+      type: 'text',
+      heading: 'Combien de temps souscrire ?',
+      paragraphs: [
+        "De 1 à 90 jours, au jour près. La plupart des acheteurs couvrent le temps de faire la carte grise et de souscrire leur assurance annuelle. Sans engagement.",
       ],
     },
     {
       type: 'text',
-      heading: 'En résumé',
+      heading: 'Que risque-t-on en roulant sans assurance ?',
       paragraphs: [
-        "Acheter chez un particulier n'oblige pas à attendre pour rouler. Assurez-vous dès la prise de possession - une temporaire suffit, avec attestation immédiate - et vous prenez la route légalement le jour même, carte grise à régulariser sous 30 jours.",
+        "Rouler sans assurance est un délit : amende, et surtout prise en charge personnelle de tous les dommages en cas d'accident.",
       ],
+      relatedLink: {
+        text: 'Contrôlé sans assurance : risques, amende et que faire',
+        href: '/articles/controle-sans-assurance-risques-amende',
+      },
     },
   ],
   faqItems: [
     {
-      q: 'Peut-on rouler immédiatement après avoir acheté une voiture à un particulier ?',
-      a: "Oui, à condition d'être assuré au minimum en responsabilité civile dès la prise de possession du véhicule.",
+      q: 'Dois-je attendre la carte grise pour m\'assurer ?',
+      a: 'Non. Vous vous assurez immédiatement, avec la carte grise du vendeur et le certificat de cession.',
     },
     {
-      q: "L'assurance du vendeur me couvre-t-elle ?",
-      a: "Ne comptez pas dessus : le contrat du vendeur est en principe suspendu à la vente. Vous devez avoir votre propre assurance avant de rouler.",
+      q: "Y a-t-il un délai pour s'assurer après l'achat ?",
+      a: "Non, aucun délai de grâce : l'assurance est obligatoire dès le premier trajet.",
     },
     {
-      q: "Peut-on assurer une voiture dont la carte grise n'est pas encore à mon nom ?",
-      a: "Oui, avec le certificat de cession et l'ancienne carte grise barrée. Vous avez 30 jours pour faire la carte grise à votre nom.",
+      q: 'Combien de temps pour faire la carte grise ?',
+      a: 'Un mois à partir de la date du certificat de cession.',
     },
     {
-      q: "Combien de temps faut-il s'assurer ?",
-      a: 'De 1 à 90 jours selon le besoin : ramener le véhicule, attendre le contrat annuel, ou usage ponctuel.',
+      q: "Quels documents pour souscrire l'assurance ?",
+      a: "Permis, carte grise du véhicule, certificat de cession, moyen de paiement.",
     },
     {
-      q: 'Quels documents pour souscrire ?',
-      a: "Permis valide, ancienne carte grise barrée ou certificat de cession, pièce d'identité, moyen de paiement.",
-    },
-    {
-      q: "Que risque-t-on à rouler sans assurance après l'achat ?",
-      a: "C'est un délit (amende de 500 € à 3 750 €). En cas d'accident, le FGAO indemnise les victimes puis se retourne contre vous.",
+      q: 'Reçois-je une carte verte ?',
+      a: "Non, elle a été supprimée. Vous recevez un Mémo Véhicule Assuré et une carte internationale d'assurance (valable dans 34 pays) ; le contrôle se fait à la plaque via le FVA.",
     },
   ],
 };
