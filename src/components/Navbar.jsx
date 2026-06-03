@@ -7,7 +7,7 @@ const links = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Articles', href: '/articles' },
-  { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
+  { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 
 const mobileMenuVariants = {

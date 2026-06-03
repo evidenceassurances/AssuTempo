@@ -2,7 +2,7 @@ export const siteConfig = {
   navLinks: [
     { label: 'Tarification', href: '/tarification' },
     { label: 'FAQ', href: '/faq' },
-    { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
+    { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
   ],
   hero: {
     badge: 'ASSURANCE TEMPORAIRE EN LIGNE',

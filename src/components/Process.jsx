@@ -61,6 +61,9 @@ function ProcessStep({ step, index, inView }) {
           background: 'var(--gold)',
           borderRadius: 2,
           marginBottom: 20,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          alignSelf: 'center',
           opacity: 0.6,
           flexShrink: 0,
         }}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const navLinks = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'FAQ', href: '/faq' },
-  { label: 'Qui sommes-nous', href: '/qui-sommes-nous' },
+  { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 
 const colLabel = {

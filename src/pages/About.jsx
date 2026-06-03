@@ -357,7 +357,7 @@ function About() {
               letterSpacing: '-0.03em',
             }}
           >
-            Qui sommes-nous
+            Qui sommes-nous ?
           </h1>
           <p
             style={{
