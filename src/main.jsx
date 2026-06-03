@@ -5,7 +5,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.hydrateRoot(
+  document.getElementById('root'),
   <React.StrictMode>
     <HelmetProvider>
       <BrowserRouter>
