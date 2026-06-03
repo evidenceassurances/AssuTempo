@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import { ArrowRight, Phone } from 'lucide-react';
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useIsMobile } from '../hooks/useIsMobile';
 import {
   COUNTRIES,
   SLUG_TO_COUNTRY,
@@ -259,7 +260,7 @@ function CountryPanel({ country }) {
 }
 
 /* ── Carte SVG ────────────────────────────────────────────────────────────── */
-function EuropeMap({ selectedId, onCountryClick }) {
+function EuropeMap({ selectedId, onCountryClick, isMobile }) {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
   const reduce = useReducedMotion();
 
@@ -363,6 +364,14 @@ function EuropeMap({ selectedId, onCountryClick }) {
           height={520}
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
+          {/* ZoomableGroup toujours rendu (pas de conditionnel → pas de mismatch SSR).
+              filterZoomEvent bloque tout sur bureau ; laisse passer sur mobile. */}
+          <ZoomableGroup
+            zoom={1}
+            minZoom={1}
+            maxZoom={4}
+            filterZoomEvent={() => isMobile}
+          >
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
                 geographies.map((geo) => {
@@ -411,6 +420,7 @@ function EuropeMap({ selectedId, onCountryClick }) {
                 })
               }
             </Geographies>
+          </ZoomableGroup>
         </ComposableMap>
 
         {/* Légende */}
@@ -450,6 +460,7 @@ function Carte() {
   const { state }            = useLocation();
   const [openFaq, setOpenFaq] = useState(null);
   const [pillsRef, pillsInView] = useScrollReveal();
+  const isMobile = useIsMobile();
   const mapRef   = useRef(null);
   const panelRef = useRef(null);
 
@@ -599,7 +610,7 @@ function Carte() {
       {/* ── Carte SVG ───────────────────────────────────────────────────── */}
       <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
         <Reveal>
-          <EuropeMap selectedId={selectedId} onCountryClick={handleCountryClick} />
+          <EuropeMap selectedId={selectedId} onCountryClick={handleCountryClick} isMobile={isMobile} />
         </Reveal>
       </section>
 
