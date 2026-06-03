@@ -477,6 +477,112 @@ const ROYAUMEUNI_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Portugal - lot 3 ───────────────────────────────── */
+const PORTUGAL_OVERRIDE = {
+  title: `Assurance temporaire Portugal | Carte verte & péages électroniques - AssuTempo`,
+  metaDescription:
+    `Roulez couvert au Portugal dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Péages électroniques, zone de Lisbonne et N2 expliqués.`,
+  h1: `Assurance temporaire au Portugal : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire au Portugal dès le 1er jour : séjour ponctuel, import d'un véhicule ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    ...genericPoints('Portugal'),
+    {
+      icon: 'ScanLine',
+      titre: `Péages électroniques : enregistrez votre plaque`,
+      texte: `De nombreuses autoroutes portugaises sont en péage 100% électronique, sans barrière : des portiques lisent votre plaque. En voiture étrangère, enregistrez-la avant le départ (Easytoll, carte prépayée ou boîtier Via Verde), sous peine d'amende.`,
+    },
+    {
+      icon: 'Route',
+      titre: `La N2, la Route 66 portugaise`,
+      texte: `La Estrada Nacional 2 traverse tout le pays sur près de 740 km, de Chaves au nord à Faro au sud. C'est la plus longue route nationale du Portugal, devenue un itinéraire de road-trip culte.`,
+    },
+    {
+      icon: 'Wind',
+      titre: `La zone à émissions réduites de Lisbonne`,
+      texte: `Le centre de Lisbonne (Baixa, Avenida da Liberdade) est une Zona de Emissões Reduzidas qui interdit les véhicules les plus anciens. Vérifiez l'éligibilité de votre véhicule avant d'y entrer.`,
+    },
+    {
+      icon: 'Flag',
+      titre: `Des circuits de légende`,
+      texte: `Le Portugal a sa part de mythe automobile : l'Estoril a accueilli la Formule 1 jusqu'aux années 1990, et le circuit de Portimão, dans l'Algarve, reçoit aujourd'hui les plus grandes compétitions.`,
+    },
+    {
+      icon: 'Gauge',
+      titre: `Équipement et contrôles`,
+      texte: `Gilet de haute visibilité et triangle de présignalisation sont obligatoires à bord. Les limites de vitesse sont contrôlées : adaptez votre allure, surtout sur les autoroutes à péage rapides.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Importer depuis le Portugal`,
+      texte: `Le Portugal étant dans l'Union européenne, l'import vers la France se fait sans douane, simplement avec le quitus fiscal et l'immatriculation. L'assurance temporaire couvre le trajet de rapatriement.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Comment payer les péages au Portugal en voiture étrangère ?`,
+      a: `Enregistrez votre plaque avant le départ (Easytoll, carte prépayée ou boîtier Via Verde) : beaucoup d'autoroutes sont en péage électronique, sans barrière, et lisent la plaque.`,
+    },
+    {
+      q: `Le Portugal est-il couvert dès le départ ?`,
+      a: `Oui : RC et carte verte valent dès le 1er jour dans les 34 pays, Portugal inclus.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Pays-Bas - lot 3 ───────────────────────────────── */
+const PAYSBAS_OVERRIDE = {
+  title: `Assurance temporaire Pays-Bas | Carte verte & 100 km/h - AssuTempo`,
+  metaDescription:
+    `Roulez couvert aux Pays-Bas dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Priorité aux vélos, 100 km/h le jour et milieuzones expliqués.`,
+  h1: `Assurance temporaire aux Pays-Bas : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire aux Pays-Bas dès le 1er jour : séjour ponctuel, import d'un véhicule ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    ...genericPoints('Pays-Bas'),
+    {
+      icon: 'Bike',
+      titre: `Priorité aux vélos, partout`,
+      texte: `Premier pays cycliste au monde : les vélos sont rois, avec leurs propres pistes (fietspad). En tournant ou en ouvrant une portière, vérifiez toujours : les cyclistes ont souvent la priorité, et ils sont nombreux.`,
+    },
+    {
+      icon: 'Gauge',
+      titre: `100 km/h le jour sur autoroute`,
+      texte: `Depuis 2020, les autoroutes sont limitées à 100 km/h de 6h à 19h, parfois 120 ou 130 la nuit selon les panneaux. Les contrôles de vitesse, dont les contrôles de tronçon, sont omniprésents.`,
+    },
+    {
+      icon: 'Wind',
+      titre: `Les zones environnementales (milieuzone)`,
+      texte: `Amsterdam, Rotterdam, Utrecht et d'autres villes appliquent une milieuzone interdisant les diesels les plus anciens. Les véhicules étrangers y sont soumis : vérifiez avant d'entrer en centre-ville.`,
+    },
+    {
+      icon: 'Waves',
+      titre: `Rouler sous le niveau de la mer`,
+      texte: `Une grande partie du pays est sous le niveau de la mer : on roule sur des digues et des ouvrages spectaculaires, comme l'Afsluitdijk, barrage de 32 km, ou les barrages anti-tempête du plan Delta.`,
+    },
+    {
+      icon: 'Cog',
+      titre: `Le berceau de la boîte automatique`,
+      texte: `Curiosité automobile : c'est le constructeur néerlandais DAF qui a popularisé la transmission à variation continue, le Variomatic, dès la fin des années 1950. Une innovation que l'on retrouve aujourd'hui dans bien des voitures.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Importer depuis les Pays-Bas`,
+      texte: `Plaque tournante de l'occasion en Europe, les Pays-Bas sont dans l'Union européenne : l'import vers la France se fait sans douane, avec quitus fiscal et immatriculation. L'assurance temporaire couvre le rapatriement.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Quelle vitesse sur les autoroutes néerlandaises ?`,
+      a: `100 km/h de 6h à 19h, parfois 120 ou 130 la nuit selon les panneaux. Les contrôles de vitesse, dont les contrôles de tronçon, sont très nombreux.`,
+    },
+    {
+      q: `Les Pays-Bas sont-ils couverts dès le départ ?`,
+      a: `Oui : RC et carte verte valent dès le 1er jour dans les 34 pays, Pays-Bas inclus.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -490,6 +596,8 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'suisse'      ? SUISSE_OVERRIDE      :
     slug === 'italie'      ? ITALIE_OVERRIDE      :
     slug === 'royaume-uni' ? ROYAUMEUNI_OVERRIDE  :
+    slug === 'portugal'    ? PORTUGAL_OVERRIDE    :
+    slug === 'pays-bas'    ? PAYSBAS_OVERRIDE     :
     {};
 
   return {

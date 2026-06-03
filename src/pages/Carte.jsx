@@ -11,6 +11,7 @@ import {
   CornerUpRight, Camera, GraduationCap, Flag, FileText,
   Sticker, Gavel, Bus, Mountain, Clapperboard,
   Ticket, Trophy, AlertTriangle, ShieldCheck,
+  ScanLine, Bike, Waves, Cog,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -21,6 +22,7 @@ const ICON_MAP = {
   CornerUpRight, Camera, GraduationCap, Flag, FileText,
   Sticker, Gavel, Bus, Mountain, Clapperboard,
   Ticket, Trophy, AlertTriangle, ShieldCheck,
+  ScanLine, Bike, Waves, Cog,
 };
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';
