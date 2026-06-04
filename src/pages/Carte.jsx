@@ -12,6 +12,7 @@ import {
   Sticker, Gavel, Bus, Mountain, Clapperboard,
   Ticket, Trophy, AlertTriangle, ShieldCheck,
   ScanLine, Bike, Waves, Cog,
+  Anchor, HeartPulse, Zap,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -23,6 +24,7 @@ const ICON_MAP = {
   Sticker, Gavel, Bus, Mountain, Clapperboard,
   Ticket, Trophy, AlertTriangle, ShieldCheck,
   ScanLine, Bike, Waves, Cog,
+  Anchor, HeartPulse, Zap,
 };
 import AccordionItem from '../components/ui/AccordionItem';
 import Footer from '../components/Footer';

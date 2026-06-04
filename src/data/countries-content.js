@@ -114,54 +114,56 @@ const RAW = [
   ['royaume-uni',        826,  'Royaume-Uni',          '🇬🇧', [-2.0, 54.0]],
 ];
 
-/* ─── Contenu spécifique France ──────────────────────────────────────────── */
+/* ─── Contenu spécifique France - lot 5 ─────────────────────────────────── */
 const FRANCE_OVERRIDE = {
-  title: 'Assurance temporaire en France, Mémo Véhicule Assuré & FVA | AssuTempo',
+  title: `Assurance temporaire France | Achat, prêt & carte grise - AssuTempo`,
   metaDescription:
-    'Assurance auto temporaire en France : RC couverte dès J1, Mémo Véhicule Assuré immédiat, ' +
-    'FVA (fichier officiel depuis avril 2024). Attestation en moins de 5 minutes.',
-  h1: 'Assurance temporaire en France : Mémo Véhicule Assuré dès la souscription',
+    `Souscrivez une assurance temporaire en France dès le 1er jour : achat entre particuliers, véhicule prêté, attente de carte grise. ZFE, radars et 80 km/h expliqués.`,
+  h1: `Assurance temporaire en France : couvrez votre véhicule dès le 1er jour`,
   intro:
-    'En France, votre assurance temporaire AssuTempo couvre la responsabilité civile ' +
-    'obligatoire dès le premier jour. Depuis avril 2024, la carte verte physique n\'existe ' +
-    'plus : la preuve d\'assurance se fait directement à la plaque via le Fichier des ' +
-    'Véhicules Assurés (FVA), consultable par les forces de l\'ordre. À la souscription, ' +
-    'vous recevez immédiatement votre Mémo Véhicule Assuré (France) et votre carte ' +
-    'internationale d\'assurance automobile (valable dans les 34 pays couverts).',
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en France dès le 1er jour : achat entre particuliers, véhicule prêté ou en attente de carte grise définitive. Votre attestation est disponible en moins de 5 minutes, sans engagement.`,
   points: [
     {
-      icon: 'Shield',
-      titre: 'RC couverte dès J1',
-      texte:
-        'La responsabilité civile obligatoire est active dès le premier jour du contrat, ' +
-        'aucun délai de carence, quelle que soit la durée choisie (1 à 90 jours).',
+      icon: 'Wind',
+      titre: `ZFE et vignette Crit'Air`,
+      texte: `De nombreuses grandes villes ont leur Zone à Faibles Emissions. La vignette Crit'Air, obligatoire pour y circuler, s'applique aussi aux véhicules étrangers. Commandez-la avant d'entrer dans Paris, Lyon ou Marseille.`,
     },
     {
-      icon: 'FileSearch',
-      titre: 'Le FVA remplace la carte verte en France',
-      texte:
-        'Depuis avril 2024, la carte verte n\'existe plus comme justificatif en France. ' +
-        'L\'assurance est vérifiée directement à la plaque via le Fichier des Véhicules ' +
-        'Assurés (FVA), mis à jour à votre souscription.',
+      icon: 'RotateCw',
+      titre: `Championne mondiale des ronds-points`,
+      texte: `La France compte plus de 50 000 ronds-points, davantage que n'importe quel autre pays au monde. Une adoption massive qui a fortement réduit la mortalité aux intersections.`,
     },
     {
-      icon: 'MailCheck',
-      titre: 'Mémo Véhicule Assuré, immédiat',
-      texte:
-        'À la souscription, vous recevez votre Mémo Véhicule Assuré (document de ' +
-        'référence en France) et votre carte internationale d\'assurance automobile ' +
-        '(pour les 34 pays européens couverts).',
+      icon: 'Gauge',
+      titre: `Réseau radar parmi les plus denses d'Europe`,
+      texte: `Radars fixes, mobiles et contrôles de vitesse sur tronçon : aucune marge. Les amendes et retraits de points s'appliquent aussi aux conducteurs étrangers.`,
     },
     {
-      icon: 'Car',
-      titre: 'Cas d\'usage typiques',
-      texte:
-        'Achat d\'un véhicule d\'occasion, démarche de carte grise, rapatriement, export, ' +
-        'véhicule peu utilisé dans l\'année, permis ou véhicule étranger : le contrat ' +
-        'temporaire couvre tous ces besoins sans relevé d\'information.',
+      icon: 'Globe',
+      titre: `Première destination touristique mondiale`,
+      texte: `Avec plus de 90 millions de visiteurs par an, la France est le pays le plus visité au monde. Ses routes, de la Côte d'Azur aux cols alpins, font partie du voyage.`,
+    },
+    {
+      icon: 'AlertTriangle',
+      titre: `80 km/h sur routes secondaires`,
+      texte: `Depuis 2018, les routes à deux voies sans séparateur central sont limitées à 80 km/h. Une mesure qui surprend encore de nombreux conducteurs habitués aux 90.`,
+    },
+    {
+      icon: 'FileText',
+      titre: `Quand l'assurance temporaire s'impose`,
+      texte: `Achat entre particuliers, véhicule prêté, attente de carte grise définitive : l'assurance temporaire couvre chaque situation dès le 1er jour, sans engagement, attestation immédiate.`,
     },
   ],
-  faq: null,
+  faq: [
+    {
+      q: `Quand faut-il une assurance temporaire en France ?`,
+      a: `Pour un véhicule acheté entre particuliers, prêté ou en attente de carte grise : l'assurance temporaire vous couvre dès le 1er jour, sans contrat à l'année.`,
+    },
+    {
+      q: `La vignette Crit'Air est-elle obligatoire pour un véhicule étranger ?`,
+      a: `Oui, dans les ZFE (Paris, Lyon, Marseille...) : les véhicules étrangers doivent aussi disposer de la vignette Crit'Air pour circuler en zone concernée.`,
+    },
+  ],
 };
 
 /* ─── Contenu spécifique Allemagne, lot 1 ──────────────────────────────── */
@@ -583,6 +585,58 @@ const PAYSBAS_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Croatie - lot 5 ────────────────────────────────── */
+const CROATIE_OVERRIDE = {
+  title: `Assurance temporaire Croatie | Carte verte & péages - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Croatie dès le 1er jour : RC auto, carte internationale d'assurance, attestation en 5 min. Péages, ferries, Schengen 2023 et trousse de secours expliqués.`,
+  h1: `Assurance temporaire en Croatie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Croatie dès le 1er jour : séjour ponctuel, import d'un véhicule ou conduite d'une voiture étrangère. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Ticket',
+      titre: `Des péages, pas de vignette`,
+      texte: `Les autoroutes (Autocesta) sont à péage, payé en cabine ou par transpondeur ENC. L'A1 longe la côte dalmate sur des centaines de kilomètres : prévoyez les arrêts péage sur votre itinéraire.`,
+    },
+    {
+      icon: 'Anchor',
+      titre: `1200 îles et quelques ferries`,
+      texte: `La Croatie compte plus de 1200 îles. Pour rejoindre Brač, Hvar ou Korčula, le ferry s'impose. Renseignez-vous sur les horaires et la capacité, surtout en juillet et août.`,
+    },
+    {
+      icon: 'ShieldCheck',
+      titre: `Dans l'espace Schengen depuis 2023`,
+      texte: `Le 1er janvier 2023, la Croatie a rejoint Schengen et adopté l'euro. Fini les contrôles aux frontières avec la Slovénie ou la Hongrie, et fini la conversion de monnaie.`,
+    },
+    {
+      icon: 'HeartPulse',
+      titre: `Trousse de secours obligatoire`,
+      texte: `Une trousse de premiers secours est exigée à bord, en plus du gilet et du triangle. Vérifiez votre coffre avant de franchir la frontière.`,
+    },
+    {
+      icon: 'Zap',
+      titre: `Rimac, le constructeur électrique croate`,
+      texte: `Rimac Automobili, basé près de Zagreb, construit certaines des hypercars électriques les plus rapides du monde. En 2021, Bugatti lui a été rattaché : une fierté nationale née du garage d'un jeune ingénieur de 23 ans.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Importer depuis la Croatie`,
+      texte: `Membre de l'Union européenne depuis 2013, la Croatie permet un import sans douane vers la France, avec quitus fiscal et immatriculation. L'assurance temporaire couvre le rapatriement.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette en Croatie ?`,
+      a: `Non : les autoroutes sont à péage payé en cabine ou par transpondeur. Aucune vignette, mais prévoyez carte bancaire ou pièces pour les barrières.`,
+    },
+    {
+      q: `La Croatie est-elle couverte dès le départ ?`,
+      a: `Oui : RC et carte verte valent dès le 1er jour dans les 34 pays, Croatie incluse.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -598,6 +652,7 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'royaume-uni' ? ROYAUMEUNI_OVERRIDE  :
     slug === 'portugal'    ? PORTUGAL_OVERRIDE    :
     slug === 'pays-bas'    ? PAYSBAS_OVERRIDE     :
+    slug === 'croatie'     ? CROATIE_OVERRIDE     :
     {};
 
   return {
