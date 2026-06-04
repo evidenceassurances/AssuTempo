@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getConsent } from '../components/CookieConsent';
+import { isAnalyticsAllowed } from '../components/CookieConsent';
 
 const GA_ID = import.meta.env.VITE_GA_ID;
 
@@ -25,10 +25,16 @@ export function useAnalytics() {
   const location = useLocation();
 
   useEffect(() => {
-    if (getConsent()?.analytics === true) loadGA();
+    // Analytics active par défaut : charge GA dès que l'utilisateur n'a pas refusé.
+    if (isAnalyticsAllowed()) loadGA();
 
     const handler = (e) => {
-      if (e.detail?.analytics === true) loadGA();
+      if (e.detail?.analytics === false) {
+        // Refus explicite : désactive GA pour la session en cours.
+        if (GA_ID) window['ga-disable-' + GA_ID] = true;
+      } else if (e.detail?.analytics === true) {
+        loadGA();
+      }
     };
     window.addEventListener('cookie-consent', handler);
     return () => window.removeEventListener('cookie-consent', handler);

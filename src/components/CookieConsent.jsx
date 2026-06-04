@@ -1,119 +1,92 @@
-// src/components/CookieConsent.jsx
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const STORAGE_KEY = 'assutempo_consent_v1';
 
-export function getConsent() {
+// Mesure d'audience ACTIVE par défaut, tant que l'utilisateur n'a pas explicitement refusé.
+export function isAnalyticsAllowed() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return true;
+    return JSON.parse(raw).analytics !== false;
   } catch {
-    return null;
+    return true;
   }
 }
 
-function saveConsent(consent) {
+function hasChosen() {
   try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ ...consent, necessary: true, date: new Date().toISOString() })
-    );
-  } catch (e) {
-    // localStorage indisponible (navigation privée stricte) : on ignore
+    return !!localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return false;
   }
-  window.dispatchEvent(new CustomEvent('cookie-consent', { detail: consent }));
 }
+
+function save(analytics) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ analytics, date: new Date().toISOString() }));
+  } catch (e) {}
+  window.dispatchEvent(new CustomEvent('cookie-consent', { detail: { analytics } }));
+}
+
+function clearAnalyticsCookies() {
+  try {
+    const host = location.hostname;
+    const root = '.' + host.split('.').slice(-2).join('.');
+    const domains = ['', host, '.' + host, root];
+    document.cookie
+      .split(';')
+      .map((c) => c.split('=')[0].trim())
+      .forEach((name) => {
+        if (name === '_ga' || name === '_gid' || name === '_gat' || name.startsWith('_ga_') || name.startsWith('_gat_')) {
+          domains.forEach((d) => {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + (d ? '; domain=' + d : '');
+          });
+        }
+      });
+    window['ga-disable-G-W8M4ZGXZE1'] = true;
+  } catch (e) {}
+}
+
+const C = { card: '#0E0E0E', gold: '#C9A84C', goldLight: '#E8C97A', text: '#F5F5F5', sub: '#A0A0A0' };
 
 export default function CookieConsent() {
   const [open, setOpen] = useState(false);
-  const [custom, setCustom] = useState(false);
-  const [prefs, setPrefs] = useState({ analytics: false, marketing: false });
 
   useEffect(() => {
-    if (!getConsent()) setOpen(true);
-    const reopen = () => { setCustom(true); setOpen(true); };
+    if (!hasChosen()) setOpen(true);
+    const reopen = () => setOpen(true);
     window.addEventListener('open-cookie-settings', reopen);
     return () => window.removeEventListener('open-cookie-settings', reopen);
   }, []);
 
-  const decide = (consent) => {
-    saveConsent(consent);
-    setOpen(false);
-    setCustom(false);
-  };
+  const accept = () => { save(true); setOpen(false); };
+  const refuse = () => { save(false); clearAnalyticsCookies(); setOpen(false); };
 
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ y: 80, opacity: 0 }}
+          initial={{ y: 120, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 80, opacity: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="fixed inset-x-0 bottom-0 z-[9999] p-4"
+          exit={{ y: 120, opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           role="dialog"
           aria-label="Gestion des cookies"
+          style={{ position: 'fixed', left: 16, right: 16, bottom: 16, zIndex: 9999, maxWidth: 460, margin: '0 auto' }}
         >
-          <div className="mx-auto max-w-3xl rounded-2xl border border-[#C9A84C]/25 bg-[#0E0E0E]/95 backdrop-blur p-5 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
-            <p className="text-sm leading-relaxed text-[#A0A0A0]">
-              Nous utilisons des cookies pour le bon fonctionnement du site et, avec votre accord, pour mesurer son audience. Vous pouvez accepter, refuser ou personnaliser vos choix.{' '}
-              <a href="/cookies" className="text-[#E8C97A] underline underline-offset-2">En savoir plus</a>.
+          <div style={{ background: C.card, border: '1px solid ' + C.gold + '40', borderRadius: 16, padding: 20, boxShadow: '0 12px 40px rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}>
+            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: C.sub }}>
+              Nous utilisons des cookies pour le bon fonctionnement du site et pour mesurer son audience. Vous pouvez accepter ou refuser.{' '}
+              <a href="/cookies" style={{ color: C.goldLight, textDecoration: 'underline' }}>En savoir plus</a>.
             </p>
-
-            {custom && (
-              <div className="mt-4 space-y-3 text-sm">
-                <label className="flex items-center justify-between gap-4 opacity-70">
-                  <span>Cookies nécessaires (toujours actifs)</span>
-                  <input type="checkbox" checked disabled />
-                </label>
-                <label className="flex items-center justify-between gap-4 text-[#F5F5F5]">
-                  <span>Mesure d&apos;audience</span>
-                  <input
-                    type="checkbox"
-                    checked={prefs.analytics}
-                    onChange={(e) => setPrefs((p) => ({ ...p, analytics: e.target.checked }))}
-                  />
-                </label>
-                <label className="flex items-center justify-between gap-4 text-[#F5F5F5]">
-                  <span>Marketing</span>
-                  <input
-                    type="checkbox"
-                    checked={prefs.marketing}
-                    onChange={(e) => setPrefs((p) => ({ ...p, marketing: e.target.checked }))}
-                  />
-                </label>
-              </div>
-            )}
-
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => decide({ analytics: true, marketing: true })}
-                className="rounded-lg bg-[#C9A84C] px-4 py-2 text-sm font-semibold text-black transition hover:bg-[#E8C97A]"
-              >
-                Tout accepter
+            <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+              <button onClick={accept} style={{ flex: 1, cursor: 'pointer', borderRadius: 10, border: 'none', padding: '10px 16px', fontSize: 14, fontWeight: 600, color: '#000', background: C.gold }}>
+                Accepter
               </button>
-              <button
-                onClick={() => decide({ analytics: false, marketing: false })}
-                className="rounded-lg border border-[#C9A84C]/40 px-4 py-2 text-sm font-semibold text-[#F5F5F5] transition hover:border-[#C9A84C]"
-              >
-                Tout refuser
+              <button onClick={refuse} style={{ flex: 1, cursor: 'pointer', borderRadius: 10, border: '1px solid ' + C.gold + '66', padding: '10px 16px', fontSize: 14, fontWeight: 600, color: C.text, background: 'transparent' }}>
+                Refuser
               </button>
-              {!custom ? (
-                <button
-                  onClick={() => setCustom(true)}
-                  className="rounded-lg px-4 py-2 text-sm text-[#A0A0A0] transition hover:text-[#F5F5F5]"
-                >
-                  Personnaliser
-                </button>
-              ) : (
-                <button
-                  onClick={() => decide(prefs)}
-                  className="rounded-lg px-4 py-2 text-sm text-[#A0A0A0] transition hover:text-[#F5F5F5]"
-                >
-                  Enregistrer mes choix
-                </button>
-              )}
             </div>
           </div>
         </motion.div>
