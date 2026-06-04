@@ -206,13 +206,31 @@ function Footer() {
           borderTop: '1px solid rgba(255,255,255,0.04)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 12,
           position: 'relative',
         }}
       >
-        <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, textAlign: 'center' }}>
+        <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0 }}>
           &copy; 2026 Evidence Assurances - Tous droits réservés
         </p>
+        <button
+          onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontSize: 13,
+            color: 'var(--text-subtle)',
+            cursor: 'pointer',
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold-light)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-subtle)'; }}
+        >
+          Gérer les cookies
+        </button>
       </div>
 
       <style>{`

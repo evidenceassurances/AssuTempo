@@ -2,6 +2,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import BackgroundFX from './components/BackgroundFX';
 import Navbar from './components/Navbar';
+import CookieConsent from './components/CookieConsent';
+import { useAnalytics } from './hooks/useAnalytics';
 import PageTransition from './components/blocks/PageTransition';
 import Home from './pages/Home';
 import Faq from './pages/Faq';
@@ -21,6 +23,7 @@ import Carte from './pages/Carte';
 
 function App() {
   const location = useLocation();
+  useAnalytics();
   /* Normalise la clé pour que la transition de page ne se déclenche pas
      lors du changement de pays (/carte/france → /carte/espagne). */
   const pageKey = location.pathname.replace(/^(\/carte)\/.+$/, '$1');
@@ -51,6 +54,7 @@ function App() {
           <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
         </Routes>
       </AnimatePresence>
+      <CookieConsent />
     </div>
   );
 }
