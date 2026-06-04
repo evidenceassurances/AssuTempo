@@ -43,6 +43,7 @@ const ROUTES = [
   '/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
+  '/cookies',
 ];
 
 // ── 1. Build SSR bundle ───────────────────────────────────────────────────────

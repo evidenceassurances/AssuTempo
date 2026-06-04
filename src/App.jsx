@@ -20,6 +20,7 @@ import ConvoyageProfessionnel from './pages/articles/ConvoyageProfessionnel';
 import EssaiVehicule from './pages/articles/EssaiVehicule';
 import CarteGrise from './pages/articles/CarteGrise';
 import Carte from './pages/Carte';
+import Cookies from './pages/Cookies';
 
 function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
           <Route path="/articles/assurance-temporaire-rouler-en-attendant-carte-grise" element={<PageTransition><CarteGrise /></PageTransition>} />
           <Route path="/carte" element={<PageTransition><Carte /></PageTransition>} />
           <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
+          <Route path="/cookies" element={<PageTransition><Cookies /></PageTransition>} />
         </Routes>
       </AnimatePresence>
       <CookieConsent />
