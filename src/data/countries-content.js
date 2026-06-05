@@ -721,6 +721,174 @@ const SUEDE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Norvège - lot 7 ────────────────────────────────── */
+const NORVEGE_OVERRIDE = {
+  title: `Assurance temporaire Norvège | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Norvège dès le 1er jour : RC auto, carte verte, attestation en 5 min. Péages AutoPASS, feux 24h/24 et alcool à 0,2 g/L expliqués.`,
+  h1: `Assurance temporaire en Norvège : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Norvège dès le 1er jour : road-trip des fjords, transit ou conduite d'un véhicule étranger. Hors UE mais incluse, la Norvège fait partie des 34 pays couverts par votre carte internationale d'assurance (carte verte).`,
+  points: [
+    {
+      icon: 'Receipt',
+      titre: `Péages AutoPASS automatiques`,
+      texte: `Pas de barrière : des caméras lisent votre plaque et la facture arrive à domicile. S'y ajoutent des péages urbains et de nombreux ferries le long des fjords.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés 24h/24`,
+      texte: `Feux de croisement obligatoires toute l'année, de jour comme de nuit. Gilet réfléchissant et triangle doivent rester à bord.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : tolérance quasi nulle`,
+      texte: `Le seuil est de 0,2 g/L, parmi les plus bas d'Europe, et les amendes sont élevées. On évite la moindre goutte avant de prendre le volant.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Pneus hiver et grands espaces`,
+      texte: `Pneus hiver imposés dès que la route l'exige. Dans le nord, des troupeaux de rennes circulent en liberté : vigilance, surtout au crépuscule.`,
+    },
+  ],
+  faq: [
+    {
+      q: `La Norvège est-elle couverte alors qu'elle n'est pas dans l'UE ?`,
+      a: `Oui. La Norvège fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+    {
+      q: `Comment se paient les péages norvégiens ?`,
+      a: `Sans badge, votre plaque est photographiée et la facture vous parvient ensuite. Côté assurance, votre carte verte suffit.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Finlande - lot 7 ───────────────────────────────── */
+const FINLANDE_OVERRIDE = {
+  title: `Assurance temporaire Finlande | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Finlande dès le 1er jour : RC auto, carte verte, attestation en 5 min. Réseau gratuit, feux 24h/24, rennes et amendes au revenu expliqués.`,
+  h1: `Assurance temporaire en Finlande : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Finlande dès le 1er jour : séjour nordique, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Route',
+      titre: `Un réseau entièrement gratuit`,
+      texte: `Bonne nouvelle : il n'existe aucun péage en Finlande. Malgré le climat, les routes sont en excellent état.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés toute l'année`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit, toute l'année, pour tous les véhicules.`,
+    },
+    {
+      icon: 'Gauge',
+      titre: `Des amendes proportionnelles aux revenus`,
+      texte: `Particularité nordique : les grosses amendes de vitesse sont calculées sur les revenus du conducteur. Mieux vaut lever le pied.`,
+    },
+    {
+      icon: 'TriangleAlert',
+      titre: `Rennes et élans sur la route`,
+      texte: `Au crépuscule surtout, rennes et élans traversent librement. Pneus hiver imposés de décembre à fin février, ou dès que les conditions l'exigent.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Y a-t-il des péages en Finlande ?`,
+      a: `Non, le réseau est entièrement gratuit. Seule l'assurance reste obligatoire : votre carte verte AssuTempo en fait foi.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la Finlande ?`,
+      a: `Oui. La Finlande fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Islande - lot 7 ────────────────────────────────── */
+const ISLANDE_OVERRIDE = {
+  title: `Assurance temporaire Islande | Carte verte & routes F expliquées - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Islande dès le 1er jour : RC auto, carte verte, attestation en 5 min. Route 1, pistes de gravier, routes F en 4x4 et hors-piste interdit expliqués.`,
+  h1: `Assurance temporaire en Islande : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Islande dès le 1er jour : tour de l'île, séjour ou conduite d'un véhicule étranger. Hors UE mais incluse, l'Islande fait partie des 34 pays couverts par votre carte internationale d'assurance (carte verte).`,
+  points: [
+    {
+      icon: 'Route',
+      titre: `La route 1 et les pistes de gravier`,
+      texte: `La route circulaire (n°1) fait le tour de l'île, goudronnée. Hors d'elle, beaucoup de pistes de gravier : on ralentit au changement de revêtement, où les graviers font déraper.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Routes F : 4x4 obligatoire`,
+      texte: `Les routes F (montagne) sont réservées aux 4x4 et ouvertes l'été seulement. Elles comportent des gués à franchir sans pont : interdites et dangereuses pour une voiture classique.`,
+    },
+    {
+      icon: 'TriangleAlert',
+      titre: `Ponts à voie unique et collines aveugles`,
+      texte: `Ponts et tunnels souvent à voie unique, collines sans visibilité, moutons en liberté. On ralentit et l'on serre à droite par prudence.`,
+    },
+    {
+      icon: 'Ban',
+      titre: `Hors-piste interdit, feux en permanence`,
+      texte: `Conduire hors des pistes est strictement interdit (amendes lourdes, sols fragiles). Feux de croisement obligatoires de jour comme de nuit.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Ma carte verte est-elle valable en Islande ?`,
+      a: `Oui. L'Islande fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+    {
+      q: `Puis-je emprunter les routes F ?`,
+      a: `Votre responsabilité civile reste valable, mais les routes F exigent un 4x4 et le hors-piste est interdit : prudence sur ces pistes.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Irlande - lot 7 ────────────────────────────────── */
+const IRLANDE_OVERRIDE = {
+  title: `Assurance temporaire Irlande | Carte verte & conduite à gauche - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Irlande dès le 1er jour : RC auto, carte verte, attestation en 5 min. Conduite à gauche, péage sans barrière M50 et petites routes expliqués.`,
+  h1: `Assurance temporaire en Irlande : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Irlande dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'ArrowLeft',
+      titre: `On roule à gauche`,
+      texte: `Comme au Royaume-Uni, la circulation se fait à gauche. Attention aux carrefours et aux ronds-points, qui se prennent dans le sens horaire.`,
+    },
+    {
+      icon: 'Receipt',
+      titre: `La M50 : péage sans barrière`,
+      texte: `Autour de Dublin, la M50 se paie sans barrière (eFlow) : la plaque est scannée, le règlement doit être fait avant 20h le lendemain sous peine de pénalités. Méfiez-vous des faux SMS de paiement.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Petites routes et signalisation`,
+      texte: `Hors des grands axes, le réseau est étroit et sinueux. La signalisation est en kilomètres, parfois uniquement en gaélique.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : seuil abaissé pour les novices`,
+      texte: `Le taux autorisé est de 0,5 g/L, ramené à 0,2 g/L pour les jeunes permis et les conducteurs professionnels.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Roule-t-on à gauche en Irlande ?`,
+      a: `Oui, comme au Royaume-Uni. La circulation se fait à gauche sur tout le territoire.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle l'Irlande ?`,
+      a: `Oui. L'Irlande fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -739,6 +907,10 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'croatie'     ? CROATIE_OVERRIDE     :
     slug === 'danemark'    ? DANEMARK_OVERRIDE    :
     slug === 'suede'       ? SUEDE_OVERRIDE       :
+    slug === 'norvege'     ? NORVEGE_OVERRIDE     :
+    slug === 'finlande'    ? FINLANDE_OVERRIDE    :
+    slug === 'islande'     ? ISLANDE_OVERRIDE     :
+    slug === 'irlande'     ? IRLANDE_OVERRIDE     :
     {};
 
   return {
