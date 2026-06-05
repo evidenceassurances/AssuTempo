@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, ShieldCheck, Users } from 'lucide-react';
+import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet } from 'lucide-react';
 import { fadeUp, stagger, slideLeft } from '../animations';
 import Footer from '../components/Footer';
 
@@ -14,6 +14,12 @@ const aboutStats = [
   { value: '6', suffix: ' ans', label: "d'expertise" },
   { value: '24h', suffix: '', label: 'Réponse max' },
   { value: '34', suffix: '', label: 'pays couverts' },
+];
+
+const partnerPerks = [
+  { icon: Clock,       title: 'Devis en 3 minutes',    label: 'Un parcours adapté à votre métier' },
+  { icon: FileCheck,   title: 'Attestation immédiate',  label: 'Votre client repart couvert' },
+  { icon: Wallet,      title: 'Commission chaque mois', label: 'Virement instantané le mois suivant' },
 ];
 
 const typeOptions = [
@@ -554,6 +560,95 @@ function About() {
             </p>
           </motion.div>
 
+          {/* ─── Proposition de valeur ─── */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            style={{ marginBottom: 48 }}
+          >
+            <h3
+              style={{
+                fontSize: 'clamp(1.2rem, 2.5vw, 1.65rem)',
+                fontWeight: 700,
+                color: '#fff',
+                lineHeight: 1.25,
+                marginBottom: 16,
+                letterSpacing: '-0.025em',
+              }}
+            >
+              Proposez une assurance temporaire à vos clients en 3 minutes.{' '}
+              <span style={{ color: 'var(--gold)' }}>Encaissez dès le mois suivant.</span>
+            </h3>
+            <p
+              style={{
+                fontSize: 15,
+                color: 'var(--text-muted)',
+                lineHeight: 1.75,
+                marginBottom: 32,
+                maxWidth: 640,
+              }}
+            >
+              Nous adaptons notre système à chaque métier — durée, option assistance, tarif.
+              Votre client repart avec son attestation immédiatement. Vous recevez votre commission
+              par virement instantané, chaque mois.
+            </p>
+
+            <div
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}
+              className="partner-perks-grid"
+            >
+              {partnerPerks.map(({ icon: Icon, title, label }) => (
+                <motion.div
+                  key={title}
+                  variants={fadeUp}
+                  className="card-glass"
+                  style={{
+                    padding: '28px 24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 14,
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      background: 'rgba(201,168,76,0.08)',
+                      border: '1px solid var(--gold-border)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon size={22} style={{ color: 'var(--gold)' }} />
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        fontSize: 11,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        color: 'var(--gold)',
+                        marginBottom: 6,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {title}
+                    </p>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: '#fff', lineHeight: 1.4 }}>
+                      {label}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -569,11 +664,27 @@ function About() {
             }}
             className="partner-form-wrap"
           >
+            <p
+              style={{
+                fontSize: 14,
+                color: 'var(--text-muted)',
+                textAlign: 'center',
+                marginBottom: 28,
+                letterSpacing: '0.01em',
+              }}
+            >
+              <strong style={{ color: 'var(--text)' }}>Aucune gestion administrative.</strong>
+              {' '}
+              <strong style={{ color: 'var(--text)' }}>Aucun engagement.</strong>
+            </p>
             <PartnerForm />
           </motion.div>
         </div>
 
         <style>{`
+          @media (max-width: 700px) {
+            .partner-perks-grid { grid-template-columns: 1fr !important; }
+          }
           @media (max-width: 640px) {
             .partner-form-wrap { padding: 28px 20px !important; }
           }

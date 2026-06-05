@@ -21,6 +21,7 @@ import EssaiVehicule from './pages/articles/EssaiVehicule';
 import CarteGrise from './pages/articles/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
+import CGV from './pages/CGV';
 
 function App() {
   const location = useLocation();
@@ -54,6 +55,7 @@ function App() {
           <Route path="/carte" element={<PageTransition><Carte /></PageTransition>} />
           <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
           <Route path="/cookies" element={<PageTransition><Cookies /></PageTransition>} />
+          <Route path="/conditions-generales" element={<PageTransition><CGV /></PageTransition>} />
         </Routes>
       </AnimatePresence>
       <CookieConsent />

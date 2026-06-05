@@ -189,9 +189,7 @@ function Footer() {
               Lun-Ven 9h-21h<br />Sam 9h-20h
             </p>
             <div style={{ marginTop: 8 }}>
-              <FooterLink href="https://assutempo.fr/conditions-generales" external style={{ fontSize: 13 }}>
-                Conditions Générales
-              </FooterLink>
+              <FooterLink to="/conditions-generales">Conditions Générales</FooterLink>
             </div>
           </div>
         </div>
