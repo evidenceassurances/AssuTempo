@@ -637,6 +637,90 @@ const CROATIE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Danemark - lot 6 ───────────────────────────────── */
+const DANEMARK_OVERRIDE = {
+  title: `Assurance temporaire Danemark | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert au Danemark dès le 1er jour : RC auto, carte verte, attestation en 5 min. Ponts à péage, vélos prioritaires et feux de jour expliqués.`,
+  h1: `Assurance temporaire au Danemark : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire au Danemark dès le 1er jour : transit vers la Scandinavie, séjour ponctuel ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Bike',
+      titre: `Le royaume du vélo`,
+      texte: `À Copenhague, les cyclistes sont partout et prioritaires. Avant de tourner à droite, on vérifie toujours la piste cyclable : c'est le réflexe qui évite l'accrochage.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés toute l'année`,
+      texte: `Les feux de croisement sont obligatoires de jour comme de nuit, toute l'année. Une règle scandinave systématique et contrôlée.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Autoroutes gratuites, deux grands ponts payants`,
+      texte: `Pas de péage classique : seuls les ponts du Grand Belt (Storebælt) et de l'Øresund vers la Suède sont payants. Le pays fonctionne largement sans espèces, carte acceptée partout.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : sanction très lourde`,
+      texte: `Le taux autorisé est de 0,5 g/L, mais la peine est sévère : même un léger dépassement peut coûter l'équivalent d'un mois de salaire.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il payer un péage pour traverser le Danemark ?`,
+      a: `Non, les autoroutes sont gratuites. Seuls les ponts du Grand Belt et de l'Øresund (vers la Suède) sont payants.`,
+    },
+    {
+      q: `Ma carte verte couvre-t-elle le Danemark ?`,
+      a: `Oui. Le Danemark fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Suède - lot 6 ──────────────────────────────────── */
+const SUEDE_OVERRIDE = {
+  title: `Assurance temporaire Suède | Carte verte & péages - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Suède dès le 1er jour : RC auto, carte verte, attestation en 5 min. Feux 24h/24, pneus hiver, alcool à 0,2 g/L et péages urbains expliqués.`,
+  h1: `Assurance temporaire en Suède : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Suède dès le 1er jour : road-trip nordique, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'ArrowRightLeft',
+      titre: `Le jour où la Suède a changé de côté`,
+      texte: `Le 3 septembre 1967, lors du "Dagen H", tout le pays est passé de la conduite à gauche à la conduite à droite en une seule nuit. On roule donc à droite, comme en France.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Feux 24h/24 et pneus hiver`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit. Pneus hiver imposés du 1er décembre au 31 mars, et dès que la route est enneigée ou verglacée.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : parmi les plus stricts d'Europe`,
+      texte: `Le seuil est de 0,2 g/L, l'un des plus bas du continent. Les amendes sont proportionnelles aux revenus et la conduite sous influence peut mener à la prison.`,
+    },
+    {
+      icon: 'Building2',
+      titre: `Péages urbains et pont de l'Øresund`,
+      texte: `Le réseau est gratuit, sauf le pont de l'Øresund vers le Danemark et les péages urbains de Stockholm et Göteborg, facturés automatiquement à la plaque.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Roule-t-on à droite ou à gauche en Suède ?`,
+      a: `À droite, comme en France, depuis le passage historique du 3 septembre 1967.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Suède ?`,
+      a: `Oui. La Suède fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -653,6 +737,8 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'portugal'    ? PORTUGAL_OVERRIDE    :
     slug === 'pays-bas'    ? PAYSBAS_OVERRIDE     :
     slug === 'croatie'     ? CROATIE_OVERRIDE     :
+    slug === 'danemark'    ? DANEMARK_OVERRIDE    :
+    slug === 'suede'       ? SUEDE_OVERRIDE       :
     {};
 
   return {
