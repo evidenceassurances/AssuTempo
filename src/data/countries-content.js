@@ -889,6 +889,174 @@ const IRLANDE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Luxembourg - lot 8 ─────────────────────────────── */
+const LUXEMBOURG_OVERRIDE = {
+  title: `Assurance temporaire Luxembourg | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert au Luxembourg dès le 1er jour : RC auto, carte verte, attestation en 5 min. Autoroutes gratuites, carburant et transports gratuits expliqués.`,
+  h1: `Assurance temporaire au Luxembourg : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire au Luxembourg dès le 1er jour : trajet transfrontalier, séjour ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Fuel',
+      titre: `Carburant et transports`,
+      texte: `Le Grand-Duché est resté connu pour ses carburants moins chers qu'ailleurs. Depuis 2020, les transports publics y sont gratuits sur tout le territoire.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Autoroutes gratuites`,
+      texte: `Aucun péage : tout le réseau autoroutier est gratuit. Ces axes mènent rapidement vers la France, la Belgique et l'Allemagne.`,
+    },
+    {
+      icon: 'Milestone',
+      titre: `Priorité à droite`,
+      texte: `On roule à droite, priorité à droite sauf panneau contraire. Par temps de pluie, la vitesse est plafonnée à 110 km/h, même sans panneau.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool et équipements`,
+      texte: `Le seuil est de 0,5 g/L, ramené à 0,2 g/L pour les permis de moins de deux ans. Gilet réfléchissant et triangle restent obligatoires à bord.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il payer un péage au Luxembourg ?`,
+      a: `Non, le réseau autoroutier est entièrement gratuit. Côté assurance, votre carte verte AssuTempo suffit.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle le Luxembourg ?`,
+      a: `Oui. Le Luxembourg fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Grèce - lot 8 ──────────────────────────────────── */
+const GRECE_OVERRIDE = {
+  title: `Assurance temporaire Grèce | Carte verte & péages - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Grèce dès le 1er jour : RC auto, carte verte, attestation en 5 min. Autoroutes à péage, routes de montagne et alcool expliqués.`,
+  h1: `Assurance temporaire en Grèce : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Grèce dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Ticket',
+      titre: `Autoroutes à péage`,
+      texte: `Les grands axes (Athènes-Thessalonique, Attiki Odos...) sont à péage, réglé au poste ou par badge. Gardez de quoi payer en espèces ou par carte.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Routes étroites et sinueuses`,
+      texte: `Sur les îles et en montagne, les routes sont étroites, le revêtement irrégulier. On adapte son allure, surtout à deux-roues.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : seuil abaissé pour certains`,
+      texte: `Le taux autorisé est de 0,5 g/L, abaissé à 0,2 g/L pour les jeunes permis, les professionnels et les motards.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Trafic dense à Athènes`,
+      texte: `Dans la capitale, le trafic est dense et la conduite vive. Anticipez, gardez vos distances et vérifiez le stationnement, souvent réglementé.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Y a-t-il des péages en Grèce ?`,
+      a: `Oui, les principaux axes autoroutiers sont à péage. Côté assurance, votre carte verte AssuTempo reste nécessaire.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Grèce ?`,
+      a: `Oui. La Grèce fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique République tchèque - lot 8 ─────────────────────── */
+const REPUBLIQUETCHEQUE_OVERRIDE = {
+  title: `Assurance temporaire République tchèque | Carte verte & vignette - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en République tchèque dès le 1er jour : RC auto, carte verte, attestation en 5 min. E-vignette, alcool à 0,0 g/L et feux 24h/24 expliqués.`,
+  h1: `Assurance temporaire en République tchèque : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en République tchèque dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `E-vignette obligatoire`,
+      texte: `Sur autoroutes et voies rapides, une e-vignette liée à la plaque est obligatoire (véhicules jusqu'à 3,5 t). À activer avant d'entrer sur l'autoroute, sous peine d'amende salée.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : tolérance zéro`,
+      texte: `La Tchéquie applique le 0,0 g/L : aucune trace d'alcool tolérée au volant, contrôles fréquents. Un seul verre suffit à vous mettre en faute.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés 24h/24`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit, toute l'année. Vérifiez-en le bon fonctionnement avant le départ.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Pneus hiver`,
+      texte: `Du 1er novembre à fin mars, les pneus hiver sont obligatoires dès que la route est enneigée ou verglacée.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette pour rouler en République tchèque ?`,
+      a: `Oui, une e-vignette liée à la plaque est obligatoire sur autoroutes et voies rapides. Elle est distincte de l'assurance : votre carte verte AssuTempo couvre la responsabilité civile.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la République tchèque ?`,
+      a: `Oui. Elle fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Hongrie - lot 8 ────────────────────────────────── */
+const HONGRIE_OVERRIDE = {
+  title: `Assurance temporaire Hongrie | Carte verte & e-vignette - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Hongrie dès le 1er jour : RC auto, carte verte, attestation en 5 min. E-vignette (matrica), alcool à 0,0 g/L et contrôles expliqués.`,
+  h1: `Assurance temporaire en Hongrie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Hongrie dès le 1er jour : séjour, transit vers les Balkans ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `E-vignette (matrica) automatique`,
+      texte: `Depuis 2013, la vignette hongroise est entièrement numérique, liée à la plaque et contrôlée par caméras. Pas d'autocollant : on l'achète en ligne ou en station avant l'autoroute.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : tolérance zéro`,
+      texte: `Le 0,0 g/L s'applique à tous les conducteurs. En cas d'infraction, retrait immédiat du permis et amendes lourdes.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux et équipements`,
+      texte: `Feux de croisement obligatoires de jour hors agglomération, et de nuit partout. Gilet réfléchissant et triangle à bord.`,
+    },
+    {
+      icon: 'Camera',
+      titre: `Contrôles renforcés`,
+      texte: `Radars automatiques, patrouilles mobiles et surveillance se sont multipliés. Les conducteurs étrangers sont sanctionnés au même titre que les locaux.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Comment fonctionne la vignette en Hongrie ?`,
+      a: `Elle est 100% numérique : on achète une e-vignette liée à la plaque, sans autocollant, vérifiée par caméras. L'assurance reste distincte.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Hongrie ?`,
+      a: `Oui. La Hongrie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -910,7 +1078,11 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'norvege'     ? NORVEGE_OVERRIDE     :
     slug === 'finlande'    ? FINLANDE_OVERRIDE    :
     slug === 'islande'     ? ISLANDE_OVERRIDE     :
-    slug === 'irlande'     ? IRLANDE_OVERRIDE     :
+    slug === 'irlande'          ? IRLANDE_OVERRIDE          :
+    slug === 'luxembourg'       ? LUXEMBOURG_OVERRIDE       :
+    slug === 'grece'            ? GRECE_OVERRIDE            :
+    slug === 'republique-tcheque' ? REPUBLIQUETCHEQUE_OVERRIDE :
+    slug === 'hongrie'          ? HONGRIE_OVERRIDE          :
     {};
 
   return {
