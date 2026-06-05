@@ -1,0 +1,90 @@
+.atd{
+  --d: min(78vmin, 600px);
+  --r: 34.6%;
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  width: var(--d);
+  height: var(--d);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: .9;
+}
+.atd > *{
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+/* lueur diffuse, legere */
+.atd-bloom{
+  background: radial-gradient(circle at 50% 50%,
+    rgba(232,201,122,.055),
+    rgba(201,168,76,.025) 40%,
+    transparent 62%);
+}
+
+/* anneaux concentriques tres fins */
+.atd-ring{ border: 1px solid rgba(201,168,76,.07); }
+.atd-r2{ inset: 11%; border-color: rgba(201,168,76,.05); }
+.atd-dash{
+  inset: 5%;
+  border: 1px dashed rgba(201,168,76,.10);
+  animation: atd-spin 120s linear infinite;
+}
+
+/* couronne de graduations fines (aucun noeud DOM) */
+.atd-ticks{
+  background: repeating-conic-gradient(from 0deg,
+    rgba(201,168,76,.26) 0deg .18deg, transparent .18deg 5deg);
+  -webkit-mask: radial-gradient(circle, transparent 67.8%, #000 68.6%, #000 70%, transparent 70.8%);
+          mask: radial-gradient(circle, transparent 67.8%, #000 68.6%, #000 70%, transparent 70.8%);
+}
+.atd-ticks-major{
+  background: repeating-conic-gradient(from 0deg,
+    rgba(232,201,122,.40) 0deg .42deg, transparent .42deg 30deg);
+  -webkit-mask: radial-gradient(circle, transparent 65.5%, #000 66.5%, #000 70%, transparent 71%);
+          mask: radial-gradient(circle, transparent 65.5%, #000 66.5%, #000 70%, transparent 71%);
+}
+
+/* comete : tete + trainee dans un meme conteneur qui tourne, la lueur suit le point */
+.atd-comet{ animation: atd-spin 17s linear infinite; }
+.atd-trail{
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(.5px);
+  background: conic-gradient(from 0deg,
+    rgba(232,201,122,.46) 0deg,
+    rgba(232,201,122,0) 13deg,
+    transparent 290deg,
+    rgba(232,201,122,.10) 326deg,
+    rgba(232,201,122,.30) 350deg,
+    rgba(232,201,122,.46) 360deg);
+  -webkit-mask: radial-gradient(circle, transparent 66.4%, #000 67.8%, #000 70.6%, transparent 72%);
+          mask: radial-gradient(circle, transparent 66.4%, #000 67.8%, #000 70.6%, transparent 72%);
+}
+.atd-dot{
+  position: absolute;
+  top: calc(50% - var(--r));
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #F6E7B6;
+  box-shadow: 0 0 8px 2px rgba(232,201,122,.65), 0 0 20px 6px rgba(232,201,122,.28);
+}
+
+@keyframes atd-spin{ to{ transform: rotate(360deg); } }
+
+/* accessibilite : on fige si l'utilisateur a reduit les animations */
+@media (prefers-reduced-motion: reduce){
+  .atd-comet, .atd-dash{ animation: none; }
+}
+
+/* allege sur petit ecran */
+@media (max-width: 680px){
+  .atd{ --d: min(86vw, 380px); top: 53%; opacity: .85; }
+}

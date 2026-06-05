@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
+import TempoDial from './TempoDial';
 
 const words1 = ['L\'assurance', 'temporaire'];
 const words2 = ['qui', 'change', 'tout.'];
@@ -24,7 +25,7 @@ function Hero() {
         overflow: 'hidden',
       }}
     >
-      <GoldenRing />
+      <TempoDial />
 
       {/* ── HAUT : Badge ── */}
       <div
@@ -256,126 +257,5 @@ function Hero() {
   );
 }
 
-/* Anneau lumineux doré - pièce maîtresse (aria-hidden, décoratif) */
-function GoldenRing() {
-  return (
-    <>
-      <div
-        aria-hidden
-        className="golden-ring-outer"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      >
-        {/* Halo flou */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: 440,
-            height: 440,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 65%)',
-            animation: 'halo-pulse 6s ease-in-out infinite',
-            willChange: 'transform',
-          }}
-        />
-
-        {/* Anneau principal - 520×520 rendu, viewBox 700×700 conservé */}
-        <svg
-          width="520"
-          height="520"
-          viewBox="0 0 700 700"
-          style={{
-            display: 'block',
-            animation: 'rotate-slow 40s linear infinite',
-            willChange: 'transform',
-          }}
-        >
-          <defs>
-            <linearGradient id="ring-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--gold-deep)" />
-              <stop offset="50%" stopColor="var(--gold-light)" />
-              <stop offset="100%" stopColor="var(--gold-deep)" />
-            </linearGradient>
-          </defs>
-          <circle
-            cx="350"
-            cy="350"
-            r="340"
-            fill="none"
-            stroke="url(#ring-grad-1)"
-            strokeWidth="1.5"
-            opacity="0.5"
-            strokeDasharray="60 24"
-          />
-        </svg>
-
-        {/* Second anneau concentrique */}
-        <svg
-          width="520"
-          height="520"
-          viewBox="0 0 700 700"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            display: 'block',
-            animation: 'rotate-slow-reverse 60s linear infinite',
-            willChange: 'transform',
-          }}
-        >
-          <defs>
-            <linearGradient id="ring-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--gold-deep)" />
-              <stop offset="100%" stopColor="var(--gold)" />
-            </linearGradient>
-          </defs>
-          <circle
-            cx="350"
-            cy="350"
-            r="290"
-            fill="none"
-            stroke="url(#ring-grad-2)"
-            strokeWidth="1"
-            opacity="0.25"
-            strokeDasharray="40 30"
-          />
-        </svg>
-      </div>
-
-      <style>{`
-        .golden-ring-outer {
-          transform: translate(-50%, -50%);
-        }
-        @media (max-height: 800px) {
-          .golden-ring-outer {
-            transform: translate(-50%, -50%) scale(0.8);
-          }
-        }
-        @media (max-height: 680px) {
-          .golden-ring-outer {
-            transform: translate(-50%, -50%) scale(0.62);
-          }
-        }
-        @media (max-width: 480px) {
-          .golden-ring-outer {
-            transform: translate(-50%, -50%) scale(0.68);
-          }
-        }
-        @media (max-width: 480px) and (max-height: 700px) {
-          .golden-ring-outer {
-            transform: translate(-50%, -50%) scale(0.52);
-          }
-        }
-      `}</style>
-    </>
-  );
-}
 
 export default Hero;
