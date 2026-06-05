@@ -321,3 +321,18 @@ body {
 .pays-legende-titre{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#A0A0A0;margin-bottom:10px}
 .pays-legende-row{display:flex;flex-wrap:wrap;gap:8px}
 .pays-legende .dot{width:7px;height:7px;border-radius:50%;background:var(--c);flex-shrink:0}
+
+/* ── Hero hauteur ──────────────────────────────────────────────────────── */
+/* Desktop : pleine hauteur d'ecran */
+.home-hero{ min-height: 100vh; }
+
+/* Mobile uniquement : le hero epouse son contenu */
+@media (max-width: 767px){
+  .home-hero{
+    min-height: auto;
+    padding-bottom: 48px;
+  }
+  .home-hero-spacer{ height: 16px !important; }
+  .home-hero .scroll-indicator,
+  .home-hero [data-scroll-indicator]{ margin-top: 24px; }
+}

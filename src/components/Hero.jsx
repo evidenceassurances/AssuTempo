@@ -16,8 +16,8 @@ function Hero() {
 
   return (
     <section
+      className="home-hero"
       style={{
-        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -221,7 +221,7 @@ function Hero() {
       </div>
 
       {/* ── BAS : Espace bas + chevron ── */}
-      <div style={{ flexShrink: 0, height: 64 }} />
+      <div className="home-hero-spacer" style={{ flexShrink: 0, height: 64 }} />
 
       {/* Indicateur scroll */}
       <motion.div
