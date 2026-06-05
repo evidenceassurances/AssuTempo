@@ -1057,6 +1057,174 @@ const HONGRIE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Bulgarie - lot 9 ───────────────────────────────── */
+const BULGARIE_OVERRIDE = {
+  title: `Assurance temporaire Bulgarie | Carte verte & vignette - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Bulgarie dès le 1er jour : RC auto, carte verte, attestation en 5 min. E-vignette, alcool et ponts du Danube expliqués.`,
+  h1: `Assurance temporaire en Bulgarie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Bulgarie dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `E-vignette numérique`,
+      texte: `Depuis 2019, la vignette bulgare est électronique et liée à la plaque, obligatoire sur autoroutes et de nombreuses routes nationales. À activer avant d'entrer dans le pays.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool au volant`,
+      texte: `Le seuil autorisé est de 0,5 g/L. Contrôles et sanctions sont au rendez-vous, comme partout dans la région.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Ponts du Danube payants à part`,
+      texte: `Les ponts sur le Danube, comme celui de Vidin vers la Roumanie, se paient séparément de la vignette. Prévoyez ce péage si vous franchissez le fleuve.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Un réseau en évolution`,
+      texte: `Le réseau s'améliore mais reste inégal selon les axes. Hors autoroutes, prudence sur l'état de la chaussée et les usagers lents.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette pour rouler en Bulgarie ?`,
+      a: `Oui, une e-vignette liée à la plaque est obligatoire sur autoroutes et de nombreuses routes nationales. Elle est distincte de l'assurance : votre carte verte AssuTempo couvre la responsabilité civile.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la Bulgarie ?`,
+      a: `Oui. La Bulgarie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Roumanie - lot 9 ───────────────────────────────── */
+const ROUMANIE_OVERRIDE = {
+  title: `Assurance temporaire Roumanie | Carte verte & rovinieta - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Roumanie dès le 1er jour : RC auto, carte verte, attestation en 5 min. Rovinieta, alcool à 0,0 g/L et routes de montagne expliqués.`,
+  h1: `Assurance temporaire en Roumanie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Roumanie dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `La rovinieta obligatoire`,
+      texte: `La rovinieta, vignette électronique liée à la plaque, est obligatoire sur presque toutes les routes nationales, pas seulement les autoroutes. À activer avant de rouler.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : tolérance zéro`,
+      texte: `La Roumanie applique le 0,0 g/L : aucune trace d'alcool tolérée au volant. Sanctions immédiates en cas de contrôle positif.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `La Transfăgărășan`,
+      texte: `La Transfăgărășan, route de montagne spectaculaire des Carpates, n'ouvre qu'en été. En zone rurale, attendez-vous à des attelages et à des véhicules lents.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Ponts du Danube payants`,
+      texte: `Certains ponts, comme Fetești-Cernavodă, se paient en plus de la rovinieta. À prévoir sur les grands itinéraires vers la mer Noire.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Qu'est-ce que la rovinieta ?`,
+      a: `C'est la vignette électronique roumaine, liée à la plaque, obligatoire sur presque toutes les routes nationales. Elle ne remplace pas l'assurance : votre carte verte AssuTempo reste nécessaire.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Roumanie ?`,
+      a: `Oui. La Roumanie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Slovaquie - lot 9 ──────────────────────────────── */
+const SLOVAQUIE_OVERRIDE = {
+  title: `Assurance temporaire Slovaquie | Carte verte & vignette - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Slovaquie dès le 1er jour : RC auto, carte verte, attestation en 5 min. E-vignette, alcool à 0,0 g/L et conduite hivernale expliqués.`,
+  h1: `Assurance temporaire en Slovaquie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Slovaquie dès le 1er jour : séjour, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `E-vignette sur routes D et R`,
+      texte: `Une e-vignette liée à la plaque est obligatoire sur les autoroutes (D) et voies rapides (R). À activer avant d'y circuler, sous peine d'amende.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : tolérance zéro`,
+      texte: `Le 0,0 g/L s'applique à tous les conducteurs : aucune goutte d'alcool avant de prendre le volant.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés 24h/24`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit, toute l'année.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Tatras et conduite hivernale`,
+      texte: `Pays montagneux (Hautes Tatras), l'hiver y est rude : pneus hiver imposés dès que la route est enneigée ou verglacée.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette en Slovaquie ?`,
+      a: `Oui, sur les routes D et R. C'est une e-vignette liée à la plaque, distincte de l'assurance ; votre carte verte AssuTempo couvre la responsabilité civile.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la Slovaquie ?`,
+      a: `Oui. Elle fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Slovénie - lot 9 ───────────────────────────────── */
+const SLOVENIE_OVERRIDE = {
+  title: `Assurance temporaire Slovénie | Carte verte & vignette - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Slovénie dès le 1er jour : RC auto, carte verte, attestation en 5 min. E-vignette, pays de transit et équipement hiver expliqués.`,
+  h1: `Assurance temporaire en Slovénie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Slovénie dès le 1er jour : transit entre l'Italie, l'Autriche et la Croatie, séjour ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `Vignette obligatoire dès l'entrée`,
+      texte: `Sur autoroutes et voies rapides, une e-vignette liée à la plaque est obligatoire, en formule hebdomadaire, mensuelle ou plus. Les contrôles se font après le premier point de vente.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Un petit pays de transit`,
+      texte: `Carrefour entre l'Italie, l'Autriche et la Croatie : on le traverse vite, mais la vignette est exigée dès les premiers kilomètres d'autoroute.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Équipement hiver imposé`,
+      texte: `Du 15 novembre au 15 mars, l'équipement hiver (pneus adaptés ou chaînes à bord) est obligatoire.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : seuil abaissé pour certains`,
+      texte: `Le seuil est de 0,5 g/L, abaissé à 0,0 g/L pour les jeunes permis et les conducteurs professionnels.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette pour traverser la Slovénie ?`,
+      a: `Oui, dès les premiers kilomètres d'autoroute. La e-vignette liée à la plaque est exigée, en plus de l'assurance que couvre votre carte verte AssuTempo.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Slovénie ?`,
+      a: `Oui. La Slovénie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -1083,6 +1251,10 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'grece'            ? GRECE_OVERRIDE            :
     slug === 'republique-tcheque' ? REPUBLIQUETCHEQUE_OVERRIDE :
     slug === 'hongrie'          ? HONGRIE_OVERRIDE          :
+    slug === 'bulgarie'         ? BULGARIE_OVERRIDE         :
+    slug === 'roumanie'         ? ROUMANIE_OVERRIDE         :
+    slug === 'slovaquie'        ? SLOVAQUIE_OVERRIDE        :
+    slug === 'slovenie'         ? SLOVENIE_OVERRIDE         :
     {};
 
   return {
