@@ -326,13 +326,14 @@ body {
 /* Desktop : pleine hauteur d'ecran */
 .home-hero{ min-height: 100vh; }
 
-/* Mobile uniquement : le hero epouse son contenu */
+/* Mobile uniquement : recentrage vertical */
 @media (max-width: 767px){
   .home-hero{
-    min-height: auto;
-    padding-bottom: 48px;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 72px;
+    padding-bottom: 40px;
   }
-  .home-hero-spacer{ height: 16px !important; }
-  .home-hero .scroll-indicator,
-  .home-hero [data-scroll-indicator]{ margin-top: 24px; }
 }
