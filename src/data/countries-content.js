@@ -1393,6 +1393,174 @@ const CHYPRE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Malte - lot 11 ─────────────────────────────────── */
+const MALTE_OVERRIDE = {
+  title: `Assurance temporaire Malte | Carte verte & conduite à gauche - AssuTempo`,
+  metaDescription:
+    `Roulez couvert à Malte dès le 1er jour : RC auto, carte verte, attestation en 5 min. Conduite à gauche, routes étroites et trafic dense expliqués.`,
+  h1: `Assurance temporaire à Malte : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire à Malte dès le 1er jour : séjour, location ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'ArrowLeft',
+      titre: `On roule à gauche`,
+      texte: `Héritage britannique : à Malte, la circulation se fait à gauche. Ronds-points dans le sens horaire et carrefours demandent une vigilance constante.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Le seuil d'alcool le plus haut`,
+      texte: `Avec le Royaume-Uni, Malte affiche le seuil le plus élevé d'Europe, à 0,8 g/L. Cela n'enlève rien aux risques : la prudence reste de mise.`,
+    },
+    {
+      icon: 'Car',
+      titre: `Routes étroites et denses`,
+      texte: `Sur la plus petite île de l'UE, le trafic est dense, les routes étroites et les ronds-points nombreux. On roule lentement, l'oeil sur les cyclistes.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Pas d'autoroute, vitesses basses`,
+      texte: `Pas de véritable autoroute : le réseau est essentiellement urbain et la vitesse plafonne autour de 80 km/h sur les axes les plus rapides.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Roule-t-on à gauche à Malte ?`,
+      a: `Oui. Comme en Irlande et à Chypre, la circulation se fait à gauche sur tout l'archipel.`,
+    },
+    {
+      q: `La carte verte est-elle valable à Malte ?`,
+      a: `Oui. Malte fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Andorre - lot 11 ───────────────────────────────── */
+const ANDORRE_OVERRIDE = {
+  title: `Assurance temporaire Andorre | Carte verte & cols de montagne - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Andorre dès le 1er jour : RC auto, carte verte, attestation en 5 min. Cols pyrénéens, duty-free et conduite hivernale expliqués.`,
+  h1: `Assurance temporaire en Andorre : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Andorre dès le 1er jour : escapade pyrénéenne, achats transfrontaliers ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Mountain',
+      titre: `Cols de haute montagne`,
+      texte: `Nichée dans les Pyrénées, la principauté se gagne par des cols, dont le Port d'Envalira, le plus haut col routier des Pyrénées. Équipement hiver vivement conseillé en saison froide.`,
+    },
+    {
+      icon: 'ShoppingBag',
+      titre: `Le paradis du duty-free`,
+      texte: `Hors UE mais à l'euro, l'Andorre attire pour ses prix : carburant, tabac et alcool y sont moins chers, d'où un trafic dense aux frontières.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Aucun péage`,
+      texte: `Pas de péage sur le territoire andorran. Les routes de montagne, sinueuses, demandent une conduite prudente, surtout l'hiver.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool au volant`,
+      texte: `Le seuil autorisé est de 0,5 g/L. Les contrôles sont présents, notamment à l'approche des stations de ski.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il un péage pour rouler en Andorre ?`,
+      a: `Non, il n'y a pas de péage. Côté assurance, votre carte verte AssuTempo suffit.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle l'Andorre ?`,
+      a: `Oui. L'Andorre fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Bosnie-Herzégovine - lot 11 ────────────────────── */
+const BOSNIEHERZEGOVINE_OVERRIDE = {
+  title: `Assurance temporaire Bosnie-Herzégovine | Carte verte indispensable - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Bosnie-Herzégovine dès le 1er jour : RC auto, carte verte incluse, attestation en 5 min. Péage A1, routes de montagne et vigilance expliqués.`,
+  h1: `Assurance temporaire en Bosnie-Herzégovine : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Bosnie-Herzégovine dès le 1er jour : transit balkanique, séjour ou conduite d'un véhicule étranger. Hors UE mais incluse, elle fait partie des 34 pays couverts par votre carte internationale d'assurance (carte verte).`,
+  points: [
+    {
+      icon: 'ShieldCheck',
+      titre: `Carte verte indispensable`,
+      texte: `Hors Union européenne, la Bosnie-Herzégovine exige la carte internationale d'assurance (carte verte) à la frontière. Avec AssuTempo, elle est incluse.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Péage sur l'A1`,
+      texte: `Le réseau est en partie gratuit, mais l'autoroute A1 comporte un péage. Gardez de quoi régler en espèces ou par carte.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Routes de montagne et vigilance`,
+      texte: `Les grands axes sont bien entretenus, mais certaines routes secondaires restent rustiques. En zone isolée, mieux vaut s'en tenir aux voies balisées.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux et équipements`,
+      texte: `Feux de croisement allumés recommandés de jour, gilet et triangle à bord. Équipement hiver requis en conditions enneigées.`,
+    },
+  ],
+  faq: [
+    {
+      q: `La Bosnie-Herzégovine est-elle couverte alors qu'elle n'est pas dans l'UE ?`,
+      a: `Oui. Hors UE, elle exige la carte verte à la frontière, et celle-ci est incluse dans votre contrat AssuTempo. C'est l'un des 34 pays couverts.`,
+    },
+    {
+      q: `Y a-t-il des péages en Bosnie-Herzégovine ?`,
+      a: `Oui, sur l'autoroute A1. Le reste du réseau est largement gratuit.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Monténégro - lot 11 ────────────────────────────── */
+const MONTENEGRO_OVERRIDE = {
+  title: `Assurance temporaire Monténégro | Carte verte incluse - AssuTempo`,
+  metaDescription:
+    `Roulez couvert au Monténégro dès le 1er jour : RC auto, carte verte incluse, attestation en 5 min. Tunnel de Sozina, ferry de Kotor et routes de montagne expliqués.`,
+  h1: `Assurance temporaire au Monténégro : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire au Monténégro dès le 1er jour : road-trip adriatique, transit ou conduite d'un véhicule étranger. Hors UE mais incluse, il fait partie des 34 pays couverts par votre carte internationale d'assurance (carte verte).`,
+  points: [
+    {
+      icon: 'ShieldCheck',
+      titre: `Carte verte indispensable`,
+      texte: `Hors UE mais à l'euro, le Monténégro demande la carte verte à l'entrée. Elle est incluse dans votre contrat AssuTempo.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Tunnel de Sozina et ferry de Kotor`,
+      texte: `Le tunnel de Sozina, sur l'axe Podgorica-littoral, est payant, tout comme le ferry de la baie de Kotor. À prévoir sur votre itinéraire.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Routes spectaculaires et exigeantes`,
+      texte: `Les routes de montagne, comme les lacets au-dessus de Kotor, offrent des panoramas saisissants mais demandent une conduite attentive.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux et conduite hivernale`,
+      texte: `Feux de croisement obligatoires de jour, gilet et triangle à bord. Équipement hiver nécessaire dès que la neige s'installe.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Le Monténégro est-il couvert par la carte verte ?`,
+      a: `Oui. Hors UE, il demande la carte verte à l'entrée ; elle est incluse dans votre contrat AssuTempo. C'est l'un des 34 pays couverts.`,
+    },
+    {
+      q: `Quels sont les péages au Monténégro ?`,
+      a: `Le tunnel de Sozina et le ferry de la baie de Kotor sont payants. Le reste du réseau est gratuit.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -1426,7 +1594,11 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'estonie'          ? ESTONIE_OVERRIDE          :
     slug === 'lettonie'         ? LETTONIE_OVERRIDE         :
     slug === 'lituanie'         ? LITUANIE_OVERRIDE         :
-    slug === 'chypre'           ? CHYPRE_OVERRIDE           :
+    slug === 'chypre'              ? CHYPRE_OVERRIDE              :
+    slug === 'malte'               ? MALTE_OVERRIDE               :
+    slug === 'andorre'             ? ANDORRE_OVERRIDE             :
+    slug === 'bosnie-herzegovine'  ? BOSNIEHERZEGOVINE_OVERRIDE   :
+    slug === 'montenegro'          ? MONTENEGRO_OVERRIDE          :
     {};
 
   return {
