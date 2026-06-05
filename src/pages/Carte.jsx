@@ -13,6 +13,9 @@ import {
   Ticket, Trophy, AlertTriangle, ShieldCheck,
   ScanLine, Bike, Waves, Cog,
   Anchor, HeartPulse, Zap,
+  Wine, Sun, Snowflake, ArrowLeft, ArrowRightLeft,
+  Milestone, CircleAlert, TriangleAlert,
+  Receipt, Fuel, ShoppingBag, Building2, Ban,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -25,8 +28,12 @@ const ICON_MAP = {
   Ticket, Trophy, AlertTriangle, ShieldCheck,
   ScanLine, Bike, Waves, Cog,
   Anchor, HeartPulse, Zap,
+  Wine, Sun, Snowflake, ArrowLeft, ArrowRightLeft,
+  Milestone, CircleAlert, TriangleAlert,
+  Receipt, Fuel, ShoppingBag, Building2, Ban,
 };
 import AccordionItem from '../components/ui/AccordionItem';
+import { PaysCarte, PaysLegende } from '../components/blocks/PaysCarte';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useIsMobile } from '../hooks/useIsMobile';
@@ -181,9 +188,13 @@ function CountryPanel({ country }) {
           {intro}
         </motion.p>
 
-        {/* Points clés */}
-        <motion.div
-          variants={stagger}
+        {/* Légende catégories */}
+        <motion.div variants={fadeUp}>
+          <PaysLegende />
+        </motion.div>
+
+        {/* Points clés — cartes catégorisées */}
+        <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
@@ -191,75 +202,10 @@ function CountryPanel({ country }) {
             marginBottom: 36,
           }}
         >
-          {points.map((point, i) => {
-            const IconComp = point.icon ? ICON_MAP[point.icon] : null;
-            return (
-              <motion.div
-                key={i}
-                variants={cardVariant}
-                whileHover={
-                  reduce
-                    ? {}
-                    : {
-                        y: -4,
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
-                        borderColor: 'rgba(201,168,76,0.45)',
-                      }
-                }
-                transition={{ duration: 0.22 }}
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.015) 100%), #0E0E0E',
-                  border: '1px solid rgba(201,168,76,0.18)',
-                  borderRadius: 16,
-                  padding: '20px 22px',
-                  cursor: 'default',
-                }}
-              >
-                {IconComp && (
-                  <div
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 10,
-                      background: 'rgba(201,168,76,0.10)',
-                      border: '1px solid rgba(201,168,76,0.25)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 14,
-                      flexShrink: 0,
-                    }}
-                  >
-                    <IconComp size={18} color="#E8C97A" strokeWidth={1.8} />
-                  </div>
-                )}
-                <p
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: '#C9A84C',
-                    margin: '0 0 8px',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {point.titre}
-                </p>
-                <p
-                  style={{
-                    fontSize: 14,
-                    color: '#A0A0A0',
-                    margin: 0,
-                    lineHeight: 1.75,
-                  }}
-                >
-                  {point.texte}
-                </p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+          {points.map((point, i) => (
+            <PaysCarte key={i} section={point} index={i} IconComp={ICON_MAP[point.icon] || Info} />
+          ))}
+        </div>
 
         {/* CTA */}
         <motion.div
