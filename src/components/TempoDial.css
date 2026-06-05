@@ -84,7 +84,13 @@
   .atd-comet, .atd-dash{ animation: none; }
 }
 
-/* allege sur petit ecran */
-@media (max-width: 680px){
-  .atd{ --d: min(86vw, 380px); top: 53%; opacity: .85; }
+/* mobile : cadran repositionne et fondu haut/bas */
+@media (max-width: 767px){
+  .atd{
+    --d: min(108vw, 440px);
+    top: 58%;
+    opacity: 1;
+    -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 32%, #000 80%, transparent 100%);
+            mask: linear-gradient(to bottom, transparent 0%, #000 32%, #000 80%, transparent 100%);
+  }
 }
