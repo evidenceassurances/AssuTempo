@@ -1225,6 +1225,174 @@ const SLOVENIE_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Estonie - lot 10 ───────────────────────────────── */
+const ESTONIE_OVERRIDE = {
+  title: `Assurance temporaire Estonie | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Estonie dès le 1er jour : RC auto, carte verte, attestation en 5 min. Alcool à 0,2 g/L, feux 24h/24 et pneus hiver expliqués.`,
+  h1: `Assurance temporaire en Estonie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Estonie dès le 1er jour : séjour balte, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Wine',
+      titre: `Alcool : seuil très bas`,
+      texte: `Le seuil est de 0,2 g/L, parmi les plus stricts d'Europe : le moindre verre est à proscrire avant de conduire.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés 24h/24`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit, toute l'année, pour tous les véhicules.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Pneus hiver imposés`,
+      texte: `Pneus hiver obligatoires du 1er décembre au 1er mars. Au dégel, la chaussée peut être abîmée : prudence.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Un réseau gratuit`,
+      texte: `Aucun péage : les routes sont gratuites. La conduite y est posée, plus calme que dans le sud de l'Europe.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Y a-t-il des péages en Estonie ?`,
+      a: `Non, les routes sont gratuites. Côté assurance, votre carte verte AssuTempo suffit.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle l'Estonie ?`,
+      a: `Oui. L'Estonie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Lettonie - lot 10 ──────────────────────────────── */
+const LETTONIE_OVERRIDE = {
+  title: `Assurance temporaire Lettonie | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Lettonie dès le 1er jour : RC auto, carte verte, attestation en 5 min. Alcool, feux de jour et réseau gratuit expliqués.`,
+  h1: `Assurance temporaire en Lettonie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Lettonie dès le 1er jour : séjour balte, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Wine',
+      titre: `Alcool au volant`,
+      texte: `Le seuil est de 0,5 g/L, ramené à 0,2 g/L pour les permis récents. Les contrôles sont fréquents.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux de jour en saison sombre`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit pendant la saison sombre, du 1er octobre au 1er avril.`,
+    },
+    {
+      icon: 'CircleAlert',
+      titre: `Pas de passage à l'orange`,
+      texte: `Particularité locale : franchir un feu à l'orange est interdit. On anticipe le freinage dès l'allumage.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Un réseau gratuit`,
+      texte: `Aucun péage ni route payante. Le réseau est correct autour de Riga, plus rustique en s'en éloignant.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il payer un péage en Lettonie ?`,
+      a: `Non, il n'y a ni péage ni route payante. Côté assurance, votre carte verte AssuTempo reste nécessaire.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Lettonie ?`,
+      a: `Oui. La Lettonie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Lituanie - lot 10 ──────────────────────────────── */
+const LITUANIE_OVERRIDE = {
+  title: `Assurance temporaire Lituanie | Carte verte & RC dès le 1er jour - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Lituanie dès le 1er jour : RC auto, carte verte, attestation en 5 min. Alcool, feux de jour et réseau gratuit pour les voitures expliqués.`,
+  h1: `Assurance temporaire en Lituanie : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Lituanie dès le 1er jour : séjour balte, transit ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'Wine',
+      titre: `Alcool : seuil abaissé pour certains`,
+      texte: `Le seuil général est de 0,4 g/L, ramené à 0,0 g/L pour les jeunes permis et les conducteurs professionnels.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux de jour en hiver`,
+      texte: `Feux de croisement obligatoires de jour comme de nuit durant la période hivernale, du 1er novembre au 1er mars.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Conduite hivernale`,
+      texte: `Pneus hiver imposés en saison froide. Les hivers baltes sont rigoureux : équipez-vous en conséquence.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Gratuit pour les voitures`,
+      texte: `Pas de péage pour les voitures particulières. Sur autoroute, la vitesse peut monter à 130 km/h l'été.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Les autoroutes lituaniennes sont-elles payantes ?`,
+      a: `Non pour les voitures particulières. L'assurance, elle, reste obligatoire : votre carte verte AssuTempo en fait foi.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la Lituanie ?`,
+      a: `Oui. La Lituanie fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Chypre - lot 10 ────────────────────────────────── */
+const CHYPRE_OVERRIDE = {
+  title: `Assurance temporaire Chypre | Carte verte & conduite à gauche - AssuTempo`,
+  metaDescription:
+    `Roulez couvert à Chypre dès le 1er jour : RC auto, carte verte, attestation en 5 min. Conduite à gauche, autoroutes gratuites et routes de montagne expliquées.`,
+  h1: `Assurance temporaire à Chypre : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire à Chypre dès le 1er jour : séjour sur l'île, location ou conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays.`,
+  points: [
+    {
+      icon: 'ArrowLeft',
+      titre: `On roule à gauche`,
+      texte: `Héritage britannique : à Chypre, la circulation se fait à gauche. Attention aux ronds-points, pris dans le sens horaire, et aux carrefours.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Autoroutes gratuites`,
+      texte: `Aucun péage sur l'île : les autoroutes sont gratuites. Le réseau principal est moderne et bien entretenu.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Routes du massif du Troodos`,
+      texte: `Vers les montagnes du Troodos, les routes deviennent étroites et sinueuses. On adapte son allure, surtout en été.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Contrôles d'alcoolémie stricts`,
+      texte: `Les contrôles sont fréquents et fermes. Par prudence, on s'abstient de tout verre avant de prendre le volant.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Roule-t-on à gauche à Chypre ?`,
+      a: `Oui. Comme en Irlande et à Malte, la circulation se fait à gauche sur toute l'île.`,
+    },
+    {
+      q: `La carte verte est-elle valable à Chypre ?`,
+      a: `Oui. Chypre fait partie des 34 pays couverts par votre carte internationale d'assurance AssuTempo.`,
+    },
+  ],
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -1255,6 +1423,10 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug === 'roumanie'         ? ROUMANIE_OVERRIDE         :
     slug === 'slovaquie'        ? SLOVAQUIE_OVERRIDE        :
     slug === 'slovenie'         ? SLOVENIE_OVERRIDE         :
+    slug === 'estonie'          ? ESTONIE_OVERRIDE          :
+    slug === 'lettonie'         ? LETTONIE_OVERRIDE         :
+    slug === 'lituanie'         ? LITUANIE_OVERRIDE         :
+    slug === 'chypre'           ? CHYPRE_OVERRIDE           :
     {};
 
   return {
