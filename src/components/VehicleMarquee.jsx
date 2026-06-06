@@ -1,27 +1,28 @@
 import { motion } from 'framer-motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { VehicleIcon, VehicleIconDefs } from './VehicleIcons';
 
 const row1 = [
-  { emoji: '🚗', label: 'Voiture' },
-  { emoji: '🏎️', label: 'Sportive' },
-  { emoji: '🚐', label: 'Utilitaire' },
-  { emoji: '🚌', label: 'Minibus' },
-  { emoji: '🚛', label: 'Poids lourd' },
-  { emoji: '🚜', label: 'Tracteur' },
-  { emoji: '🏕️', label: 'Camping-car' },
+  { label: 'Voiture' },
+  { label: 'Sportive' },
+  { label: 'Utilitaire' },
+  { label: 'Minibus' },
+  { label: 'Poids lourd' },
+  { label: 'Tracteur' },
+  { label: 'Camping-car' },
 ];
 
 const row2 = [
-  { emoji: '🚍', label: 'Autocar' },
-  { emoji: '🛻', label: 'Pick-up' },
-  { emoji: '🚎', label: 'Semi-remorque' },
-  { emoji: '🏠', label: 'Caravane' },
-  { emoji: '🏍️', label: 'Quad' },
-  { emoji: '🚙', label: '4x4' },
-  { emoji: '🚓', label: 'Berline' },
+  { label: 'Autocar' },
+  { label: 'Pick-up' },
+  { label: 'Semi-remorque' },
+  { label: 'Caravane' },
+  { label: 'Quad' },
+  { label: '4x4' },
+  { label: 'Berline' },
 ];
 
-function VehicleCard({ emoji, label }) {
+function VehicleCard({ label }) {
   return (
     <div
       style={{
@@ -48,7 +49,9 @@ function VehicleCard({ emoji, label }) {
         e.currentTarget.style.boxShadow = 'none';
       }}
     >
-      <div style={{ fontSize: '2.4rem', marginBottom: 10, lineHeight: 1 }}>{emoji}</div>
+      <div style={{ marginBottom: 10, lineHeight: 1, display: 'flex', justifyContent: 'center' }}>
+        <VehicleIcon type={label} size={58} />
+      </div>
       <div
         style={{
           fontSize: 11,
@@ -91,6 +94,7 @@ function VehicleMarquee() {
         overflow: 'hidden',
       }}
     >
+      <VehicleIconDefs />
       <motion.div
         ref={ref}
         initial={{ opacity: 0, y: 40 }}
