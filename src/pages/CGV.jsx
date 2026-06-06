@@ -344,7 +344,7 @@ function CGV() {
             </Card>
           </Reveal>
 
-          {/* 5. Droit de rétractation ─── */}
+          {/* 5. Absence de droit de rétractation ─── */}
           <Reveal>
             <div
               style={{
@@ -358,19 +358,41 @@ function CGV() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                 <AlertCircle size={16} style={{ color: 'var(--gold)', flexShrink: 0 }} />
                 <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: 0, letterSpacing: '-0.01em' }}>
-                  Article 5 — Droit de rétractation
+                  Article 5 — Absence de droit de rétractation
                 </h2>
               </div>
               <P>
-                Conformément à l&apos;article <Strong>L.112-2-1 du Code des assurances</Strong>, vous
-                disposez d&apos;un droit de rétractation de <Strong>14 jours calendaires</Strong> à
-                compter de la conclusion du contrat, sans frais ni pénalité.
+                L&apos;assurance automobile temporaire proposée sur assutempo.fr n&apos;ouvre pas droit
+                à la faculté de renonciation de 14 jours prévue pour les contrats conclus à distance.
+              </P>
+              <P>
+                Cette exclusion résulte de l&apos;article <Strong>L.112-2-1, II, 3° du Code des assurances</Strong>,
+                qui écarte expressément le droit de renonciation :
+              </P>
+              <ul style={{ margin: '0 0 12px 20px', padding: 0, fontSize: 14, color: 'var(--text-muted)', lineHeight: 2 }}>
+                <li>
+                  pour les contrats d&apos;assurance automobile relevant de l&apos;article <Strong>L.211-1</Strong> du
+                  même code (responsabilité civile obligatoire des véhicules terrestres à moteur), sans condition
+                  de durée ;
+                </li>
+                <li>
+                  pour les polices d&apos;assurance à court terme d&apos;une durée inférieure à un mois.
+                </li>
+              </ul>
+              <P>
+                En souscrivant, le souscripteur demande expressément l&apos;exécution immédiate du contrat :
+                la garantie prend effet et l&apos;attestation est délivrée dès la confirmation du paiement.
+              </P>
+              <P>
+                En conséquence, la prime est intégralement acquise à l&apos;assureur dès le paiement.
+                Aucun remboursement, total ou partiel, ne peut être demandé, et le contrat ne peut faire
+                l&apos;objet d&apos;aucune résiliation à l&apos;initiative du souscripteur. La couverture se poursuit
+                jusqu&apos;au terme de la durée choisie lors de la souscription.
               </P>
               <P last>
-                <Strong>Exception :</Strong> ce droit ne s&apos;applique pas aux contrats dont la durée
-                est inférieure ou égale à un mois, ni aux contrats dont vous avez expressément demandé
-                l&apos;exécution immédiate. Dans ces cas, l&apos;assurance prend effet dès la souscription et
-                aucune rétractation n&apos;est possible.
+                Les situations particulières éventuellement prévues par la loi ou par les conditions
+                particulières du contrat d&apos;assurance demeurent régies par ces dernières, qui prévalent
+                sur les présentes CGU.
               </P>
             </div>
           </Reveal>
