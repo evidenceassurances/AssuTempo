@@ -358,7 +358,7 @@ function CGV() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                 <AlertCircle size={16} style={{ color: 'var(--gold)', flexShrink: 0 }} />
                 <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: 0, letterSpacing: '-0.01em' }}>
-                  Article 5 — Absence de droit de rétractation
+                  Article 5 - Absence de droit de rétractation
                 </h2>
               </div>
               <P>

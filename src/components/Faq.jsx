@@ -9,6 +9,10 @@ const items = [
     a: 'Toute personne de 20 ans minimum, titulaire d\'un permis depuis plus de 2 ans. Paiement par carte bancaire uniquement.',
   },
   {
+    q: "L'assurance temporaire est-elle sans engagement ?",
+    a: "Oui. Contrairement à une assurance auto classique, qui est un contrat annuel reconduit tacitement et impose un engagement minimal d'un an, l'assurance temporaire est un contrat à durée déterminée. Elle couvre uniquement la période choisie, de 1 à 90 jours, puis prend fin automatiquement, sans reconduction ni démarche de résiliation. Aucun engagement dans le temps et aucun prélèvement ultérieur.",
+  },
+  {
     q: 'Quels véhicules sont assurés ?',
     a: 'Voitures, utilitaires, camping-cars, camions, tracteurs, remorques et plus. Pour tout type de véhicule, contactez-nous.',
   },
