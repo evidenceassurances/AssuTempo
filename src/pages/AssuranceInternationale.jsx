@@ -3,23 +3,36 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight } from 'lucide-react';
 import Footer from '../components/Footer';
+import TempoDial from '../components/TempoDial';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const PAYS = [
-  { nom: 'Albanie',           flag: '🇦🇱' },
-  { nom: 'Azerbaidjan',       flag: '🇦🇿' },
-  { nom: 'Macedoine du Nord', flag: '🇲🇰' },
-  { nom: 'Maroc',             flag: '🇲🇦' },
-  { nom: 'Moldavie',          flag: '🇲🇩' },
-  { nom: 'Tunisie',           flag: '🇹🇳' },
-  { nom: 'Turquie',           flag: '🇹🇷' },
+  { nom: 'Albanie',            flag: '🇦🇱' },
+  { nom: 'Azerbaïdjan',        flag: '🇦🇿' },
+  { nom: 'Macédoine du Nord',  flag: '🇲🇰' },
+  { nom: 'Maroc',              flag: '🇲🇦' },
+  { nom: 'Moldavie',           flag: '🇲🇩' },
+  { nom: 'Tunisie',            flag: '🇹🇳' },
+  { nom: 'Turquie',            flag: '🇹🇷' },
 ];
 
 const STEPS = [
-  { num: '01', title: 'Vous remplissez le formulaire', body: 'Votre vehicule, votre trajet, vos dates.' },
-  { num: '02', title: 'Notre equipe etablit votre devis personnalise', body: '' },
-  { num: '03', title: 'Vous recevez votre proposition sous 12h', body: 'Prete a souscrire, par email.' },
+  {
+    num: '01',
+    title: 'Vous remplissez le formulaire',
+    body: 'Votre véhicule, votre trajet, vos dates.',
+  },
+  {
+    num: '02',
+    title: 'Notre équipe établit votre devis',
+    body: 'Un tarif sur mesure, calculé selon votre profil.',
+  },
+  {
+    num: '03',
+    title: 'Vous recevez votre proposition',
+    body: 'Sous 12h, prête à souscrire, directement par email.',
+  },
 ];
 
 const inputBase = {
@@ -121,7 +134,7 @@ function DevisForm() {
 
   function validate() {
     const errs = {};
-    if (pays.length === 0) errs.pays = 'Selectionnez au moins un pays de destination.';
+    if (pays.length === 0) errs.pays = 'Sélectionnez au moins un pays de destination.';
     if (!form.dateEffet) errs.dateEffet = 'Champ requis.';
     if (!form.duree) errs.duree = 'Champ requis.';
     if (!form.genre) errs.genre = 'Champ requis.';
@@ -136,7 +149,7 @@ function DevisForm() {
     if (!form.datePermis) errs.datePermis = 'Champ requis.';
     if (!form.numPermis.trim()) errs.numPermis = 'Champ requis.';
     if (!form.ville.trim()) errs.ville = 'Champ requis.';
-    if (!form.condamnation) errs.condamnation = 'Repondez a cette question.';
+    if (!form.condamnation) errs.condamnation = 'Répondez à cette question.';
     if (!form.email.trim()) {
       errs.email = 'Champ requis.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -150,10 +163,7 @@ function DevisForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({});
     if (paysRef.current) paysRef.current.value = pays.join(', ');
     setStatus('envoi');
@@ -186,11 +196,11 @@ function DevisForm() {
       >
         <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>&#10003;</div>
         <h3 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
-          Demande recue.
+          Demande reçue.
         </h3>
         <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
-          Notre equipe vous envoie votre devis personnalise sous 12h.
-          Pensez a verifier vos spams.
+          Notre équipe vous envoie votre devis personnalisé sous 12h.
+          Pensez à vérifier vos spams.
         </p>
       </motion.div>
     );
@@ -204,8 +214,8 @@ function DevisForm() {
       <input type="hidden" name="Pays de destination" ref={paysRef} />
       <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
 
-      {/* Destination */}
-      <FormSection title="Destination et duree">
+      {/* Destination et durée */}
+      <FormSection title="Destination et durée">
         <Field label="Pays de destination *" error={errors.pays}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
             {PAYS.map(({ nom, flag }) => {
@@ -236,7 +246,7 @@ function DevisForm() {
         </Field>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
-          <Field label="Date et heure d&apos;effet souhaitees *" error={errors.dateEffet}>
+          <Field label="Date et heure d'effet souhaitées *" error={errors.dateEffet}>
             <input
               type="datetime-local"
               name="Date et heure d'effet"
@@ -247,10 +257,10 @@ function DevisForm() {
               style={{ ...inputBase, colorScheme: 'dark' }}
             />
           </Field>
-          <Field label="Duree souhaitee (jours) *" error={errors.duree}>
+          <Field label="Durée souhaitée (jours) *" error={errors.duree}>
             <input
               type="number"
-              name="Duree (jours)"
+              name="Durée (jours)"
               min="1"
               max="90"
               placeholder="Ex. : 7"
@@ -264,34 +274,34 @@ function DevisForm() {
         </div>
       </FormSection>
 
-      {/* Vehicule */}
-      <FormSection title="Le vehicule">
+      {/* Le véhicule */}
+      <FormSection title="Le véhicule">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
-          <Field label="Genre du vehicule *" error={errors.genre}>
+          <Field label="Genre du véhicule *" error={errors.genre}>
             <select
-              name="Genre du vehicule"
+              name="Genre du véhicule"
               value={form.genre}
               onChange={set('genre')}
               onFocus={onFocus}
               onBlur={onBlur}
               style={{ ...inputBase, appearance: 'none', cursor: 'pointer', color: form.genre ? 'var(--text)' : 'var(--text-muted)' }}
             >
-              <option value="" disabled>Selectionnez...</option>
-              <option value="Vehicule particulier" style={{ background: '#0C0A08' }}>Vehicule particulier</option>
+              <option value="" disabled>Sélectionnez...</option>
+              <option value="Véhicule particulier" style={{ background: '#0C0A08' }}>Véhicule particulier</option>
               <option value="Poids lourd" style={{ background: '#0C0A08' }}>Poids lourd</option>
             </select>
           </Field>
-          <Field label="Usage du vehicule *" error={errors.usage}>
+          <Field label="Usage du véhicule *" error={errors.usage}>
             <select
-              name="Usage du vehicule"
+              name="Usage du véhicule"
               value={form.usage}
               onChange={set('usage')}
               onFocus={onFocus}
               onBlur={onBlur}
               style={{ ...inputBase, appearance: 'none', cursor: 'pointer', color: form.usage ? 'var(--text)' : 'var(--text-muted)' }}
             >
-              <option value="" disabled>Selectionnez...</option>
-              <option value="Prive et professionnel occasionnel" style={{ background: '#0C0A08' }}>Prive et professionnel occasionnel</option>
+              <option value="" disabled>Sélectionnez...</option>
+              <option value="Privé et professionnel occasionnel" style={{ background: '#0C0A08' }}>Privé et professionnel occasionnel</option>
               <option value="Import-export" style={{ background: '#0C0A08' }}>Import-export</option>
             </select>
           </Field>
@@ -301,8 +311,8 @@ function DevisForm() {
           <Field label="Marque *" error={errors.marque}>
             <input type="text" name="Marque" placeholder="Ex. : Renault" value={form.marque} onChange={set('marque')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
-          <Field label="Modele *" error={errors.modele}>
-            <input type="text" name="Modele" placeholder="Ex. : Clio" value={form.modele} onChange={set('modele')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <Field label="Modèle *" error={errors.modele}>
+            <input type="text" name="Modèle" placeholder="Ex. : Clio" value={form.modele} onChange={set('modele')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
         </div>
 
@@ -315,19 +325,19 @@ function DevisForm() {
           </Field>
         </div>
 
-        <Field label="Pays d&apos;immatriculation *">
+        <Field label="Pays d'immatriculation *">
           <input type="text" name="Pays d'immatriculation" value={form.paysImmat} onChange={set('paysImmat')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
         </Field>
       </FormSection>
 
-      {/* Conducteur */}
+      {/* Le conducteur */}
       <FormSection title="Le conducteur">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Nom *" error={errors.nom}>
             <input type="text" name="Nom" value={form.nom} onChange={set('nom')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
-          <Field label="Prenom *" error={errors.prenom}>
-            <input type="text" name="Prenom" value={form.prenom} onChange={set('prenom')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <Field label="Prénom *" error={errors.prenom}>
+            <input type="text" name="Prénom" value={form.prenom} onChange={set('prenom')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
         </div>
 
@@ -335,33 +345,33 @@ function DevisForm() {
           <Field label="Date de naissance *" error={errors.dateNaissance}>
             <input type="date" name="Date de naissance" value={form.dateNaissance} onChange={set('dateNaissance')} onFocus={onFocus} onBlur={onBlur} style={{ ...inputBase, colorScheme: 'dark' }} />
           </Field>
-          <Field label="Date d&apos;obtention du permis *" error={errors.datePermis}>
+          <Field label="Date d'obtention du permis de conduire *" error={errors.datePermis}>
             <input type="date" name="Date d'obtention du permis" value={form.datePermis} onChange={set('datePermis')} onFocus={onFocus} onBlur={onBlur} style={{ ...inputBase, colorScheme: 'dark' }} />
           </Field>
         </div>
 
-        <Field label="Numero du permis de conduire *" error={errors.numPermis}>
-          <input type="text" name="Numero du permis" value={form.numPermis} onChange={set('numPermis')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+        <Field label="Numéro du permis de conduire *" error={errors.numPermis}>
+          <input type="text" name="Numéro du permis" value={form.numPermis} onChange={set('numPermis')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
         </Field>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
-          <Field label="Pays de residence *">
-            <input type="text" name="Pays de residence" value={form.paysResidence} onChange={set('paysResidence')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <Field label="Pays de résidence *">
+            <input type="text" name="Pays de résidence" value={form.paysResidence} onChange={set('paysResidence')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
           <Field
-            label="Ville de residence *"
+            label="Ville de résidence *"
             error={errors.ville}
-            hint="La souscription n'est pas possible si le conducteur reside en Corse, a Monaco ou en France d'Outre-mer."
+            hint="La souscription n'est pas possible si le conducteur réside en Corse, à Monaco ou en France d'Outre-mer."
           >
-            <input type="text" name="Ville de residence" value={form.ville} onChange={set('ville')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Ville de résidence" value={form.ville} onChange={set('ville')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
         </div>
       </FormSection>
 
-      {/* Eligibilite */}
-      <FormSection title="Eligibilite">
+      {/* Éligibilité */}
+      <FormSection title="Éligibilité">
         <Field
-          label="Avez-vous fait l'objet d'une condamnation pour delit de fuite, d'une suspension ou d'une annulation de permis de conduire au cours des 24 derniers mois ? *"
+          label="Avez-vous fait l'objet d'une condamnation pour délit de fuite, d'une suspension ou d'une annulation de permis de conduire au cours des 24 derniers mois ? *"
           error={errors.condamnation}
         >
           <div style={{ display: 'flex', gap: 24, marginTop: 4 }}>
@@ -382,24 +392,24 @@ function DevisForm() {
         </Field>
       </FormSection>
 
-      {/* Coordonnees */}
-      <FormSection title="Vos coordonnees">
+      {/* Vos coordonnées */}
+      <FormSection title="Vos coordonnées">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Email *" error={errors.email}>
             <input type="email" name="Email" placeholder="vous@exemple.fr" value={form.email} onChange={set('email')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
-          <Field label="Telephone *" error={errors.telephone}>
-            <input type="tel" name="Telephone" placeholder="06 00 00 00 00" value={form.telephone} onChange={set('telephone')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <Field label="Téléphone *" error={errors.telephone}>
+            <input type="tel" name="Téléphone" placeholder="06 00 00 00 00" value={form.telephone} onChange={set('telephone')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
           </Field>
         </div>
       </FormSection>
 
-      {/* Precisions */}
-      <FormSection title="Precisions">
+      {/* Précisions */}
+      <FormSection title="Précisions">
         <Field label="Message (facultatif)">
           <textarea
             name="Message"
-            placeholder="Une precision sur votre situation ? (facultatif)"
+            placeholder="Une précision sur votre situation ? (facultatif)"
             value={form.message}
             onChange={set('message')}
             onFocus={onFocus}
@@ -421,7 +431,7 @@ function DevisForm() {
             style={{ accentColor: 'var(--gold)', width: 16, height: 16, marginTop: 3, flexShrink: 0, cursor: 'pointer' }}
           />
           <span style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-            J&apos;accepte que mes informations soient utilisees pour etablir mon devis et etre recontacte par AssuTempo.
+            J&apos;accepte que mes informations soient utilisées pour établir mon devis et être recontacté par AssuTempo.
           </span>
         </label>
         {errors.consentement && (
@@ -441,7 +451,7 @@ function DevisForm() {
             padding: '12px 16px',
             margin: 0,
           }}>
-            Une erreur est survenue. Reessayez ou appelez-nous au 09 74 19 78 20.
+            Une erreur est survenue. Réessayez ou appelez-nous au 09 74 19 78 20.
           </p>
         )}
       </div>
@@ -468,7 +478,7 @@ function DevisForm() {
           {status !== 'envoi' && <ArrowRight size={16} strokeWidth={2} />}
         </button>
         <p style={{ fontSize: 13, color: 'var(--text-subtle)', marginTop: 10, marginBottom: 0 }}>
-          Reponse sous 12h. Sans engagement.
+          Réponse sous 12h. Sans engagement.
         </p>
       </div>
 
@@ -489,7 +499,7 @@ function AssuranceInternationale() {
     <>
       <Helmet>
         <title>Assurance temporaire internationale, Maroc Turquie Tunisie et plus | AssuTempo</title>
-        <meta name="description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie, l'Azerbaidjan, la Macedoine du Nord et la Moldavie. Devis personnalise sous 12h. De 1 a 90 jours." />
+        <meta name="description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie, l'Azerbaïdjan, la Macédoine du Nord et la Moldavie. Devis personnalisé sous 12h. De 1 à 90 jours." />
         <link rel="canonical" href="https://assutempo.fr/assurance-internationale" />
       </Helmet>
 
@@ -502,17 +512,18 @@ function AssuranceInternationale() {
         position: 'relative',
         overflow: 'hidden',
       }}>
+        <TempoDial />
         <div style={{
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%)',
         }} />
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          style={{ position: 'relative', padding: '0 24px' }}
+          style={{ position: 'relative', zIndex: 2, padding: '0 24px' }}
         >
           <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 16 }}>
             COUVERTURE INTERNATIONALE
@@ -533,7 +544,9 @@ function AssuranceInternationale() {
             margin: '0 auto',
             lineHeight: 1.75,
           }}>
-            Au-dela de la zone carte verte europeenne, notre equipe etablit votre devis sur mesure et vous accompagne personnellement dans votre souscription. Vous recevez votre proposition sous 12h, prete a souscrire. Offre disponible pour les voitures et les poids lourds.
+            Au-delà de la zone carte verte européenne, notre équipe établit votre devis sur mesure
+            et vous accompagne personnellement jusqu&apos;à la souscription. Vous recevez votre
+            proposition sous 12h, prête à souscrire. Offre réservée aux voitures et aux poids lourds.
           </p>
         </motion.div>
       </section>
@@ -569,7 +582,7 @@ function AssuranceInternationale() {
         </div>
       </section>
 
-      {/* Comment ca marche */}
+      {/* Comment ça marche */}
       <section style={{ background: 'var(--bg-2)', padding: '80px 0' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
           <motion.div
@@ -586,10 +599,10 @@ function AssuranceInternationale() {
               color: 'var(--text)',
               margin: '0 0 14px',
             }}>
-              Comment ca marche ?
+              Comment ça marche ?
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
-              Simple, rapide, personnalise.
+              Simple, rapide, personnalisé.
             </p>
           </motion.div>
 
@@ -609,11 +622,9 @@ function AssuranceInternationale() {
                 <p style={{ fontSize: 17, fontWeight: 600, color: 'var(--text)', margin: '0 0 8px', lineHeight: 1.4, maxWidth: 260 }}>
                   {step.title}
                 </p>
-                {step.body && (
-                  <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65, maxWidth: 240 }}>
-                    {step.body}
-                  </p>
-                )}
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65, maxWidth: 240 }}>
+                  {step.body}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -639,7 +650,7 @@ function AssuranceInternationale() {
             style={{ marginBottom: 40 }}
           >
             <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 14 }}>
-              DEVIS PERSONNALISE
+              DEVIS PERSONNALISÉ
             </p>
             <h2 style={{
               fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
@@ -652,7 +663,7 @@ function AssuranceInternationale() {
               Demandez votre devis
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7, maxWidth: 600 }}>
-              Remplissez le formulaire. Notre equipe vous envoie votre proposition personnalisee sous 12h.
+              Remplissez le formulaire ci-dessous. Notre équipe vous envoie votre proposition personnalisée sous 12h.
             </p>
           </motion.div>
 

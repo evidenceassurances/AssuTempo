@@ -8,6 +8,7 @@ const links = [
   { label: 'FAQ', href: '/faq' },
   { label: 'Articles', href: '/articles' },
   { label: 'Carte', href: '/carte' },
+  { label: 'International', href: '/assurance-internationale' },
   { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 

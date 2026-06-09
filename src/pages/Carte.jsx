@@ -623,6 +623,42 @@ function Carte() {
         </div>
       </section>
 
+      {/* ── Bandeau international ───────────────────────────────────────── */}
+      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 16px' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+          background: 'rgba(201,168,76,0.05)',
+          border: '1px solid var(--gold-border)',
+          borderRadius: 12,
+          padding: '16px 24px',
+          flexWrap: 'wrap',
+        }}>
+          <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
+            <span style={{ fontWeight: 600, color: 'var(--text)' }}>Vous roulez au-delà de l&apos;Europe ?</span>
+            {' '}Maroc, Turquie, Tunisie et 4 autres destinations sur demande.
+          </p>
+          <Link
+            to="/assurance-internationale"
+            className="btn-glass"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '9px 18px',
+              fontSize: 13,
+              flexShrink: 0,
+            }}
+          >
+            Demander un devis
+            <ArrowRight size={13} strokeWidth={2} />
+          </Link>
+        </div>
+      </section>
+
       {/* ── Carte SVG ───────────────────────────────────────────────────── */}
       <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
         <Reveal>
@@ -917,6 +953,51 @@ function Carte() {
             <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
               Lun-Ven 9h-21h · Sam 9h-20h
             </p>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ── CTA destinations hors Europe ────────────────────────────────── */}
+      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+        <Reveal>
+          <div style={{
+            background: 'var(--glass)',
+            border: '1px solid var(--gold-border)',
+            borderRadius: 16,
+            padding: '36px 32px',
+            textAlign: 'center',
+          }}>
+            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)', margin: '0 0 12px' }}>
+              AU-DELÀ DE L&apos;EUROPE
+            </p>
+            <p style={{
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
+              fontWeight: 700,
+              color: 'var(--text)',
+              margin: '0 0 10px',
+              letterSpacing: '-0.02em',
+            }}>
+              Une destination hors Europe ?
+            </p>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
+              Albanie, Azerbaïdjan, Macédoine du Nord, Maroc, Moldavie, Tunisie, Turquie :
+              devis personnalisé sous 12h.
+            </p>
+            <Link
+              to="/assurance-internationale"
+              className="btn-gold"
+              style={{
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '13px 26px',
+                fontSize: 15,
+              }}
+            >
+              Destinations sur demande
+              <ArrowRight size={15} strokeWidth={2} />
+            </Link>
           </div>
         </Reveal>
       </section>
