@@ -44,6 +44,7 @@ const ROUTES = [
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/cookies',
+  '/assurance-internationale',
 ];
 
 // ── 1. Build SSR bundle ───────────────────────────────────────────────────────

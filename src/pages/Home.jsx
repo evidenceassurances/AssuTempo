@@ -8,7 +8,7 @@ import Countries from '../components/Countries';
 import Faq from '../components/Faq';
 import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
-import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries } from '../components/CtaBanner';
+import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries, CtaInternational } from '../components/CtaBanner';
 
 function Home() {
   return (
@@ -22,6 +22,7 @@ function Home() {
       <CtaAfterProcess />
       <UseCases />
       <Countries />
+      <CtaInternational />
       <CtaAfterCountries />
       <Faq />
       <FinalCTA />

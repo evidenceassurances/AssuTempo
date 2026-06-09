@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const TARGET = 'https://assutempo.fr/tarification';
@@ -127,6 +128,52 @@ export function CtaAfterProcess() {
           }
         }
       `}</style>
+    </section>
+  );
+}
+
+/* CTA International - après Countries, avant FAQ */
+export function CtaInternational() {
+  const [ref, inView] = useScrollReveal();
+
+  return (
+    <section style={{ background: 'var(--bg)', padding: '0 24px 40px', textAlign: 'center' }}>
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          maxWidth: 480,
+          margin: '0 auto',
+          background: 'rgba(201,168,76,0.04)',
+          border: '1px solid var(--gold-border)',
+          borderRadius: 16,
+          padding: '28px 32px',
+        }}
+      >
+        <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', margin: '0 0 6px', letterSpacing: '-0.01em' }}>
+          Vous roulez au-dela de l&apos;Europe ?
+        </p>
+        <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 20px', lineHeight: 1.6 }}>
+          Maroc, Turquie, Tunisie et plus : devis personnalise sous 12h.
+        </p>
+        <Link
+          to="/assurance-internationale"
+          className="btn-glass"
+          style={{
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '10px 20px',
+            fontSize: 14,
+          }}
+        >
+          Destinations sur demande
+          <ArrowRight size={14} strokeWidth={2} />
+        </Link>
+      </motion.div>
     </section>
   );
 }

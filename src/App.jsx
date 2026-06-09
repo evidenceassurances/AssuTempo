@@ -22,6 +22,7 @@ import CarteGrise from './pages/articles/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
+import AssuranceInternationale from './pages/AssuranceInternationale';
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,7 @@ function App() {
           <Route path="/carte/:pays" element={<PageTransition><Carte /></PageTransition>} />
           <Route path="/cookies" element={<PageTransition><Cookies /></PageTransition>} />
           <Route path="/conditions-generales" element={<PageTransition><CGV /></PageTransition>} />
+          <Route path="/assurance-internationale" element={<PageTransition><AssuranceInternationale /></PageTransition>} />
         </Routes>
       </AnimatePresence>
       <CookieConsent />

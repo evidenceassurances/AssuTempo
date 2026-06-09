@@ -4,6 +4,7 @@ const navLinks = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Carte', href: '/carte' },
+  { label: 'Assurance internationale', href: '/assurance-internationale' },
   { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 
