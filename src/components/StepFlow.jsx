@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 
 function StepFlow({ steps, ariaLabel }) {
@@ -25,7 +25,7 @@ function StepFlow({ steps, ariaLabel }) {
             const isLast = i === steps.length - 1;
             return (
               <Fragment key={i}>
-                <motion.div
+                <m.div
                   className="stepflow-step"
                   initial={reduce ? false : { opacity: 0, y: 8 }}
                   whileInView={reduce ? false : { opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ function StepFlow({ steps, ariaLabel }) {
                     <Icon size={20} color="var(--gold)" strokeWidth={1.5} />
                   </div>
                   <p className="stepflow-label">{step.label}</p>
-                </motion.div>
+                </m.div>
 
                 {!isLast && (
                   <ChevronRight

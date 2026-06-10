@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -17,7 +17,7 @@ export function CtaAfterVehicles() {
         textAlign: 'center',
       }}
     >
-      <motion.div
+      <m.div
         ref={ref}
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -47,7 +47,7 @@ export function CtaAfterVehicles() {
           Obtenir mon devis
           <ArrowRight size={16} strokeWidth={2} />
         </button>
-      </motion.div>
+      </m.div>
     </section>
   );
 }
@@ -63,7 +63,7 @@ export function CtaAfterProcess() {
         padding: '0 0 8px',
       }}
     >
-      <motion.div
+      <m.div
         ref={ref}
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -113,7 +113,7 @@ export function CtaAfterProcess() {
             Souscrire maintenant
           </button>
         </div>
-      </motion.div>
+      </m.div>
 
       <style>{`
         @media (max-width: 640px) {
@@ -138,7 +138,7 @@ export function CtaInternational() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: '0 24px 40px', textAlign: 'center' }}>
-      <motion.div
+      <m.div
         ref={ref}
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -173,7 +173,7 @@ export function CtaInternational() {
           Destinations sur demande
           <ArrowRight size={14} strokeWidth={2} />
         </Link>
-      </motion.div>
+      </m.div>
     </section>
   );
 }
@@ -190,7 +190,7 @@ export function CtaAfterCountries() {
         textAlign: 'center',
       }}
     >
-      <motion.div
+      <m.div
         ref={ref}
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -213,7 +213,7 @@ export function CtaAfterCountries() {
         >
           Voir les tarifs
         </button>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

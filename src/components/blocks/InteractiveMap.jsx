@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 function InteractiveMap({ countries }) {
   const [active, setActive] = useState(countries[0] || 'France');
@@ -17,7 +17,7 @@ function InteractiveMap({ countries }) {
         </div>
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} className="grid gap-3 rounded-[2rem] border border-slate-200 bg-white/85 p-6 shadow-sm md:grid-cols-2 lg:grid-cols-3">
+      <m.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} className="grid gap-3 rounded-[2rem] border border-slate-200 bg-white/85 p-6 shadow-sm md:grid-cols-2 lg:grid-cols-3">
         {countries.map((country) => (
           <button
             key={country}
@@ -28,7 +28,7 @@ function InteractiveMap({ countries }) {
             {country}
           </button>
         ))}
-      </motion.div>
+      </m.div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { useScroll, useTransform, m } from 'framer-motion';
 
 /* Données statiques des particules (20 particules) */
 const PARTICLES = [
@@ -30,7 +30,7 @@ function Particle({ p, scrollYProgress }) {
   const y = useTransform(scrollYProgress, [0, 1], [0, range]);
 
   return (
-    <motion.div
+    <m.div
       style={{
         position: 'absolute',
         left: `${p.x}%`,

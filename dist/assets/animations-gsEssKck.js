@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-Cyuzqnbw.js";var t,n,r,i=e((()=>{t={hidden:{opacity:0,y:50},visible:{opacity:1,y:0,transition:{duration:.8,ease:[.22,1,.36,1]}}},n={hidden:{},visible:{transition:{staggerChildren:.1,delayChildren:.2}}},r={hidden:{opacity:0,x:-40},visible:{opacity:1,x:0,transition:{duration:.7,ease:[.22,1,.36,1]}}}}));export{n as i,i as n,r,t};

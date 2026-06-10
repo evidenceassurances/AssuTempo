@@ -1,16 +1,28 @@
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+import { m } from 'framer-motion';
 import { fadeUp } from '../animations';
 
 function Pricing() {
   return (
-    <div
-      style={{
-        background: 'var(--bg)',
-        minHeight: '100vh',
-        paddingTop: 100,
-        paddingBottom: 80,
-        position: 'relative',
-        overflow: 'hidden',
+    <>
+      <Helmet>
+        <title>Tarif Assurance Temporaire : Devis Immédiat en Ligne | AssuTempo</title>
+        <meta name="description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe sans frais cachés. Souscription 100 % en ligne, attestation immédiate." />
+        <link rel="canonical" href="https://assutempo.fr/tarification" />
+        <meta property="og:title" content="Tarif Assurance Temporaire : Devis Immédiat en Ligne | AssuTempo" />
+        <meta property="og:description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe sans frais cachés. Souscription 100 % en ligne, attestation immédiate." />
+        <meta property="og:url" content="https://assutempo.fr/tarification" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
+      <div
+        style={{
+          background: 'var(--bg)',
+          minHeight: '100vh',
+          paddingTop: 100,
+          paddingBottom: 80,
+          position: 'relative',
+          overflow: 'hidden',
       }}
     >
       {/* Orbe haut */}
@@ -31,7 +43,7 @@ function Pricing() {
       <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 24, paddingRight: 24, position: 'relative', zIndex: 1 }}>
 
         {/* Header SEO */}
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -52,10 +64,10 @@ function Pricing() {
             </a>
             {' '}du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Wrapper iframe */}
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -79,10 +91,10 @@ function Pricing() {
             title="Souscription assurance temporaire AssuTempo"
             style={{ display: 'block', border: 'none', borderRadius: 0 }}
           />
-        </motion.div>
+        </m.div>
 
         {/* Card aide */}
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -113,9 +125,10 @@ function Pricing() {
           <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
             Lun-Ven 9h-21h | Sam 9h-20h
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </div>
+    </>
   );
 }
 

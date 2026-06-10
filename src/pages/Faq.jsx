@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
 
@@ -68,6 +69,16 @@ function Faq() {
 
   return (
     <>
+      <Helmet>
+        <title>Assurance Temporaire : Questions Fréquentes (FAQ) | AssuTempo</title>
+        <meta name="description" content="Toutes les réponses sur l'assurance temporaire : qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information. Guide complet AssuTempo." />
+        <link rel="canonical" href="https://assutempo.fr/faq" />
+        <meta property="og:title" content="Assurance Temporaire : Questions Fréquentes (FAQ) | AssuTempo" />
+        <meta property="og:description" content="Toutes les réponses sur l'assurance temporaire : qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information. Guide complet AssuTempo." />
+        <meta property="og:url" content="https://assutempo.fr/faq" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
       <section
         style={{
           paddingTop: 160,
@@ -85,7 +96,7 @@ function Faq() {
             background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 60%)',
           }}
         />
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -100,26 +111,26 @@ function Faq() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
             Retrouvez les réponses aux questions les plus fréquentes sur l'assurance temporaire AssuTempo.
           </p>
-        </motion.div>
+        </m.div>
       </section>
 
       <section style={{ background: 'var(--bg)', padding: '80px 24px' }}>
-        <motion.div
+        <m.div
           variants={stagger}
           initial="hidden"
           animate="visible"
           style={{ maxWidth: 760, margin: '0 auto' }}
         >
           {faqs.map((item, i) => (
-            <motion.div key={item.q} variants={fadeUp}>
+            <m.div key={item.q} variants={fadeUp}>
               <AccordionItem
                 item={item}
                 isOpen={openIndex === i}
                 onToggle={() => setOpenIndex(openIndex === i ? null : i)}
               />
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
     </>
   );

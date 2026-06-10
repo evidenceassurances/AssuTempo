@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -180,7 +180,7 @@ function DevisForm() {
 
   if (status === 'succes') {
     return (
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -202,7 +202,7 @@ function DevisForm() {
           Notre équipe vous envoie votre devis personnalisé sous 12h.
           Pensez à vérifier vos spams.
         </p>
-      </motion.div>
+      </m.div>
     );
   }
 
@@ -498,8 +498,8 @@ function AssuranceInternationale() {
   return (
     <>
       <Helmet>
-        <title>Assurance temporaire internationale, Maroc Turquie Tunisie et plus | AssuTempo</title>
-        <meta name="description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie, l'Azerbaïdjan, la Macédoine du Nord et la Moldavie. Devis personnalisé sous 12h. De 1 à 90 jours." />
+        <title>Assurance Temporaire Maroc, Turquie, Tunisie | AssuTempo</title>
+        <meta name="description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie et plus. Devis personnalisé sous 12h, accompagnement dédié. Voitures et poids lourds." />
         <link rel="canonical" href="https://assutempo.fr/assurance-internationale" />
       </Helmet>
 
@@ -519,7 +519,7 @@ function AssuranceInternationale() {
           pointerEvents: 'none',
           background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%)',
         }} />
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -548,7 +548,7 @@ function AssuranceInternationale() {
             et vous accompagne personnellement jusqu&apos;à la souscription. Vous recevez votre
             proposition sous 12h, prête à souscrire. Offre réservée aux voitures et aux poids lourds.
           </p>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* Pills */}
@@ -559,7 +559,7 @@ function AssuranceInternationale() {
             style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}
           >
             {PAYS.map((p, i) => (
-              <motion.span
+              <m.span
                 key={p.nom}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={pillsInView ? { opacity: 1, scale: 1 } : {}}
@@ -576,7 +576,7 @@ function AssuranceInternationale() {
                 }}
               >
                 {p.flag} {p.nom}
-              </motion.span>
+              </m.span>
             ))}
           </div>
         </div>
@@ -585,7 +585,7 @@ function AssuranceInternationale() {
       {/* Comment ça marche */}
       <section style={{ background: 'var(--bg-2)', padding: '80px 0' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -604,11 +604,11 @@ function AssuranceInternationale() {
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
               Simple, rapide, personnalisé.
             </p>
-          </motion.div>
+          </m.div>
 
           <div ref={stepsRef} className="intl-steps" style={{ display: 'flex', alignItems: 'flex-start' }}>
             {STEPS.map((step, i) => (
-              <motion.div
+              <m.div
                 key={step.num}
                 className="intl-step"
                 initial={{ opacity: 0, y: 12 }}
@@ -625,7 +625,7 @@ function AssuranceInternationale() {
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65, maxWidth: 240 }}>
                   {step.body}
                 </p>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -642,7 +642,7 @@ function AssuranceInternationale() {
       {/* Formulaire */}
       <section style={{ background: 'var(--bg)', padding: '100px 0' }}>
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 32px' }}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -665,9 +665,9 @@ function AssuranceInternationale() {
             <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7, maxWidth: 600 }}>
               Remplissez le formulaire ci-dessous. Notre équipe vous envoie votre proposition personnalisée sous 12h.
             </p>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -683,7 +683,7 @@ function AssuranceInternationale() {
             className="intl-form-wrap"
           >
             <DevisForm />
-          </motion.div>
+          </m.div>
         </div>
 
         <style>{`

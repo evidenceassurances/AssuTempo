@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Hero from '../components/Hero';
 import VehicleMarquee from '../components/VehicleMarquee';
 import Stats from '../components/Stats';
@@ -12,7 +13,20 @@ import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries, CtaInternational 
 
 function Home() {
   return (
-    <main style={{ overflow: 'hidden' }}>
+    <>
+      <Helmet>
+        <title>Assurance Temporaire Auto en Ligne, 1 à 90 Jours | AssuTempo</title>
+        <meta name="description" content="Assurance auto temporaire de 1 à 90 jours. Attestation immédiate en 5 minutes, sans relevé d'information. 34 pays couverts. Devis gratuit en ligne." />
+        <link rel="canonical" href="https://assutempo.fr/" />
+        <meta property="og:title" content="Assurance Temporaire Auto en Ligne, 1 à 90 Jours | AssuTempo" />
+        <meta property="og:description" content="Assurance auto temporaire de 1 à 90 jours. Attestation immédiate en 5 minutes, sans relevé d'information. 34 pays couverts. Devis gratuit en ligne." />
+        <meta property="og:url" content="https://assutempo.fr/" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Assurance Temporaire Auto en Ligne, 1 à 90 Jours | AssuTempo" />
+        <meta name="twitter:description" content="Assurance auto temporaire de 1 à 90 jours. Attestation immédiate en 5 minutes, sans relevé d'information. 34 pays couverts. Devis gratuit en ligne." />
+      </Helmet>
+      <main style={{ overflow: 'hidden' }}>
       <Hero />
       <VehicleMarquee />
       <CtaAfterVehicles />
@@ -28,6 +42,7 @@ function Home() {
       <FinalCTA />
       <Footer />
     </main>
+    </>
   );
 }
 

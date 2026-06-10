@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Clock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fadeUp, stagger } from '../animations';
@@ -56,7 +56,7 @@ function Contact() {
       />
 
       {/* Orbe central pulsant */}
-      <motion.div
+      <m.div
         animate={{ scale: [1, 1.15, 1], opacity: [0.04, 0.07, 0.04] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         style={{
@@ -83,14 +83,14 @@ function Contact() {
           zIndex: 1,
         }}
       >
-        <motion.div
+        <m.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
         >
           {/* Badge disponibilité - vert pulsant */}
-          <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
+          <m.div variants={fadeUp} style={{ marginBottom: 32 }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -118,10 +118,10 @@ function Contact() {
               />
               Disponible maintenant • Lun-Sam
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Téléphone */}
-          <motion.div variants={fadeUp}>
+          <m.div variants={fadeUp}>
             <a
               href="tel:0974197820"
               style={{
@@ -158,10 +158,10 @@ function Contact() {
             >
               Ou souscrivez directement en ligne →
             </Link>
-          </motion.div>
+          </m.div>
 
           {/* Horaires */}
-          <motion.div
+          <m.div
             variants={fadeUp}
             style={{
               display: 'flex',
@@ -186,10 +186,10 @@ function Contact() {
                 {h}
               </p>
             ))}
-          </motion.div>
+          </m.div>
 
           {/* CTA */}
-          <motion.div variants={fadeUp}>
+          <m.div variants={fadeUp}>
             <button
               className="btn-gold"
               onClick={() => navigate('/tarification')}
@@ -219,10 +219,10 @@ function Contact() {
               <span style={{ color: 'var(--gold)' }}>✓</span> Attestation immédiate{'  '}
               <span style={{ color: 'var(--gold)' }}>✓</span> Remboursement impossible légalement - vous êtes protégé dès le paiement
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Pills documents */}
-          <motion.div
+          <m.div
             variants={fadeUp}
             style={{
               display: 'flex',
@@ -251,8 +251,8 @@ function Contact() {
                 <span>{label}</span>
               </div>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

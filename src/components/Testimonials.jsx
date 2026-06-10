@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
 
 const reviews = [
@@ -34,7 +34,7 @@ function Stars({ count }) {
 
 function TestimonialCard({ review }) {
   return (
-    <motion.div
+    <m.div
       variants={fadeUp}
       className="testimonial-card"
       style={{
@@ -102,7 +102,7 @@ function TestimonialCard({ review }) {
           </p>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -135,7 +135,7 @@ function Testimonials() {
           zIndex: 1,
         }}
       >
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -163,9 +163,9 @@ function Testimonials() {
           >
             Ils nous ont fait confiance
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -180,7 +180,7 @@ function Testimonials() {
           {reviews.map((review) => (
             <TestimonialCard key={review.author} review={review} />
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
       <style>{`

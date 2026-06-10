@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import Footer from '../components/Footer';
@@ -184,7 +185,7 @@ function ArticleCard({ article, index, inView }) {
   const glow    = `${accent}22`; // ~13 %, hover box-shadow
 
   const inner = (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
@@ -294,7 +295,7 @@ function ArticleCard({ article, index, inView }) {
           Lire <ArrowRight size={13} strokeWidth={2} />
         </div>
       )}
-    </motion.div>
+    </m.div>
   );
 
   if (article.hasPage) {
@@ -318,6 +319,16 @@ function Articles() {
 
   return (
     <>
+      <Helmet>
+        <title>Assurance Temporaire : Guides et Conseils | AssuTempo</title>
+        <meta name="description" content="Guides pratiques sur l'assurance temporaire : contrôle sans assurance, sortie de fourrière, achat de véhicule, export, carte grise. Conseils vérifiés et à jour." />
+        <link rel="canonical" href="https://assutempo.fr/articles" />
+        <meta property="og:title" content="Assurance Temporaire : Guides et Conseils | AssuTempo" />
+        <meta property="og:description" content="Guides pratiques sur l'assurance temporaire : contrôle sans assurance, sortie de fourrière, achat de véhicule, export, carte grise. Conseils vérifiés et à jour." />
+        <meta property="og:url" content="https://assutempo.fr/articles" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
       {/* Hero */}
       <section
         style={{
@@ -338,7 +349,7 @@ function Articles() {
               'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%)',
           }}
         />
-        <motion.div
+        <m.div
           ref={headRef}
           initial={{ opacity: 0, y: 30 }}
           animate={headInView ? { opacity: 1, y: 0 } : {}}
@@ -379,19 +390,19 @@ function Articles() {
           >
             Le guide de l&apos;assurance temporaire, situation par situation.
           </p>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* Featured article */}
       {featuredArticle && (activeFilter === 'Tous' || matchesFilter(featuredArticle, activeFilter)) && (
         <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px 32px' }}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <FeaturedCard article={featuredArticle} />
-          </motion.div>
+          </m.div>
         </section>
       )}
 

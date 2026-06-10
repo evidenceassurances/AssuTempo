@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -10,7 +10,7 @@ function Countries() {
   return (
     <section style={{ background: 'var(--bg)', padding: '100px 0' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div
+        <m.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -31,7 +31,7 @@ function Countries() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
             34 pays européens couverts dès le premier jour.
           </p>
-        </motion.div>
+        </m.div>
 
         <div
           style={{
@@ -42,7 +42,7 @@ function Countries() {
           }}
         >
           {COUNTRIES.map((c, i) => (
-            <motion.div
+            <m.div
               key={c.slug}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
@@ -76,12 +76,12 @@ function Countries() {
               >
                 {c.flag} {c.nom}
               </Link>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         {/* Lien vers la carte interactive */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -102,7 +102,7 @@ function Countries() {
             Voir la carte interactive
             <ArrowRight size={14} strokeWidth={2} />
           </Link>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

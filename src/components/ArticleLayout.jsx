@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import {
   Check,
@@ -26,7 +26,7 @@ function Reveal({ children, delay = 0, style }) {
   const reduce = useReducedMotion();
   if (reduce) return <div style={style}>{children}</div>;
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -60px 0px' }}
@@ -34,7 +34,7 @@ function Reveal({ children, delay = 0, style }) {
       style={style}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -388,7 +388,7 @@ function RenderSection({ section, index }) {
 function ArticleCTABlock() {
   const [ref, inView] = useScrollReveal();
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -445,7 +445,7 @@ function ArticleCTABlock() {
       <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: '14px 0 0' }}>
         Lun-Ven 9h-21h · Sam 9h-20h
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 

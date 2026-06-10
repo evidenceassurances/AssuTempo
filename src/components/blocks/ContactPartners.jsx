@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Button from '../ui/Button';
 
 const defaultContact = { name: '', email: '', phone: '', message: '' };
@@ -36,7 +36,7 @@ function ContactPartners() {
         </button>
       </div>
 
-      <motion.form onSubmit={handleSubmit} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mt-8 grid gap-6">
+      <m.form onSubmit={handleSubmit} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mt-8 grid gap-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium text-slate-700">
             {activeTab === 'contact' ? 'Nom complet' : "Nom de l'agence / garage"}
@@ -75,7 +75,7 @@ function ContactPartners() {
         </div>
 
         {submitted && <div className="rounded-3xl bg-mint/10 p-4 text-sm text-slate-950">Merci ! Votre demande a bien été prise en compte.</div>}
-      </motion.form>
+      </m.form>
     </div>
   );
 }

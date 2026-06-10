@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import {
   Building2, ShieldCheck, Scale, FileText, Lock,
   AlertCircle, Clock, Phone, Mail, Gavel,
@@ -13,14 +13,14 @@ const LAST_UPDATE = '5 juin 2026';
 /* ─── Utilitaires ───────────────────────────────────────────────────────── */
 function Reveal({ children, delay = 0 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -60px 0px' }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -179,7 +179,7 @@ function CGV() {
           }}
         />
 
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -222,7 +222,7 @@ function CGV() {
             <Clock size={13} style={{ color: 'var(--gold)' }} />
             Dernière mise à jour : {LAST_UPDATE}
           </div>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── Contenu ───────────────────────────────────────────────────────── */}

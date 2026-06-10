@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import {
   ArrowRight, Phone,
@@ -108,14 +108,14 @@ function Reveal({ children, delay = 0 }) {
   const reduce = useReducedMotion();
   if (reduce) return <div>{children}</div>;
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -60px 0px' }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -126,16 +126,16 @@ function CountryPanel({ country }) {
   const { h1, intro, points, flag, nom, slug, faq } = country;
 
   return (
-    <motion.div
+    <m.div
       key={slug}
       variants={panelInner}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-      <motion.div variants={stagger} initial="hidden" animate="visible">
+      <m.div variants={stagger} initial="hidden" animate="visible">
         {/* En-tête */}
-        <motion.div variants={fadeUp} style={{ marginBottom: 8 }}>
+        <m.div variants={fadeUp} style={{ marginBottom: 8 }}>
           <p
             style={{
               fontSize: 11,
@@ -160,10 +160,10 @@ function CountryPanel({ country }) {
           >
             {h1}
           </h2>
-        </motion.div>
+        </m.div>
 
         {/* Filet doré, animation "dessin" */}
-        <motion.div
+        <m.div
           variants={lineVariant}
           style={{
             height: 1.5,
@@ -175,7 +175,7 @@ function CountryPanel({ country }) {
         />
 
         {/* Intro */}
-        <motion.p
+        <m.p
           variants={fadeUp}
           style={{
             fontSize: 15,
@@ -186,12 +186,12 @@ function CountryPanel({ country }) {
           }}
         >
           {intro}
-        </motion.p>
+        </m.p>
 
         {/* Légende catégories */}
-        <motion.div variants={fadeUp}>
+        <m.div variants={fadeUp}>
           <PaysLegende />
-        </motion.div>
+        </m.div>
 
         {/* Points clés — cartes catégorisées */}
         <div
@@ -208,7 +208,7 @@ function CountryPanel({ country }) {
         </div>
 
         {/* CTA */}
-        <motion.div
+        <m.div
           variants={fadeUp}
           style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}
         >
@@ -243,11 +243,11 @@ function CountryPanel({ country }) {
             <Phone size={14} strokeWidth={1.5} />
             09 74 19 78 20
           </a>
-        </motion.div>
+        </m.div>
 
         {/* FAQ pays, uniquement si des questions sont disponibles */}
         {faq && faq.length > 0 && (
-          <motion.div variants={fadeUp} style={{ marginTop: 32 }}>
+          <m.div variants={fadeUp} style={{ marginTop: 32 }}>
             <p
               style={{
                 fontSize: 11,
@@ -268,10 +268,10 @@ function CountryPanel({ country }) {
                 onToggle={() => setOpenFaq(openFaq === i ? null : i)}
               />
             ))}
-          </motion.div>
+          </m.div>
         )}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -342,7 +342,7 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         {/* Badge nom pays */}
         <AnimatePresence mode="wait">
           {badgeName && (
-            <motion.div
+            <m.div
               key={badgeName}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -367,7 +367,7 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
               }}
             >
               {badgeName}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
@@ -531,11 +531,11 @@ function Carte() {
 
   /* ── SEO ────────────────────────────────────────────────────────────────── */
   const seoTitle = selectedCountry
-    ? selectedCountry.title
-    : 'Carte des 34 pays couverts : assurance temporaire en Europe';
+    ? `Assurance Temporaire ${selectedCountry.nom} : Couvert dès le 1er Jour | AssuTempo`
+    : 'Assurance Temporaire en Europe : 34 Pays Couverts | AssuTempo';
   const seoDesc = selectedCountry
-    ? selectedCountry.metaDescription
-    : "Découvrez les 34 pays européens où votre assurance temporaire AssuTempo est valable. Carte interactive et liste complète.";
+    ? `Assurance temporaire valable en ${selectedCountry.nom} dès le 1er jour : responsabilité civile, règles locales, péages. Attestation immédiate en 5 minutes.`
+    : "Assurance temporaire valable dans 34 pays européens dès le premier jour. Carte interactive, règles locales de circulation, péages et vignettes pays par pays.";
   const canonical = selectedCountry
     ? `https://assutempo.fr/carte/${selectedCountry.slug}`
     : 'https://assutempo.fr/carte';
@@ -580,7 +580,7 @@ function Carte() {
           }}
         />
         <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px', position: 'relative' }}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE }}
@@ -599,7 +599,7 @@ function Carte() {
 
             {/* H1, générique ou spécifique au pays */}
             <AnimatePresence mode="wait">
-              <motion.h1
+              <m.h1
                 key={selectedCountry?.slug ?? 'default'}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -617,9 +617,9 @@ function Carte() {
                 {selectedCountry
                   ? selectedCountry.h1
                   : 'Assurance temporaire : 34 pays européens couverts'}
-              </motion.h1>
+              </m.h1>
             </AnimatePresence>
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -718,7 +718,7 @@ function Carte() {
       >
         <AnimatePresence mode="wait">
           {selectedCountry && (
-            <motion.div
+            <m.div
               key="panel-wrapper"
               variants={panelOuter}
               initial="hidden"
@@ -740,7 +740,7 @@ function Carte() {
                   <CountryPanel key={selectedCountry.slug} country={selectedCountry} />
                 </AnimatePresence>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </section>
@@ -769,7 +769,7 @@ function Carte() {
             {COUNTRIES.map((c, i) => {
               const isActive = selectedCountry?.slug === c.slug;
               return (
-                <motion.div
+                <m.div
                   key={c.slug}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={pillsInView ? { opacity: 1, scale: 1 } : {}}
@@ -805,7 +805,7 @@ function Carte() {
                   >
                     {c.flag} {c.nom}
                   </Link>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>

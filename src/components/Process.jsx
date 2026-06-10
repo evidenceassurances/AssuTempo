@@ -1,4 +1,4 @@
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { Search, FileText, Download } from 'lucide-react';
 import { useRef } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -26,7 +26,7 @@ const steps = [
 
 function ProcessStep({ step, index, inView }) {
   return (
-    <motion.div
+    <m.div
       className="process-step"
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -93,7 +93,7 @@ function ProcessStep({ step, index, inView }) {
       >
         {step.body}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -116,7 +116,7 @@ function ConnectingLine({ inView }) {
         preserveAspectRatio="none"
         style={{ width: '100%', height: 1, display: 'block', overflow: 'visible' }}
       >
-        <motion.line
+        <m.line
           x1="0"
           y1="0.5"
           x2="100"
@@ -143,7 +143,7 @@ function Process() {
   return (
     <section style={{ background: 'var(--bg)', padding: '100px 0' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div
+        <m.div
           ref={headRef}
           initial={{ opacity: 0, y: 30 }}
           animate={headInView ? { opacity: 1, y: 0 } : {}}
@@ -164,7 +164,7 @@ function Process() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
             Simple, rapide, sans paperasse.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Conteneur des étapes */}
         <div

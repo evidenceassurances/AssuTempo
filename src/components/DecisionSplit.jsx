@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const STATUS = {
@@ -16,7 +16,7 @@ function DecisionSplit({ question, voies, ariaLabel }) {
     <div role="img" aria-label={ariaLabel} style={{ margin: '32px 0' }}>
 
       {/* ── Question centrale ── */}
-      <motion.div
+      <m.div
         initial={reduce ? false : { opacity: 0, y: 10 }}
         whileInView={reduce ? false : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '0px 0px -40px 0px' }}
@@ -38,7 +38,7 @@ function DecisionSplit({ question, voies, ariaLabel }) {
         >
           {question}
         </div>
-      </motion.div>
+      </m.div>
 
       {/* ── Connecteur fourche (masqué sur mobile) ── */}
       <div aria-hidden="true" className="ds-fork" style={{ height: 28, position: 'relative' }}>
@@ -76,7 +76,7 @@ function DecisionSplit({ question, voies, ariaLabel }) {
           const c = cfg.color;
 
           return (
-            <motion.div
+            <m.div
               key={i}
               initial={reduce ? false : { opacity: 0, y: 14 }}
               whileInView={reduce ? false : { opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ function DecisionSplit({ question, voies, ariaLabel }) {
               }}>
                 {voie.verdict}
               </p>
-            </motion.div>
+            </m.div>
           );
         })}
       </div>

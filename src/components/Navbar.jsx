@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 const links = [
@@ -33,7 +33,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -49,11 +49,13 @@ function Navbar() {
         height: 68,
         display: 'flex',
         alignItems: 'center',
-        transition: 'background 0.4s ease-out, backdrop-filter 0.4s ease-out, border-color 0.4s ease-out',
-        background: scrolled ? 'rgba(8,7,6,0.7)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: `1px solid ${scrolled ? 'rgba(201,168,76,0.12)' : 'transparent'}`,
+        transition: 'background 300ms ease, backdrop-filter 300ms ease, border-color 300ms ease, padding 300ms ease',
+        background: scrolled ? 'rgba(10,10,10,0.72)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: `1px solid ${scrolled ? 'rgba(201,168,76,0.15)' : 'transparent'}`,
+        paddingTop: scrolled ? 4 : 0,
+        paddingBottom: scrolled ? 4 : 0,
       }}
     >
       <div
@@ -131,7 +133,7 @@ function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             variants={mobileMenuVariants}
             initial="hidden"
             animate="show"
@@ -153,7 +155,7 @@ function Navbar() {
             }}
           >
             {links.map((link) => (
-              <motion.div key={link.href} variants={mobileLinkVariants}>
+              <m.div key={link.href} variants={mobileLinkVariants}>
                 <NavLink
                   to={link.href}
                   onClick={() => setOpen(false)}
@@ -169,9 +171,9 @@ function Navbar() {
                 >
                   {link.label}
                 </NavLink>
-              </motion.div>
+              </m.div>
             ))}
-            <motion.div variants={mobileLinkVariants}>
+            <m.div variants={mobileLinkVariants}>
               <button
                 onClick={() => { navigate('/tarification'); setOpen(false); }}
                 className="btn-gold"
@@ -179,8 +181,8 @@ function Navbar() {
               >
                 Obtenir mon devis
               </button>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
 function AccordionItem({ item, isOpen, onToggle }) {
@@ -26,18 +26,18 @@ function AccordionItem({ item, isOpen, onToggle }) {
         }}
       >
         <span>{item.q}</span>
-        <motion.span
+        <m.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
           style={{ flexShrink: 0 }}
         >
           <ChevronDown size={20} style={{ color: 'var(--gold)' }} />
-        </motion.span>
+        </m.span>
       </button>
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <m.div
             key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -48,7 +48,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
             <p style={{ paddingBottom: 24, fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.75 }}>
               {item.a}
             </p>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

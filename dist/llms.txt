@@ -1,5 +1,7 @@
 # AssuTempo
 
+AssuTempo (assutempo.fr) est le service d'assurance auto temporaire d'Evidence Assurances. Il est distinct du site assutempo.com, exploité par une autre société.
+
 AssuTempo est la plateforme en ligne d'assurance auto temporaire d'Evidence Assurances (cabinet de courtage, 6 ans d'expérience). Couverture de 1 à 90 jours, responsabilité civile obligatoire, attestation immédiate par email, 100 % en ligne, assistance dans 34 pays européens.
 
 Contact : 09 74 19 78 20 - Lun-Ven 9h-21h, Sam 9h-20h.

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { slideLeft, fadeUp, stagger } from '../animations';
@@ -25,7 +25,7 @@ function WhyUs() {
         className="whyus-grid"
       >
         {/* Colonne gauche */}
-        <motion.div variants={slideLeft} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+        <m.div variants={slideLeft} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
           <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 20 }}>
             CAS D'USAGE
           </p>
@@ -42,17 +42,17 @@ function WhyUs() {
           >
             Voir nos tarifs
           </button>
-        </motion.div>
+        </m.div>
 
         {/* Colonne droite */}
-        <motion.div
+        <m.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
         >
           {items.map((item) => (
-            <motion.div
+            <m.div
               key={item}
               variants={fadeUp}
               style={{
@@ -71,9 +71,9 @@ function WhyUs() {
                 <Check size={18} style={{ color: 'var(--gold)' }} />
               </div>
               <p style={{ fontSize: 15, color: '#fff', lineHeight: 1.6 }}>{item}</p>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
       <style>{`

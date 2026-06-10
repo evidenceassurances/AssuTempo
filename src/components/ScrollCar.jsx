@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { useScrollProgress } from '../hooks/useScrollProgress';
 
 const carSvg = (
@@ -56,7 +56,7 @@ function ScrollCar() {
   const rotate = direction === 'down' ? 90 : -90;
 
   return (
-    <motion.div
+    <m.div
       className="scroll-car hidden md:block fixed left-5 z-50"
       style={{ top: `${top}px` }}
       animate={{ rotate, y: isStopped ? [0, -6, 0] : 0 }}
@@ -67,7 +67,7 @@ function ScrollCar() {
           {carSvg}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 

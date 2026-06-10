@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FileText, CreditCard, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fadeUp } from '../animations';
@@ -36,7 +36,7 @@ const stepVariant = {
 function Step({ step, index }) {
   const { num, Icon, title, text } = step;
   return (
-    <motion.div
+    <m.div
       custom={index}
       variants={stepVariant}
       initial="hidden"
@@ -101,7 +101,7 @@ function Step({ step, index }) {
         {title}
       </h3>
       <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.75 }}>{text}</p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -158,7 +158,7 @@ function HowItWorks() {
           zIndex: 1,
         }}
       >
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -186,7 +186,7 @@ function HowItWorks() {
           >
             Assuré en 3 étapes
           </h2>
-        </motion.div>
+        </m.div>
 
         <div
           style={{
@@ -216,7 +216,7 @@ function HowItWorks() {
           ))}
         </div>
 
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -230,7 +230,7 @@ function HowItWorks() {
           >
             Commencer maintenant →
           </button>
-        </motion.div>
+        </m.div>
       </div>
 
       <style>{`

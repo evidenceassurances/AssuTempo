@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { CATS, CAT_LABEL, classifySection } from '../../lib/carteCategories';
 
 export function PaysCarte({ section, index = 0, IconComp }) {
@@ -6,7 +6,7 @@ export function PaysCarte({ section, index = 0, IconComp }) {
   const cat = CATS[key];
   const Ico = IconComp;
   return (
-    <motion.article
+    <m.article
       className="pays-carte"
       style={{
         '--c':     cat.color,
@@ -26,7 +26,7 @@ export function PaysCarte({ section, index = 0, IconComp }) {
       </div>
       <h3 className="ctitle">{section.titre}</h3>
       <p className="ctext">{section.texte}</p>
-    </motion.article>
+    </m.article>
   );
 }
 

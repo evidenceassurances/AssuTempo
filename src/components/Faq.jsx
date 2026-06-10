@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -66,18 +66,18 @@ function FaqItem({ item, isOpen, onToggle }) {
         <span style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.4, letterSpacing: '-0.01em' }}>
           {item.q}
         </span>
-        <motion.span
+        <m.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{ flexShrink: 0, color: isOpen ? 'var(--gold)' : 'var(--text-muted)' }}
         >
           <ChevronDown size={20} />
-        </motion.span>
+        </m.span>
       </button>
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -95,7 +95,7 @@ function FaqItem({ item, isOpen, onToggle }) {
             >
               {item.a}
             </p>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
@@ -109,7 +109,7 @@ function Faq() {
   return (
     <section style={{ background: 'var(--bg-2)', padding: '100px 0' }}>
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div
+        <m.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -130,9 +130,9 @@ function Faq() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
             Tout ce qu&apos;il faut savoir avant de souscrire.
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
@@ -145,7 +145,7 @@ function Faq() {
               onToggle={() => setOpen(open === i ? null : i)}
             />
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

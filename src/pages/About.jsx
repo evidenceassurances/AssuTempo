@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+import { m } from 'framer-motion';
 import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet } from 'lucide-react';
 import { fadeUp, stagger, slideLeft } from '../animations';
 import Footer from '../components/Footer';
@@ -133,7 +134,7 @@ function PartnerForm() {
 
   if (status === 'succes') {
     return (
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -172,7 +173,7 @@ function PartnerForm() {
         >
           Nouvelle demande
         </button>
-      </motion.div>
+      </m.div>
     );
   }
 
@@ -318,6 +319,16 @@ function PartnerForm() {
 function About() {
   return (
     <>
+      <Helmet>
+        <title>Qui Sommes-Nous ? Evidence Assurances | AssuTempo</title>
+        <meta name="description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage avec 6 ans d'expertise. Découvrez notre histoire et nos engagements." />
+        <link rel="canonical" href="https://assutempo.fr/qui-sommes-nous" />
+        <meta property="og:title" content="Qui Sommes-Nous ? Evidence Assurances | AssuTempo" />
+        <meta property="og:description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage avec 6 ans d'expertise. Découvrez notre histoire et nos engagements." />
+        <meta property="og:url" content="https://assutempo.fr/qui-sommes-nous" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+      </Helmet>
       {/* Hero */}
       <section
         style={{
@@ -337,7 +348,7 @@ function About() {
             background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 60%)',
           }}
         />
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -376,7 +387,7 @@ function About() {
           >
             Evidence Assurances, 6 ans d&apos;expertise au service d&apos;une assurance temporaire moderne.
           </p>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* Contenu principal */}
@@ -387,7 +398,7 @@ function About() {
             className="about-grid"
           >
             {/* Colonne gauche - Notre histoire */}
-            <motion.div
+            <m.div
               variants={slideLeft}
               initial="hidden"
               whileInView="visible"
@@ -462,10 +473,10 @@ function About() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Colonne droite - Valeurs */}
-            <motion.div
+            <m.div
               variants={stagger}
               initial="hidden"
               whileInView="visible"
@@ -473,7 +484,7 @@ function About() {
               style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
             >
               {values.map(({ title, description, icon: Icon }) => (
-                <motion.div
+                <m.div
                   key={title}
                   variants={fadeUp}
                   className="card-glass"
@@ -498,9 +509,9 @@ function About() {
                     <h3 style={{ fontSize: 18, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{title}</h3>
                     <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7 }}>{description}</p>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
-            </motion.div>
+            </m.div>
           </div>
         </div>
 
@@ -514,7 +525,7 @@ function About() {
       {/* ─── Section Devenir partenaire ─── */}
       <section style={{ background: 'var(--bg-2)', padding: '100px 0' }}>
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 32px' }}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -558,10 +569,10 @@ function About() {
               technique, auto-écoles… proposez l&apos;assurance temporaire AssuTempo à vos clients.
               Devenons partenaires.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* ─── Proposition de valeur ─── */}
-          <motion.div
+          <m.div
             variants={stagger}
             initial="hidden"
             whileInView="visible"
@@ -590,7 +601,7 @@ function About() {
                 maxWidth: 640,
               }}
             >
-              Nous adaptons notre système à chaque métier — durée, option assistance, tarif.
+              Nous adaptons notre système à chaque métier : durée, option assistance, tarif.
               Votre client repart avec son attestation immédiatement. Vous recevez votre commission
               par virement instantané, chaque mois.
             </p>
@@ -600,7 +611,7 @@ function About() {
               className="partner-perks-grid"
             >
               {partnerPerks.map(({ icon: Icon, title, label }) => (
-                <motion.div
+                <m.div
                   key={title}
                   variants={fadeUp}
                   className="card-glass"
@@ -644,12 +655,12 @@ function About() {
                       {label}
                     </p>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -678,7 +689,7 @@ function About() {
               <strong style={{ color: 'var(--text)' }}>Aucun engagement.</strong>
             </p>
             <PartnerForm />
-          </motion.div>
+          </m.div>
         </div>
 
         <style>{`

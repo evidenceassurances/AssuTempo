@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { useCountUp } from '../hooks/useCountUp';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import CompteurAttestations from './CompteurAttestations';
@@ -16,7 +16,7 @@ function StatItem({ stat, inView, index }) {
   const isLast = index === stats.length - 1;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -84,7 +84,7 @@ function StatItem({ stat, inView, index }) {
       >
         {stat.label}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -102,7 +102,7 @@ function Stats() {
     >
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
         {/* Heading */}
-        <motion.div
+        <m.div
           ref={headRef}
           initial={{ opacity: 0, y: 30 }}
           animate={headInView ? { opacity: 1, y: 0 } : {}}
@@ -123,7 +123,7 @@ function Stats() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
             Simple, rapide, et vraiment efficace.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Compteur attestations live */}
         <CompteurAttestations />

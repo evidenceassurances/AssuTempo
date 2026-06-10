@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { m, useInView, useReducedMotion } from 'framer-motion';
 import * as THREE from 'three';
 import { useCountUp } from '../hooks/useCountUp';
 
@@ -137,7 +137,7 @@ function Globe() {
 
   return (
     <section ref={wrapperRef} className="relative mx-auto max-w-7xl px-6 pb-24 pt-24 lg:px-8">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.94 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.35 }}
@@ -195,7 +195,7 @@ function Globe() {
             )}
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

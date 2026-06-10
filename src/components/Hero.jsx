@@ -1,18 +1,25 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import TempoDial from './TempoDial';
+import { EASE_PREMIUM } from '../lib/motion';
 
-const words1 = ['L\'assurance', 'temporaire'];
-const words2 = ['qui', 'change', 'tout.'];
+const lineContainerVar = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
+};
 
-const wordVariant = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+const lineVar = {
+  hidden: { y: '110%' },
+  show: { y: 0, transition: { duration: 0.8, ease: EASE_PREMIUM } },
 };
 
 function Hero() {
   const navigate = useNavigate();
+  const prefersReducedMotion = useReducedMotion();
+
+  const skip = prefersReducedMotion;
 
   return (
     <section
@@ -27,7 +34,7 @@ function Hero() {
     >
       <TempoDial />
 
-      {/* ── HAUT : Badge ── */}
+      {/* Badge */}
       <div
         style={{
           paddingTop: 96,
@@ -38,10 +45,10 @@ function Hero() {
           flexShrink: 0,
         }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
+        <m.div
+          initial={skip ? false : { opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={skip ? { duration: 0 } : { duration: 0.6, ease: EASE_PREMIUM }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -70,10 +77,10 @@ function Hero() {
             }}
           />
           Couverture immédiate &middot; 34 pays européens
-        </motion.div>
+        </m.div>
       </div>
 
-      {/* ── MILIEU : Titre + Sous-titre + CTAs ── */}
+      {/* Titre + sous-titre + CTAs */}
       <div
         style={{
           flex: 1,
@@ -88,7 +95,7 @@ function Hero() {
       >
         <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
 
-          {/* H1 */}
+          {/* H1 : reveal ligne par ligne, toujours dans le DOM */}
           <h1
             style={{
               fontSize: 'clamp(2.5rem, 7vw, 5rem)',
@@ -99,55 +106,33 @@ function Hero() {
               color: 'var(--text)',
             }}
           >
-            <motion.span
-              style={{ display: 'block' }}
-              initial="hidden"
+            <m.span
+              variants={lineContainerVar}
+              initial={skip ? false : 'hidden'}
               animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } } }}
-            >
-              {words1.map((w, i) => (
-                <motion.span
-                  key={i}
-                  variants={wordVariant}
-                  style={{ display: 'inline-block', marginRight: '0.3em' }}
-                >
-                  {w}
-                </motion.span>
-              ))}
-            </motion.span>
-
-            <motion.span
               style={{ display: 'block' }}
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.38 } } }}
             >
-              {words2.map((w, i) => (
-                <motion.span
-                  key={i}
-                  variants={wordVariant}
-                  style={{
-                    display: 'inline-block',
-                    marginRight: '0.3em',
-                    background: i === words2.length - 1
-                      ? 'linear-gradient(135deg, var(--gold), var(--gold-light))'
-                      : 'none',
-                    WebkitBackgroundClip: i === words2.length - 1 ? 'text' : 'unset',
-                    WebkitTextFillColor: i === words2.length - 1 ? 'transparent' : 'var(--text)',
-                    backgroundClip: i === words2.length - 1 ? 'text' : 'unset',
-                  }}
-                >
-                  {w}
-                </motion.span>
-              ))}
-            </motion.span>
+              {/* Ligne 1 */}
+              <span style={{ display: 'block', overflow: 'hidden' }}>
+                <m.span variants={lineVar} style={{ display: 'block' }}>
+                  L&apos;assurance temporaire
+                </m.span>
+              </span>
+              {/* Ligne 2 */}
+              <span style={{ display: 'block', overflow: 'hidden' }}>
+                <m.span variants={lineVar} style={{ display: 'block' }}>
+                  qui change{' '}
+                  <span className="gold-text-animated">tout.</span>
+                </m.span>
+              </span>
+            </m.span>
           </h1>
 
           {/* Sous-titre */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
+          <m.p
+            initial={skip ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.55, ease: EASE_PREMIUM }}
             style={{
               color: 'var(--text-muted)',
               fontSize: 'clamp(1rem, 2vw, 1.15rem)',
@@ -159,13 +144,13 @@ function Hero() {
             De 1 à 90 jours. Attestation en 5 minutes.
             <br />
             Sans engagement, sans mauvaise surprise.
-          </motion.p>
+          </m.p>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9 }}
+          <m.div
+            initial={skip ? false : { opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.7, ease: EASE_PREMIUM }}
             style={{
               display: 'flex',
               gap: 16,
@@ -188,13 +173,13 @@ function Hero() {
             >
               Voir les tarifs
             </button>
-          </motion.div>
+          </m.div>
 
-          {/* Ligne de confiance - discrète, secondaire, pas de conteneur */}
-          <motion.p
-            initial={{ opacity: 0 }}
+          {/* Ligne de confiance */}
+          <m.p
+            initial={skip ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1.05 }}
+            transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.85, ease: EASE_PREMIUM }}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -207,27 +192,27 @@ function Hero() {
               lineHeight: 1.6,
             }}
           >
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>⚡</span>
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#9889;</span>
             <span>Attestation immédiate</span>
             <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>🌍</span>
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#127760;</span>
             <span>34 pays couverts</span>
             <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>✓</span>
+            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#10003;</span>
             <span>Prix fixe, zéro surprise</span>
-          </motion.p>
+          </m.p>
 
         </div>
       </div>
 
-      {/* ── BAS : Espace bas + chevron ── */}
+      {/* Espace bas */}
       <div className="home-hero-spacer" style={{ flexShrink: 0, height: 64 }} />
 
       {/* Indicateur scroll */}
-      <motion.div
-        initial={{ opacity: 0 }}
+      <m.div
+        initial={skip ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.5 }}
+        transition={skip ? { duration: 0 } : { delay: 1.4, duration: 0.5 }}
         style={{
           position: 'absolute',
           bottom: 20,
@@ -238,7 +223,7 @@ function Hero() {
         }}
       >
         <ChevronDown size={22} />
-      </motion.div>
+      </m.div>
 
       {/* Fondu vers la section suivante */}
       <div
@@ -256,6 +241,5 @@ function Hero() {
     </section>
   );
 }
-
 
 export default Hero;

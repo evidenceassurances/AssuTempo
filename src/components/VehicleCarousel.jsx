@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeUp } from '../animations';
 
 const rowOne = [
@@ -72,7 +72,7 @@ function VehicleCarousel() {
         }}
       />
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', position: 'relative', zIndex: 1 }}>
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -85,7 +85,7 @@ function VehicleCarousel() {
           <h2 style={{ fontSize: 'clamp(24px, 3vw, 40px)', fontWeight: 700, color: '#fff' }}>
             Tous vos véhicules assurés
           </h2>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Rangée 1 → droite */}

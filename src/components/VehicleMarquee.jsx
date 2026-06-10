@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { VehicleIcon, VehicleIconDefs } from './VehicleIcons';
 
@@ -95,7 +95,7 @@ function VehicleMarquee() {
       }}
     >
       <VehicleIconDefs />
-      <motion.div
+      <m.div
         ref={ref}
         initial={{ opacity: 0, y: 40 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -116,7 +116,7 @@ function VehicleMarquee() {
         <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
           Quel que soit votre véhicule, une attestation immédiate.
         </p>
-      </motion.div>
+      </m.div>
 
       <MarqueeRow items={row1} direction="left" />
       <MarqueeRow items={row2} direction="right" />

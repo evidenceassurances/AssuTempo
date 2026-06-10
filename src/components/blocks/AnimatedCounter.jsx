@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 function AnimatedCounter({ value, label, prefix = '' }) {
   const ref = useRef(null);
@@ -41,10 +41,10 @@ function AnimatedCounter({ value, label, prefix = '' }) {
   }, [visible, value]);
 
   return (
-    <motion.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="rounded-3xl border border-slate-200 bg-white/85 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <m.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={visible ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="rounded-3xl border border-slate-200 bg-white/85 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       <p className="text-5xl font-semibold text-slate-950">{prefix}{count}</p>
       <p className="mt-3 text-sm uppercase tracking-[0.24em] text-slate-500">{label}</p>
-    </motion.div>
+    </m.div>
   );
 }
 

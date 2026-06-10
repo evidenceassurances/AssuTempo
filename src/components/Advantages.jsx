@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Zap, Shield, Clock } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -22,7 +22,7 @@ const cards = [
 
 function AdvantageCard({ Icon, title, body, delay, inView }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
@@ -79,7 +79,7 @@ function AdvantageCard({ Icon, title, body, delay, inView }) {
       <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65 }}>
         {body}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -89,7 +89,7 @@ function Advantages() {
   return (
     <section style={{ background: 'var(--bg-2)', padding: '100px 0' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div
+        <m.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -117,7 +117,7 @@ function Advantages() {
           >
             L&apos;assurance temporaire, sans les défauts de l&apos;assurance temporaire.
           </p>
-        </motion.div>
+        </m.div>
 
         <div style={{ display: 'flex', gap: 20, alignItems: 'stretch' }} className="advantages-grid">
           {cards.map((card, i) => (

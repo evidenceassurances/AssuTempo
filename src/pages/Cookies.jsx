@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import {
   Shield, BarChart3, Megaphone, Clock, Scale, Settings,
   ChevronDown, Info,
@@ -119,14 +119,14 @@ const DROITS = [
 /* ─── Composants utilitaires ────────────────────────────────────────────── */
 function Reveal({ children, delay = 0 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -60px 0px' }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -321,7 +321,7 @@ function Cookies() {
           }}
         />
 
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -382,7 +382,7 @@ function Cookies() {
             <Clock size={13} style={{ color: 'var(--gold)' }} />
             Dernière mise à jour : {LAST_UPDATE}
           </div>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── Contenu ───────────────────────────────────────────────────────── */}
@@ -462,7 +462,7 @@ function Cookies() {
               </div>
             </Reveal>
 
-            <motion.div
+            <m.div
               variants={stagger}
               initial="hidden"
               whileInView="visible"
@@ -470,11 +470,11 @@ function Cookies() {
               style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
             >
               {CATEGORIES.map((cat) => (
-                <motion.div key={cat.titre} variants={fadeUp}>
+                <m.div key={cat.titre} variants={fadeUp}>
                   <CookieCategoryCard cat={cat} />
-                </motion.div>
+                </m.div>
               ))}
-            </motion.div>
+            </m.div>
           </div>
 
           {/* Durée de conservation ─── */}

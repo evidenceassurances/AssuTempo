@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -17,7 +17,7 @@ function UseCases() {
   return (
     <section style={{ background: 'var(--bg-2)', padding: '100px 0' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-        <motion.div
+        <m.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -38,11 +38,11 @@ function UseCases() {
           <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
             L&apos;assurance temporaire qui s&apos;adapte à votre besoin réel.
           </p>
-        </motion.div>
+        </m.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }} className="cases-grid">
           {cases.map((item, i) => (
-            <motion.div
+            <m.div
               key={item.title}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -77,12 +77,12 @@ function UseCases() {
               <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
                 {item.body}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         {/* Lien discret vers la page Articles */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -104,7 +104,7 @@ function UseCases() {
           >
             Lire nos articles &rarr;
           </Link>
-        </motion.div>
+        </m.div>
       </div>
 
       <style>{`

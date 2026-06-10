@@ -58,8 +58,13 @@ body {
 }
 
 ::selection {
-  background: var(--gold-dim);
-  color: #fff;
+  background: var(--gold);
+  color: #0A0A0A;
+}
+
+h1, h2 {
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 ::-webkit-scrollbar {
@@ -264,6 +269,21 @@ body {
 @keyframes particle-drift-3 {
   0%   { transform: translateX(0px); }
   100% { transform: translateX(6px); }
+}
+
+/* ─── Gold animated text (hero "tout.") ─── */
+@keyframes gold-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.gold-text-animated {
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gold-shift 6s ease-in-out infinite;
 }
 
 /* ─── Reduced motion ─── */
