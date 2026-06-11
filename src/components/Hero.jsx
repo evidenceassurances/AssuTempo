@@ -100,7 +100,7 @@ function Hero() {
             style={{
               fontSize: 'clamp(2.5rem, 7vw, 5rem)',
               fontWeight: 800,
-              lineHeight: 1.05,
+              lineHeight: 1.15,
               letterSpacing: '-0.03em',
               margin: '0 0 24px',
               color: 'var(--text)',
@@ -113,13 +113,13 @@ function Hero() {
               style={{ display: 'block' }}
             >
               {/* Ligne 1 */}
-              <span style={{ display: 'block', overflow: 'hidden' }}>
+              <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
                 <m.span variants={lineVar} style={{ display: 'block' }}>
                   L&apos;assurance temporaire
                 </m.span>
               </span>
               {/* Ligne 2 */}
-              <span style={{ display: 'block', overflow: 'hidden' }}>
+              <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
                 <m.span variants={lineVar} style={{ display: 'block' }}>
                   qui change{' '}
                   <span className="gold-text-animated">tout.</span>

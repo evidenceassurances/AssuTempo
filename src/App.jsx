@@ -58,7 +58,7 @@ function App() {
       <BackgroundFX />
       <Navbar />
       <Suspense fallback={<PageLoader />}>
-        <AnimatePresence mode="wait" initial={false} onExitComplete={() => {
+        <AnimatePresence mode="wait" onExitComplete={() => {
           if (typeof window !== 'undefined') window.scrollTo(0, 0);
         }}>
           <Routes location={location} key={pageKey}>
