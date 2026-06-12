@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
-import { m } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { m, useReducedMotion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -8,13 +9,13 @@ import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const PAYS = [
-  { nom: 'Albanie',            flag: '🇦🇱' },
-  { nom: 'Azerbaïdjan',        flag: '🇦🇿' },
-  { nom: 'Macédoine du Nord',  flag: '🇲🇰' },
-  { nom: 'Maroc',              flag: '🇲🇦' },
-  { nom: 'Moldavie',           flag: '🇲🇩' },
-  { nom: 'Tunisie',            flag: '🇹🇳' },
-  { nom: 'Turquie',            flag: '🇹🇷' },
+  { slug: 'albanie',           nom: 'Albanie',            flag: '🇦🇱' },
+  { slug: 'azerbaidjan',       nom: 'Azerbaïdjan',        flag: '🇦🇿' },
+  { slug: 'macedoine-du-nord', nom: 'Macédoine du Nord',  flag: '🇲🇰' },
+  { slug: 'maroc',             nom: 'Maroc',              flag: '🇲🇦' },
+  { slug: 'moldavie',          nom: 'Moldavie',           flag: '🇲🇩' },
+  { slug: 'tunisie',           nom: 'Tunisie',            flag: '🇹🇳' },
+  { slug: 'turquie',           nom: 'Turquie',            flag: '🇹🇷' },
 ];
 
 const STEPS = [
@@ -117,9 +118,9 @@ const EMPTY = {
   consentement: false,
 };
 
-function DevisForm() {
+function DevisForm({ initialPays }) {
   const [form, setForm] = useState(EMPTY);
-  const [pays, setPays] = useState([]);
+  const [pays, setPays] = useState(() => (initialPays ? [initialPays] : []));
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
   const paysRef = useRef(null);
@@ -494,6 +495,24 @@ function DevisForm() {
 function AssuranceInternationale() {
   const [pillsRef, pillsInView] = useScrollReveal();
   const [stepsRef, stepsInView] = useScrollReveal();
+  const [searchParams] = useSearchParams();
+  const reduce = useReducedMotion();
+  const formSectionRef = useRef(null);
+
+  /* Présélection via ?pays={slug} depuis la carte Europe */
+  const slugParam = searchParams.get('pays');
+  const paysFromUrl = PAYS.find((p) => p.slug === slugParam) ?? null;
+
+  useEffect(() => {
+    if (!paysFromUrl) return;
+    const t = setTimeout(() => {
+      formSectionRef.current?.scrollIntoView({
+        behavior: reduce ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }, 300);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -640,7 +659,7 @@ function AssuranceInternationale() {
       </section>
 
       {/* Formulaire */}
-      <section style={{ background: 'var(--bg)', padding: '100px 0' }}>
+      <section ref={formSectionRef} style={{ background: 'var(--bg)', padding: '100px 0' }}>
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 32px' }}>
           <m.div
             initial={{ opacity: 0, y: 20 }}
@@ -680,7 +699,7 @@ function AssuranceInternationale() {
             }}
             className="intl-form-wrap"
           >
-            <DevisForm />
+            <DevisForm initialPays={paysFromUrl?.nom} />
           </m.div>
         </div>
 

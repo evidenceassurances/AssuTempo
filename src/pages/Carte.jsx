@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import {
   ArrowRight, Phone,
@@ -48,6 +48,18 @@ const GEO_URL = '/countries-110m.json';
 
 const COVERED        = new Set(COUNTRIES.map(c => c.isoId));
 const COUNTRY_NAMES  = Object.fromEntries(COUNTRIES.map(c => [c.isoId, c.nom]));
+
+/* Pays disponibles sur demande (devis via la page internationale) */
+const ON_DEMAND = [
+  { isoId: 8,   slug: 'albanie',            nom: 'Albanie' },
+  { isoId: 31,  slug: 'azerbaidjan',        nom: 'Azerbaïdjan' },
+  { isoId: 807, slug: 'macedoine-du-nord',  nom: 'Macédoine du Nord' },
+  { isoId: 504, slug: 'maroc',              nom: 'Maroc' },
+  { isoId: 498, slug: 'moldavie',           nom: 'Moldavie' },
+  { isoId: 788, slug: 'tunisie',            nom: 'Tunisie' },
+  { isoId: 792, slug: 'turquie',            nom: 'Turquie' },
+];
+const ON_DEMAND_BY_ISO = Object.fromEntries(ON_DEMAND.map(c => [c.isoId, c]));
 
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */
 const FAQ_ITEMS = [
@@ -275,10 +287,155 @@ function CountryPanel({ country }) {
   );
 }
 
+/* ── Paths pays, mémoïsés pour ne pas re-rendre au déplacement du tooltip ── */
+const MapGeographies = memo(function MapGeographies({
+  selectedId, reduce, inView, onEnter, onMove, onLeave, onActivate,
+}) {
+  return (
+    <Geographies geography={GEO_URL}>
+      {({ geographies }) => {
+        let revealIdx = 0;
+        return geographies.map((geo) => {
+          const id            = +geo.id;
+          const isCovered     = COVERED.has(id);
+          const onDemand      = ON_DEMAND_BY_ISO[id];
+          const isSelected    = selectedId === id;
+          const isInteractive = isCovered || !!onDemand;
+          const name          = onDemand ? onDemand.nom : COUNTRY_NAMES[id];
+
+          const baseFill = isSelected
+            ? '#E8C97A'
+            : isCovered
+            ? 'url(#carteGoldGradient)'
+            : onDemand
+            ? '#6E5524'
+            : '#1C1A16';
+          const hoverFill = onDemand ? '#8A6B2E' : isCovered ? baseFill : '#222018';
+          const hoverGlow = isSelected
+            ? 'drop-shadow(0 0 12px rgba(232,201,122,0.55))'
+            : isCovered
+            ? 'drop-shadow(0 0 12px rgba(201,168,76,0.45))'
+            : onDemand
+            ? 'drop-shadow(0 0 10px rgba(201,168,76,0.35))'
+            : 'none';
+
+          const ariaLabel = onDemand
+            ? `${name}, disponible sur demande, voir la page assurance internationale`
+            : isCovered
+            ? `${name}, pays couvert, voir les informations de couverture`
+            : undefined;
+
+          const geographyNode = (
+            <Geography
+              key={geo.rsmKey}
+              geography={geo}
+              fill={baseFill}
+              stroke={isSelected ? 'rgba(232,201,122,0.55)' : onDemand ? '#C9A84C' : '#080706'}
+              strokeWidth={isSelected ? 1.2 : 0.4}
+              strokeDasharray={onDemand ? '4 3' : undefined}
+              opacity={onDemand ? 0.9 : 1}
+              aria-label={ariaLabel}
+              tabIndex={isInteractive ? 0 : -1}
+              role={isInteractive ? 'button' : undefined}
+              className={isSelected && !reduce ? 'carte-pays-pulse' : undefined}
+              style={{
+                default: {
+                  outline: 'none',
+                  fill: baseFill,
+                  transformBox: 'fill-box',
+                  transformOrigin: 'center',
+                  transform: 'scale(1)',
+                  transition: reduce
+                    ? 'none'
+                    : 'fill 180ms ease-out, filter 180ms ease-out, transform 180ms ease-out',
+                  filter: isSelected
+                    ? 'drop-shadow(0 0 9px rgba(232,201,122,0.55))'
+                    : 'none',
+                },
+                hover: {
+                  outline: 'none',
+                  fill: hoverFill,
+                  cursor: isInteractive ? 'pointer' : 'default',
+                  transformBox: 'fill-box',
+                  transformOrigin: 'center',
+                  transform: isCovered && !reduce ? 'scale(1.02)' : 'scale(1)',
+                  transition: reduce
+                    ? 'none'
+                    : 'fill 180ms ease-out, filter 180ms ease-out, transform 180ms ease-out',
+                  filter: hoverGlow,
+                },
+                pressed: { outline: 'none' },
+              }}
+              onMouseEnter={(e) => onEnter(id, e)}
+              onMouseMove={(e)  => onMove(id, e)}
+              onMouseLeave={onLeave}
+              onClick={() => onActivate(id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onActivate(id);
+                }
+              }}
+            />
+          );
+
+          /* Révélation en cascade : uniquement les pays couverts et sur demande */
+          if (!isInteractive || reduce) return geographyNode;
+          const delay = revealIdx * 0.01;
+          revealIdx += 1;
+          return (
+            <m.g
+              key={geo.rsmKey}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.45, ease: 'easeOut', delay }}
+              style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+            >
+              {geographyNode}
+            </m.g>
+          );
+        });
+      }}
+    </Geographies>
+  );
+});
+
 /* ── Carte SVG ────────────────────────────────────────────────────────────── */
 function EuropeMap({ selectedId, onCountryClick, isMobile }) {
   const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
-  const reduce = useReducedMotion();
+  const [inView, setInView]   = useState(false);
+  const [sweep, setSweep]     = useState('idle');
+  const reduce   = useReducedMotion();
+  const navigate = useNavigate();
+
+  /* Tilt 3D au pointeur, desktop uniquement */
+  const [finePointer] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches,
+  );
+  const tiltActive = finePointer && !reduce;
+  const tiltX   = useMotionValue(0);
+  const tiltY   = useMotionValue(0);
+  const springX = useSpring(tiltX, { stiffness: 120, damping: 18 });
+  const springY = useSpring(tiltY, { stiffness: 120, damping: 18 });
+
+  const handleTiltMove = useCallback((e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    tiltY.set(px * 6);
+    tiltX.set(py * -6);
+  }, [tiltX, tiltY]);
+  const handleTiltLeave = useCallback(() => {
+    tiltX.set(0);
+    tiltY.set(0);
+  }, [tiltX, tiltY]);
+
+  /* Balayage lumineux unique, 0.8s après l'entrée dans le viewport */
+  useEffect(() => {
+    if (!inView || reduce) return;
+    const t = setTimeout(() => setSweep('run'), 800);
+    return () => clearTimeout(t);
+  }, [inView, reduce]);
 
   const badgeName = tooltip.visible
     ? tooltip.name
@@ -286,20 +443,29 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
     ? COUNTRY_NAMES[selectedId]
     : null;
 
-  const handleEnter = (id, e) => {
-    const name = COUNTRY_NAMES[id];
-    if (!name) return;
-    setTooltip({ visible: true, name, x: e.clientX, y: e.clientY });
-  };
-  const handleMove = (id, e) => {
-    if (!COUNTRY_NAMES[id]) return;
-    setTooltip(t => ({ ...t, x: e.clientX, y: e.clientY }));
-  };
-  const handleLeave = () => setTooltip(t => ({ ...t, visible: false }));
-  const handleClick = (id) => {
+  const handleEnter = useCallback((id, e) => {
+    const onDemand = ON_DEMAND_BY_ISO[id];
+    const covered  = COUNTRY_NAMES[id];
+    if (!onDemand && !covered) return;
+    const label = onDemand ? `${onDemand.nom} · Sur demande` : `${covered} · Couvert`;
+    setTooltip({ visible: true, name: label, x: e.clientX, y: e.clientY });
+  }, []);
+  const handleMove = useCallback((id, e) => {
+    if (!COUNTRY_NAMES[id] && !ON_DEMAND_BY_ISO[id]) return;
+    setTooltip(t => (t.visible ? { ...t, x: e.clientX, y: e.clientY } : t));
+  }, []);
+  const handleLeave = useCallback(() => {
+    setTooltip(t => ({ ...t, visible: false }));
+  }, []);
+  const handleActivate = useCallback((id) => {
+    const onDemand = ON_DEMAND_BY_ISO[id];
+    if (onDemand) {
+      navigate(`/assurance-internationale?pays=${onDemand.slug}`);
+      return;
+    }
     if (!COUNTRY_NAMES[id]) return;
     onCountryClick(id);
-  };
+  }, [navigate, onCountryClick]);
 
   return (
     <>
@@ -329,14 +495,33 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         </div>
       )}
 
-      {/* Carte container, vue fixe, toute l'Europe visible */}
-      <div
+      {/* Carte container, vue fixe, toute l'Europe visible, perspective pour le tilt */}
+      <div style={{ position: 'relative', perspective: '1200px' }}>
+        {/* Halo ambiant derrière la carte */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: -32,
+            background:
+              'radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 65%)',
+            pointerEvents: 'none',
+          }}
+        />
+      <m.div
+        onViewportEnter={() => setInView(true)}
+        viewport={{ once: true, amount: 0.3 }}
+        onMouseMove={tiltActive ? handleTiltMove : undefined}
+        onMouseLeave={tiltActive ? handleTiltLeave : undefined}
         style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--glass-border)',
           borderRadius: 20,
           overflow: 'hidden',
           position: 'relative',
+          rotateX: tiltActive ? springX : 0,
+          rotateY: tiltActive ? springY : 0,
+          willChange: tiltActive ? 'transform' : undefined,
         }}
       >
         {/* Badge nom pays */}
@@ -371,15 +556,41 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
           )}
         </AnimatePresence>
 
+        {/* Balayage lumineux unique après la cascade */}
+        {sweep === 'run' && !reduce && (
+          <m.div
+            aria-hidden="true"
+            initial={{ x: '-100%' }}
+            animate={{ x: '100%' }}
+            transition={{ duration: 1.1, ease: 'easeInOut' }}
+            onAnimationComplete={() => setSweep('done')}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 5,
+              pointerEvents: 'none',
+              background:
+                'linear-gradient(105deg, transparent 40%, rgba(232,201,122,0.12) 50%, transparent 60%)',
+            }}
+          />
+        )}
+
         <ComposableMap
           role="img"
-          aria-label="Carte des 34 pays européens couverts par l'assurance temporaire AssuTempo. Les pays couverts sont colorés en doré."
+          aria-label="Carte des 34 pays européens couverts par l'assurance temporaire AssuTempo, et des 7 destinations disponibles sur demande comme le Maroc, la Tunisie ou la Turquie."
           projection="geoAzimuthalEqualArea"
-          projectionConfig={{ rotate: [-15, -52, 0], scale: 680 }}
+          projectionConfig={{ rotate: [-15, -50, 0], scale: 680 }}
           width={800}
-          height={520}
+          height={560}
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
+          <defs>
+            {/* Dégradé or des pays couverts, angle 135 degrés */}
+            <linearGradient id="carteGoldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#C9A84C" />
+              <stop offset="100%" stopColor="#E8C97A" />
+            </linearGradient>
+          </defs>
           {/* ZoomableGroup toujours rendu (pas de conditionnel → pas de mismatch SSR).
               filterZoomEvent bloque tout sur bureau ; laisse passer sur mobile. */}
           <ZoomableGroup
@@ -388,54 +599,15 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
             maxZoom={4}
             filterZoomEvent={() => isMobile}
           >
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map((geo) => {
-                  const id        = +geo.id;
-                  const isCovered = COVERED.has(id);
-                  const name      = COUNTRY_NAMES[id];
-                  const isSelected = selectedId === id;
-                  const baseFill  = isSelected ? '#E8C97A' : isCovered ? '#C9A84C' : '#1C1A16';
-
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={baseFill}
-                      stroke={isSelected ? 'rgba(232,201,122,0.55)' : '#080706'}
-                      strokeWidth={isSelected ? 1.2 : 0.4}
-                      aria-label={isCovered ? `${name}, pays couvert` : undefined}
-                      tabIndex={isCovered ? 0 : -1}
-                      role={isCovered ? 'button' : undefined}
-                      style={{
-                        default: {
-                          outline: 'none',
-                          transition: reduce ? 'none' : 'fill 0.28s ease, filter 0.3s ease',
-                          fill: baseFill,
-                          filter: isSelected
-                            ? 'drop-shadow(0 0 9px rgba(232,201,122,0.55))'
-                            : 'none',
-                        },
-                        hover: {
-                          fill: isCovered ? '#E8C97A' : '#222018',
-                          outline: 'none',
-                          cursor: isCovered ? 'pointer' : 'default',
-                          filter: isCovered ? 'drop-shadow(0 0 7px rgba(232,201,122,0.45))' : 'none',
-                        },
-                        pressed: { outline: 'none' },
-                      }}
-                      onMouseEnter={(e) => handleEnter(id, e)}
-                      onMouseMove={(e)  => handleMove(id, e)}
-                      onMouseLeave={handleLeave}
-                      onClick={() => handleClick(id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') handleClick(id);
-                      }}
-                    />
-                  );
-                })
-              }
-            </Geographies>
+            <MapGeographies
+              selectedId={selectedId}
+              reduce={reduce}
+              inView={inView}
+              onEnter={handleEnter}
+              onMove={handleMove}
+              onLeave={handleLeave}
+              onActivate={handleActivate}
+            />
           </ZoomableGroup>
         </ComposableMap>
 
@@ -443,7 +615,8 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         <div
           style={{
             display: 'flex',
-            gap: 20,
+            gap: 16,
+            flexWrap: 'wrap',
             justifyContent: 'center',
             padding: '14px 20px',
             borderTop: '1px solid var(--glass-border)',
@@ -451,18 +624,20 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         >
           {[
             { bg: '#C9A84C', label: '34 pays couverts' },
-            { bg: '#E8C97A', border: 'none', label: 'Sélectionné' },
+            ...(selectedId != null ? [{ bg: '#E8C97A', label: 'Sélectionné' }] : []),
+            { bg: '#6E5524', border: '1px dashed #C9A84C', label: 'Sur demande' },
             { bg: '#1C1A16', border: '1px solid #333', label: 'Non couvert' },
           ].map(({ bg, border, label }) => (
             <div
               key={label}
               style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)' }}
             >
-              <div style={{ width: 14, height: 14, borderRadius: 3, background: bg, border, flexShrink: 0 }} />
+              <div style={{ width: 14, height: 14, borderRadius: 3, background: bg, border, flexShrink: 0, boxSizing: 'border-box' }} />
               {label}
             </div>
           ))}
         </div>
+      </m.div>
       </div>
     </>
   );
@@ -519,7 +694,7 @@ function Carte() {
   }, [selectedCountry?.slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Clic sur la carte ──────────────────────────────────────────────────── */
-  const handleCountryClick = (isoId) => {
+  const handleCountryClick = useCallback((isoId) => {
     const slug = ISO_TO_SLUG[isoId];
     if (!slug) return;
     if (selectedId === isoId) {
@@ -527,7 +702,7 @@ function Carte() {
     } else {
       navigate(`/carte/${slug}`);
     }
-  };
+  }, [navigate, selectedId]);
 
   /* ── SEO ────────────────────────────────────────────────────────────────── */
   const seoTitle = selectedCountry
