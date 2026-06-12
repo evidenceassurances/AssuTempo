@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
@@ -15,7 +15,7 @@ import {
   Anchor, HeartPulse, Zap,
   Wine, Sun, Snowflake, ArrowLeft, ArrowRightLeft,
   Milestone, CircleAlert, TriangleAlert,
-  Receipt, Fuel, ShoppingBag, Building2, Ban,
+  Receipt, Fuel, ShoppingBag, Building2, Ban, X,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -60,6 +60,40 @@ const ON_DEMAND = [
   { isoId: 792, slug: 'turquie',            nom: 'Turquie' },
 ];
 const ON_DEMAND_BY_ISO = Object.fromEntries(ON_DEMAND.map(c => [c.isoId, c]));
+
+const FRANCE_ID  = 250;
+const EMPTY_TRIP = [];
+
+/* Micro-info vignette / péage par isoId, issue des données pays existantes */
+const INFO_BY_ISO = Object.fromEntries(
+  COUNTRIES.filter(c => c.infoCle).map(c => [c.isoId, c.infoCle]),
+);
+
+/* ── JSON-LD ItemList (page /carte générique) ────────────────────────────── */
+const JSONLD_PAYS_COUVERTS = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: "Pays couverts par l'assurance temporaire AssuTempo",
+  numberOfItems: COUNTRIES.length,
+  itemListElement: COUNTRIES.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.nom,
+    url: `https://assutempo.fr/carte/${c.slug}`,
+  })),
+};
+const JSONLD_SUR_DEMANDE = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Destinations sur demande',
+  numberOfItems: ON_DEMAND.length,
+  itemListElement: ON_DEMAND.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.nom,
+    url: 'https://assutempo.fr/assurance-internationale',
+  })),
+};
 
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */
 const FAQ_ITEMS = [
@@ -295,23 +329,160 @@ function GeoIndexReporter({ geographies, onGeographies }) {
   return null;
 }
 
-/* ── Halo de lumière itinérant, clippé à l'intérieur du pays actif ───────── */
-const HALO_BBOX_CACHE = new Map();
+/* ── Mesures getBBox mutualisées : une seule fois par pays ───────────────── */
+const GEO_BBOX_CACHE = new Map();
 
+function useGeoBBox(geo) {
+  const measureRef = useRef(null);
+  const [box, setBox] = useState(() => (geo ? GEO_BBOX_CACHE.get(geo.rsmKey) ?? null : null));
+
+  useEffect(() => {
+    if (!geo) return;
+    const cached = GEO_BBOX_CACHE.get(geo.rsmKey);
+    if (cached) {
+      setBox(cached);
+      return;
+    }
+    if (!measureRef.current) return;
+    const b = measureRef.current.getBBox();
+    const next = { x: b.x, y: b.y, width: b.width, height: b.height };
+    GEO_BBOX_CACHE.set(geo.rsmKey, next);
+    setBox(next);
+  }, [geo?.rsmKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return [box, measureRef];
+}
+
+/* ── Ping permanent sur la France ────────────────────────────────────────── */
+function FrancePing({ geo, reduce }) {
+  const [box, measureRef] = useGeoBBox(geo);
+  if (!geo) return null;
+  return (
+    <g aria-hidden="true" style={{ pointerEvents: 'none' }}>
+      {!box && <path ref={measureRef} d={geo.svgPath} fill="none" stroke="none" />}
+      {box && (
+        <g transform={`translate(${box.x + box.width / 2}, ${box.y + box.height / 2})`}>
+          <circle r={2.5} fill="#E8C97A" />
+          {!reduce && (
+            <circle r={2.5} stroke="#E8C97A" strokeWidth={1} fill="none" className="carte-ping-ring" />
+          )}
+        </g>
+      )}
+    </g>
+  );
+}
+
+/* ── Segment de route animé entre deux pays ──────────────────────────────── */
+const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
+  const [fromBox, fromRef] = useGeoBBox(from);
+  const [toBox, toRef]     = useGeoBBox(to);
+  const measureRef = useRef(null);
+  const motionRef  = useRef(null);
+  const [length, setLength] = useState(null);
+  const [drawn, setDrawn]   = useState(false);
+
+  /* Courbe de Bézier quadratique entre les deux centroïdes,
+     point de contrôle décalé perpendiculairement de 12% de la distance */
+  const d = useMemo(() => {
+    if (!fromBox || !toBox) return null;
+    const x0 = fromBox.x + fromBox.width / 2;
+    const y0 = fromBox.y + fromBox.height / 2;
+    const x1 = toBox.x + toBox.width / 2;
+    const y1 = toBox.y + toBox.height / 2;
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    if (Math.hypot(dx, dy) < 1) return null;
+    const cx = (x0 + x1) / 2 - dy * 0.12;
+    const cy = (y0 + y1) / 2 + dx * 0.12;
+    return `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`;
+  }, [fromBox, toBox]);
+
+  /* getTotalLength une seule fois par segment */
+  useEffect(() => {
+    if (!reduce && d && length == null && measureRef.current) {
+      setLength(measureRef.current.getTotalLength());
+    }
+  }, [d, length, reduce]);
+
+  /* Le point voyageur part exactement à la fin du tracé */
+  useEffect(() => {
+    if (drawn && motionRef.current) {
+      try {
+        motionRef.current.beginElement();
+      } catch {
+        /* SMIL indisponible : le point reste masqué */
+      }
+    }
+  }, [drawn]);
+
+  if (!from || !to) return null;
+
+  return (
+    <g aria-hidden="true" style={{ pointerEvents: 'none' }}>
+      {!fromBox && <path ref={fromRef} d={from.svgPath} fill="none" stroke="none" />}
+      {!toBox && <path ref={toRef} d={to.svgPath} fill="none" stroke="none" />}
+      {d && reduce && (
+        <path
+          d={d}
+          stroke="#E8C97A"
+          strokeWidth={1.5}
+          fill="none"
+          strokeLinecap="round"
+          opacity={0.85}
+        />
+      )}
+      {d && !reduce && length == null && (
+        <path ref={measureRef} d={d} fill="none" stroke="none" />
+      )}
+      {d && !reduce && length != null && (
+        <>
+          <m.path
+            d={d}
+            stroke="#E8C97A"
+            strokeWidth={1.5}
+            fill="none"
+            strokeLinecap="round"
+            opacity={0.85}
+            strokeDasharray={length}
+            initial={{ strokeDashoffset: length }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={{ duration: 1.2, ease: 'easeOut', delay }}
+            onAnimationComplete={() => setDrawn(true)}
+          />
+          {drawn && (
+            <g>
+              <circle r={7} fill="#E8C97A" opacity={0.25} />
+              <circle r={3} fill="#E8C97A" />
+              <animateMotion
+                ref={motionRef}
+                dur="3.5s"
+                repeatCount="indefinite"
+                begin="indefinite"
+                path={d}
+              />
+            </g>
+          )}
+        </>
+      )}
+    </g>
+  );
+});
+
+/* ── Halo de lumière itinérant, clippé à l'intérieur du pays actif ───────── */
 function CountryHalo({ geo }) {
   const pathRef = useRef(null);
-  const [box, setBox] = useState(() => HALO_BBOX_CACHE.get(geo.rsmKey) ?? null);
+  const [box, setBox] = useState(() => GEO_BBOX_CACHE.get(geo.rsmKey) ?? null);
 
   /* getBBox une seule fois par pays, résultat mémoïsé au niveau module */
   useEffect(() => {
-    if (HALO_BBOX_CACHE.has(geo.rsmKey)) {
-      setBox(HALO_BBOX_CACHE.get(geo.rsmKey));
+    if (GEO_BBOX_CACHE.has(geo.rsmKey)) {
+      setBox(GEO_BBOX_CACHE.get(geo.rsmKey));
       return;
     }
     if (!pathRef.current) return;
     const b = pathRef.current.getBBox();
     const next = { x: b.x, y: b.y, width: b.width, height: b.height };
-    HALO_BBOX_CACHE.set(geo.rsmKey, next);
+    GEO_BBOX_CACHE.set(geo.rsmKey, next);
     setBox(next);
   }, [geo.rsmKey]);
 
@@ -351,7 +522,7 @@ function CountryHalo({ geo }) {
 
 /* ── Paths pays, mémoïsés pour ne pas re-rendre au survol ─────────────────── */
 const MapGeographies = memo(function MapGeographies({
-  selectedId, reduce, inView, onEnter, onLeave, onActivate, onGeographies,
+  selectedId, reduce, inView, tripMode, tripSteps, onEnter, onLeave, onActivate, onGeographies,
 }) {
   return (
     <Geographies geography={GEO_URL}>
@@ -364,22 +535,30 @@ const MapGeographies = memo(function MapGeographies({
           const isSelected    = selectedId === id;
           const isInteractive = isCovered || !!onDemand;
           const name          = onDemand ? onDemand.nom : COUNTRY_NAMES[id];
+          const inTrip        = tripMode && tripSteps.includes(id);
 
-          const baseFill = isSelected
-            ? '#D9B85E'
-            : isCovered
+          const restFill = isCovered
             ? 'url(#carteGoldGradient)'
             : onDemand
             ? '#A05E26'
             : '#1C1A16';
+          const baseFill = tripMode
+            ? inTrip
+              ? onDemand ? '#C27A35' : '#E8C97A'
+              : id === FRANCE_ID
+              ? '#D9B85E'
+              : restFill
+            : isSelected
+            ? '#D9B85E'
+            : restFill;
           const hoverFill = onDemand ? '#C27A35' : isCovered ? '#E8C97A' : baseFill;
           const fillTransition = reduce ? 'none' : 'fill 200ms ease-out';
 
           const ariaLabel = onDemand
             ? `${name}, disponible sur demande, voir la page assurance internationale`
             : isCovered
-            ? `${name}, pays couvert, voir les informations de couverture`
-            : undefined;
+            ? `${name}, couvert par l'assurance temporaire AssuTempo, voir la page dédiée`
+            : `${geo.properties?.name ?? 'Pays'}, non couvert`;
 
           const geographyNode = (
             <Geography
@@ -447,13 +626,25 @@ const MapGeographies = memo(function MapGeographies({
 });
 
 /* ── Carte SVG ────────────────────────────────────────────────────────────── */
-function EuropeMap({ selectedId, onCountryClick, isMobile }) {
+function EuropeMap({
+  selectedId, onCountryClick, isMobile,
+  tripMode = false, tripSteps = EMPTY_TRIP, onTripClick,
+}) {
   const [hovered, setHovered]   = useState(null);
   const [geoIndex, setGeoIndex] = useState(null);
   const [inView, setInView]     = useState(false);
   const [sweep, setSweep]       = useState('idle');
+  const [flash, setFlash]       = useState(null);
+  const flashTimer = useRef(null);
   const reduce   = useReducedMotion();
   const navigate = useNavigate();
+
+  const showFlash = useCallback((text) => {
+    setFlash(text);
+    clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setFlash(null), 1500);
+  }, []);
+  useEffect(() => () => clearTimeout(flashTimer.current), []);
 
   /* Tilt 3D au pointeur, desktop uniquement */
   const [finePointer] = useState(
@@ -484,14 +675,43 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
     return () => clearTimeout(t);
   }, [inView, reduce]);
 
-  const hoveredName = hovered
-    ? ON_DEMAND_BY_ISO[hovered.id]?.nom ?? COUNTRY_NAMES[hovered.id]
-    : null;
-  const badgeName = hoveredName ?? (selectedId != null ? COUNTRY_NAMES[selectedId] : null);
+  /* Tooltip : "{Pays} · {infoCle}" quand la micro-info existe, sinon le nom seul */
+  const labelFor = (id) => {
+    const name = ON_DEMAND_BY_ISO[id]?.nom ?? COUNTRY_NAMES[id];
+    const info = INFO_BY_ISO[id];
+    return info ? `${name} · ${info}` : name;
+  };
+  const badgeName = flash
+    ?? (hovered ? labelFor(hovered.id) : selectedId != null ? labelFor(selectedId) : null);
 
   /* Un seul halo actif : le pays survolé, sinon le pays sélectionné */
   const activeGeo = hovered?.geo
     ?? (selectedId != null && geoIndex ? geoIndex[selectedId] ?? null : null);
+
+  /* Segments de route : France vers pays sélectionné (pages slug),
+     ou chaîne France vers chaque étape en mode itinéraire */
+  const routePairs = useMemo(() => {
+    if (!geoIndex) return [];
+    const buildPair = (aId, bId) => {
+      const a = geoIndex[aId];
+      const b = geoIndex[bId];
+      return a && b ? { from: a, to: b, key: `${a.rsmKey}-${b.rsmKey}` } : null;
+    };
+    if (tripMode) {
+      const ids = [FRANCE_ID, ...tripSteps];
+      const pairs = [];
+      for (let i = 0; i < ids.length - 1; i += 1) {
+        const pair = buildPair(ids[i], ids[i + 1]);
+        if (pair) pairs.push(pair);
+      }
+      return pairs;
+    }
+    if (selectedId != null && selectedId !== FRANCE_ID) {
+      const pair = buildPair(FRANCE_ID, selectedId);
+      return pair ? [pair] : [];
+    }
+    return [];
+  }, [geoIndex, tripMode, tripSteps, selectedId]);
 
   const handleGeographies = useCallback((geographies) => {
     setGeoIndex(Object.fromEntries(geographies.map(g => [+g.id, g])));
@@ -504,14 +724,24 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
     setHovered(null);
   }, []);
   const handleActivate = useCallback((id) => {
-    const onDemand = ON_DEMAND_BY_ISO[id];
+    const onDemand  = ON_DEMAND_BY_ISO[id];
+    const isCovered = !!COUNTRY_NAMES[id];
+    if (tripMode) {
+      if (!onDemand && !isCovered) {
+        showFlash('Pays non couvert');
+        return;
+      }
+      if (id === FRANCE_ID) return;
+      onTripClick?.(id);
+      return;
+    }
     if (onDemand) {
       navigate(`/assurance-internationale?pays=${onDemand.slug}`);
       return;
     }
-    if (!COUNTRY_NAMES[id]) return;
+    if (!isCovered) return;
     onCountryClick(id);
-  }, [navigate, onCountryClick]);
+  }, [tripMode, onTripClick, showFlash, navigate, onCountryClick]);
 
   return (
     <>
@@ -630,6 +860,8 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
               selectedId={selectedId}
               reduce={reduce}
               inView={inView}
+              tripMode={tripMode}
+              tripSteps={tripSteps}
               onEnter={handleEnter}
               onLeave={handleLeave}
               onActivate={handleActivate}
@@ -641,6 +873,20 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
                 {activeGeo && <CountryHalo key={activeGeo.rsmKey} geo={activeGeo} />}
               </AnimatePresence>
             )}
+            {/* Ping permanent sur la France, masqué en mode itinéraire */}
+            {!tripMode && (
+              <FrancePing geo={geoIndex ? geoIndex[FRANCE_ID] : null} reduce={reduce} />
+            )}
+            {/* Routes animées France vers destination(s) */}
+            {routePairs.map((pair, i) => (
+              <RouteSegment
+                key={pair.key}
+                from={pair.from}
+                to={pair.to}
+                delay={0.4 + i * 0.3}
+                reduce={reduce}
+              />
+            ))}
           </ZoomableGroup>
         </ComposableMap>
 
@@ -688,6 +934,25 @@ function Carte() {
   const mapRef   = useRef(null);
   const panelRef = useRef(null);
 
+  /* ── Mode itinéraire (page /carte uniquement) ──────────────────────────── */
+  const [tripMode, setTripMode]   = useState(false);
+  const [tripSteps, setTripSteps] = useState([]);
+
+  const handleTripToggle = useCallback(() => {
+    setTripMode(v => !v);
+    setTripSteps([]);
+  }, []);
+  const handleTripClick = useCallback((id) => {
+    setTripSteps(prev => {
+      if (prev.includes(id)) return prev.filter(s => s !== id);
+      if (prev.length >= 8) return prev;
+      return [...prev, id];
+    });
+  }, []);
+  const handleTripRemove = useCallback((id) => {
+    setTripSteps(prev => prev.filter(s => s !== id));
+  }, []);
+
   /* ── Résolution du pays sélectionné ────────────────────────────────────── */
   const countryFromSlug = slugParam ? SLUG_TO_COUNTRY[slugParam] ?? null : null;
 
@@ -703,6 +968,11 @@ function Carte() {
 
   const selectedCountry = countryFromSlug;
   const selectedId      = selectedCountry?.isoId ?? null;
+
+  /* Le mode itinéraire n'existe que sur /carte (pas sur les pages slug) */
+  const tripActive = tripMode && !selectedCountry;
+  const tripOnDemandIds = tripSteps.filter(id => ON_DEMAND_BY_ISO[id]);
+  const tripAllCovered  = tripOnDemandIds.length === 0;
 
   /* ── Scroll depuis l'accueil ────────────────────────────────────────────── */
   useEffect(() => {
@@ -765,6 +1035,12 @@ function Carte() {
         <meta name="description" content={seoDesc} />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json">{JSON.stringify(jsonLdBase)}</script>
+        {!selectedCountry && (
+          <script type="application/ld+json">{JSON.stringify(JSONLD_PAYS_COUVERTS)}</script>
+        )}
+        {!selectedCountry && (
+          <script type="application/ld+json">{JSON.stringify(JSONLD_SUR_DEMANDE)}</script>
+        )}
       </Helmet>
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
@@ -827,6 +1103,24 @@ function Carte() {
                   : 'Assurance temporaire : 34 pays européens couverts'}
               </m.h1>
             </AnimatePresence>
+
+            {/* Réponse directe crawlable, page /carte uniquement */}
+            {!selectedCountry && (
+              <p
+                style={{
+                  fontSize: 15,
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.75,
+                  margin: '18px auto 0',
+                  maxWidth: 640,
+                }}
+              >
+                L&apos;assurance temporaire AssuTempo est valable dans 34 pays européens
+                dès le premier jour, avec une attestation unique. Sept destinations
+                supplémentaires (Maroc, Tunisie, Turquie, Albanie, Macédoine du Nord,
+                Moldavie, Azerbaïdjan) sont disponibles sur demande avec un devis sous 12h.
+              </p>
+            )}
           </m.div>
         </div>
       </section>
@@ -869,9 +1163,166 @@ function Carte() {
 
       {/* ── Carte SVG ───────────────────────────────────────────────────── */}
       <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
+        {/* Toggle mode itinéraire, page /carte uniquement */}
+        {!selectedCountry && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
+            <button
+              type="button"
+              onClick={handleTripToggle}
+              aria-pressed={tripActive}
+              style={{
+                padding: '9px 20px',
+                borderRadius: 999,
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                border: '1px solid var(--gold-border)',
+                background: tripActive ? '#C9A84C' : 'rgba(8,7,6,0.9)',
+                color: tripActive ? '#0A0A0A' : 'var(--gold-light)',
+                transition: 'background 0.25s, color 0.25s, border-color 0.25s',
+              }}
+            >
+              Mon trajet
+            </button>
+          </div>
+        )}
         <Reveal>
-          <EuropeMap selectedId={selectedId} onCountryClick={handleCountryClick} isMobile={isMobile} />
+          <EuropeMap
+            selectedId={selectedId}
+            onCountryClick={handleCountryClick}
+            isMobile={isMobile}
+            tripMode={tripActive}
+            tripSteps={tripSteps}
+            onTripClick={handleTripClick}
+          />
         </Reveal>
+
+        {/* Étapes et statut de l'itinéraire */}
+        {tripActive && (
+          <div style={{ marginTop: 16 }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '8px 14px',
+                  background: 'var(--gold-dim)',
+                  border: '1px solid var(--gold-border)',
+                  borderRadius: 999,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: 'var(--gold)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                🇫🇷 France
+              </span>
+              {tripSteps.map((id) => {
+                const onDemand = ON_DEMAND_BY_ISO[id];
+                const nom = onDemand?.nom ?? COUNTRY_NAMES[id];
+                return (
+                  <span
+                    key={id}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 7,
+                      padding: '8px 10px 8px 14px',
+                      background: 'var(--glass)',
+                      border: `1px solid ${onDemand ? '#D98E4A' : 'var(--gold-border)'}`,
+                      borderRadius: 999,
+                      fontSize: 13,
+                      color: onDemand ? '#D98E4A' : 'var(--text)',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {nom}
+                    <button
+                      type="button"
+                      onClick={() => handleTripRemove(id)}
+                      aria-label={`Retirer ${nom} de l'itinéraire`}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 18,
+                        height: 18,
+                        padding: 0,
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'inherit',
+                        opacity: 0.7,
+                      }}
+                    >
+                      <X size={12} strokeWidth={2} />
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+
+            {tripSteps.length > 0 && (
+              <div
+                style={{
+                  marginTop: 14,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 14,
+                  flexWrap: 'wrap',
+                  background: 'var(--gold-glow)',
+                  border: '1px solid var(--gold-border)',
+                  borderRadius: 12,
+                  padding: '14px 18px',
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 14,
+                    lineHeight: 1.6,
+                    fontWeight: 600,
+                    color: tripAllCovered ? 'var(--gold)' : 'var(--text)',
+                  }}
+                >
+                  {tripAllCovered
+                    ? 'Trajet entièrement couvert. Une seule attestation suffit.'
+                    : `Trajet réalisable. Devis sur demande pour : ${tripOnDemandIds
+                        .map(id => ON_DEMAND_BY_ISO[id].nom)
+                        .join(', ')}.`}
+                </p>
+                <Link
+                  to={tripAllCovered
+                    ? '/tarification'
+                    : `/assurance-internationale?pays=${ON_DEMAND_BY_ISO[tripOnDemandIds[0]].slug}`}
+                  className={tripAllCovered ? 'btn-gold' : 'btn-glass'}
+                  style={{
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '10px 20px',
+                    fontSize: 13,
+                    flexShrink: 0,
+                  }}
+                >
+                  {tripAllCovered ? 'Obtenir mon devis' : 'Demander un devis'}
+                  <ArrowRight size={13} strokeWidth={2} />
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* ── Encadré L'essentiel ─────────────────────────────────────────── */}

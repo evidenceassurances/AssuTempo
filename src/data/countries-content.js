@@ -1561,6 +1561,42 @@ const MONTENEGRO_OVERRIDE = {
   ],
 };
 
+/* ─── Micro-info tooltip carte (5 mots max) ──────────────────────────────
+   Renseignée uniquement quand le contenu de page ci-dessus mentionne déjà
+   clairement une vignette ou un péage. Aucune invention : pays absent de
+   cette liste = pas d'information affichée. */
+const INFO_CLE = {
+  "france":             `Vignette Crit'Air en ZFE`,
+  "allemagne":          `Vignette environnementale en ville`,
+  "espagne":            `Vignette DGT en ville`,
+  "belgique":           `Réseau gratuit, sans vignette`,
+  "suisse":             `Vignette autoroutière obligatoire`,
+  "italie":             `Autoroutes à péage`,
+  "royaume-uni":        `ULEZ et péage à Londres`,
+  "portugal":           `Péages électroniques sans barrière`,
+  "croatie":            `Autoroutes à péage`,
+  "danemark":           `Ponts à péage uniquement`,
+  "suede":              `Péages urbains automatiques`,
+  "norvege":            `Péages AutoPASS automatiques`,
+  "finlande":           `Aucun péage`,
+  "irlande":            `Péage M50 sans barrière`,
+  "luxembourg":         `Aucun péage`,
+  "grece":              `Autoroutes à péage`,
+  "republique-tcheque": `E-vignette obligatoire`,
+  "hongrie":            `E-vignette liée à la plaque`,
+  "bulgarie":           `E-vignette obligatoire`,
+  "roumanie":           `Vignette rovinieta obligatoire`,
+  "slovaquie":          `E-vignette obligatoire`,
+  "slovenie":           `Vignette obligatoire`,
+  "estonie":            `Aucun péage`,
+  "lettonie":           `Aucun péage`,
+  "lituanie":           `Aucun péage pour voitures`,
+  "chypre":             `Aucun péage`,
+  "andorre":            `Aucun péage`,
+  "bosnie-herzegovine": `Péage sur l'A1`,
+  "montenegro":         `Tunnel de Sozina payant`,
+};
+
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
 export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
   const base = generic(nom, flag, center);
@@ -1607,6 +1643,7 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     nom,
     flag,
     center,
+    infoCle: INFO_CLE[slug],
     title:           over.title           ?? `Assurance temporaire en ${nom}, RC dès J1 | AssuTempo`,
     metaDescription: over.metaDescription ?? (
       `Circulez en ${nom} avec l'assurance temporaire AssuTempo. Responsabilité civile couverte ` +
