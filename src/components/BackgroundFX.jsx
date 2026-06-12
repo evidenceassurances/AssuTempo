@@ -1,4 +1,13 @@
+import { useSyncExternalStore } from 'react';
 import { useScroll, useTransform, m } from 'framer-motion';
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
+function subscribeReducedMotion(callback) {
+  const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+  mq.addEventListener('change', callback);
+  return () => mq.removeEventListener('change', callback);
+}
 
 /* Données statiques des particules (20 particules) */
 const PARTICLES = [
@@ -96,8 +105,14 @@ function StaticParticles() {
 
 /* BackgroundFX - fond atmosphérique 5 couches + particules scroll */
 function BackgroundFX() {
-  const prefersReduced = typeof window !== 'undefined'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Snapshot serveur false : le HTML prérendu suppose toujours la version
+     animée, la bascule reduced-motion se fait juste après hydratation
+     (sinon mismatch React #418 pour les utilisateurs en reduced-motion). */
+  const prefersReduced = useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia(REDUCED_MOTION_QUERY).matches,
+    () => false,
+  );
 
   return (
     <div

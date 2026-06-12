@@ -95,7 +95,12 @@ for (const route of ROUTES) {
 
   /* React 19 rend les balises <Helmet> (<title>, <meta>, <link>) directement
      dans le HTML du composant (Document Metadata hoisting). Il faut les
-     extraire du body SSR et les hisser dans le <head> du template. */
+     extraire du body SSR et les hisser dans le <head> du template.
+     ATTENTION : ne pas toucher aux <script type="application/ld+json">.
+     Contrairement aux title/meta/link (hoistables, que React 19 réconcilie
+     avec le <head> sans erreur), un <script> inline reste dans l'arbre client
+     à sa position d'origine : le retirer du body prérendu provoque un
+     mismatch d'hydratation React #418. Le JSON-LD est valide dans le body. */
 
   // Extraire le <title> depuis le body et le retirer du body
   const titleMatch = appHtml.match(/<title[^>]*>([^<]*)<\/title>/);
@@ -114,13 +119,6 @@ for (const route of ROUTES) {
   if (canonicalMatch) {
     appHtml = appHtml.replace(/<link\s+rel="canonical"[^>]*\/?>/gi, '');
   }
-
-  // Extraire les <script type="application/ld+json"> depuis le body
-  const ldJsonTags = [];
-  appHtml = appHtml.replace(
-    /<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/gi,
-    (match) => { ldJsonTags.push(match); return ''; },
-  );
 
   // Injecter le contenu dans le template
   let pageHtml = template.replace('<!--ssr-outlet-->', appHtml);
@@ -141,14 +139,12 @@ for (const route of ROUTES) {
     );
   }
 
-  // Injecter le canonical et les ld+json avant </head>
-  const headExtras = [
-    canonicalMatch ? `<link rel="canonical" href="${canonicalMatch[1]}">` : '',
-    ...ldJsonTags,
-  ].filter(Boolean).join('\n    ');
-
-  if (headExtras) {
-    pageHtml = pageHtml.replace('</head>', `    ${headExtras}\n  </head>`);
+  // Injecter le canonical avant </head>
+  if (canonicalMatch) {
+    pageHtml = pageHtml.replace(
+      '</head>',
+      `    <link rel="canonical" href="${canonicalMatch[1]}">\n  </head>`,
+    );
   }
 
   // Écrire dans dist/<route>/index.html
