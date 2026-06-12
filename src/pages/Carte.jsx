@@ -15,7 +15,7 @@ import {
   Anchor, HeartPulse, Zap,
   Wine, Sun, Snowflake, ArrowLeft, ArrowRightLeft,
   Milestone, CircleAlert, TriangleAlert,
-  Receipt, Fuel, ShoppingBag, Building2, Ban, X,
+  Receipt, Fuel, ShoppingBag, Building2, Ban, X, MapPin,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -45,6 +45,8 @@ import {
 
 /* ── Constantes géo ──────────────────────────────────────────────────────── */
 const GEO_URL = '/countries-110m.json';
+const MAP_W   = 800;
+const MAP_H   = 560;
 
 const COVERED        = new Set(COUNTRIES.map(c => c.isoId));
 const COUNTRY_NAMES  = Object.fromEntries(COUNTRIES.map(c => [c.isoId, c.nom]));
@@ -353,8 +355,8 @@ function useGeoBBox(geo) {
   return [box, measureRef];
 }
 
-/* ── Ping permanent sur la France ────────────────────────────────────────── */
-function FrancePing({ geo, reduce }) {
+/* ── Ping lumineux : pays de départ en mode itinéraire, France sinon ─────── */
+function MapPing({ geo, reduce }) {
   const [box, measureRef] = useGeoBBox(geo);
   if (!geo) return null;
   return (
@@ -383,7 +385,7 @@ function RouteMarker({ x, y }) {
 }
 
 /* ── Segment de route animé entre deux pays ──────────────────────────────── */
-const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showStart = false }) {
+const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
   const [fromBox, fromRef] = useGeoBBox(from);
   const [toBox, toRef]     = useGeoBBox(to);
   const measureRef = useRef(null);
@@ -391,8 +393,10 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showS
   const [length, setLength] = useState(null);
   const [drawn, setDrawn]   = useState(false);
 
-  /* Courbe de Bézier quadratique entre les deux centroïdes,
-     point de contrôle décalé perpendiculairement de 12% de la distance */
+  /* Courbe de Bézier quadratique entre les deux centroïdes.
+     Décalage perpendiculaire du point de contrôle : 12% de la distance,
+     plafonné à 40 unités, puis point de contrôle ramené dans le viewBox
+     (marge de 10 unités) pour que la route reste dans le cadre. */
   const seg = useMemo(() => {
     if (!fromBox || !toBox) return null;
     const x0 = fromBox.x + fromBox.width / 2;
@@ -401,9 +405,13 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showS
     const y1 = toBox.y + toBox.height / 2;
     const dx = x1 - x0;
     const dy = y1 - y0;
-    if (Math.hypot(dx, dy) < 1) return null;
-    const cx = (x0 + x1) / 2 - dy * 0.12;
-    const cy = (y0 + y1) / 2 + dx * 0.12;
+    const dist = Math.hypot(dx, dy);
+    if (dist < 1) return null;
+    const offset = Math.min(dist * 0.12, 40);
+    let cx = (x0 + x1) / 2 - (dy / dist) * offset;
+    let cy = (y0 + y1) / 2 + (dx / dist) * offset;
+    cx = Math.min(Math.max(cx, 10), MAP_W - 10);
+    cy = Math.min(Math.max(cy, 10), MAP_H - 10);
     return { d: `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`, x0, y0, x1, y1 };
   }, [fromBox, toBox]);
 
@@ -452,7 +460,6 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showS
             strokeLinecap="round"
             opacity={0.95}
           />
-          {showStart && <RouteMarker x={seg.x0} y={seg.y0} />}
           <RouteMarker x={seg.x1} y={seg.y1} />
         </>
       )}
@@ -461,7 +468,6 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showS
       )}
       {seg && !reduce && length != null && (
         <>
-          {showStart && <RouteMarker x={seg.x0} y={seg.y0} />}
           <m.path
             d={seg.d}
             stroke="#0A0A0A"
@@ -586,8 +592,6 @@ const MapGeographies = memo(function MapGeographies({
           const baseFill = tripMode
             ? inTrip
               ? onDemand ? '#C27A35' : '#E8C97A'
-              : id === FRANCE_ID
-              ? '#D9B85E'
               : restFill
             : isSelected
             ? '#D9B85E'
@@ -670,7 +674,9 @@ const MapGeographies = memo(function MapGeographies({
 function EuropeMap({
   selectedId, onCountryClick, isMobile,
   tripMode = false, tripSteps = EMPTY_TRIP, onTripClick,
+  showTripToggle = false, onTripToggle,
 }) {
+  const isNarrow = useIsMobile('(max-width: 640px)');
   const [hovered, setHovered]   = useState(null);
   const [geoIndex, setGeoIndex] = useState(null);
   const [inView, setInView]     = useState(false);
@@ -730,7 +736,7 @@ function EuropeMap({
     ?? (selectedId != null && geoIndex ? geoIndex[selectedId] ?? null : null);
 
   /* Segments de route : France vers pays sélectionné (pages slug),
-     ou chaîne France vers chaque étape en mode itinéraire */
+     ou chaîne depuis le pays de départ choisi en mode itinéraire */
   const routePairs = useMemo(() => {
     if (!geoIndex) return [];
     const buildPair = (aId, bId) => {
@@ -739,10 +745,9 @@ function EuropeMap({
       return a && b ? { from: a, to: b, key: `${a.rsmKey}-${b.rsmKey}` } : null;
     };
     if (tripMode) {
-      const ids = [FRANCE_ID, ...tripSteps];
       const pairs = [];
-      for (let i = 0; i < ids.length - 1; i += 1) {
-        const pair = buildPair(ids[i], ids[i + 1]);
+      for (let i = 0; i < tripSteps.length - 1; i += 1) {
+        const pair = buildPair(tripSteps[i], tripSteps[i + 1]);
         if (pair) pairs.push(pair);
       }
       return pairs;
@@ -753,6 +758,15 @@ function EuropeMap({
     }
     return [];
   }, [geoIndex, tripMode, tripSteps, selectedId]);
+
+  /* Ping : pays de départ de l'itinéraire, France hors mode itinéraire */
+  const pingGeo = geoIndex
+    ? tripMode
+      ? tripSteps.length > 0
+        ? geoIndex[tripSteps[0]] ?? null
+        : null
+      : geoIndex[FRANCE_ID] ?? null
+    : null;
 
   const handleGeographies = useCallback((geographies) => {
     setGeoIndex(Object.fromEntries(geographies.map(g => [+g.id, g])));
@@ -772,7 +786,6 @@ function EuropeMap({
         showFlash('Pays non couvert');
         return;
       }
-      if (id === FRANCE_ID) return;
       onTripClick?.(id);
       return;
     }
@@ -828,8 +841,9 @@ function EuropeMap({
               style={{
                 position: 'absolute',
                 top: 12,
-                left: '50%',
-                x: '-50%',
+                ...(showTripToggle && isNarrow
+                  ? { right: 12, maxWidth: '55%', overflow: 'hidden', textOverflow: 'ellipsis' }
+                  : { left: '50%', x: '-50%' }),
                 background: 'rgba(8,7,6,0.9)',
                 border: '1px solid var(--gold-border)',
                 borderRadius: 999,
@@ -846,6 +860,96 @@ function EuropeMap({
             </m.div>
           )}
         </AnimatePresence>
+
+        {/* Toggle Mon trajet, en superposition coin supérieur gauche */}
+        {showTripToggle && (
+          <div
+            style={{
+              position: 'absolute',
+              top: isNarrow ? 12 : 16,
+              left: isNarrow ? 12 : 16,
+              zIndex: 11,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: 6,
+            }}
+          >
+            <button
+              type="button"
+              onClick={onTripToggle}
+              aria-pressed={tripMode}
+              onMouseEnter={(e) => {
+                if (!tripMode) e.currentTarget.style.borderColor = 'rgba(201,168,76,0.8)';
+              }}
+              onMouseLeave={(e) => {
+                if (!tripMode) e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)';
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                minHeight: 44,
+                padding: isNarrow ? '8px 14px' : '9px 18px',
+                borderRadius: 999,
+                fontSize: isNarrow ? 12.5 : 13,
+                fontWeight: 500,
+                fontFamily: 'inherit',
+                cursor: 'pointer',
+                border: `1px solid ${tripMode ? 'transparent' : 'rgba(201,168,76,0.4)'}`,
+                background: tripMode
+                  ? 'linear-gradient(135deg, #C9A84C, #E8C97A)'
+                  : 'rgba(10,10,10,0.65)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: tripMode ? '#0A0A0A' : '#E8C97A',
+                transition:
+                  'background 250ms ease-out, color 250ms ease-out, border-color 200ms, opacity 250ms ease-out',
+              }}
+            >
+              <Route size={16} strokeWidth={2} />
+              Mon trajet
+              {tripMode && tripSteps.length > 0 && (
+                <span
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderRadius: '50%',
+                    background: '#0A0A0A',
+                    color: '#E8C97A',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {tripSteps.length}
+                </span>
+              )}
+            </button>
+            <AnimatePresence>
+              {tripMode && tripSteps.length === 0 && (
+                <m.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    margin: 0,
+                    paddingLeft: 4,
+                    fontSize: 11,
+                    color: 'rgba(232,201,122,0.7)',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  Cliquez sur les pays de votre trajet
+                </m.p>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
         {/* Balayage lumineux unique après la cascade */}
         {sweep === 'run' && !reduce && (
@@ -871,8 +975,8 @@ function EuropeMap({
           aria-label="Carte des 34 pays européens couverts par l'assurance temporaire AssuTempo, et des 7 destinations disponibles sur demande comme le Maroc, la Tunisie ou la Turquie."
           projection="geoAzimuthalEqualArea"
           projectionConfig={{ rotate: [-15, -50, 0], scale: 680 }}
-          width={800}
-          height={560}
+          width={MAP_W}
+          height={MAP_H}
           shapeRendering="geometricPrecision"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
@@ -914,11 +1018,9 @@ function EuropeMap({
                 {activeGeo && <CountryHalo key={activeGeo.rsmKey} geo={activeGeo} />}
               </AnimatePresence>
             )}
-            {/* Ping permanent sur la France, masqué en mode itinéraire */}
-            {!tripMode && (
-              <FrancePing geo={geoIndex ? geoIndex[FRANCE_ID] : null} reduce={reduce} />
-            )}
-            {/* Routes animées France vers destination(s) */}
+            {/* Ping lumineux : départ de l'itinéraire, France sinon */}
+            {pingGeo && <MapPing key={pingGeo.rsmKey} geo={pingGeo} reduce={reduce} />}
+            {/* Routes animées entre les étapes */}
             {routePairs.map((pair, i) => (
               <RouteSegment
                 key={pair.key}
@@ -926,7 +1028,6 @@ function EuropeMap({
                 to={pair.to}
                 delay={0.4 + i * 0.3}
                 reduce={reduce}
-                showStart={tripMode && i === 0}
               />
             ))}
           </ZoomableGroup>
@@ -1205,30 +1306,6 @@ function Carte() {
 
       {/* ── Carte SVG ───────────────────────────────────────────────────── */}
       <section ref={mapRef} style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 0' }}>
-        {/* Toggle mode itinéraire, page /carte uniquement */}
-        {!selectedCountry && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
-            <button
-              type="button"
-              onClick={handleTripToggle}
-              aria-pressed={tripActive}
-              style={{
-                padding: '9px 20px',
-                borderRadius: 999,
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                border: '1px solid var(--gold-border)',
-                background: tripActive ? '#C9A84C' : 'rgba(8,7,6,0.9)',
-                color: tripActive ? '#0A0A0A' : 'var(--gold-light)',
-                transition: 'background 0.25s, color 0.25s, border-color 0.25s',
-              }}
-            >
-              Mon trajet
-            </button>
-          </div>
-        )}
         <Reveal>
           <EuropeMap
             selectedId={selectedId}
@@ -1237,132 +1314,164 @@ function Carte() {
             tripMode={tripActive}
             tripSteps={tripSteps}
             onTripClick={handleTripClick}
+            showTripToggle={!selectedCountry}
+            onTripToggle={handleTripToggle}
           />
         </Reveal>
 
         {/* Étapes et statut de l'itinéraire */}
         {tripActive && (
           <div style={{ marginTop: 16 }}>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '8px 14px',
-                  background: 'var(--gold-dim)',
-                  border: '1px solid var(--gold-border)',
-                  borderRadius: 999,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: 'var(--gold)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                🇫🇷 France
-              </span>
-              {tripSteps.map((id) => {
-                const onDemand = ON_DEMAND_BY_ISO[id];
-                const nom = onDemand?.nom ?? COUNTRY_NAMES[id];
-                return (
-                  <span
-                    key={id}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 7,
-                      padding: '8px 10px 8px 14px',
-                      background: 'var(--glass)',
-                      border: `1px solid ${onDemand ? '#D98E4A' : 'var(--gold-border)'}`,
-                      borderRadius: 999,
-                      fontSize: 13,
-                      color: onDemand ? '#D98E4A' : 'var(--text)',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {nom}
-                    <button
-                      type="button"
-                      onClick={() => handleTripRemove(id)}
-                      aria-label={`Retirer ${nom} de l'itinéraire`}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 18,
-                        height: 18,
-                        padding: 0,
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        color: 'inherit',
-                        opacity: 0.7,
-                      }}
-                    >
-                      <X size={12} strokeWidth={2} />
-                    </button>
-                  </span>
-                );
-              })}
-            </div>
-
             {tripSteps.length > 0 && (
               <div
                 style={{
-                  marginTop: 14,
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 14,
                   flexWrap: 'wrap',
-                  background: 'var(--gold-glow)',
-                  border: '1px solid var(--gold-border)',
-                  borderRadius: 12,
-                  padding: '14px 18px',
+                  gap: 8,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    fontWeight: 600,
-                    color: tripAllCovered ? 'var(--gold)' : 'var(--text)',
-                  }}
-                >
-                  {tripAllCovered
-                    ? 'Trajet entièrement couvert. Une seule attestation suffit.'
-                    : `Trajet réalisable. Devis sur demande pour : ${tripOnDemandIds
-                        .map(id => ON_DEMAND_BY_ISO[id].nom)
-                        .join(', ')}.`}
-                </p>
-                <Link
-                  to={tripAllCovered
-                    ? '/tarification'
-                    : `/assurance-internationale?pays=${ON_DEMAND_BY_ISO[tripOnDemandIds[0]].slug}`}
-                  className={tripAllCovered ? 'btn-gold' : 'btn-glass'}
-                  style={{
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '10px 20px',
-                    fontSize: 13,
-                    flexShrink: 0,
-                  }}
-                >
-                  {tripAllCovered ? 'Obtenir mon devis' : 'Demander un devis'}
-                  <ArrowRight size={13} strokeWidth={2} />
-                </Link>
+                {tripSteps.map((id, i) => {
+                  const onDemand = ON_DEMAND_BY_ISO[id];
+                  const nom = onDemand?.nom ?? COUNTRY_NAMES[id];
+                  if (i === 0) {
+                    return (
+                      <span
+                        key={id}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 7,
+                          padding: '8px 14px',
+                          background: 'var(--gold-dim)',
+                          border: '1px solid var(--gold)',
+                          borderRadius: 999,
+                          fontSize: 13,
+                          color: 'var(--text)',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        <MapPin size={12} strokeWidth={2} color="var(--gold)" />
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            color: 'var(--gold)',
+                          }}
+                        >
+                          Départ
+                        </span>
+                        {nom}
+                      </span>
+                    );
+                  }
+                  return (
+                    <span
+                      key={id}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 7,
+                        padding: '8px 10px 8px 14px',
+                        background: 'var(--glass)',
+                        border: `1px solid ${onDemand ? '#D98E4A' : 'var(--gold-border)'}`,
+                        borderRadius: 999,
+                        fontSize: 13,
+                        color: onDemand ? '#D98E4A' : 'var(--text)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {nom}
+                      <button
+                        type="button"
+                        onClick={() => handleTripRemove(id)}
+                        aria-label={`Retirer ${nom} de l'itinéraire`}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 18,
+                          height: 18,
+                          padding: 0,
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: 'inherit',
+                          opacity: 0.7,
+                        }}
+                      >
+                        <X size={12} strokeWidth={2} />
+                      </button>
+                    </span>
+                  );
+                })}
               </div>
             )}
+
+            {/* Bandeau de statut : invite, puis bilan de couverture */}
+            <div
+              style={{
+                marginTop: tripSteps.length > 0 ? 14 : 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: tripSteps.length >= 2 ? 'space-between' : 'center',
+                gap: 14,
+                flexWrap: 'wrap',
+                background: 'var(--gold-glow)',
+                border: '1px solid var(--gold-border)',
+                borderRadius: 12,
+                padding: '14px 18px',
+              }}
+            >
+              {tripSteps.length === 0 ? (
+                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--text-muted)' }}>
+                  Cliquez sur votre pays de départ
+                </p>
+              ) : tripSteps.length === 1 ? (
+                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--text-muted)' }}>
+                  Ajoutez les pays de votre trajet
+                </p>
+              ) : (
+                <>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      fontWeight: 600,
+                      color: tripAllCovered ? 'var(--gold)' : 'var(--text)',
+                    }}
+                  >
+                    {tripAllCovered
+                      ? 'Trajet entièrement couvert. Une seule attestation suffit.'
+                      : `Trajet réalisable. Devis sur demande pour : ${tripOnDemandIds
+                          .map(id => ON_DEMAND_BY_ISO[id].nom)
+                          .join(', ')}.`}
+                  </p>
+                  <Link
+                    to={tripAllCovered
+                      ? '/tarification'
+                      : `/assurance-internationale?pays=${ON_DEMAND_BY_ISO[tripOnDemandIds[0]].slug}`}
+                    className={tripAllCovered ? 'btn-gold' : 'btn-glass'}
+                    style={{
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      padding: '10px 20px',
+                      fontSize: 13,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {tripAllCovered ? 'Obtenir mon devis' : 'Demander un devis'}
+                    <ArrowRight size={13} strokeWidth={2} />
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         )}
       </section>
