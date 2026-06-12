@@ -372,8 +372,18 @@ function FrancePing({ geo, reduce }) {
   );
 }
 
+/* ── Marqueur d'étape à contraste garanti ────────────────────────────────── */
+function RouteMarker({ x, y }) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <circle r={4.5} fill="#0A0A0A" opacity={0.5} />
+      <circle r={2.5} fill="#F5EDD6" />
+    </g>
+  );
+}
+
 /* ── Segment de route animé entre deux pays ──────────────────────────────── */
-const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
+const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce, showStart = false }) {
   const [fromBox, fromRef] = useGeoBBox(from);
   const [toBox, toRef]     = useGeoBBox(to);
   const measureRef = useRef(null);
@@ -383,7 +393,7 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
 
   /* Courbe de Bézier quadratique entre les deux centroïdes,
      point de contrôle décalé perpendiculairement de 12% de la distance */
-  const d = useMemo(() => {
+  const seg = useMemo(() => {
     if (!fromBox || !toBox) return null;
     const x0 = fromBox.x + fromBox.width / 2;
     const y0 = fromBox.y + fromBox.height / 2;
@@ -394,15 +404,15 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
     if (Math.hypot(dx, dy) < 1) return null;
     const cx = (x0 + x1) / 2 - dy * 0.12;
     const cy = (y0 + y1) / 2 + dx * 0.12;
-    return `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`;
+    return { d: `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`, x0, y0, x1, y1 };
   }, [fromBox, toBox]);
 
   /* getTotalLength une seule fois par segment */
   useEffect(() => {
-    if (!reduce && d && length == null && measureRef.current) {
+    if (!reduce && seg && length == null && measureRef.current) {
       setLength(measureRef.current.getTotalLength());
     }
-  }, [d, length, reduce]);
+  }, [seg, length, reduce]);
 
   /* Le point voyageur part exactement à la fin du tracé */
   useEffect(() => {
@@ -417,50 +427,81 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
 
   if (!from || !to) return null;
 
+  /* Tracé synchronisé des deux traits (casing sombre + trait ivoire) */
+  const drawTransition = { duration: 1.2, ease: 'easeOut', delay };
+
   return (
     <g aria-hidden="true" style={{ pointerEvents: 'none' }}>
       {!fromBox && <path ref={fromRef} d={from.svgPath} fill="none" stroke="none" />}
       {!toBox && <path ref={toRef} d={to.svgPath} fill="none" stroke="none" />}
-      {d && reduce && (
-        <path
-          d={d}
-          stroke="#E8C97A"
-          strokeWidth={1.5}
-          fill="none"
-          strokeLinecap="round"
-          opacity={0.85}
-        />
-      )}
-      {d && !reduce && length == null && (
-        <path ref={measureRef} d={d} fill="none" stroke="none" />
-      )}
-      {d && !reduce && length != null && (
+      {seg && reduce && (
         <>
-          <m.path
-            d={d}
-            stroke="#E8C97A"
+          <path
+            d={seg.d}
+            stroke="#0A0A0A"
+            strokeWidth={4}
+            fill="none"
+            strokeLinecap="round"
+            opacity={0.55}
+          />
+          <path
+            d={seg.d}
+            stroke="#F5EDD6"
             strokeWidth={1.5}
             fill="none"
             strokeLinecap="round"
-            opacity={0.85}
+            opacity={0.95}
+          />
+          {showStart && <RouteMarker x={seg.x0} y={seg.y0} />}
+          <RouteMarker x={seg.x1} y={seg.y1} />
+        </>
+      )}
+      {seg && !reduce && length == null && (
+        <path ref={measureRef} d={seg.d} fill="none" stroke="none" />
+      )}
+      {seg && !reduce && length != null && (
+        <>
+          {showStart && <RouteMarker x={seg.x0} y={seg.y0} />}
+          <m.path
+            d={seg.d}
+            stroke="#0A0A0A"
+            strokeWidth={4}
+            fill="none"
+            strokeLinecap="round"
+            opacity={0.55}
             strokeDasharray={length}
             initial={{ strokeDashoffset: length }}
             animate={{ strokeDashoffset: 0 }}
-            transition={{ duration: 1.2, ease: 'easeOut', delay }}
+            transition={drawTransition}
+          />
+          <m.path
+            d={seg.d}
+            stroke="#F5EDD6"
+            strokeWidth={1.5}
+            fill="none"
+            strokeLinecap="round"
+            opacity={0.95}
+            strokeDasharray={length}
+            initial={{ strokeDashoffset: length }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={drawTransition}
             onAnimationComplete={() => setDrawn(true)}
           />
           {drawn && (
-            <g>
-              <circle r={7} fill="#E8C97A" opacity={0.25} />
-              <circle r={3} fill="#E8C97A" />
-              <animateMotion
-                ref={motionRef}
-                dur="3.5s"
-                repeatCount="indefinite"
-                begin="indefinite"
-                path={d}
-              />
-            </g>
+            <>
+              <RouteMarker x={seg.x1} y={seg.y1} />
+              <g>
+                <circle r={6} fill="#0A0A0A" opacity={0.5} />
+                <circle r={3} fill="#F5EDD6" />
+                <animateMotion
+                  ref={motionRef}
+                  dur="3.5s"
+                  repeatCount="indefinite"
+                  begin="indefinite"
+                  path={seg.d}
+                />
+              </g>
+            </>
           )}
         </>
       )}
@@ -885,6 +926,7 @@ function EuropeMap({
                 to={pair.to}
                 delay={0.4 + i * 0.3}
                 reduce={reduce}
+                showStart={tripMode && i === 0}
               />
             ))}
           </ZoomableGroup>
