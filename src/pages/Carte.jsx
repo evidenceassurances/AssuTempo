@@ -287,15 +287,77 @@ function CountryPanel({ country }) {
   );
 }
 
-/* ── Paths pays, mémoïsés pour ne pas re-rendre au déplacement du tooltip ── */
+/* ── Remontée des géographies chargées vers EuropeMap (pour le halo) ────── */
+function GeoIndexReporter({ geographies, onGeographies }) {
+  useEffect(() => {
+    if (geographies.length > 0) onGeographies(geographies);
+  }, [geographies, onGeographies]);
+  return null;
+}
+
+/* ── Halo de lumière itinérant, clippé à l'intérieur du pays actif ───────── */
+const HALO_BBOX_CACHE = new Map();
+
+function CountryHalo({ geo }) {
+  const pathRef = useRef(null);
+  const [box, setBox] = useState(() => HALO_BBOX_CACHE.get(geo.rsmKey) ?? null);
+
+  /* getBBox une seule fois par pays, résultat mémoïsé au niveau module */
+  useEffect(() => {
+    if (HALO_BBOX_CACHE.has(geo.rsmKey)) {
+      setBox(HALO_BBOX_CACHE.get(geo.rsmKey));
+      return;
+    }
+    if (!pathRef.current) return;
+    const b = pathRef.current.getBBox();
+    const next = { x: b.x, y: b.y, width: b.width, height: b.height };
+    HALO_BBOX_CACHE.set(geo.rsmKey, next);
+    setBox(next);
+  }, [geo.rsmKey]);
+
+  const clipId = `carte-halo-clip-${geo.rsmKey}`;
+
+  return (
+    <m.g
+      aria-hidden="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      style={{ pointerEvents: 'none' }}
+    >
+      <clipPath id={clipId}>
+        <path ref={pathRef} d={geo.svgPath} />
+      </clipPath>
+      {box && (
+        <g clipPath={`url(#${clipId})`}>
+          <m.circle
+            cx={0}
+            cy={0}
+            r={Math.max(box.width, box.height) * 0.6}
+            fill="url(#carteHaloGradient)"
+            style={{ pointerEvents: 'none' }}
+            animate={{
+              x: [box.x, box.x + box.width, box.x + box.width, box.x, box.x],
+              y: [box.y, box.y, box.y + box.height, box.y + box.height, box.y],
+            }}
+            transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
+          />
+        </g>
+      )}
+    </m.g>
+  );
+}
+
+/* ── Paths pays, mémoïsés pour ne pas re-rendre au survol ─────────────────── */
 const MapGeographies = memo(function MapGeographies({
-  selectedId, reduce, inView, onEnter, onMove, onLeave, onActivate,
+  selectedId, reduce, inView, onEnter, onLeave, onActivate, onGeographies,
 }) {
   return (
     <Geographies geography={GEO_URL}>
       {({ geographies }) => {
         let revealIdx = 0;
-        return geographies.map((geo) => {
+        const nodes = geographies.map((geo) => {
           const id            = +geo.id;
           const isCovered     = COVERED.has(id);
           const onDemand      = ON_DEMAND_BY_ISO[id];
@@ -304,20 +366,14 @@ const MapGeographies = memo(function MapGeographies({
           const name          = onDemand ? onDemand.nom : COUNTRY_NAMES[id];
 
           const baseFill = isSelected
-            ? '#E8C97A'
+            ? '#D9B85E'
             : isCovered
             ? 'url(#carteGoldGradient)'
             : onDemand
-            ? '#6E5524'
+            ? '#A05E26'
             : '#1C1A16';
-          const hoverFill = onDemand ? '#8A6B2E' : isCovered ? baseFill : '#222018';
-          const hoverGlow = isSelected
-            ? 'drop-shadow(0 0 12px rgba(232,201,122,0.55))'
-            : isCovered
-            ? 'drop-shadow(0 0 12px rgba(201,168,76,0.45))'
-            : onDemand
-            ? 'drop-shadow(0 0 10px rgba(201,168,76,0.35))'
-            : 'none';
+          const hoverFill = onDemand ? '#C27A35' : isCovered ? '#E8C97A' : baseFill;
+          const fillTransition = reduce ? 'none' : 'fill 200ms ease-out';
 
           const ariaLabel = onDemand
             ? `${name}, disponible sur demande, voir la page assurance internationale`
@@ -330,44 +386,28 @@ const MapGeographies = memo(function MapGeographies({
               key={geo.rsmKey}
               geography={geo}
               fill={baseFill}
-              stroke={isSelected ? 'rgba(232,201,122,0.55)' : onDemand ? '#C9A84C' : '#080706'}
+              stroke={isSelected ? 'rgba(232,201,122,0.55)' : onDemand ? '#D98E4A' : '#080706'}
               strokeWidth={isSelected ? 1.2 : 0.4}
               strokeDasharray={onDemand ? '4 3' : undefined}
-              opacity={onDemand ? 0.9 : 1}
+              vectorEffect="non-scaling-stroke"
               aria-label={ariaLabel}
               tabIndex={isInteractive ? 0 : -1}
               role={isInteractive ? 'button' : undefined}
-              className={isSelected && !reduce ? 'carte-pays-pulse' : undefined}
               style={{
                 default: {
                   outline: 'none',
                   fill: baseFill,
-                  transformBox: 'fill-box',
-                  transformOrigin: 'center',
-                  transform: 'scale(1)',
-                  transition: reduce
-                    ? 'none'
-                    : 'fill 180ms ease-out, filter 180ms ease-out, transform 180ms ease-out',
-                  filter: isSelected
-                    ? 'drop-shadow(0 0 9px rgba(232,201,122,0.55))'
-                    : 'none',
+                  transition: fillTransition,
                 },
                 hover: {
                   outline: 'none',
                   fill: hoverFill,
                   cursor: isInteractive ? 'pointer' : 'default',
-                  transformBox: 'fill-box',
-                  transformOrigin: 'center',
-                  transform: isCovered && !reduce ? 'scale(1.02)' : 'scale(1)',
-                  transition: reduce
-                    ? 'none'
-                    : 'fill 180ms ease-out, filter 180ms ease-out, transform 180ms ease-out',
-                  filter: hoverGlow,
+                  transition: fillTransition,
                 },
                 pressed: { outline: 'none' },
               }}
-              onMouseEnter={(e) => onEnter(id, e)}
-              onMouseMove={(e)  => onMove(id, e)}
+              onMouseEnter={() => onEnter(id, geo)}
               onMouseLeave={onLeave}
               onClick={() => onActivate(id)}
               onKeyDown={(e) => {
@@ -395,6 +435,12 @@ const MapGeographies = memo(function MapGeographies({
             </m.g>
           );
         });
+        return (
+          <>
+            <GeoIndexReporter geographies={geographies} onGeographies={onGeographies} />
+            {nodes}
+          </>
+        );
       }}
     </Geographies>
   );
@@ -402,9 +448,10 @@ const MapGeographies = memo(function MapGeographies({
 
 /* ── Carte SVG ────────────────────────────────────────────────────────────── */
 function EuropeMap({ selectedId, onCountryClick, isMobile }) {
-  const [tooltip, setTooltip] = useState({ visible: false, name: '', x: 0, y: 0 });
-  const [inView, setInView]   = useState(false);
-  const [sweep, setSweep]     = useState('idle');
+  const [hovered, setHovered]   = useState(null);
+  const [geoIndex, setGeoIndex] = useState(null);
+  const [inView, setInView]     = useState(false);
+  const [sweep, setSweep]       = useState('idle');
   const reduce   = useReducedMotion();
   const navigate = useNavigate();
 
@@ -437,25 +484,24 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
     return () => clearTimeout(t);
   }, [inView, reduce]);
 
-  const badgeName = tooltip.visible
-    ? tooltip.name
-    : selectedId != null
-    ? COUNTRY_NAMES[selectedId]
+  const hoveredName = hovered
+    ? ON_DEMAND_BY_ISO[hovered.id]?.nom ?? COUNTRY_NAMES[hovered.id]
     : null;
+  const badgeName = hoveredName ?? (selectedId != null ? COUNTRY_NAMES[selectedId] : null);
 
-  const handleEnter = useCallback((id, e) => {
-    const onDemand = ON_DEMAND_BY_ISO[id];
-    const covered  = COUNTRY_NAMES[id];
-    if (!onDemand && !covered) return;
-    const label = onDemand ? `${onDemand.nom} · Sur demande` : `${covered} · Couvert`;
-    setTooltip({ visible: true, name: label, x: e.clientX, y: e.clientY });
+  /* Un seul halo actif : le pays survolé, sinon le pays sélectionné */
+  const activeGeo = hovered?.geo
+    ?? (selectedId != null && geoIndex ? geoIndex[selectedId] ?? null : null);
+
+  const handleGeographies = useCallback((geographies) => {
+    setGeoIndex(Object.fromEntries(geographies.map(g => [+g.id, g])));
   }, []);
-  const handleMove = useCallback((id, e) => {
+  const handleEnter = useCallback((id, geo) => {
     if (!COUNTRY_NAMES[id] && !ON_DEMAND_BY_ISO[id]) return;
-    setTooltip(t => (t.visible ? { ...t, x: e.clientX, y: e.clientY } : t));
+    setHovered({ id, geo });
   }, []);
   const handleLeave = useCallback(() => {
-    setTooltip(t => ({ ...t, visible: false }));
+    setHovered(null);
   }, []);
   const handleActivate = useCallback((id) => {
     const onDemand = ON_DEMAND_BY_ISO[id];
@@ -469,32 +515,6 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
 
   return (
     <>
-      {/* Tooltip curseur */}
-      {tooltip.visible && (
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'fixed',
-            top: tooltip.y - 44,
-            left: tooltip.x,
-            transform: 'translateX(-50%)',
-            background: 'rgba(8,7,6,0.96)',
-            border: '1px solid var(--gold-border)',
-            borderRadius: 8,
-            padding: '6px 14px',
-            fontSize: 13,
-            fontWeight: 600,
-            color: 'var(--gold)',
-            pointerEvents: 'none',
-            zIndex: 1000,
-            whiteSpace: 'nowrap',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
-          }}
-        >
-          {tooltip.name}
-        </div>
-      )}
-
       {/* Carte container, vue fixe, toute l'Europe visible, perspective pour le tilt */}
       <div style={{ position: 'relative', perspective: '1200px' }}>
         {/* Halo ambiant derrière la carte */}
@@ -524,21 +544,21 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
           willChange: tiltActive ? 'transform' : undefined,
         }}
       >
-        {/* Badge nom pays */}
-        <AnimatePresence mode="wait">
+        {/* Tooltip fixe : pill unique en haut de la carte, nom du pays seul */}
+        <AnimatePresence>
           {badgeName && (
             <m.div
-              key={badgeName}
-              initial={{ opacity: 0, y: -4 }}
+              key="carte-tooltip"
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.2 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
               aria-live="polite"
               style={{
                 position: 'absolute',
                 top: 12,
                 left: '50%',
-                transform: 'translateX(-50%)',
+                x: '-50%',
                 background: 'rgba(8,7,6,0.9)',
                 border: '1px solid var(--gold-border)',
                 borderRadius: 999,
@@ -582,6 +602,7 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
           projectionConfig={{ rotate: [-15, -50, 0], scale: 680 }}
           width={800}
           height={560}
+          shapeRendering="geometricPrecision"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         >
           <defs>
@@ -590,6 +611,12 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
               <stop offset="0%" stopColor="#C9A84C" />
               <stop offset="100%" stopColor="#E8C97A" />
             </linearGradient>
+            {/* Dégradé radial du halo itinérant */}
+            <radialGradient id="carteHaloGradient">
+              <stop offset="0%" stopColor="#E8C97A" stopOpacity="0.45" />
+              <stop offset="50%" stopColor="#E8C97A" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#E8C97A" stopOpacity="0" />
+            </radialGradient>
           </defs>
           {/* ZoomableGroup toujours rendu (pas de conditionnel → pas de mismatch SSR).
               filterZoomEvent bloque tout sur bureau ; laisse passer sur mobile. */}
@@ -604,10 +631,16 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
               reduce={reduce}
               inView={inView}
               onEnter={handleEnter}
-              onMove={handleMove}
               onLeave={handleLeave}
               onActivate={handleActivate}
+              onGeographies={handleGeographies}
             />
+            {/* Halo itinérant, désactivé si prefers-reduced-motion */}
+            {!reduce && (
+              <AnimatePresence>
+                {activeGeo && <CountryHalo key={activeGeo.rsmKey} geo={activeGeo} />}
+              </AnimatePresence>
+            )}
           </ZoomableGroup>
         </ComposableMap>
 
@@ -624,8 +657,8 @@ function EuropeMap({ selectedId, onCountryClick, isMobile }) {
         >
           {[
             { bg: '#C9A84C', label: '34 pays couverts' },
-            ...(selectedId != null ? [{ bg: '#E8C97A', label: 'Sélectionné' }] : []),
-            { bg: '#6E5524', border: '1px dashed #C9A84C', label: 'Sur demande' },
+            ...(selectedId != null ? [{ bg: '#D9B85E', label: 'Sélectionné' }] : []),
+            { bg: '#A05E26', border: '1px dashed #D98E4A', label: 'Sur demande' },
             { bg: '#1C1A16', border: '1px solid #333', label: 'Non couvert' },
           ].map(({ bg, border, label }) => (
             <div

@@ -387,16 +387,6 @@ h1, h2 {
   animation: gold-shift 6s ease-in-out infinite;
 }
 
-/* ─── Pulsation du pays sélectionné (carte Europe) ─── */
-@keyframes carte-pays-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.85; }
-}
-
-.carte-pays-pulse {
-  animation: carte-pays-pulse 2.4s ease-in-out infinite;
-}
-
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
