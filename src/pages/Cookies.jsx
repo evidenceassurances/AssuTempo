@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence } from 'framer-motion';
 import {
   Shield, BarChart3, Megaphone, Clock, Scale, Settings,
-  ChevronDown, Info,
+  ChevronDown, Info, Phone,
 } from 'lucide-react';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
@@ -104,7 +104,7 @@ const DROITS = [
     a:
       "Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une " +
       "réclamation auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL) " +
-      "— cnil.fr — 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07.",
+      "- cnil.fr - 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07.",
   },
   {
     q: "Comment configurer les cookies depuis mon navigateur ?",
@@ -223,7 +223,7 @@ function CookieCategoryCard({ cat }) {
                     borderBottom: i < cookies.length - 1 ? '1px solid var(--glass-border)' : 'none',
                   }}
                 >
-                  {/* Nom en monospace — comme une plaque d'immatriculation */}
+                  {/* Nom en monospace - comme une plaque d'immatriculation */}
                   <td
                     style={{
                       padding: '12px 16px',
@@ -271,7 +271,7 @@ function Cookies() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Politique de cookies — AssuTempo',
+    name: 'Politique de cookies - AssuTempo',
     description:
       "Politique de gestion des cookies du site assutempo.fr, édité par Evidence Assurances. " +
       "Détail des cookies utilisés, vos droits RGPD et comment gérer vos préférences.",
@@ -279,7 +279,7 @@ function Cookies() {
     dateModified: '2026-06-04',
     publisher: {
       '@type': 'Organization',
-      name: 'AssuTempo — Evidence Assurances',
+      name: 'AssuTempo - Evidence Assurances',
       url: 'https://assutempo.fr',
       telephone: '+33974197820',
     },
@@ -289,7 +289,7 @@ function Cookies() {
   return (
     <>
       <Helmet>
-        <title>Politique de cookies | AssuTempo — Evidence Assurances</title>
+        <title>Politique de cookies | AssuTempo - Evidence Assurances</title>
         <meta
           name="description"
           content="Découvrez comment AssuTempo utilise les cookies : nécessaires, Google Analytics 4, vos droits RGPD et comment gérer vos préférences en un clic."
@@ -365,7 +365,7 @@ function Cookies() {
             reprendre le contrôle en un clic.
           </p>
 
-          {/* Badge "Mise à jour" — indicateur de tableau de bord doré */}
+          {/* Badge "Mise à jour" - indicateur de tableau de bord doré */}
           <div
             style={{
               display: 'inline-flex',
@@ -552,7 +552,7 @@ function Cookies() {
             </div>
           </Reveal>
 
-          {/* Séparateur kilométrique — détail thématique */}
+          {/* Séparateur kilométrique - détail thématique */}
           <Reveal>
             <div
               style={{
@@ -581,7 +581,7 @@ function Cookies() {
             </div>
           </Reveal>
 
-          {/* CTA — Gérer ses préférences ─── */}
+          {/* CTA - Gérer ses préférences ─── */}
           <Reveal>
             <div
               style={{
@@ -629,7 +629,7 @@ function Cookies() {
                   maxWidth: 480,
                 }}
               >
-                Modifiez vos préférences à tout moment. Votre choix est sauvegardé immédiatement —
+                Modifiez vos préférences à tout moment. Votre choix est sauvegardé immédiatement -
                 la mesure d'audience n'est activée qu'avec votre accord explicite.
               </p>
 
@@ -674,7 +674,7 @@ function Cookies() {
                 Responsable du traitement
               </p>
               <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 10px' }}>
-                <strong style={{ color: 'var(--text)' }}>Evidence Assurances</strong> — cabinet de courtage
+                <strong style={{ color: 'var(--text)' }}>Evidence Assurances</strong> - cabinet de courtage
                 engagé RSE, éditeur d'AssuTempo depuis 2020. Pour toute question relative à vos données
                 ou à vos préférences cookies, contactez-nous via la page{' '}
                 <a
@@ -684,8 +684,9 @@ function Cookies() {
                   Qui sommes-nous&nbsp;?
                 </a>
               </p>
-              <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0 }}>
-                📞 09 74 19 78 20 — Lun-Ven 9h–21h · Sam 9h–20h
+              <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Phone size={13} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
+                09 74 19 78 20 · Lun-Ven 9h-21h · Sam 9h-20h
               </p>
             </div>
           </Reveal>

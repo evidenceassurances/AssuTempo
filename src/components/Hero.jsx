@@ -1,7 +1,7 @@
 import { m } from 'framer-motion';
 import { useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Zap, Globe, Check } from 'lucide-react';
 import TempoDial from './TempoDial';
 import { EASE_PREMIUM } from '../lib/motion';
 
@@ -34,6 +34,11 @@ function Hero() {
     >
       <TempoDial />
 
+      {/* Halo d'ambiance dore */}
+      <div aria-hidden className="halo-gold" style={{ zIndex: 1 }} />
+      {/* Vignette douce vers les bords */}
+      <div aria-hidden className="hero-vignette" style={{ zIndex: 1 }} />
+
       {/* Badge */}
       <div
         style={{
@@ -53,9 +58,7 @@ function Hero() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
-            background: 'rgba(8,7,6,0.82)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            background: 'rgba(8,7,6,0.88)',
             border: '1px solid var(--gold-border)',
             borderRadius: 100,
             padding: '8px 18px',
@@ -192,13 +195,13 @@ function Hero() {
               lineHeight: 1.6,
             }}
           >
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#9889;</span>
+            <Zap size={16} strokeWidth={1.75} style={{ color: '#C9A84C', flexShrink: 0, marginRight: 4 }} aria-hidden />
             <span>Attestation immédiate</span>
             <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#127760;</span>
+            <Globe size={16} strokeWidth={1.75} style={{ color: '#C9A84C', flexShrink: 0, marginRight: 4 }} aria-hidden />
             <span>34 pays couverts</span>
             <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
-            <span style={{ color: 'var(--gold)', opacity: 0.85 }}>&#10003;</span>
+            <Check size={16} strokeWidth={2} style={{ color: '#C9A84C', flexShrink: 0, marginRight: 4 }} aria-hidden />
             <span>Prix fixe, zéro surprise</span>
           </m.p>
 

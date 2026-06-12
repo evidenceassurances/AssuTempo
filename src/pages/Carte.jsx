@@ -193,7 +193,7 @@ function CountryPanel({ country }) {
           <PaysLegende />
         </m.div>
 
-        {/* Points clés — cartes catégorisées */}
+        {/* Points clés - cartes catégorisées */}
         <div
           style={{
             display: 'grid',

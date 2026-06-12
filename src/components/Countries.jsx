@@ -60,11 +60,11 @@ function Countries() {
                   fontSize: 13,
                   color: 'var(--text-muted)',
                   textDecoration: 'none',
-                  transition: 'border-color 0.25s, background 0.25s, color 0.25s',
+                  transition: 'border-color 0.2s, background 0.2s, color 0.2s',
                   whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--gold-border)';
+                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.5)';
                   e.currentTarget.style.background = 'var(--gold-glow)';
                   e.currentTarget.style.color = 'var(--text)';
                 }}

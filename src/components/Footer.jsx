@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Phone } from 'lucide-react';
 
 const navLinks = [
   { label: 'Tarification', href: '/tarification' },
@@ -179,12 +180,15 @@ function Footer() {
                 color: 'var(--text)',
                 textDecoration: 'none',
                 transition: 'color 0.2s',
-                display: 'inline-block',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
               }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             >
-              📞 09 74 19 78 20
+              <Phone size={14} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
+              09 74 19 78 20
             </a>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
               Lun-Ven 9h-21h<br />Sam 9h-20h

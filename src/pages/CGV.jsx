@@ -127,7 +127,7 @@ function ObfuscatedEmail() {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: "Conditions Générales d'Utilisation — AssuTempo",
+  name: "Conditions Générales d'Utilisation - AssuTempo",
   description:
     "Conditions générales d'utilisation du service AssuTempo, édité par Evidence Assurances, " +
     "intermédiaire en assurance immatriculé à l'ORIAS sous le numéro 20005719.",
@@ -135,7 +135,7 @@ const jsonLd = {
   dateModified: '2026-06-05',
   publisher: {
     '@type': 'Organization',
-    name: 'AssuTempo — Evidence Assurances',
+    name: 'AssuTempo - Evidence Assurances',
     url: 'https://assutempo.fr',
     telephone: '+33974197820',
   },
@@ -147,7 +147,7 @@ function CGV() {
   return (
     <>
       <Helmet>
-        <title>Conditions Générales d'Utilisation | AssuTempo — Evidence Assurances</title>
+        <title>Conditions Générales d'Utilisation | AssuTempo - Evidence Assurances</title>
         <meta
           name="description"
           content="Conditions générales d'utilisation d'AssuTempo. Mentions légales, SIRET 88464152300011, ORIAS 20005719, modalités de souscription, droit de rétractation et médiation."
@@ -485,7 +485,7 @@ function CGV() {
                     <a href="tel:0974197820" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 600 }}>
                       09 74 19 78 20
                     </a>
-                    {' '}— Lun-Ven 9h–21h · Sam 9h–20h
+                    {' '}- Lun-Ven 9h–21h · Sam 9h–20h
                   </span>
                 </div>
               </div>
@@ -504,7 +504,7 @@ function CGV() {
               >
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.75, margin: 0 }}>
                   <Strong>Médiateur de l&apos;Assurance</Strong><br />
-                  TSA 50110 — 75441 Paris Cedex 09<br />
+                  TSA 50110 - 75441 Paris Cedex 09<br />
                   <GoldLink href="https://www.mediation-assurance.org">www.mediation-assurance.org</GoldLink>
                 </p>
               </div>

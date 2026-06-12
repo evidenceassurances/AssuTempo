@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
+import { Phone } from 'lucide-react';
 import { fadeUp } from '../animations';
 
 function Pricing() {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
   return (
     <>
       <Helmet>
@@ -74,13 +78,14 @@ function Pricing() {
           transition={{ delay: 0.2 }}
           style={{
             background: 'var(--bg-card)',
-            border: '1px solid var(--gold-border)',
-            borderRadius: 8,
+            border: '1px solid rgba(201,168,76,0.25)',
+            borderRadius: 16,
             overflow: 'hidden',
             maxWidth: 1100,
             width: '95%',
             margin: '0 auto',
             padding: 0,
+            position: 'relative',
           }}
         >
           <iframe
@@ -90,7 +95,68 @@ function Pricing() {
             frameBorder="0"
             title="Souscription assurance temporaire AssuTempo"
             style={{ display: 'block', border: 'none', borderRadius: 0 }}
+            onLoad={() => setIframeLoaded(true)}
           />
+
+          {/* Skeleton de chargement : fondu de sortie 400ms au onLoad */}
+          <div
+            aria-hidden={iframeLoaded}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#141414',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 20,
+              opacity: iframeLoaded ? 0 : 1,
+              transition: 'opacity 400ms var(--ease-out)',
+              pointerEvents: 'none',
+            }}
+          >
+            <div
+              style={{
+                width: 'min(420px, 70%)',
+                height: 14,
+                borderRadius: 7,
+                position: 'relative',
+                overflow: 'hidden',
+                background: 'rgba(255,255,255,0.05)',
+              }}
+            >
+              <div className="skeleton-shimmer" />
+            </div>
+            <div
+              style={{
+                width: 'min(320px, 55%)',
+                height: 14,
+                borderRadius: 7,
+                position: 'relative',
+                overflow: 'hidden',
+                background: 'rgba(255,255,255,0.05)',
+              }}
+            >
+              <div className="skeleton-shimmer" />
+            </div>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '12px 0 0' }}>
+              Chargement du module de souscription sécurisé...
+            </p>
+          </div>
+
+          <style>{`
+            .skeleton-shimmer {
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(90deg, transparent 30%, rgba(201,168,76,0.12) 50%, transparent 70%);
+              transform: translateX(-100%);
+              animation: skeleton-sweep 1.6s ease-in-out infinite;
+            }
+            @keyframes skeleton-sweep {
+              from { transform: translateX(-100%); }
+              to   { transform: translateX(100%); }
+            }
+          `}</style>
         </m.div>
 
         {/* Card aide */}
@@ -105,7 +171,6 @@ function Pricing() {
             background: 'rgba(201,168,76,0.04)',
             border: '1px solid var(--gold-border)',
             borderRadius: 16,
-            backdropFilter: 'blur(10px)',
             padding: '40px 32px',
             textAlign: 'center',
           }}
@@ -118,9 +183,10 @@ function Pricing() {
           </p>
           <a
             href="tel:0974197820"
-            style={{ fontSize: 24, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'block', marginBottom: 12 }}
+            style={{ fontSize: 24, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}
           >
-            📞 09 74 19 78 20
+            <Phone size={22} strokeWidth={1.75} style={{ flexShrink: 0 }} aria-hidden />
+            09 74 19 78 20
           </a>
           <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
             Lun-Ven 9h-21h | Sam 9h-20h

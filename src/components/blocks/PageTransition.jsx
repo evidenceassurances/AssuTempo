@@ -1,12 +1,15 @@
-import { m } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
+import { EASE_PREMIUM } from '../../lib/motion';
 
 function PageTransition({ children }) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <m.main
-      initial={{ opacity: 0, y: 18 }}
+      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -18 }}
-      transition={{ duration: 0.45, ease: 'easeOut' }}
+      exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeOut' } }}
+      transition={{ duration: 0.3, ease: EASE_PREMIUM }}
       className="min-h-[calc(100vh-112px)]"
     >
       {children}

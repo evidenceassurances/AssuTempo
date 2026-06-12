@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
-import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet } from 'lucide-react';
+import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet, Check } from 'lucide-react';
 import { fadeUp, stagger, slideLeft } from '../animations';
 import Footer from '../components/Footer';
 
@@ -55,7 +55,7 @@ const inputBase = {
   color: 'var(--text)',
   fontFamily: 'inherit',
   outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
+  transition: 'border-color 0.2s',
   boxSizing: 'border-box',
 };
 
@@ -148,7 +148,21 @@ function PartnerForm() {
           borderRadius: 20,
         }}
       >
-        <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>✓</div>
+        <div
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: 14,
+            background: 'rgba(201,168,76,0.08)',
+            border: '1px solid rgba(201,168,76,0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 16px',
+          }}
+        >
+          <Check size={26} color="var(--gold)" strokeWidth={2} />
+        </div>
         <h3 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
           Demande envoyée !
         </h3>
@@ -410,7 +424,6 @@ function About() {
                   border: '1px solid var(--gold-border)',
                   borderRadius: 20,
                   padding: 40,
-                  backdropFilter: 'blur(10px)',
                 }}
               >
                 <p
@@ -487,7 +500,7 @@ function About() {
                 <m.div
                   key={title}
                   variants={fadeUp}
-                  className="card-glass"
+                  className="card-glass card-jewel"
                   style={{ padding: '28px 32px', display: 'flex', gap: 20, alignItems: 'flex-start' }}
                 >
                   <div
@@ -614,7 +627,7 @@ function About() {
                 <m.div
                   key={title}
                   variants={fadeUp}
-                  className="card-glass"
+                  className="card-glass card-jewel"
                   style={{
                     padding: '28px 24px',
                     display: 'flex',

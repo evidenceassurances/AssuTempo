@@ -12,9 +12,9 @@ export const siteConfig = {
     primaryCta: { label: 'Voir nos tarifs', href: '/tarification' },
     secondaryCta: { label: 'En savoir plus', href: '/qui-sommes-nous' },
     trust: [
-      { label: 'Certifié sans surprise', icon: '✓' },
-      { label: '34 pays', icon: '🌍' },
-      { label: 'Attestation immédiate', icon: '⚡' },
+      { label: 'Certifié sans surprise', icon: 'Check' },
+      { label: '34 pays', icon: 'Globe' },
+      { label: 'Attestation immédiate', icon: 'Zap' },
     ],
   },
   stats: [
@@ -25,17 +25,17 @@ export const siteConfig = {
   ],
   benefits: [
     {
-      icon: '🎯',
+      icon: 'Target',
       title: 'Certifié sans surprise',
       description: "Prix fixe à l'euro près. Pas de petite ligne, pas de frais cachés.",
     },
     {
-      icon: '🌍',
+      icon: 'Globe',
       title: 'Assistance Europe',
       description: 'Couverture dans 34 pays européens dès le premier jour du contrat.',
     },
     {
-      icon: '⚡',
+      icon: 'Zap',
       title: 'Illico Presto',
       description: 'Souscription en moins de 5 minutes. Attestation disponible immédiatement.',
     },
@@ -78,7 +78,7 @@ export const siteConfig = {
   faqItems: [
     {
       question: 'Qu’est-ce qu’une assurance temporaire ?',
-      answer: ‘Une assurance auto temporaire est une couverture de courte durée, de 1 à 90 jours, avec validité immédiate et sans relevé d’information.’,
+      answer: "Une assurance auto temporaire est une couverture de courte durée, de 1 à 90 jours, avec validité immédiate et sans relevé d’information.",
     },
     {
       question: 'Pourquoi souscrire une assurance temporaire ?',

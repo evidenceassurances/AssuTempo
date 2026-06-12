@@ -23,6 +23,7 @@ const cards = [
 function AdvantageCard({ Icon, title, body, delay, inView }) {
   return (
     <m.div
+      className="card-jewel"
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
@@ -30,23 +31,16 @@ function AdvantageCard({ Icon, title, body, delay, inView }) {
         flex: 1,
         padding: 32,
         background: 'var(--glass)',
-        border: '1px solid var(--glass-border)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
         borderRadius: 20,
         cursor: 'default',
       }}
       whileHover={{
-        y: -6,
-        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+        y: -4,
+        transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--gold-border)';
-        e.currentTarget.style.boxShadow = '0 16px 48px -16px rgba(201,168,76,0.12)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--glass-border)';
-        e.currentTarget.style.boxShadow = 'none';
+      whileTap={{
+        scale: 0.98,
+        transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] },
       }}
     >
       <div

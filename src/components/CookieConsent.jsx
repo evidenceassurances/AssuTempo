@@ -75,7 +75,7 @@ export default function CookieConsent() {
           aria-label="Gestion des cookies"
           style={{ position: 'fixed', left: 16, right: 16, bottom: 16, zIndex: 9999, maxWidth: 460, margin: '0 auto' }}
         >
-          <div style={{ background: C.card, border: '1px solid ' + C.gold + '40', borderRadius: 16, padding: 20, boxShadow: '0 12px 40px rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}>
+          <div style={{ background: C.card, border: '1px solid ' + C.gold + '40', borderRadius: 16, padding: 20, boxShadow: '0 12px 40px rgba(0,0,0,0.6)' }}>
             <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: C.sub }}>
               Nous utilisons des cookies pour le bon fonctionnement du site et pour mesurer son audience. Vous pouvez accepter ou refuser.{' '}
               <a href="/cookies" style={{ color: C.goldLight, textDecoration: 'underline' }}>En savoir plus</a>.

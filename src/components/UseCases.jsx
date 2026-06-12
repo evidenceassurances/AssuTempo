@@ -1,14 +1,15 @@
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Car, FileText, Globe, CircleParking, Route, Package } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const cases = [
-  { emoji: '🚗', title: 'Véhicule récemment acquis', body: 'Vous venez d’acquérir un véhicule et souhaitez l’assurer immédiatement.' },
-  { emoji: '📄', title: 'Démarche de carte grise', body: 'En attente d’immatriculation, restez couvert pendant vos démarches.' },
-  { emoji: '🌍', title: 'Véhicule ou permis étranger', body: 'Permis ou véhicule d’origine étrangère, sans complication.' },
-  { emoji: '🅿️', title: 'Véhicule qui circule peu', body: 'Inutile d’assurer à l’année un véhicule utilisé quelques jours par an.' },
-  { emoji: '🛣️', title: 'Véhicule en transit', body: 'Couvert en France ou à l’étranger pour un déplacement ponctuel.' },
-  { emoji: '📦', title: 'Export de véhicule', body: 'Assurez votre véhicule pour un export dans les meilleures conditions.' },
+  { Icon: Car, title: 'Véhicule récemment acquis', body: 'Vous venez d’acquérir un véhicule et souhaitez l’assurer immédiatement.' },
+  { Icon: FileText, title: 'Démarche de carte grise', body: 'En attente d’immatriculation, restez couvert pendant vos démarches.' },
+  { Icon: Globe, title: 'Véhicule ou permis étranger', body: 'Permis ou véhicule d’origine étrangère, sans complication.' },
+  { Icon: CircleParking, title: 'Véhicule qui circule peu', body: 'Inutile d’assurer à l’année un véhicule utilisé quelques jours par an.' },
+  { Icon: Route, title: 'Véhicule en transit', body: 'Couvert en France ou à l’étranger pour un déplacement ponctuel.' },
+  { Icon: Package, title: 'Export de véhicule', body: 'Assurez votre véhicule pour un export dans les meilleures conditions.' },
 ];
 
 function UseCases() {
@@ -44,25 +45,40 @@ function UseCases() {
           {cases.map((item, i) => (
             <m.div
               key={item.title}
+              className="card-jewel"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 padding: '24px 20px',
                 background: 'var(--bg-card)',
-                border: '1px solid var(--glass-border)',
                 borderRadius: 16,
-                transition: 'border-color 0.3s, transform 0.3s var(--ease-out)',
                 cursor: 'default',
               }}
               whileHover={{
                 y: -4,
                 transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--gold-border)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; }}
+              whileTap={{
+                scale: 0.98,
+                transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] },
+              }}
             >
-              <div style={{ fontSize: '1.75rem', marginBottom: 12 }}>{item.emoji}</div>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: 'rgba(201,168,76,0.08)',
+                  border: '1px solid rgba(201,168,76,0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 14,
+                }}
+              >
+                <item.Icon size={20} color="var(--gold)" strokeWidth={1.5} />
+              </div>
               <h3
                 style={{
                   fontSize: 15,

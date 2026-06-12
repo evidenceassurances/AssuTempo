@@ -52,10 +52,10 @@ function StatItem({ stat, inView, index }) {
         }}
       >
         <span
+          className="text-gold-gradient"
           style={{
             fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
             fontWeight: 800,
-            color: 'var(--gold)',
             lineHeight: 1,
             letterSpacing: '-0.03em',
           }}
@@ -98,9 +98,15 @@ function Stats() {
       style={{
         background: 'var(--bg)',
         padding: '100px 0',
+        position: 'relative',
       }}
     >
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
+      {/* Halo d'ambiance dore */}
+      <div aria-hidden className="halo-gold" />
+      {/* Hairline doree */}
+      <div aria-hidden className="hairline-gold" style={{ position: 'absolute', top: 0, left: '10%', right: '10%' }} />
+
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', position: 'relative' }}>
         {/* Heading */}
         <m.div
           ref={headRef}
@@ -135,11 +141,9 @@ function Stats() {
             display: 'flex',
             alignItems: 'stretch',
             background: 'var(--bg-2)',
-            border: '1px solid var(--glass-border)',
             borderRadius: 20,
-            overflow: 'hidden',
           }}
-          className="stats-grid"
+          className="stats-grid card-jewel"
         >
           {stats.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} inView={inView} index={i} />

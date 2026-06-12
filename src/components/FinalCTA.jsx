@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { Phone } from 'lucide-react';
+import { Phone, IdCard, ClipboardList, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -9,6 +9,9 @@ function FinalCTA() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+
+      {/* Hairline doree */}
+      <div aria-hidden className="hairline-gold" style={{ position: 'absolute', top: 0, left: '10%', right: '10%' }} />
 
       {/* Halo doré central qui pulse */}
       <div
@@ -121,23 +124,25 @@ function FinalCTA() {
             <a
               href="tel:0974197820"
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
                 fontSize: 22,
                 fontWeight: 700,
                 color: 'var(--text)',
                 textDecoration: 'none',
                 letterSpacing: '-0.01em',
-                transition: 'color 0.2s, text-shadow 0.2s',
+                transition: 'color 0.2s',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'var(--gold)';
-                e.currentTarget.style.textShadow = '0 0 20px rgba(201,168,76,0.4)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'var(--text)';
-                e.currentTarget.style.textShadow = 'none';
               }}
             >
-              📞 09 74 19 78 20
+              <Phone size={20} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
+              09 74 19 78 20
             </a>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0 }}>
               Lun-Ven 9h-21h &middot; Sam 9h-20h
@@ -160,10 +165,10 @@ function FinalCTA() {
             {/* Pills documents */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 16 }}>
               {[
-                { icon: '🪪', label: 'Permis' },
-                { icon: '📋', label: 'Carte grise' },
-                { icon: '💳', label: 'Carte bancaire' },
-              ].map(({ icon, label }) => (
+                { Icon: IdCard, label: 'Permis' },
+                { Icon: ClipboardList, label: 'Carte grise' },
+                { Icon: CreditCard, label: 'Carte bancaire' },
+              ].map(({ Icon, label }) => (
                 <div
                   key={label}
                   style={{
@@ -188,7 +193,7 @@ function FinalCTA() {
                     e.currentTarget.style.color = 'var(--text-muted)';
                   }}
                 >
-                  <span>{icon}</span>
+                  <Icon size={14} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
                   <span>{label}</span>
                 </div>
               ))}

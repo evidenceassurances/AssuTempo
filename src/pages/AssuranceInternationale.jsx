@@ -677,8 +677,6 @@ function AssuranceInternationale() {
               border: '1px solid var(--glass-border)',
               borderRadius: 20,
               padding: '40px 40px',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
             }}
             className="intl-form-wrap"
           >

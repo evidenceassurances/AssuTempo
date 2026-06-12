@@ -591,9 +591,7 @@ function StickyCTA() {
             left: 0;
             right: 0;
             padding: 12px 16px max(12px, env(safe-area-inset-bottom));
-            background: rgba(8, 7, 6, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(8, 7, 6, 0.96);
             border-top: 1px solid var(--gold-border);
             z-index: 100;
           }

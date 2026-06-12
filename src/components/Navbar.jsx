@@ -49,7 +49,7 @@ function Navbar() {
         height: 68,
         display: 'flex',
         alignItems: 'center',
-        transition: 'background 300ms ease, backdrop-filter 300ms ease, border-color 300ms ease, padding 300ms ease',
+        transition: 'background 300ms ease, border-color 300ms ease, padding 300ms ease',
         background: scrolled ? 'rgba(10,10,10,0.72)' : 'transparent',
         backdropFilter: scrolled ? 'blur(12px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
@@ -103,7 +103,7 @@ function Navbar() {
         <div className="nav-desktop">
           <button
             onClick={() => navigate('/tarification')}
-            className="btn-gold nav-cta shimmer-btn"
+            className="btn-gold"
             style={{ padding: '10px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600 }}
           >
             Obtenir mon devis
@@ -144,8 +144,6 @@ function Navbar() {
               left: 0,
               right: 0,
               background: 'rgba(8,7,6,0.97)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
               borderTop: '1px solid var(--gold-border)',
               padding: '32px 32px 40px',
               display: 'flex',
@@ -218,23 +216,6 @@ function Navbar() {
           transform: scaleX(1);
         }
 
-        .nav-cta {
-          position: relative;
-          overflow: hidden;
-        }
-        .nav-cta::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -120%;
-          width: 60%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-          transform: skewX(-20deg);
-        }
-        .nav-cta:hover::before {
-          animation: shimmer 1.2s ease-in-out;
-        }
       `}</style>
     </header>
   );

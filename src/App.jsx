@@ -56,6 +56,7 @@ function App() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
       <BackgroundFX />
+      <div aria-hidden className="grain-overlay" />
       <Navbar />
       <Suspense fallback={<PageLoader />}>
         <AnimatePresence mode="wait" onExitComplete={() => {

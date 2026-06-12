@@ -71,36 +71,72 @@ h1, h2 {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(201,168,76,0.18);
+  background: rgba(201,168,76,0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(201,168,76,0.3);
+  background: rgba(201,168,76,0.45);
 }
 
 /* ─── Utility classes ─── */
 .text-gold { color: var(--gold); }
 
 .text-gold-gradient {
-  background: linear-gradient(135deg, var(--gold-deep), var(--gold-light));
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Halo d'ambiance dore : la profondeur vient du degrade, pas d'un blur */
+.halo-gold {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 45% at center, rgba(201,168,76,0.07), transparent 70%);
+  pointer-events: none;
+}
+
+/* Vignette douce vers les bords (hero) */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 55%, rgba(0,0,0,0.7) 100%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Hairline doree : separateur de sections */
+.hairline-gold {
+  height: 1px;
+  border: none;
+  margin: 0;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+}
+
+/* Grain premium global : au-dessus des fonds de section, sous le header */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+}
+
 /* ─── Buttons ─── */
 .btn-gold {
-  background: var(--gold);
+  background: linear-gradient(135deg, #C9A84C, #E8C97A);
   color: #080706;
   font-weight: 600;
   padding: 14px 28px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  transition: box-shadow 0.3s var(--ease-out), transform 0.2s var(--ease-out), background 0.2s;
+  transition: transform 0.2s var(--ease-out);
   position: relative;
   overflow: hidden;
   display: inline-flex;
@@ -112,22 +148,32 @@ h1, h2 {
   letter-spacing: -0.01em;
 }
 .btn-gold:hover {
-  box-shadow: 0 0 28px var(--gold-strong);
   transform: scale(1.02);
+}
+.btn-gold:active {
+  transform: scale(0.97);
+  transition-duration: 0.15s;
+}
+.btn-gold:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 .btn-gold::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -120%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
-  transform: skewX(-20deg);
-  transition: none;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.28) 50%, transparent 60%);
+  transform: translateX(-150%);
+  pointer-events: none;
 }
 .btn-gold:hover::before {
-  animation: shimmer 1.2s ease-in-out;
+  animation: shine-sweep 0.65s var(--ease-out);
+}
+.btn-gold svg {
+  transition: transform 0.2s var(--ease-out);
+}
+.btn-gold:hover svg {
+  transform: translateX(4px);
 }
 
 .btn-glass {
@@ -147,11 +193,14 @@ h1, h2 {
   font-family: inherit;
   font-size: 15px;
   letter-spacing: -0.01em;
-  backdrop-filter: blur(8px);
 }
 .btn-glass:hover {
   border-color: var(--gold-border);
   background: var(--gold-glow);
+}
+.btn-glass:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 
 /* ─── Cards ─── */
@@ -159,13 +208,65 @@ h1, h2 {
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  backdrop-filter: blur(12px);
-  transition: border-color 0.3s var(--ease-out), transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  transition: border-color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
 .card-glass:hover {
   border-color: var(--gold-border);
-  transform: translateY(-6px);
-  box-shadow: 0 16px 48px -16px rgba(201,168,76,0.15);
+  transform: translateY(-4px);
+}
+
+/* ─── Cartes joaillerie ───
+   Bordure degradee 1px + glow pre-dessine, revele par opacity uniquement */
+.card-jewel {
+  position: relative;
+}
+.card-jewel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.35), rgba(201,168,76,0.06) 40%, transparent 70%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0.8;
+  transition: opacity 0.25s var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+.card-jewel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 90% 70% at 50% 0%, rgba(201,168,76,0.10), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .card-jewel:hover::before,
+  .card-jewel:hover::after {
+    opacity: 1;
+  }
+}
+.card-jewel:active::after {
+  opacity: 1;
+}
+/* Lift CSS pour les cartes sans transform Framer inline */
+@media (hover: hover) {
+  .card-lift {
+    transition: transform 0.25s var(--ease-out);
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+  }
+}
+.card-lift:active {
+  transform: scale(0.98);
+  transition: transform 0.15s var(--ease-out);
 }
 
 /* ─── Marquee ─── */
@@ -192,9 +293,9 @@ h1, h2 {
 }
 
 /* ─── Keyframes ─── */
-@keyframes shimmer {
-  0%   { left: -120%; }
-  100% { left: 220%; }
+@keyframes shine-sweep {
+  from { transform: translateX(-150%); }
+  to   { transform: translateX(150%); }
 }
 
 @keyframes scroll-left {
@@ -306,7 +407,7 @@ h1, h2 {
   background:linear-gradient(180deg,#141416,#0F0F11);
   border:1px solid rgba(255,255,255,.06);
   padding:20px 20px 22px 24px;
-  transition:border-color .3s,box-shadow .3s,transform .3s;
+  transition:border-color .25s,transform .25s var(--ease-out);
 }
 .pays-carte::before{
   content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;
@@ -317,9 +418,9 @@ h1, h2 {
   background:radial-gradient(circle,var(--cglow),transparent 70%);
   opacity:.55;pointer-events:none;
 }
-.pays-carte:active{transform:translateY(-2px);border-color:var(--chover);box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.pays-carte:active{transform:scale(0.98);border-color:var(--chover)}
 @media (hover:hover){
-  .pays-carte:hover{transform:translateY(-3px);border-color:var(--chover);box-shadow:0 14px 34px rgba(0,0,0,.5)}
+  .pays-carte:hover{transform:translateY(-4px);border-color:var(--chover)}
 }
 .pays-carte-head{display:flex;align-items:center;gap:13px;margin-bottom:14px}
 .pays-carte .chip{

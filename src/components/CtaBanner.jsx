@@ -84,8 +84,6 @@ export function CtaAfterProcess() {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 24,
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
           }}
           className="cta-process-inner"
         >

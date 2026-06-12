@@ -34,10 +34,9 @@ function FeaturedCard({ article }) {
       aria-label={article.titre}
     >
       <div
-        className="featured-card"
+        className="featured-card card-jewel card-lift"
         style={{
           background: 'var(--bg-card)',
-          border: '1px solid var(--glass-border)',
           borderRadius: 20,
           padding: '36px 36px 32px',
           display: 'flex',
@@ -45,17 +44,6 @@ function FeaturedCard({ article }) {
           gap: 16,
           position: 'relative',
           overflow: 'hidden',
-          transition: 'border-color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = 'var(--gold-border)';
-          e.currentTarget.style.transform = 'translateY(-5px)';
-          e.currentTarget.style.boxShadow = '0 16px 48px rgba(201,168,76,0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = 'var(--glass-border)';
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
         }}
       >
         {/* Gold ambient glow */}
@@ -182,7 +170,6 @@ function ArticleCard({ article, index, inView }) {
   const halo   = `${accent}18`; // ~9 %, icon background
   const border  = `${accent}44`; // ~27 %, top liseré base
   const borderH = `${accent}88`; // ~53 %, top liseré on hover
-  const glow    = `${accent}22`; // ~13 %, hover box-shadow
 
   const inner = (
     <m.div
@@ -199,20 +186,18 @@ function ArticleCard({ article, index, inView }) {
         flexDirection: 'column',
         gap: 14,
         cursor: article.hasPage ? 'pointer' : 'default',
-        transition: 'border-color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s',
+        transition: 'border-color 0.25s, transform 0.25s var(--ease-out)',
         height: '100%',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = `${accent}44`;
         e.currentTarget.style.borderTopColor = borderH;
         e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = `0 14px 36px ${glow}`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = 'var(--glass-border)';
         e.currentTarget.style.borderTopColor = border;
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
       }}
     >
       {/* Icon + category row */}
