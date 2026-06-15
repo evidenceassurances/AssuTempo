@@ -377,6 +377,67 @@ function useGeoBBox(geo) {
   return [box, measureRef];
 }
 
+/* ── Centre de route : centre du plus grand sous-tracé ───────────────────── */
+/* La bounding box globale getBBox d'un pays multi-polygones dont une enclave
+   est lointaine (la Guyane pour la France) tombe hors du cadre. Pour les
+   noeuds de route on prend donc le centre du plus grand sous-tracé (la plus
+   grande masse terrestre, ici la France métropolitaine), dans le même espace
+   local que le halo et le ping. */
+const GEO_CENTER_CACHE = new Map();
+
+function splitSubpaths(d) {
+  if (!d) return [];
+  return d.split(/(?=M)/).filter(Boolean);
+}
+
+function useGeoCenter(geo) {
+  const groupRef = useRef(null);
+  const [center, setCenter] = useState(() => (geo ? GEO_CENTER_CACHE.get(geo.rsmKey) ?? null : null));
+  const subpaths = useMemo(
+    () => (geo ? splitSubpaths(geo.svgPath) : []),
+    [geo?.rsmKey], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  useLayoutEffect(() => {
+    if (!geo) return undefined;
+    const cached = GEO_CENTER_CACHE.get(geo.rsmKey);
+    if (cached) {
+      setCenter(cached);
+      return undefined;
+    }
+    let raf = 0;
+    const measure = () => {
+      const g = groupRef.current;
+      if (!g) {
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      let best = null;
+      let bestArea = -1;
+      g.querySelectorAll('path').forEach((p) => {
+        const b = p.getBBox();
+        if (!b.width || !b.height || Number.isNaN(b.width) || Number.isNaN(b.height)) return;
+        const area = b.width * b.height;
+        if (area > bestArea) {
+          bestArea = area;
+          best = b;
+        }
+      });
+      if (!best) {
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      const next = { x: best.x + best.width / 2, y: best.y + best.height / 2 };
+      GEO_CENTER_CACHE.set(geo.rsmKey, next);
+      setCenter(next);
+    };
+    measure();
+    return () => cancelAnimationFrame(raf);
+  }, [geo?.rsmKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return [center, groupRef, subpaths];
+}
+
 /* ── Ping lumineux : pays de départ en mode itinéraire, France sinon ─────── */
 function MapPing({ geo, reduce }) {
   const [box, measureRef] = useGeoBBox(geo);
@@ -407,9 +468,9 @@ function RouteMarker({ x, y }) {
 }
 
 /* ── Segment de route animé entre deux pays ──────────────────────────────── */
-const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
-  const [fromBox, fromRef] = useGeoBBox(from);
-  const [toBox, toRef]     = useGeoBBox(to);
+const RouteSegment = memo(function RouteSegment({ from, to, delay, isFirst, reduce }) {
+  const [fromCenter, fromGroupRef, fromSubpaths] = useGeoCenter(from);
+  const [toCenter, toGroupRef, toSubpaths]       = useGeoCenter(to);
   const measureRef = useRef(null);
   const motionRef  = useRef(null);
   const [length, setLength] = useState(null);
@@ -421,11 +482,11 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
      aucun clamp sur les bords. Securite : si un centre est invalide ou hors
      des bornes du viewBox, on ne trace pas le segment. */
   const seg = useMemo(() => {
-    if (!fromBox || !toBox) return null;
-    const x0 = fromBox.x + fromBox.width / 2;
-    const y0 = fromBox.y + fromBox.height / 2;
-    const x1 = toBox.x + toBox.width / 2;
-    const y1 = toBox.y + toBox.height / 2;
+    if (!fromCenter || !toCenter) return null;
+    const x0 = fromCenter.x;
+    const y0 = fromCenter.y;
+    const x1 = toCenter.x;
+    const y1 = toCenter.y;
     const inBounds = (x, y) =>
       Number.isFinite(x) && Number.isFinite(y) &&
       x >= 0 && x <= MAP_W && y >= 0 && y <= MAP_H;
@@ -444,7 +505,7 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
       d = `M ${x0} ${y0} L ${x1} ${y1}`;
     }
     return { d, x0, y0, x1, y1 };
-  }, [fromBox, toBox]);
+  }, [fromCenter, toCenter]);
 
   /* getTotalLength une seule fois par segment */
   useEffect(() => {
@@ -471,8 +532,20 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
 
   return (
     <g aria-hidden="true" style={{ pointerEvents: 'none' }}>
-      {!fromBox && <path ref={fromRef} d={from.svgPath} fill="none" stroke="none" />}
-      {!toBox && <path ref={toRef} d={to.svgPath} fill="none" stroke="none" />}
+      {!fromCenter && (
+        <g ref={fromGroupRef}>
+          {fromSubpaths.map((d, i) => (
+            <path key={i} d={d} fill="none" stroke="none" />
+          ))}
+        </g>
+      )}
+      {!toCenter && (
+        <g ref={toGroupRef}>
+          {toSubpaths.map((d, i) => (
+            <path key={i} d={d} fill="none" stroke="none" />
+          ))}
+        </g>
+      )}
       {seg && reduce && (
         <>
           <path
@@ -491,6 +564,7 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
             strokeLinecap="round"
             opacity={0.95}
           />
+          {isFirst && <RouteMarker x={seg.x0} y={seg.y0} />}
           <RouteMarker x={seg.x1} y={seg.y1} />
         </>
       )}
@@ -526,6 +600,7 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
           />
           {drawn && (
             <>
+              {isFirst && <RouteMarker x={seg.x0} y={seg.y0} />}
               <RouteMarker x={seg.x1} y={seg.y1} />
               <g>
                 <circle r={6} fill="#0A0A0A" opacity={0.5} />
@@ -1049,6 +1124,7 @@ function EuropeMap({
                 from={pair.from}
                 to={pair.to}
                 delay={0.4 + i * 0.3}
+                isFirst={i === 0}
                 reduce={reduce}
               />
             ))}
