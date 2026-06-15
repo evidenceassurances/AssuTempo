@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
@@ -47,6 +47,11 @@ import {
 const GEO_URL = '/countries-110m.json';
 const MAP_W   = 800;
 const MAP_H   = 560;
+
+/* Courbure des segments de route. 0 = lignes droites centre a centre (livraison).
+   Si > 0 : decalage perpendiculaire du point de controle, en pourcentage de la
+   longueur du segment, plafonne a 24 unites. Aucun clamp sur les bords du viewBox. */
+const ROUTE_ARC = 0;
 
 const COVERED        = new Set(COUNTRIES.map(c => c.isoId));
 const COUNTRY_NAMES  = Object.fromEntries(COUNTRIES.map(c => [c.isoId, c.nom]));
@@ -338,18 +343,35 @@ function useGeoBBox(geo) {
   const measureRef = useRef(null);
   const [box, setBox] = useState(() => (geo ? GEO_BBOX_CACHE.get(geo.rsmKey) ?? null : null));
 
-  useEffect(() => {
-    if (!geo) return;
+  /* Mesure apres montage. Si getBBox renvoie une geometrie incomplete
+     (width ou height a 0 ou NaN, SVG pas encore dimensionne), on reessaie
+     a la frame suivante jusqu'a une valeur valide, puis on memorise. Les
+     coordonnees locales ne bougent pas au resize (viewBox fixe). */
+  useLayoutEffect(() => {
+    if (!geo) return undefined;
     const cached = GEO_BBOX_CACHE.get(geo.rsmKey);
     if (cached) {
       setBox(cached);
-      return;
+      return undefined;
     }
-    if (!measureRef.current) return;
-    const b = measureRef.current.getBBox();
-    const next = { x: b.x, y: b.y, width: b.width, height: b.height };
-    GEO_BBOX_CACHE.set(geo.rsmKey, next);
-    setBox(next);
+    let raf = 0;
+    const measure = () => {
+      const node = measureRef.current;
+      if (!node) {
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      const b = node.getBBox();
+      if (!b.width || !b.height || Number.isNaN(b.width) || Number.isNaN(b.height)) {
+        raf = requestAnimationFrame(measure);
+        return;
+      }
+      const next = { x: b.x, y: b.y, width: b.width, height: b.height };
+      GEO_BBOX_CACHE.set(geo.rsmKey, next);
+      setBox(next);
+    };
+    measure();
+    return () => cancelAnimationFrame(raf);
   }, [geo?.rsmKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return [box, measureRef];
@@ -393,26 +415,35 @@ const RouteSegment = memo(function RouteSegment({ from, to, delay, reduce }) {
   const [length, setLength] = useState(null);
   const [drawn, setDrawn]   = useState(false);
 
-  /* Courbe de Bézier quadratique entre les deux centroïdes.
-     Décalage perpendiculaire du point de contrôle : 12% de la distance,
-     plafonné à 40 unités, puis point de contrôle ramené dans le viewBox
-     (marge de 10 unités) pour que la route reste dans le cadre. */
+  /* Segment centre a centre. Par defaut ligne droite (ROUTE_ARC = 0), la
+     geometrie la plus fiable. Si ROUTE_ARC > 0, courbe de Bezier quadratique
+     dont le point de controle est le milieu decale perpendiculairement, sans
+     aucun clamp sur les bords. Securite : si un centre est invalide ou hors
+     des bornes du viewBox, on ne trace pas le segment. */
   const seg = useMemo(() => {
     if (!fromBox || !toBox) return null;
     const x0 = fromBox.x + fromBox.width / 2;
     const y0 = fromBox.y + fromBox.height / 2;
     const x1 = toBox.x + toBox.width / 2;
     const y1 = toBox.y + toBox.height / 2;
+    const inBounds = (x, y) =>
+      Number.isFinite(x) && Number.isFinite(y) &&
+      x >= 0 && x <= MAP_W && y >= 0 && y <= MAP_H;
+    if (!inBounds(x0, y0) || !inBounds(x1, y1)) return null;
     const dx = x1 - x0;
     const dy = y1 - y0;
     const dist = Math.hypot(dx, dy);
     if (dist < 1) return null;
-    const offset = Math.min(dist * 0.12, 40);
-    let cx = (x0 + x1) / 2 - (dy / dist) * offset;
-    let cy = (y0 + y1) / 2 + (dx / dist) * offset;
-    cx = Math.min(Math.max(cx, 10), MAP_W - 10);
-    cy = Math.min(Math.max(cy, 10), MAP_H - 10);
-    return { d: `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`, x0, y0, x1, y1 };
+    let d;
+    if (ROUTE_ARC > 0) {
+      const offset = Math.min(dist * (ROUTE_ARC / 100), 24);
+      const cx = (x0 + x1) / 2 - (dy / dist) * offset;
+      const cy = (y0 + y1) / 2 + (dx / dist) * offset;
+      d = `M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`;
+    } else {
+      d = `M ${x0} ${y0} L ${x1} ${y1}`;
+    }
+    return { d, x0, y0, x1, y1 };
   }, [fromBox, toBox]);
 
   /* getTotalLength une seule fois par segment */
@@ -735,29 +766,20 @@ function EuropeMap({
   const activeGeo = hovered?.geo
     ?? (selectedId != null && geoIndex ? geoIndex[selectedId] ?? null : null);
 
-  /* Segments de route : France vers pays sélectionné (pages slug),
-     ou chaîne depuis le pays de départ choisi en mode itinéraire */
+  /* Segments de route : uniquement en mode itinéraire actif avec au moins
+     2 étapes. Chaîne centre à centre dans l'ordre des clics. Aucune route
+     automatique sur les pages /carte/[slug] : seuls le halo et le ping y
+     subsistent. */
   const routePairs = useMemo(() => {
-    if (!geoIndex) return [];
-    const buildPair = (aId, bId) => {
-      const a = geoIndex[aId];
-      const b = geoIndex[bId];
-      return a && b ? { from: a, to: b, key: `${a.rsmKey}-${b.rsmKey}` } : null;
-    };
-    if (tripMode) {
-      const pairs = [];
-      for (let i = 0; i < tripSteps.length - 1; i += 1) {
-        const pair = buildPair(tripSteps[i], tripSteps[i + 1]);
-        if (pair) pairs.push(pair);
-      }
-      return pairs;
+    if (!geoIndex || !tripMode || tripSteps.length < 2) return [];
+    const pairs = [];
+    for (let i = 0; i < tripSteps.length - 1; i += 1) {
+      const a = geoIndex[tripSteps[i]];
+      const b = geoIndex[tripSteps[i + 1]];
+      if (a && b) pairs.push({ from: a, to: b, key: `${a.rsmKey}-${b.rsmKey}` });
     }
-    if (selectedId != null && selectedId !== FRANCE_ID) {
-      const pair = buildPair(FRANCE_ID, selectedId);
-      return pair ? [pair] : [];
-    }
-    return [];
-  }, [geoIndex, tripMode, tripSteps, selectedId]);
+    return pairs;
+  }, [geoIndex, tripMode, tripSteps]);
 
   /* Ping : pays de départ de l'itinéraire, France hors mode itinéraire */
   const pingGeo = geoIndex
