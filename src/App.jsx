@@ -21,6 +21,7 @@ const PAGES = {
   EssaiVehicule:              lazy(() => import('./pages/articles/EssaiVehicule')),
   CarteGrise:                 lazy(() => import('./pages/articles/CarteGrise')),
   Carte:                      lazy(() => import('./pages/Carte')),
+  CarteGriseService:          lazy(() => import('./pages/CarteGrise')),
   Cookies:                    lazy(() => import('./pages/Cookies')),
   CGV:                        lazy(() => import('./pages/CGV')),
   AssuranceInternationale:    lazy(() => import('./pages/AssuranceInternationale')),

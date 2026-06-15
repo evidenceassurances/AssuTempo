@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Car, FileText, Globe, CircleParking, Route, Package } from 'lucide-react';
@@ -5,7 +6,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const cases = [
   { Icon: Car, title: 'Véhicule récemment acquis', body: 'Vous venez d’acquérir un véhicule et souhaitez l’assurer immédiatement.' },
-  { Icon: FileText, title: 'Démarche de carte grise', body: 'En attente d’immatriculation, restez couvert pendant vos démarches.' },
+  { Icon: FileText, title: 'Démarche de carte grise', body: 'En attente d’immatriculation, restez couvert pendant vos démarches.', to: '/carte-grise' },
   { Icon: Globe, title: 'Véhicule ou permis étranger', body: 'Permis ou véhicule d’origine étrangère, sans complication.' },
   { Icon: CircleParking, title: 'Véhicule qui circule peu', body: 'Inutile d’assurer à l’année un véhicule utilisé quelques jours par an.' },
   { Icon: Route, title: 'Véhicule en transit', body: 'Couvert en France ou à l’étranger pour un déplacement ponctuel.' },
@@ -42,9 +43,9 @@ function UseCases() {
         </m.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }} className="cases-grid">
-          {cases.map((item, i) => (
+          {cases.map((item, i) => {
+            const card = (
             <m.div
-              key={item.title}
               className="card-jewel"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -94,7 +95,15 @@ function UseCases() {
                 {item.body}
               </p>
             </m.div>
-          ))}
+            );
+            return item.to ? (
+              <Link key={item.title} to={item.to} style={{ textDecoration: 'none', display: 'block' }}>
+                {card}
+              </Link>
+            ) : (
+              <Fragment key={item.title}>{card}</Fragment>
+            );
+          })}
         </div>
 
         {/* Lien discret vers la page Articles */}

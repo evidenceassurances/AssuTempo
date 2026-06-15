@@ -29,6 +29,7 @@ const ROUTE_TABLE = [
   ['/articles/assurance-temporaire-rouler-en-attendant-carte-grise', 'CarteGrise'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
+  ['/carte-grise', 'CarteGriseService'],
   ['/cookies', 'Cookies'],
   ['/conditions-generales', 'CGV'],
   ['/assurance-internationale', 'AssuranceInternationale'],

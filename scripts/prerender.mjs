@@ -43,6 +43,7 @@ const ROUTES = [
   '/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
+  '/carte-grise',
   '/cookies',
   '/assurance-internationale',
 ];

@@ -6,6 +6,7 @@ const navLinks = [
   { label: 'FAQ', href: '/faq' },
   { label: 'Carte', href: '/carte' },
   { label: 'Assurance internationale', href: '/assurance-internationale' },
+  { label: 'Carte grise', href: '/carte-grise' },
   { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 

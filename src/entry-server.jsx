@@ -22,6 +22,7 @@ import PretVehicule from './pages/articles/PretVehicule';
 import ConvoyageProfessionnel from './pages/articles/ConvoyageProfessionnel';
 import EssaiVehicule from './pages/articles/EssaiVehicule';
 import CarteGrise from './pages/articles/CarteGrise';
+import CarteGriseService from './pages/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
@@ -42,6 +43,7 @@ const PAGES = {
   ConvoyageProfessionnel,
   EssaiVehicule,
   CarteGrise,
+  CarteGriseService,
   Carte,
   Cookies,
   CGV,
