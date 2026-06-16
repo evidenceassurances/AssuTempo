@@ -1,5 +1,15 @@
 import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare } from 'lucide-react';
 
+/* Champs optionnels supportes par la page /articles (Centre de reponses).
+   Tous additifs : laisser absent ne casse rien, la page applique des replis.
+   - reponseRapide (string) : phrase de reponse affichee dans le bloc encadre.
+     Si absent, repli automatique sur la 1re phrase de l'extrait.
+   - updatedAt (string) : date de mise a jour affichee dans la ligne meta.
+     Si absent, la date n'est pas affichee (le temps de lecture et "Verifie" restent).
+     TODO Ayoub : renseigner les vraies dates de mise a jour, ex. updatedAt: '12 juin 2026'.
+   - featured (boolean) : passe l'article en pilier "A la une".
+     Si aucun article n'a featured: true, le 1er article du tableau sert de pilier.
+     TODO Ayoub : poser featured: true sur l'article pilier souhaite. */
 export const articles = [
   {
     slug: 'voiture-immobilisee-defaut-assurance',
