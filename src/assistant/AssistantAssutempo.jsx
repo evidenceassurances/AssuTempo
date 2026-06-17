@@ -146,6 +146,17 @@ function scrollToTarget(el, { large, reduced }) {
   window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
 }
 
+// Cle de consentement cookies (cf. CookieConsent.jsx). Sert UNIQUEMENT a savoir
+// si le bandeau est affiche, pour ne pas recouvrir ses boutons avec le launcher.
+const COOKIE_CONSENT_KEY = 'assutempo_consent_v1';
+function consentChosen() {
+  try {
+    return typeof window !== 'undefined' && !!localStorage.getItem(COOKIE_CONSENT_KEY);
+  } catch {
+    return true; // en cas d'erreur, on n'empeche pas l'affichage du launcher
+  }
+}
+
 // "Mobile" = viewport etroit OU pointeur grossier (tactile). Sur ces ecrans le
 // tour a projecteur est trop fragile (iframe tierce lourde + barre Safari
 // mouvante) : on bascule sur un flux simple (message + CTA direct).
@@ -216,6 +227,9 @@ export default function AssistantAssutempo() {
   const [spark, setSpark] = useState(false);
   // Accompagnement mobile : { ctaLabel, path, scrollTarget } ou null.
   const [mobileCta, setMobileCta] = useState(null);
+  // Bandeau cookies affiche ? Si oui, on masque le launcher pour ne pas recouvrir
+  // ses boutons (bug mobile : le FAB volait le tap du bouton "Refuser").
+  const [cookieBannerUp, setCookieBannerUp] = useState(() => !consentChosen());
 
   // tour : { active, flowKey, step }
   const [tour, setTour] = useState({ active: false, flowKey: null, step: 0 });
@@ -318,6 +332,20 @@ export default function AssistantAssutempo() {
     };
   }, [open]);
 
+  /* Suit l'etat du bandeau cookies via les evenements de CookieConsent (couplage
+     leger, pas d'import) pour masquer/reafficher le launcher au bon moment. */
+  useEffect(() => {
+    setCookieBannerUp(!consentChosen());
+    const onChosen = () => setCookieBannerUp(false);
+    const onReopen = () => setCookieBannerUp(true);
+    window.addEventListener('cookie-consent', onChosen);
+    window.addEventListener('open-cookie-settings', onReopen);
+    return () => {
+      window.removeEventListener('cookie-consent', onChosen);
+      window.removeEventListener('open-cookie-settings', onReopen);
+    };
+  }, []);
+
   /* mobile vs desktop : reevalue au resize / rotation / changement de pointeur */
   useEffect(() => {
     const compute = () => setIsMobile(detectMobile());
@@ -338,13 +366,16 @@ export default function AssistantAssutempo() {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages, sending, showFlows]);
 
-  /* focus de la saisie a l'ouverture */
+  /* focus de la saisie a l'ouverture : DESKTOP UNIQUEMENT. Sur mobile, auto-focus
+     = ouverture forcee du clavier iOS (resize viewport, reflow, scroll) qui fige
+     le panneau quelques secondes apres l'ouverture. On laisse l'utilisateur taper
+     dans le champ quand il le souhaite. */
   useEffect(() => {
-    if (open && !tour.active && inputRef.current) {
+    if (open && !tour.active && !isMobile && inputRef.current) {
       const t = setTimeout(() => inputRef.current && inputRef.current.focus(), 250);
       return () => clearTimeout(t);
     }
-  }, [open, tour.active]);
+  }, [open, tour.active, isMobile]);
 
   /* Echap : ferme le tour, sinon le panneau */
   useEffect(() => {
@@ -806,7 +837,7 @@ export default function AssistantAssutempo() {
   /* ------------------------------ rendu : panneau -------------------------- */
   const node = (
     <div className={'atp-root' + (isMobile ? ' atp-root--lite' : '')}>
-      {!open && !tour.active && (
+      {!open && !tour.active && !cookieBannerUp && (
         <button
           type="button"
           className="atp-launcher"
