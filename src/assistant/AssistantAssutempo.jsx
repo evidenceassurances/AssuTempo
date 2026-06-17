@@ -129,6 +129,40 @@ function waitForTarget(selector, timeout = 3500) {
   });
 }
 
+/* ----------------------- envoi du transcript par email -------------------- */
+// Cle Web3Forms publique (concue pour le client, deja utilisee par le site).
+const WEB3FORMS_KEY = '7a4b9f4a-f77e-4f9b-8a16-7635bff791ed';
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+
+function buildTranscript(msgs) {
+  return msgs
+    .map((m) => (m.role === 'user' ? 'Visiteur' : 'Tempo') + ' : ' + m.content)
+    .join('\n\n');
+}
+
+// Envoie le fil complet par email. `beacon` = true pour les fermetures de page
+// (sendBeacon survit au dechargement) ; sinon fetch keepalive. Best-effort :
+// ne casse jamais l'interface, quelle que soit l'issue reseau.
+function postTranscript(msgs) {
+  if (typeof window === 'undefined') return;
+  const fd = new FormData();
+  fd.append('access_key', WEB3FORMS_KEY);
+  fd.append('subject', 'Conversation assistant Tempo (assutempo.fr)');
+  fd.append('from_name', 'Assistant Tempo');
+  fd.append('page', window.location.pathname || '/');
+  fd.append('date', new Date().toLocaleString('fr-FR'));
+  fd.append('message', buildTranscript(msgs));
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(WEB3FORMS_URL, fd);
+    } else {
+      fetch(WEB3FORMS_URL, { method: 'POST', body: fd, keepalive: true }).catch(() => {});
+    }
+  } catch {
+    // best-effort : on n'interrompt jamais le parcours utilisateur
+  }
+}
+
 export default function AssistantAssutempo() {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -150,6 +184,41 @@ export default function AssistantAssutempo() {
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const tourElRef = useRef(null);
+
+  // Envoi du transcript par email a la fin d'une conversation.
+  // messagesRef : fil a jour lisible depuis les listeners (pas d'etat perime).
+  // sentUserCountRef : nb de messages visiteur deja envoyes (anti-doublon).
+  const messagesRef = useRef(messages);
+  const sentUserCountRef = useRef(0);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  // Envoie le fil complet seulement s'il contient de nouveaux messages du
+  // visiteur depuis le dernier envoi (chaque email contient tout le fil).
+  const flushTranscript = useCallback(() => {
+    const msgs = messagesRef.current || [];
+    const userCount = msgs.filter((m) => m.role === 'user').length;
+    if (userCount === 0 || userCount <= sentUserCountRef.current) return;
+    postTranscript(msgs);
+    sentUserCountRef.current = userCount;
+  }, []);
+
+  // Fin de conversation = depart de page (pagehide) ou onglet masque
+  // (visibilitychange). Couvre desktop et mobile. La fermeture du panneau
+  // declenche aussi un envoi (voir closePanel).
+  useEffect(() => {
+    const onHide = () => flushTranscript();
+    const onVis = () => {
+      if (document.visibilityState === 'hidden') flushTranscript();
+    };
+    window.addEventListener('pagehide', onHide);
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      window.removeEventListener('pagehide', onHide);
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [flushTranscript]);
 
   /* montage : injecte le style une fois, lit prefers-reduced-motion */
   useEffect(() => {
@@ -231,7 +300,10 @@ export default function AssistantAssutempo() {
     setClosing(false);
     setOpen(true);
   }
-  function closePanel() {
+  function closePanel(flush = true) {
+    // Fermeture par l'utilisateur = fin de conversation -> envoi du fil.
+    // (flush=false quand on masque le panneau pour lancer le tour guide.)
+    if (flush) flushTranscript();
     setClosing(true);
     setTimeout(() => {
       setOpen(false);
@@ -268,7 +340,7 @@ export default function AssistantAssutempo() {
 
   function startTour(flowKey) {
     setShowFlows(false);
-    closePanel();
+    closePanel(false); // simple bascule vers le tour, pas une fin de conversation
     tourElRef.current = null;
     setTourRect(null);
     setTour({ active: true, flowKey, step: 0 });
