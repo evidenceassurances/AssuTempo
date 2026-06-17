@@ -119,9 +119,11 @@ export const ASSISTANT_CSS = `
   right: 0; bottom: 0;
   width: 380px;
   height: min(620px, calc(100vh - 48px));
+  height: min(620px, calc(100dvh - 48px)); /* dvh : pas de saut avec la barre Safari */
   display: flex; flex-direction: column;
   border-radius: 22px;
   overflow: hidden;
+  isolation: isolate; /* stacking propre : etoiles en fond, contenu au-dessus */
   background: linear-gradient(180deg, var(--atp-panel-2) 0%, var(--atp-panel) 38%);
   border: 1px solid var(--atp-line);
   box-shadow: var(--atp-shadow);
@@ -130,9 +132,17 @@ export const ASSISTANT_CSS = `
 }
 .atp-panel--closing { animation: atp-panel-out 0.28s var(--atp-ease) both; }
 
-@media (max-width: 480px) {
-  .atp-root { right: 12px; bottom: 12px; left: 12px; }
-  .atp-panel { width: auto; left: 0; right: 0; height: min(78vh, calc(100vh - 24px)); }
+@media (max-width: 520px) {
+  .atp-root {
+    right: max(12px, env(safe-area-inset-right));
+    left: max(12px, env(safe-area-inset-left));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .atp-panel {
+    width: auto; left: 0; right: 0;
+    height: min(80vh, calc(100vh - 24px));
+    height: min(80dvh, calc(100dvh - 24px));
+  }
 }
 
 /* ambiance animee en fond, jamais derriere le texte (cantonnee a l'en-tete) */
@@ -145,6 +155,31 @@ export const ASSISTANT_CSS = `
   pointer-events: none;
   animation: atp-spin 22s linear infinite;
 }
+
+/* ---- Champ d'etoiles dorees (cosmos leger, en fond) ---- */
+.atp-stars {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.atp-star {
+  position: absolute;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: var(--atp-gold-light);
+  opacity: 0.4;
+  animation: atp-twinkle linear infinite;
+  will-change: opacity, transform;
+}
+
+/* contenu du panneau au-dessus des etoiles */
+.atp-header,
+.atp-messages,
+.atp-actions,
+.atp-input-bar,
+.atp-legal { position: relative; z-index: 1; }
 
 /* ---- En-tete ---- */
 .atp-header {
@@ -199,7 +234,7 @@ export const ASSISTANT_CSS = `
   white-space: pre-wrap; word-wrap: break-word;
 }
 .atp-bubble--bot {
-  background: rgba(255,255,255,0.035);
+  background: rgba(22,17,11,0.72); /* assez opaque : texte lisible par-dessus les etoiles */
   border: 1px solid var(--atp-line);
   border-bottom-left-radius: 5px;
   color: var(--atp-cream);
@@ -323,13 +358,26 @@ export const ASSISTANT_CSS = `
 .atp-tooltip {
   position: fixed; z-index: 2147482700;
   width: min(330px, calc(100vw - 32px));
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
   background: linear-gradient(180deg, var(--atp-panel-2), var(--atp-panel));
   border: 1px solid var(--atp-line-strong);
   border-radius: 18px;
   padding: 18px;
+  overflow: hidden; /* clippe les etoiles aux coins arrondis */
+  isolation: isolate;
   box-shadow: var(--atp-shadow);
   animation: atp-bubble-in 0.4s var(--atp-ease) both;
 }
+/* sur mobile, la tooltip devient une carte ancree en bas, pleine largeur */
+.atp-tooltip--sheet {
+  left: 12px; right: 12px; width: auto;
+  top: auto; bottom: 16px;
+}
+.atp-tooltip-step,
+.atp-tooltip-title,
+.atp-tooltip-text,
+.atp-tooltip-foot { position: relative; z-index: 1; }
 .atp-tooltip-step { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--atp-gold); margin-bottom: 8px; }
 .atp-tooltip-title { font-size: 17px; font-weight: 600; color: var(--atp-cream); margin: 0 0 8px; }
 .atp-tooltip-text { font-size: 13.5px; line-height: 1.6; color: #c8c0b4; margin: 0 0 16px; }
@@ -368,6 +416,7 @@ export const ASSISTANT_CSS = `
 @keyframes atp-typing { 0%,60%,100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
 @keyframes atp-fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes atp-point { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+@keyframes atp-twinkle { 0%,100% { opacity: 0.12; transform: scale(0.7); } 50% { opacity: 0.7; transform: scale(1.05); } }
 
 /* ====================== REDUCED MOTION (variante calme) ====================== */
 @media (prefers-reduced-motion: reduce) {
@@ -375,7 +424,9 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-sigil-orbit,
   .atp-root .atp-aura,
   .atp-root .atp-typing span,
+  .atp-root .atp-star,
   .atp-root .atp-tour-pointer { animation: none; }
+  .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-launcher,
   .atp-root .atp-panel,
   .atp-root .atp-row,

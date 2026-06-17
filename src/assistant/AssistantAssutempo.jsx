@@ -66,6 +66,42 @@ function Icon({ name, size = 18 }) {
   }
 }
 
+/* champ d'etoiles dorees, discret et leger (<= 12 etoiles, CSS pur).
+   Les positions sont calculees une seule fois au chargement du module (jamais
+   regenerees au re-render) : rendu pur, cout nul par render. */
+function makeStarField(count) {
+  return Array.from({ length: count }, () => ({
+    top: (Math.random() * 100).toFixed(2),
+    left: (Math.random() * 100).toFixed(2),
+    size: (1.4 + Math.random() * 1.8).toFixed(2),
+    delay: (Math.random() * 4).toFixed(2),
+    dur: (2.6 + Math.random() * 2.6).toFixed(2),
+  }));
+}
+const PANEL_STARS = makeStarField(12);
+const TOOLTIP_STARS = makeStarField(10);
+
+function Stars({ field }) {
+  return (
+    <div className="atp-stars" aria-hidden>
+      {field.map((s, i) => (
+        <span
+          key={i}
+          className="atp-star"
+          style={{
+            top: s.top + '%',
+            left: s.left + '%',
+            width: s.size + 'px',
+            height: s.size + 'px',
+            animationDelay: s.delay + 's',
+            animationDuration: s.dur + 's',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 /* element signature : anneau + particule en orbite */
 function Sigil() {
   return (
@@ -307,16 +343,24 @@ export default function AssistantAssutempo() {
     };
   }, [tour.active, tour.flowKey, tour.step, navigate, measure]);
 
-  /* recalcule le surlignage au scroll / resize */
+  /* recalcule le surlignage au scroll / resize, throttle via requestAnimationFrame,
+     listeners passifs et bien nettoyes a la fermeture du tour */
   useEffect(() => {
     if (!tour.active) return undefined;
+    let raf = 0;
     const onMove = () => {
-      if (tourElRef.current) measure(tourElRef.current);
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        if (tourElRef.current) measure(tourElRef.current);
+      });
     };
-    window.addEventListener('scroll', onMove, true);
-    window.addEventListener('resize', onMove);
+    const scrollOpts = { capture: true, passive: true };
+    window.addEventListener('scroll', onMove, scrollOpts);
+    window.addEventListener('resize', onMove, { passive: true });
     return () => {
-      window.removeEventListener('scroll', onMove, true);
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onMove, scrollOpts);
       window.removeEventListener('resize', onMove);
     };
   }, [tour.active, tour.step, measure]);
@@ -331,10 +375,14 @@ export default function AssistantAssutempo() {
     if (!tour.active || !step) return null;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
+    const isMobile = vw <= 520;
 
-    // position du tooltip
+    // position du tooltip : sur mobile, carte ancree en bas pleine largeur
+    // (bottom-sheet) pour ne jamais deborder ; sur desktop, pres de la cible.
     let tipStyle;
-    if (!tourRect) {
+    if (isMobile) {
+      tipStyle = null; // gere par la classe .atp-tooltip--sheet
+    } else if (!tourRect) {
       tipStyle = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
     } else {
       const placeTop =
@@ -378,7 +426,13 @@ export default function AssistantAssutempo() {
         >
           <Icon name="close" size={18} />
         </button>
-        <div className="atp-tooltip" style={tipStyle} role="dialog" aria-label="Etape du guide">
+        <div
+          className={'atp-tooltip' + (isMobile ? ' atp-tooltip--sheet' : '')}
+          style={tipStyle || undefined}
+          role="dialog"
+          aria-label="Etape du guide"
+        >
+          <Stars field={TOOLTIP_STARS} />
           <div className="atp-tooltip-step">
             {flow.label} · Etape {tour.step + 1} / {flow.steps.length}
           </div>
@@ -471,6 +525,7 @@ export default function AssistantAssutempo() {
           role="dialog"
           aria-label="Assistant Assutempo"
         >
+          <Stars field={PANEL_STARS} />
           <div className="atp-aura" aria-hidden />
           <header className="atp-header">
             <span className="atp-header-avatar"><Sigil /></span>
