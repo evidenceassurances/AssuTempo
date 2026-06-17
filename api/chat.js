@@ -16,8 +16,9 @@
  * src/assistant/README.md.
  */
 
-// Modele : qualite premium. Pour reduire le cout, passer a "claude-haiku-4-5".
-const MODEL = 'claude-sonnet-4-6';
+// Modele : Haiku 4.5 pour des reponses rapides (chat client, la latence prime).
+// Pour une qualite plus premium au prix d'une latence superieure : "claude-sonnet-4-6".
+const MODEL = 'claude-haiku-4-5';
 
 // Domaines autorises a appeler l'endpoint (facile a editer). Laisser vide []
 // pour desactiver le controle d'origine (non recommande en production).
