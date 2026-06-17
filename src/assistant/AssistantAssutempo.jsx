@@ -228,6 +228,13 @@ export default function AssistantAssutempo() {
   const inputRef = useRef(null);
   const tourElRef = useRef(null);
 
+  // Mesure de latence d'ouverture (tap -> panneau peint). Visible uniquement avec
+  // ?perfdebug dans l'URL : aucun impact pour les vrais visiteurs.
+  const tapAtRef = useRef(0);
+  const [perfMs, setPerfMs] = useState(null);
+  const perfDebug =
+    typeof window !== 'undefined' && /[?&]perfdebug/.test(window.location.search);
+
   // Envoi du transcript par email a la fin d'une conversation.
   // messagesRef : fil a jour lisible depuis les listeners (pas d'etat perime).
   // sentUserCountRef : nb de messages visiteur deja envoyes (anti-doublon).
@@ -292,6 +299,24 @@ export default function AssistantAssutempo() {
     id = setTimeout(preload, 1200);
     return () => clearTimeout(id);
   }, []);
+
+  /* Mesure tap -> panneau peint (deux frames apres le montage). Stockee pour
+     affichage en mode ?perfdebug. Reinitialise tapAtRef pour la prochaine ouverture. */
+  useEffect(() => {
+    if (!open || !tapAtRef.current) return undefined;
+    const t = tapAtRef.current;
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setPerfMs(Math.round(performance.now() - t));
+        tapAtRef.current = 0;
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
+  }, [open]);
 
   /* mobile vs desktop : reevalue au resize / rotation / changement de pointeur */
   useEffect(() => {
@@ -371,7 +396,12 @@ export default function AssistantAssutempo() {
     [messages, sending],
   );
 
+  // Ouverture immediate. Declenchee sur pointerdown (au contact) pour court-circuiter
+  // le delai de `click` d'iOS (desambiguisation tap/zoom/scroll), + onClick pour le
+  // clavier. Idempotente : un double declenchement (pointerdown puis click) ne fait rien.
   function openPanel() {
+    if (open) return;
+    if (!tapAtRef.current) tapAtRef.current = performance.now();
     setClosing(false);
     setOpen(true);
   }
@@ -781,6 +811,7 @@ export default function AssistantAssutempo() {
           type="button"
           className="atp-launcher"
           aria-label="Ouvrir l'assistant Assutempo"
+          onPointerDown={openPanel}
           onClick={openPanel}
         >
           <Sigil />
@@ -794,6 +825,26 @@ export default function AssistantAssutempo() {
           role="dialog"
           aria-label="Assistant Assutempo"
         >
+          {perfDebug && perfMs != null && (
+            <div
+              aria-hidden
+              style={{
+                position: 'absolute',
+                top: 6,
+                left: 8,
+                zIndex: 50,
+                fontSize: 11,
+                fontWeight: 700,
+                color: perfMs > 800 ? '#ff6b6b' : '#6fcf97',
+                background: 'rgba(0,0,0,0.6)',
+                padding: '2px 6px',
+                borderRadius: 6,
+                pointerEvents: 'none',
+              }}
+            >
+              tap to open: {perfMs} ms
+            </div>
+          )}
           {/* Ambiance cosmos : DESKTOP UNIQUEMENT. Sur mobile rien n'est monte
               (pas de canvas, pas de boucle rAF, pas de blobs lourds) -> ouverture
               instantanee, plus de gel. */}

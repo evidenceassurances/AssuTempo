@@ -57,6 +57,8 @@ export const ASSISTANT_CSS = `
   box-shadow: var(--atp-shadow);
   transition: transform 0.18s var(--atp-ease), box-shadow 0.45s var(--atp-ease);
   will-change: transform;
+  touch-action: manipulation; /* supprime le delai de click (double-tap-zoom) iOS */
+  -webkit-tap-highlight-color: transparent;
 }
 .atp-launcher:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.22); }
 /* retour visuel net au tap (pression rapide) */
