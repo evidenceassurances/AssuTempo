@@ -98,6 +98,7 @@ export const ASSISTANT_CSS = `
   border-radius: 50%;
   background: radial-gradient(circle, var(--atp-gold-light), var(--atp-gold-deep));
   box-shadow: 0 0 10px rgba(232,201,122,0.7);
+  animation: atp-core-pulse 3.6s var(--atp-ease) infinite;
 }
 /* l'orbite : un conteneur qui tourne, avec la particule excentree */
 .atp-sigil-orbit {
@@ -174,12 +175,45 @@ export const ASSISTANT_CSS = `
   will-change: opacity, transform;
 }
 
-/* contenu du panneau au-dessus des etoiles */
+/* contenu du panneau au-dessus de l'ambiance cosmos */
 .atp-header,
 .atp-messages,
 .atp-actions,
 .atp-input-bar,
 .atp-legal { position: relative; z-index: 1; }
+
+/* ---- Ambiance cosmos (canvas etoiles/filantes + nebuleuse) ---- */
+.atp-cosmos {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.atp-nebula {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+  border-radius: inherit;
+}
+.atp-nebula-blob {
+  position: absolute; border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.atp-nebula-blob--gold {
+  width: 340px; height: 280px; top: -60px; left: -70px;
+  background: radial-gradient(circle at 50% 50%, rgba(201,168,76,0.13), transparent 66%);
+  animation: atp-neb-a 26s ease-in-out infinite;
+}
+.atp-nebula-blob--violet {
+  width: 320px; height: 320px; bottom: -80px; right: -60px;
+  background: radial-gradient(circle at 50% 50%, rgba(120,110,196,0.10), transparent 68%);
+  animation: atp-neb-b 33s ease-in-out infinite;
+}
+.atp-nebula-blob--deep {
+  width: 260px; height: 220px; top: 38%; left: 30%;
+  background: radial-gradient(circle at 50% 50%, rgba(70,96,150,0.07), transparent 70%);
+  animation: atp-neb-a 40s ease-in-out infinite reverse;
+}
 
 /* ---- En-tete ---- */
 .atp-header {
@@ -234,7 +268,7 @@ export const ASSISTANT_CSS = `
   white-space: pre-wrap; word-wrap: break-word;
 }
 .atp-bubble--bot {
-  background: rgba(22,17,11,0.72); /* assez opaque : texte lisible par-dessus les etoiles */
+  background: rgba(20,15,10,0.88); /* quasi opaque : texte parfaitement net sur le cosmos */
   border: 1px solid var(--atp-line);
   border-bottom-left-radius: 5px;
   color: var(--atp-cream);
@@ -259,6 +293,8 @@ export const ASSISTANT_CSS = `
 /* ---- Zone d'actions (puces + flux) ---- */
 .atp-actions { padding: 4px 16px 6px; display: flex; flex-wrap: wrap; gap: 8px; }
 .atp-chip {
+  position: relative;
+  overflow: hidden;
   font-family: inherit;
   font-size: 12.5px; font-weight: 500;
   padding: 8px 13px;
@@ -270,6 +306,15 @@ export const ASSISTANT_CSS = `
   transition: transform 0.22s var(--atp-ease), background 0.22s, border-color 0.22s;
   animation: atp-chip-in 0.5s var(--atp-ease) both;
 }
+/* eclat qui balaie la puce au survol (transform uniquement) */
+.atp-chip::after {
+  content: '';
+  position: absolute; top: 0; left: 0; width: 55%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,245,220,0.18), transparent);
+  transform: translateX(-180%) skewX(-18deg);
+  pointer-events: none;
+}
+.atp-chip:hover::after { animation: atp-sheen 0.8s var(--atp-ease); }
 .atp-chip:hover { transform: translateY(-2px); background: rgba(201,168,76,0.14); border-color: var(--atp-gold); }
 .atp-chip:active { transform: translateY(0) scale(0.97); }
 .atp-chip:focus-visible { outline: 2px solid var(--atp-gold-light); outline-offset: 2px; }
@@ -318,6 +363,7 @@ export const ASSISTANT_CSS = `
 .atp-input::placeholder { color: var(--atp-muted); }
 .atp-input:focus { outline: none; border-color: var(--atp-line-strong); }
 .atp-send {
+  position: relative;
   flex-shrink: 0;
   width: 42px; height: 42px; border-radius: 12px;
   border: none; cursor: pointer;
@@ -325,6 +371,14 @@ export const ASSISTANT_CSS = `
   color: #1a1206;
   display: grid; place-items: center;
   transition: transform 0.22s var(--atp-ease), opacity 0.2s, box-shadow 0.22s;
+}
+/* eclat one-shot au moment de l'envoi */
+.atp-send--spark::after {
+  content: '';
+  position: absolute; inset: -4px; border-radius: inherit;
+  background: radial-gradient(circle, rgba(255,245,220,0.85), transparent 60%);
+  pointer-events: none;
+  animation: atp-spark 0.6s var(--atp-ease) both;
 }
 .atp-send:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(201,168,76,0.3); }
 .atp-send:active:not(:disabled) { transform: translateY(0) scale(0.95); }
@@ -417,16 +471,25 @@ export const ASSISTANT_CSS = `
 @keyframes atp-fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes atp-point { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 @keyframes atp-twinkle { 0%,100% { opacity: 0.12; transform: scale(0.7); } 50% { opacity: 0.7; transform: scale(1.05); } }
+@keyframes atp-neb-a { 0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.45; } 50% { transform: translate3d(16px,12px,0) scale(1.09); opacity: 0.72; } }
+@keyframes atp-neb-b { 0%,100% { transform: translate3d(0,0,0) scale(1); opacity: 0.34; } 50% { transform: translate3d(-14px,-10px,0) scale(1.12); opacity: 0.62; } }
+@keyframes atp-sheen { from { transform: translateX(-180%) skewX(-18deg); } to { transform: translateX(320%) skewX(-18deg); } }
+@keyframes atp-spark { from { opacity: 0.9; transform: scale(0.6); } to { opacity: 0; transform: scale(1.8); } }
+@keyframes atp-core-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
 /* ====================== REDUCED MOTION (variante calme) ====================== */
 @media (prefers-reduced-motion: reduce) {
   .atp-root .atp-launcher::before,
   .atp-root .atp-sigil-orbit,
+  .atp-root .atp-sigil-core,
   .atp-root .atp-aura,
+  .atp-root .atp-nebula-blob,
   .atp-root .atp-typing span,
   .atp-root .atp-star,
   .atp-root .atp-tour-pointer { animation: none; }
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
+  .atp-root .atp-chip:hover::after { animation: none; }
+  .atp-root .atp-send--spark::after { animation: none; opacity: 0; }
   .atp-root .atp-launcher,
   .atp-root .atp-panel,
   .atp-root .atp-row,

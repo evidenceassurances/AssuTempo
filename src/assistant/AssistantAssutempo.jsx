@@ -18,6 +18,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSISTANT_CSS } from './styles';
 import { TOUR_FLOWS } from './tourSteps';
+import CosmosCanvas from './CosmosCanvas';
 
 const STYLE_ID = 'atp-styles';
 
@@ -78,7 +79,8 @@ function makeStarField(count) {
     dur: (2.6 + Math.random() * 2.6).toFixed(2),
   }));
 }
-const PANEL_STARS = makeStarField(12);
+// Le fil de chat utilise l'ambiance cosmos en canvas (CosmosCanvas).
+// La tooltip du tour garde un champ d'etoiles CSS leger (peu d'elements).
 const TOOLTIP_STARS = makeStarField(10);
 
 function Stars({ field }) {
@@ -136,6 +138,7 @@ export default function AssistantAssutempo() {
   const [sending, setSending] = useState(false);
   const [showFlows, setShowFlows] = useState(false);
   const [offerGuide, setOfferGuide] = useState(false);
+  const [spark, setSpark] = useState(false);
 
   // tour : { active, flowKey, step }
   const [tour, setTour] = useState({ active: false, flowKey: null, step: 0 });
@@ -198,6 +201,8 @@ export default function AssistantAssutempo() {
       setInput('');
       setShowFlows(false);
       setSending(true);
+      setSpark(true);
+      setTimeout(() => setSpark(false), 600);
       try {
         const apiMessages = next
           .filter((m) => m.role === 'user' || m.role === 'assistant')
@@ -525,7 +530,12 @@ export default function AssistantAssutempo() {
           role="dialog"
           aria-label="Assistant Assutempo"
         >
-          <Stars field={PANEL_STARS} />
+          <div className="atp-nebula" aria-hidden>
+            <span className="atp-nebula-blob atp-nebula-blob--gold" />
+            <span className="atp-nebula-blob atp-nebula-blob--violet" />
+            <span className="atp-nebula-blob atp-nebula-blob--deep" />
+          </div>
+          <CosmosCanvas reduced={reducedRef.current} burst={messages.length} />
           <div className="atp-aura" aria-hidden />
           <header className="atp-header">
             <span className="atp-header-avatar"><Sigil /></span>
@@ -582,7 +592,7 @@ export default function AssistantAssutempo() {
             />
             <button
               type="button"
-              className="atp-send"
+              className={'atp-send' + (spark ? ' atp-send--spark' : '')}
               aria-label="Envoyer"
               disabled={!input.trim() || sending}
               onClick={() => {
