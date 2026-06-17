@@ -321,6 +321,24 @@ export const ASSISTANT_CSS = `
 .atp-chip--primary { background: linear-gradient(135deg, var(--atp-gold), var(--atp-gold-deep)); color: #1a1206; border-color: transparent; font-weight: 600; }
 .atp-chip--primary:hover { background: linear-gradient(135deg, var(--atp-gold-light), var(--atp-gold)); }
 
+/* CTA pleine largeur (accompagnement mobile : mene directement a la cible) */
+.atp-cta {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 13px 16px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--atp-gold), var(--atp-gold-deep));
+  color: #1a1206;
+  cursor: pointer;
+  transition: transform 0.22s var(--atp-ease), background 0.22s;
+  animation: atp-chip-in 0.5s var(--atp-ease) both;
+}
+.atp-cta:hover { transform: translateY(-2px); background: linear-gradient(135deg, var(--atp-gold-light), var(--atp-gold)); }
+.atp-cta:active { transform: translateY(0) scale(0.98); }
+.atp-cta:focus-visible { outline: 2px solid var(--atp-gold-light); outline-offset: 2px; }
+
 /* carte de flux (choix du parcours guide) */
 .atp-flow {
   width: 100%;

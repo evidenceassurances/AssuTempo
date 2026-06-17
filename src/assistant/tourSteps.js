@@ -11,6 +11,19 @@
  *   - title      : titre du tooltip
  *   - text       : texte du tooltip
  *   - placement  : 'top' | 'bottom' | 'auto' (defaut 'auto')
+ *   - noCutout   : true => on cadre la cible a l'ecran SANS projecteur decoupe
+ *                  (pour les iframes tierces, potentiellement vides / en cours
+ *                  de chargement : un cutout serre afficherait un grand cadre
+ *                  gris). Tooltip affichee sans decoupe.
+ *
+ * Champ `mobile` (par flux) : sur petit ecran / pointeur grossier, on n'ouvre
+ * PAS le tour a projecteur (trop fragile : iframe lourde + barre Safari mouvante).
+ * On affiche a la place un court message + un bouton CTA qui mene directement
+ * a la bonne destination.
+ *   - message     : texte d'accompagnement injecte dans le chat
+ *   - ctaLabel    : libelle du bouton
+ *   - path        : route a ouvrir (si differente de la page courante)
+ *   - scrollTarget: selecteur vers lequel faire un smooth-scroll une fois arrive
  *
  * Mur de l'iframe : on guide jusqu'au bord de l'iframe tierce (tarification,
  * Certimat) sans jamais tenter d'acceder a son contenu (cross-origin interdit).
@@ -20,6 +33,12 @@ export const TOUR_FLOWS = {
     label: 'Assurance temporaire',
     sub: 'Devis et souscription en ligne',
     icon: 'shield',
+    mobile: {
+      message: `Renseignez votre véhicule, la durée (1 à 90 jours) et vos informations dans le formulaire ; l'attestation arrive en quelques minutes, sans relevé d'information. Je vous y emmène.`,
+      ctaLabel: 'Aller au formulaire',
+      path: '/tarification',
+      scrollTarget: '[data-assistant-target="tarif-iframe"]',
+    },
     steps: [
       {
         target: '[data-assistant-target="devis"]',
@@ -31,8 +50,9 @@ export const TOUR_FLOWS = {
         path: '/tarification',
         target: '[data-assistant-target="tarif-iframe"]',
         title: 'Votre formulaire sécurisé',
-        text: `Renseignez le véhicule, la durée (de 1 à 90 jours) et vos informations dans ce module. L'attestation arrive en quelques minutes, sans relevé d'information.`,
+        text: `Voici votre formulaire. Renseignez-y le véhicule, la durée (de 1 à 90 jours) et vos informations. L'attestation arrive en quelques minutes, sans relevé d'information.`,
         placement: 'top',
+        noCutout: true,
       },
     ],
   },
@@ -40,13 +60,20 @@ export const TOUR_FLOWS = {
     label: 'Carte grise',
     sub: 'Immatriculation en ligne',
     icon: 'file',
+    mobile: {
+      message: `Votre demande passe par notre partenaire agréé Certimat. Renseignez votre véhicule dans le module sécurisé pour obtenir votre carte grise. Je vous y emmène.`,
+      ctaLabel: 'Accéder à la carte grise',
+      path: '/carte-grise',
+      scrollTarget: '[data-assistant-target="carte-grise-iframe"]',
+    },
     steps: [
       {
         path: '/carte-grise',
         target: '[data-assistant-target="carte-grise-iframe"]',
         title: 'Votre demande de carte grise',
-        text: `Cette démarche est propulsée par notre partenaire agréé Certimat. Renseignez votre véhicule directement dans ce module sécurisé pour obtenir votre carte grise.`,
+        text: `Voici le module sécurisé, propulsé par notre partenaire agréé Certimat. Renseignez-y votre véhicule pour obtenir votre carte grise.`,
         placement: 'top',
+        noCutout: true,
       },
     ],
   },

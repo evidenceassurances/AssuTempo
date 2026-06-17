@@ -117,6 +117,16 @@ function Sigil() {
 
 /* --------------------------------- helpers -------------------------------- */
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// "Mobile" = viewport etroit OU pointeur grossier (tactile). Sur ces ecrans le
+// tour a projecteur est trop fragile (iframe tierce lourde + barre Safari
+// mouvante) : on bascule sur un flux simple (message + CTA direct).
+function detectMobile() {
+  if (typeof window === 'undefined') return false;
+  const narrow = window.innerWidth <= 820;
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  return narrow || coarse;
+}
 function waitForTarget(selector, timeout = 3500) {
   return new Promise((resolve) => {
     const t0 = Date.now();
@@ -173,6 +183,8 @@ export default function AssistantAssutempo() {
   const [showFlows, setShowFlows] = useState(false);
   const [offerGuide, setOfferGuide] = useState(false);
   const [spark, setSpark] = useState(false);
+  // Accompagnement mobile : { ctaLabel, path, scrollTarget } ou null.
+  const [mobileCta, setMobileCta] = useState(null);
 
   // tour : { active, flowKey, step }
   const [tour, setTour] = useState({ active: false, flowKey: null, step: 0 });
@@ -269,6 +281,7 @@ export default function AssistantAssutempo() {
       setMessages(next);
       setInput('');
       setShowFlows(false);
+      setMobileCta(null);
       setSending(true);
       setSpark(true);
       setTimeout(() => setSpark(false), 600);
@@ -340,10 +353,47 @@ export default function AssistantAssutempo() {
 
   function startTour(flowKey) {
     setShowFlows(false);
+    const f = TOUR_FLOWS[flowKey];
+    if (!f) return;
+
+    // Mobile / tactile : pas de tour a projecteur. On rassure dans le chat puis
+    // on propose un bouton CTA qui mene directement a la bonne destination.
+    if (detectMobile() && f.mobile) {
+      setMessages((m) => [...m, { role: 'assistant', content: f.mobile.message }]);
+      setMobileCta({
+        ctaLabel: f.mobile.ctaLabel,
+        path: f.mobile.path,
+        scrollTarget: f.mobile.scrollTarget,
+      });
+      return;
+    }
+
+    // Desktop / grand ecran : tour pas-a-pas a projecteur (effet differenciant).
     closePanel(false); // simple bascule vers le tour, pas une fin de conversation
     tourElRef.current = null;
     setTourRect(null);
     setTour({ active: true, flowKey, step: 0 });
+  }
+
+  // CTA mobile : ouvre la bonne route (si differente) puis smooth-scroll vers la
+  // section. Si la cible est sur la page courante, scroll direct. Best-effort :
+  // si la cible n'apparait pas, on reste sur la page (jamais de blocage).
+  function runCta(cta) {
+    setMobileCta(null);
+    closePanel(false);
+    const behavior = reducedRef.current ? 'auto' : 'smooth';
+    const scrollTo = (sel) => {
+      if (!sel) return;
+      waitForTarget(sel, 3500).then((el) => {
+        if (el) el.scrollIntoView({ behavior, block: 'start' });
+      });
+    };
+    if (cta.path && window.location.pathname !== cta.path) {
+      navigate(cta.path);
+      setTimeout(() => scrollTo(cta.scrollTarget), reducedRef.current ? 60 : 360);
+    } else {
+      scrollTo(cta.scrollTarget);
+    }
   }
 
   function endTour(completed) {
@@ -411,6 +461,14 @@ export default function AssistantAssutempo() {
       });
       await delay(reducedRef.current ? 60 : 420);
       if (cancelled) return;
+      // Etape iframe (noCutout) : cible cadree a l'ecran mais PAS de projecteur
+      // decoupe (l'iframe peut etre vide / en cours de chargement -> grand cadre
+      // gris). Tooltip centree, veil sans decoupe.
+      if (step.noCutout) {
+        tourElRef.current = null;
+        setTourRect(null);
+        return;
+      }
       tourElRef.current = el;
       measure(el);
     })();
@@ -540,6 +598,15 @@ export default function AssistantAssutempo() {
 
   /* ----------------------------- rendu : actions --------------------------- */
   function renderActions() {
+    if (mobileCta) {
+      return (
+        <div className="atp-actions" style={{ flexDirection: 'column' }}>
+          <button type="button" className="atp-cta" onClick={() => runCta(mobileCta)}>
+            {mobileCta.ctaLabel}
+          </button>
+        </div>
+      );
+    }
     if (showFlows) {
       return (
         <div className="atp-actions" style={{ flexDirection: 'column' }}>
