@@ -524,15 +524,31 @@ export default function AssistantAssutempo() {
         setTourRect(null);
         return;
       }
-      // Cadrage (haut aligne pour le formulaire). Le suivi en temps reel est
-      // assure par la boucle requestAnimationFrame ci-dessous : la cible est
-      // mesuree a chaque frame, y compris pendant ce scroll programmatique
-      // d'arrivee -> le surlignage suit sans saut, et epouse la taille de
-      // l'iframe des qu'elle se charge (re-mesure continue, pas de delai decalant).
-      scrollToTarget(el, { large: !!step.frame, reduced: reducedRef.current });
       if (cancelled) return;
       tourElRef.current = el;
       measure(el); // premiere pose immediate; la boucle rAF prend le relais
+
+      // Cadrage : on epingle le HAUT de la cible sous le header (formulaire) ou on
+      // la centre (petite cible). Le suivi temps reel est assure par la boucle rAF.
+      const pin = () =>
+        scrollToTarget(el, { large: !!step.frame, reduced: reducedRef.current });
+      pin();
+
+      // Robustesse : AppShell fait window.scrollTo(0,0) a chaque transition de page
+      // (AnimatePresence onExitComplete) et /tarification est en lazy-load + anim
+      // d'entree. Ce reset, ou la pose tardive de l'iframe, peut ecraser notre
+      // cadrage. On RE-CALE donc tant que le haut du formulaire n'est pas a sa place,
+      // sans secousse si c'est deja bon (guard sur la position courante). Le
+      // surlignage reste colle via la boucle rAF.
+      if (step.frame) {
+        [120, 360, 760, 1300].forEach((ms) =>
+          setTimeout(() => {
+            if (cancelled || tourElRef.current !== el) return;
+            const top = el.getBoundingClientRect().top;
+            if (Math.abs(top - FORM_TOP_OFFSET) > 24) pin();
+          }, ms),
+        );
+      }
     })();
 
     return () => {
