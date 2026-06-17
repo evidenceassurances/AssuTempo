@@ -13,9 +13,9 @@ Tout le code vit dans `src/assistant/` et la fonction serverless `api/chat.js`.
    Le proxy serverless ajoute le prompt systeme **cote serveur** et appelle l'API
    Anthropic. La cle ne touche jamais le client.
 3. **Tour guide** (`tourSteps.js`) : sur demande (« M'aider a souscrire » ou apres une
-   reponse), l'assistant propose 3 parcours (Assurance temporaire / Carte grise /
-   Assurance voyage) et surligne pas a pas les vraies cibles du site jusqu'au bord
-   de l'iframe de souscription.
+   reponse), l'assistant propose 2 parcours (Assurance temporaire / Carte grise)
+   et surligne pas a pas les vraies cibles du site jusqu'au bord de l'iframe de
+   souscription.
 
 ## Montage / demontage
 

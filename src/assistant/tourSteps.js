@@ -50,18 +50,4 @@ export const TOUR_FLOWS = {
       },
     ],
   },
-  voyage: {
-    label: 'Assurance voyage',
-    sub: 'Couverture a l\'etranger',
-    icon: 'globe',
-    steps: [
-      {
-        path: '/assurance-internationale',
-        target: null,
-        title: 'Vos deplacements a l\'etranger',
-        text: 'Voici notre page dediee a la couverture internationale. Pour une situation precise, un conseiller vous oriente au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).',
-        placement: 'auto',
-      },
-    ],
-  },
 };

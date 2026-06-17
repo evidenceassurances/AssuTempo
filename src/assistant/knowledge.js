@@ -45,14 +45,14 @@ Incluses des le 1er jour, dans les 34 pays :
 - Responsabilite civile (dommages corporels et materiels causes aux tiers).
 - Defense-recours suite a accident.
 - Assistance depannage.
-Conditions de l'assistance : panne ET accident pour les vehicules de moins de 3,5 tonnes et de moins de 10 ans ; assistance accident UNIQUEMENT pour les vehicules de moins de 3,5 tonnes et de plus de 10 ans.
-NON couverts par la formule temporaire : le vol et le bris de glace ne sont PAS inclus (couverture limitee a la RC, la defense-recours et l'assistance).
-〔A CONFIRMER : existence d'options de garantie supplementaires (ex. dommages du conducteur). Le site ne mentionne que RC + defense-recours + assistance.〕
+Conditions de l'assistance : panne ET accident pour les vehicules de moins de 3,5 tonnes et de moins de 10 ans ; assistance accident UNIQUEMENT pour les vehicules de moins de 3,5 tonnes et de plus de 10 ans. L'assistance depannage comporte une franchise kilometrique de 50 km (variable selon le vehicule).
+NON couverts par la formule temporaire : le vol et le bris de glace ne sont PAS inclus.
+Aucune option de garantie supplementaire : la couverture se limite a la RC, la defense-recours et l'assistance depannage (pas de garantie dommages du conducteur).
 
 ## Vehicules
 Large eventail de vehicules accepte (d'apres le site) : voiture, berline, sportive, utilitaire, minibus, camping-car, 4x4, pick-up, poids lourd, tracteur, autocar, semi-remorque, caravane, quad.
 Puissance : aucune limite fixee ; au-dela de 25 CV, une etude personnalisee peut etre necessaire (reponse sous 24h maximum). Contacter l'equipe le cas echeant.
-〔A CONFIRMER : liste fermee des genres eligibles et exclusions exactes du formulaire de souscription (ex. deux-roues / motos, valeur ou age maximal du vehicule, vehicules de location). Pour tout doute, orienter vers le devis qui valide l'eligibilite.〕
+Exclusions : les deux-roues (motos, scooters) ne sont PAS assurables ; les vehicules de location ne sont PAS eligibles. Il n'y a pas de valeur maximale du vehicule, mais au-dela d'un certain prix, des photos du vehicule peuvent etre demandees.
 
 ## Eligibilite du conducteur (repondre avec precision, sans minimiser une condition)
 - Profil : particulier ou professionnel.
@@ -64,7 +64,7 @@ Puissance : aucune limite fixee ; au-dela de 25 CV, une etude personnalisee peut
   - resiliation pour sinistre au cours des 5 dernieres annees,
   - condamnation penale au code de la route,
   - condamnation pour delit de fuite, suspension ou annulation de permis au cours des 24 derniers mois.
-- Permis etranger : accepte selon les cas (a verifier dans le parcours de devis ; la regle generale 20 ans et permis de plus de 2 ans reste la reference). 〔A CONFIRMER : conditions exactes du permis etranger et du jeune permis.〕
+- Permis etranger : la plupart des pays du monde sont pris en charge. La regle d'anciennete reste la reference : permis de plus de 2 ans requis (un permis de moins de 2 ans n'est pas eligible).
 
 ## Documents necessaires
 - Permis de conduire valide.
@@ -89,10 +89,6 @@ Puissance : aucune limite fixee ; au-dela de 25 CV, une etude personnalisee peut
 ## Carte grise (service distinct)
 - Demarche d'immatriculation 100 % en ligne, habilitee par le Ministere de l'Interieur, via un partenaire agree (France Titres / Certimat).
 - Certificat provisoire immediat, carte grise livree a domicile, CERFA preremplis et signature electronique, paiement des taxes possible en plusieurs fois.
-
-## Conduire a l'etranger / "assurance voyage"
-- Pour conduire a l'etranger, c'est l'assurance auto temporaire qui s'applique : RC couverte des le 1er jour dans les 34 pays, plus les 7 destinations sur demande. La carte internationale d'assurance sert de justificatif.
-- 〔A CONFIRMER : il n'a pas ete identifie dans le site de produit distinct d'assurance voyage (sante, bagages, annulation). Si un tel produit existe, le preciser ; sinon, "assurance voyage" renvoie a l'assurance auto temporaire a l'etranger.〕
 
 ## Process de souscription
 1) Choisir la duree. 2) Renseigner le vehicule. 3) Renseigner le conducteur et les coordonnees. 4) Verification du dossier par l'equipe. 5) Lien de paiement. 6) Signature, puis attestation immediate.

@@ -22,7 +22,7 @@ import { TOUR_FLOWS } from './tourSteps';
 const STYLE_ID = 'atp-styles';
 
 const WELCOME =
-  'Bonjour, je suis Tempo, votre concierge Assutempo. Je reponds a vos questions sur l\'assurance (temporaire, voyage) et la carte grise, et je peux vous guider pas a pas jusqu\'a la souscription. Comment puis-je vous aider ?';
+  'Bonjour, je suis Tempo, votre concierge Assutempo. Je reponds a vos questions sur l\'assurance auto temporaire et la carte grise, et je peux vous guider pas a pas jusqu\'a la souscription. Comment puis-je vous aider ?';
 
 const ERROR_MSG =
   'Je rencontre un souci technique a l\'instant. Je peux toutefois vous accompagner pas a pas jusqu\'au formulaire, ou vous pouvez joindre un conseiller au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).';
