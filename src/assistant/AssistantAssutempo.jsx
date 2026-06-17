@@ -118,6 +118,28 @@ function Sigil() {
 /* --------------------------------- helpers -------------------------------- */
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Hauteur reservee au header fixe : on ne place jamais une cible dessous.
+const HEADER_OFFSET = 88;
+
+// Amene la cible bien en vue en tenant compte du header fixe.
+//  - large (formulaire/iframe) : son HAUT vers ~20 % du haut de la fenetre,
+//    pour voir le formulaire ET la pop-up ensemble.
+//  - petite cible : centree verticalement, jamais cachee sous le header.
+function scrollToTarget(el, { large, reduced }) {
+  if (!el || typeof window === 'undefined') return;
+  const rect = el.getBoundingClientRect();
+  const absTop = window.scrollY + rect.top;
+  const vh = window.innerHeight;
+  let desiredTop;
+  if (large) {
+    desiredTop = Math.max(HEADER_OFFSET + 16, vh * 0.2);
+  } else {
+    desiredTop = Math.max(HEADER_OFFSET + 16, (vh - rect.height) / 2);
+  }
+  const y = Math.max(0, absTop - desiredTop);
+  window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+}
+
 // "Mobile" = viewport etroit OU pointeur grossier (tactile). Sur ces ecrans le
 // tour a projecteur est trop fragile (iframe tierce lourde + barre Safari
 // mouvante) : on bascule sur un flux simple (message + CTA direct).
@@ -450,27 +472,28 @@ export default function AssistantAssutempo() {
       const el = await waitForTarget(step.target, 3500);
       if (cancelled) return;
       if (!el) {
+        // Cible introuvable : on degrade proprement (tooltip centre), jamais de
+        // cadre vide ni de blocage.
         tourElRef.current = null;
         setTourRect(null);
         return;
       }
-      el.scrollIntoView({
-        behavior: reducedRef.current ? 'auto' : 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-      await delay(reducedRef.current ? 60 : 420);
+      // Centrage tenant compte du header fixe (jamais un simple block:'center'
+      // qui cacherait la cible derriere le header ou centrerait une iframe haute).
+      scrollToTarget(el, { large: !!step.frame, reduced: reducedRef.current });
+      await delay(reducedRef.current ? 60 : 480);
       if (cancelled) return;
-      // Etape iframe (noCutout) : cible cadree a l'ecran mais PAS de projecteur
-      // decoupe (l'iframe peut etre vide / en cours de chargement -> grand cadre
-      // gris). Tooltip centree, veil sans decoupe.
-      if (step.noCutout) {
-        tourElRef.current = null;
-        setTourRect(null);
-        return;
-      }
       tourElRef.current = el;
       measure(el);
+      // Grand formulaire/iframe : re-mesure apres chargement / pose du layout
+      // pour que l'encadre epouse la vraie taille (plus de cadre vide ni decale).
+      if (step.frame) {
+        [350, 900, 1700].forEach((ms) =>
+          setTimeout(() => {
+            if (!cancelled && tourElRef.current === el) measure(el);
+          }, ms),
+        );
+      }
     })();
 
     return () => {
@@ -511,12 +534,28 @@ export default function AssistantAssutempo() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const isMobile = vw <= 520;
+    const isFrame = !!step.frame;
+    const tipW = 330;
 
     // position du tooltip : sur mobile, carte ancree en bas pleine largeur
-    // (bottom-sheet) pour ne jamais deborder ; sur desktop, pres de la cible.
+    // (bottom-sheet) ; en mode encadre (grand formulaire), dans une marge libre
+    // (cote avec le plus de place) sans recouvrir la zone surlignee ; sinon pres
+    // de la cible (au-dessus/en dessous).
     let tipStyle;
     if (isMobile) {
       tipStyle = null; // gere par la classe .atp-tooltip--sheet
+    } else if (isFrame && tourRect) {
+      const roomLeft = tourRect.left;
+      const roomRight = vw - (tourRect.left + tourRect.width);
+      if (roomRight >= tipW + 24) {
+        tipStyle = { right: 16, top: '50%', transform: 'translateY(-50%)' };
+      } else if (roomLeft >= tipW + 24) {
+        tipStyle = { left: 16, top: '50%', transform: 'translateY(-50%)' };
+      } else {
+        // marges trop etroites : epinglee en bas a droite, sous les premiers
+        // champs (la zone de saisie reste visible).
+        tipStyle = { right: 16, bottom: 20 };
+      }
     } else if (!tourRect) {
       tipStyle = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
     } else {
@@ -533,8 +572,14 @@ export default function AssistantAssutempo() {
 
     return (
       <>
-        <div className={'atp-tour-veil' + (tourRect ? '' : ' atp-tour-veil--nospot')} />
-        {tourRect && (
+        <div
+          className={
+            'atp-tour-veil' +
+            (isFrame ? ' atp-tour-veil--frame' : tourRect ? '' : ' atp-tour-veil--nospot')
+          }
+        />
+        {/* petite cible : projecteur sombre decoupe (joli sur petit element) */}
+        {tourRect && !isFrame && (
           <div
             className="atp-tour-spot"
             style={{
@@ -545,7 +590,19 @@ export default function AssistantAssutempo() {
             }}
           />
         )}
-        {tourRect && (
+        {/* grand formulaire/iframe : encadre dore lumineux, sans trou sombre */}
+        {tourRect && isFrame && (
+          <div
+            className="atp-tour-frame"
+            style={{
+              top: tourRect.top,
+              left: tourRect.left,
+              width: tourRect.width,
+              height: tourRect.height,
+            }}
+          />
+        )}
+        {tourRect && !isFrame && (
           <div
             className="atp-tour-pointer"
             style={{ top: Math.max(tourRect.top - 30, 6), left: tourRect.left + tourRect.width / 2 - 11 }}

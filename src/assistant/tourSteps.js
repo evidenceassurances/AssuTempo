@@ -11,10 +11,12 @@
  *   - title      : titre du tooltip
  *   - text       : texte du tooltip
  *   - placement  : 'top' | 'bottom' | 'auto' (defaut 'auto')
- *   - noCutout   : true => on cadre la cible a l'ecran SANS projecteur decoupe
- *                  (pour les iframes tierces, potentiellement vides / en cours
- *                  de chargement : un cutout serre afficherait un grand cadre
- *                  gris). Tooltip affichee sans decoupe.
+ *   - frame      : true => grand element (iframe / formulaire). On le cadre par
+ *                  un ENCADRE DORE lumineux (bordure + halo), sans decoupe sombre
+ *                  ni assombrissement marque, et son haut est amene confortablement
+ *                  en vue (~20 % du haut de fenetre). Re-mesure apres chargement de
+ *                  l'iframe pour epouser la vraie taille. Les petites cibles (sans
+ *                  ce flag) gardent le projecteur sombre, joli sur petit element.
  *
  * Champ `mobile` (par flux) : sur petit ecran / pointeur grossier, on n'ouvre
  * PAS le tour a projecteur (trop fragile : iframe lourde + barre Safari mouvante).
@@ -52,7 +54,7 @@ export const TOUR_FLOWS = {
         title: 'Votre formulaire sécurisé',
         text: `Voici votre formulaire. Renseignez-y le véhicule, la durée (de 1 à 90 jours) et vos informations. L'attestation arrive en quelques minutes, sans relevé d'information.`,
         placement: 'top',
-        noCutout: true,
+        frame: true,
       },
     ],
   },
@@ -73,7 +75,7 @@ export const TOUR_FLOWS = {
         title: 'Votre demande de carte grise',
         text: `Voici le module sécurisé, propulsé par notre partenaire agréé Certimat. Renseignez-y votre véhicule pour obtenir votre carte grise.`,
         placement: 'top',
-        noCutout: true,
+        frame: true,
       },
     ],
   },

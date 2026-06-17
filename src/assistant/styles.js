@@ -421,6 +421,23 @@ export const ASSISTANT_CSS = `
   pointer-events: none;
 }
 .atp-tour-veil--nospot { background: rgba(8,7,6,0.74); }
+/* mode encadre (grand formulaire/iframe) : tres peu d'assombrissement, c'est
+   l'encadre dore qui signale la zone. */
+.atp-tour-veil--frame { background: rgba(8,7,6,0.28); }
+/* encadre dore lumineux : bordure + halo, AUCUN trou sombre. Pas de transition
+   de position -> il colle a la cible au scroll (recalcul par requestAnimationFrame),
+   sans deriver. */
+.atp-tour-frame {
+  position: fixed;
+  z-index: 2147482100;
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 2px var(--atp-gold-light),
+    0 0 24px 5px rgba(201,168,76,0.5),
+    0 0 72px 16px rgba(201,168,76,0.22);
+  pointer-events: none;
+  animation: atp-fade-in 0.3s var(--atp-ease) both;
+}
 .atp-tour-pointer {
   position: fixed; z-index: 2147482600;
   color: var(--atp-gold-light);
