@@ -275,6 +275,22 @@ export default function AssistantAssutempo() {
     }
   }, []);
 
+  /* Desktop : precharge le chunk cosmos quand la page est inactive, pour que le
+     panneau s'ouvre instantanement (aucun fetch au moment du tap). Mobile : jamais
+     (le cosmos n'y est ni charge ni monte). Le reste du widget est dans le bundle
+     initial, donc l'ouverture mobile est immediate sans reseau. */
+  useEffect(() => {
+    if (detectMobile()) return undefined;
+    let id;
+    const preload = () => { import('./CosmosCanvas'); };
+    if (typeof window !== 'undefined' && window.requestIdleCallback) {
+      id = window.requestIdleCallback(preload);
+      return () => window.cancelIdleCallback && window.cancelIdleCallback(id);
+    }
+    id = setTimeout(preload, 1200);
+    return () => clearTimeout(id);
+  }, []);
+
   /* mobile vs desktop : reevalue au resize / rotation / changement de pointeur */
   useEffect(() => {
     const compute = () => setIsMobile(detectMobile());
@@ -395,24 +411,30 @@ export default function AssistantAssutempo() {
     });
   }, []);
 
+  // Mobile / tactile : JAMAIS de tour a projecteur. On rassure dans le chat puis
+  // on propose un bouton CTA qui navigue directement vers la bonne destination.
+  function showMobileCta(flowKey) {
+    const f = TOUR_FLOWS[flowKey];
+    if (!f || !f.mobile) return;
+    setShowFlows(false);
+    setMessages((m) => [...m, { role: 'assistant', content: f.mobile.message }]);
+    setMobileCta({
+      ctaLabel: f.mobile.ctaLabel,
+      path: f.mobile.path,
+      scrollTarget: f.mobile.scrollTarget,
+    });
+  }
+
+  // Tour pas-a-pas : DESKTOP UNIQUEMENT. Garde infaillible -> sur mobile on bascule
+  // sur le CTA et on ne touche jamais a l'etat du tour (aucun overlay rendu).
   function startTour(flowKey) {
     setShowFlows(false);
-    const f = TOUR_FLOWS[flowKey];
-    if (!f) return;
-
-    // Mobile / tactile : pas de tour a projecteur. On rassure dans le chat puis
-    // on propose un bouton CTA qui mene directement a la bonne destination.
-    if (detectMobile() && f.mobile) {
-      setMessages((m) => [...m, { role: 'assistant', content: f.mobile.message }]);
-      setMobileCta({
-        ctaLabel: f.mobile.ctaLabel,
-        path: f.mobile.path,
-        scrollTarget: f.mobile.scrollTarget,
-      });
+    if (detectMobile()) {
+      showMobileCta(flowKey);
       return;
     }
-
-    // Desktop / grand ecran : tour pas-a-pas a projecteur (effet differenciant).
+    const f = TOUR_FLOWS[flowKey];
+    if (!f) return;
     closePanel(false); // simple bascule vers le tour, pas une fin de conversation
     tourElRef.current = null;
     setTourRect(null);
@@ -474,7 +496,7 @@ export default function AssistantAssutempo() {
 
   /* resolution de l'etape courante (navigation + localisation de la cible) */
   useEffect(() => {
-    if (!tour.active) return undefined;
+    if (!tour.active || detectMobile()) return undefined; // jamais de tour sur mobile
     const flow = TOUR_FLOWS[tour.flowKey];
     const step = flow && flow.steps[tour.step];
     if (!step) return undefined;
@@ -552,21 +574,21 @@ export default function AssistantAssutempo() {
 
   /* ------------------------------ rendu : tour ----------------------------- */
   function renderTour() {
+    // Garde infaillible : aucun overlay/projecteur de tour n'est JAMAIS rendu sur
+    // mobile, quel que soit l'etat (le tour ne s'y declenche pas, ceci est une
+    // double securite).
+    if (isMobile || detectMobile()) return null;
     if (!tour.active || !step) return null;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const isMobile = vw <= 520;
     const isFrame = !!step.frame;
     const tipW = 330;
 
-    // position du tooltip : sur mobile, carte ancree en bas pleine largeur
-    // (bottom-sheet) ; en mode encadre (grand formulaire), dans une marge libre
-    // (cote avec le plus de place) sans recouvrir la zone surlignee ; sinon pres
-    // de la cible (au-dessus/en dessous).
+    // Tour desktop uniquement. Position du tooltip : en mode encadre (grand
+    // formulaire), dans une marge libre (cote avec le plus de place) sans recouvrir
+    // la zone surlignee ; sinon pres de la cible (au-dessus/en dessous).
     let tipStyle;
-    if (isMobile) {
-      tipStyle = null; // gere par la classe .atp-tooltip--sheet
-    } else if (isFrame && tourRect) {
+    if (isFrame && tourRect) {
       const roomLeft = tourRect.left;
       const roomRight = vw - (tourRect.left + tourRect.width);
       if (roomRight >= tipW + 24) {
@@ -641,7 +663,7 @@ export default function AssistantAssutempo() {
           <Icon name="close" size={18} />
         </button>
         <div
-          className={'atp-tooltip' + (isMobile ? ' atp-tooltip--sheet' : '')}
+          className="atp-tooltip"
           style={tipStyle || undefined}
           role="dialog"
           aria-label="Étape du guide"
@@ -687,10 +709,13 @@ export default function AssistantAssutempo() {
       );
     }
     if (showFlows) {
+      // Desktop : chaque flux lance le tour pas-a-pas. Mobile : chaque flux
+      // ouvre directement le CTA (message + bouton de navigation), jamais le tour.
+      const onPick = isMobile ? showMobileCta : startTour;
       return (
         <div className="atp-actions" style={{ flexDirection: 'column' }}>
           {Object.entries(TOUR_FLOWS).map(([key, f]) => (
-            <button key={key} type="button" className="atp-flow" onClick={() => startTour(key)}>
+            <button key={key} type="button" className="atp-flow" onClick={() => onPick(key)}>
               <span className="atp-flow-icon"><Icon name={f.icon} size={20} /></span>
               <span className="atp-flow-text">
                 <span className="atp-flow-title">{f.label}</span>

@@ -55,11 +55,12 @@ export const ASSISTANT_CSS = `
   padding: 0;
   display: grid; place-items: center;
   box-shadow: var(--atp-shadow);
-  transition: transform 0.45s var(--atp-ease), box-shadow 0.45s var(--atp-ease);
+  transition: transform 0.18s var(--atp-ease), box-shadow 0.45s var(--atp-ease);
   will-change: transform;
 }
 .atp-launcher:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.22); }
-.atp-launcher:active { transform: translateY(-1px) scale(0.98); }
+/* retour visuel net au tap (pression rapide) */
+.atp-launcher:active { transform: scale(0.88); transition-duration: 0.07s; }
 .atp-launcher:focus-visible { outline: 2px solid var(--atp-gold-light); outline-offset: 3px; }
 .atp-launcher--hidden { opacity: 0; transform: scale(0.6); pointer-events: none; }
 
@@ -116,9 +117,9 @@ export const ASSISTANT_CSS = `
 
 /* ============ MOBILE LEGER (.atp-root--lite) ============ */
 /* Sur mobile, l'ambiance cosmos (canvas + rAF, nebuleuse, aura) n'est meme pas
-   montee (gere en JS). Ici on coupe les dernieres animations decoratives pour une
-   ouverture instantanee et zero travail inutile : avatar planete statique. */
-.atp-root--lite .atp-launcher::before { animation: none; }
+   montee (gere en JS). Ici on coupe les animations decoratives lourdes (avatar
+   planete statique), mais on GARDE le halo d'attente discret du bouton (::before,
+   un seul element, transform/opacity, perf-safe) pour montrer qu'il est interactif. */
 .atp-root--lite .atp-launcher { will-change: auto; }
 .atp-root--lite .atp-sigil-orbit { animation: none; }
 .atp-root--lite .atp-sigil-core { animation: none; }
