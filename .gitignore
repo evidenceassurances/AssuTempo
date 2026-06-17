@@ -3,3 +3,8 @@ node_modules
 .npm-cache
 $(pwd)
 .DS_Store
+
+# Variables d'environnement locales (ne jamais commiter de cle)
+.env
+.env.local
+.env.*.local

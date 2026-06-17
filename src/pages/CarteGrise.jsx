@@ -409,7 +409,7 @@ function CarteGrise() {
             </p>
           </div>
 
-          <div style={{
+          <div data-assistant-target="carte-grise-iframe" style={{
             background: '#111',
             border: '1px solid rgba(201,168,76,0.28)',
             borderRadius: 20,
