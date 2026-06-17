@@ -13,12 +13,16 @@
  *  - Animations transform/opacity uniquement, prefers-reduced-motion respecte.
  *  - Aucune cle ni prompt systeme cote client : on poste sur /api/chat.
  */
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSISTANT_CSS } from './styles';
 import { TOUR_FLOWS } from './tourSteps';
-import CosmosCanvas from './CosmosCanvas';
+
+// Ambiance cosmos (canvas + boucle requestAnimationFrame) : DESKTOP UNIQUEMENT.
+// Import dynamique => le code cosmos n'est jamais charge ni execute sur mobile
+// (cause racine du gel a l'ouverture sur telephone). Voir rendu conditionnel.
+const CosmosCanvas = lazy(() => import('./CosmosCanvas'));
 
 const STYLE_ID = 'atp-styles';
 
@@ -197,6 +201,9 @@ function postTranscript(msgs) {
 
 export default function AssistantAssutempo() {
   const [mounted, setMounted] = useState(false);
+  // isMobile : viewport etroit OU pointeur grossier. Sur mobile, AUCUNE ambiance
+  // cosmos n'est montee (ni chargee), et les animations sont reduites au minimum.
+  const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME }]);
@@ -266,6 +273,21 @@ export default function AssistantAssutempo() {
     if (typeof window !== 'undefined' && window.matchMedia) {
       reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
+  }, []);
+
+  /* mobile vs desktop : reevalue au resize / rotation / changement de pointeur */
+  useEffect(() => {
+    const compute = () => setIsMobile(detectMobile());
+    compute();
+    const mq = typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(pointer: coarse)')
+      : null;
+    window.addEventListener('resize', compute, { passive: true });
+    if (mq && mq.addEventListener) mq.addEventListener('change', compute);
+    return () => {
+      window.removeEventListener('resize', compute);
+      if (mq && mq.removeEventListener) mq.removeEventListener('change', compute);
+    };
   }, []);
 
   /* auto-scroll du fil */
@@ -707,7 +729,7 @@ export default function AssistantAssutempo() {
 
   /* ------------------------------ rendu : panneau -------------------------- */
   const node = (
-    <div className="atp-root">
+    <div className={'atp-root' + (isMobile ? ' atp-root--lite' : '')}>
       {!open && !tour.active && (
         <button
           type="button"
@@ -726,13 +748,22 @@ export default function AssistantAssutempo() {
           role="dialog"
           aria-label="Assistant Assutempo"
         >
-          <div className="atp-nebula" aria-hidden>
-            <span className="atp-nebula-blob atp-nebula-blob--gold" />
-            <span className="atp-nebula-blob atp-nebula-blob--violet" />
-            <span className="atp-nebula-blob atp-nebula-blob--deep" />
-          </div>
-          <CosmosCanvas reduced={reducedRef.current} burst={messages.length} />
-          <div className="atp-aura" aria-hidden />
+          {/* Ambiance cosmos : DESKTOP UNIQUEMENT. Sur mobile rien n'est monte
+              (pas de canvas, pas de boucle rAF, pas de blobs lourds) -> ouverture
+              instantanee, plus de gel. */}
+          {!isMobile && (
+            <>
+              <div className="atp-nebula" aria-hidden>
+                <span className="atp-nebula-blob atp-nebula-blob--gold" />
+                <span className="atp-nebula-blob atp-nebula-blob--violet" />
+                <span className="atp-nebula-blob atp-nebula-blob--deep" />
+              </div>
+              <Suspense fallback={null}>
+                <CosmosCanvas reduced={reducedRef.current} burst={messages.length} />
+              </Suspense>
+              <div className="atp-aura" aria-hidden />
+            </>
+          )}
           <header className="atp-header">
             <span className="atp-header-avatar"><Sigil /></span>
             <span className="atp-header-id">

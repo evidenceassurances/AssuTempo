@@ -114,6 +114,16 @@ export const ASSISTANT_CSS = `
   box-shadow: 0 0 8px rgba(232,201,122,0.9);
 }
 
+/* ============ MOBILE LEGER (.atp-root--lite) ============ */
+/* Sur mobile, l'ambiance cosmos (canvas + rAF, nebuleuse, aura) n'est meme pas
+   montee (gere en JS). Ici on coupe les dernieres animations decoratives pour une
+   ouverture instantanee et zero travail inutile : avatar planete statique. */
+.atp-root--lite .atp-launcher::before { animation: none; }
+.atp-root--lite .atp-launcher { will-change: auto; }
+.atp-root--lite .atp-sigil-orbit { animation: none; }
+.atp-root--lite .atp-sigil-core { animation: none; }
+.atp-root--lite .atp-sigil-particle { display: none; }
+
 /* ====================== PANNEAU ====================== */
 .atp-panel {
   position: absolute;
