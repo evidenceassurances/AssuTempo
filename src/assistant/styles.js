@@ -124,6 +124,18 @@ export const ASSISTANT_CSS = `
 .atp-root--lite .atp-sigil-orbit { animation: none; }
 .atp-root--lite .atp-sigil-core { animation: none; }
 .atp-root--lite .atp-sigil-particle { display: none; }
+/* OUVERTURE INSTANTANEE (cause racine du delai mobile) : l'animation par defaut
+   fait un scale(0.9->1) sur un panneau quasi plein ecran avec une grande ombre
+   floue (blur 70px). Sur Safari mobile, scaler un element plein ecran force la
+   re-rasterisation de toute l'ombre A CHAQUE FRAME -> plusieurs secondes de gel.
+   Sur mobile on remplace par un simple glissement (translateY, GPU) et une ombre
+   legere en bord : raster trivial, ouverture immediate. */
+.atp-root--lite .atp-panel {
+  box-shadow: 0 -6px 24px rgba(0,0,0,0.4);
+  transform-origin: bottom center;
+  animation: atp-panel-in-lite 0.24s var(--atp-ease) both;
+}
+.atp-root--lite .atp-panel--closing { animation: atp-panel-out-lite 0.18s var(--atp-ease) both; }
 
 /* ====================== PANNEAU ====================== */
 .atp-panel {
@@ -513,6 +525,9 @@ export const ASSISTANT_CSS = `
 @keyframes atp-pop { from { transform: scale(0); } to { transform: scale(1); } }
 @keyframes atp-panel-in { from { opacity: 0; transform: translateY(14px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes atp-panel-out { to { opacity: 0; transform: translateY(14px) scale(0.92); } }
+/* mobile : ouverture/fermeture sans scale (pas de re-raster de l'ombre plein ecran) */
+@keyframes atp-panel-in-lite { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes atp-panel-out-lite { to { opacity: 0; transform: translateY(18px); } }
 @keyframes atp-bubble-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes atp-chip-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes atp-typing { 0%,60%,100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
