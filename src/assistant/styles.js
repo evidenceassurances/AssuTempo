@@ -133,7 +133,8 @@ export const ASSISTANT_CSS = `
    Sur mobile on remplace par un simple glissement (translateY, GPU) et une ombre
    legere en bord : raster trivial, ouverture immediate. */
 .atp-root--lite .atp-panel {
-  box-shadow: 0 -6px 24px rgba(0,0,0,0.4);
+  box-shadow: none; /* pas d'ombre floue plein ecran a rasteriser sur mobile */
+  border-color: var(--atp-line-strong);
   transform-origin: bottom center;
   animation: atp-panel-in-lite 0.24s var(--atp-ease) both;
 }

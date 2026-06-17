@@ -13,7 +13,7 @@
  *  - Animations transform/opacity uniquement, prefers-reduced-motion respecte.
  *  - Aucune cle ni prompt systeme cote client : on poste sur /api/chat.
  */
-import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSISTANT_CSS } from './styles';
@@ -242,10 +242,12 @@ export default function AssistantAssutempo() {
   const inputRef = useRef(null);
   const tourElRef = useRef(null);
 
-  // Mesure de latence d'ouverture (tap -> panneau peint). Visible uniquement avec
+  // Mesure de latence d'ouverture, decomposee : rendu JS (tap -> commit React) vs
+  // paint/composite (commit -> premiere frame peinte). Visible uniquement avec
   // ?perfdebug dans l'URL : aucun impact pour les vrais visiteurs.
   const tapAtRef = useRef(0);
-  const [perfMs, setPerfMs] = useState(null);
+  const renderAtRef = useRef(0);
+  const [perf, setPerf] = useState(null);
   const perfDebug =
     typeof window !== 'undefined' && /[?&]perfdebug/.test(window.location.search);
 
@@ -314,15 +316,26 @@ export default function AssistantAssutempo() {
     return () => clearTimeout(id);
   }, []);
 
-  /* Mesure tap -> panneau peint (deux frames apres le montage). Stockee pour
-     affichage en mode ?perfdebug. Reinitialise tapAtRef pour la prochaine ouverture. */
+  /* Mesure : instant du commit React (DOM en place, avant peinture). */
+  useLayoutEffect(() => {
+    if (open && tapAtRef.current) renderAtRef.current = performance.now();
+  }, [open]);
+
+  /* Mesure : premiere frame peinte (deux rAF apres le commit). On en deduit le
+     temps de rendu JS et le temps de paint/composite. */
   useEffect(() => {
     if (!open || !tapAtRef.current) return undefined;
-    const t = tapAtRef.current;
+    const tap = tapAtRef.current;
+    const rendered = renderAtRef.current || tap;
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
       raf2 = requestAnimationFrame(() => {
-        setPerfMs(Math.round(performance.now() - t));
+        const paint = performance.now();
+        setPerf({
+          render: Math.round(rendered - tap),
+          paint: Math.round(paint - rendered),
+          total: Math.round(paint - tap),
+        });
         tapAtRef.current = 0;
       });
     });
@@ -856,24 +869,28 @@ export default function AssistantAssutempo() {
           role="dialog"
           aria-label="Assistant Assutempo"
         >
-          {perfDebug && perfMs != null && (
+          {perfDebug && perf && (
             <div
               aria-hidden
               style={{
                 position: 'absolute',
                 top: 6,
                 left: 8,
+                right: 8,
                 zIndex: 50,
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: 700,
-                color: perfMs > 800 ? '#ff6b6b' : '#6fcf97',
-                background: 'rgba(0,0,0,0.6)',
-                padding: '2px 6px',
-                borderRadius: 6,
+                lineHeight: 1.4,
+                color: perf.total > 1000 ? '#ff6b6b' : '#6fcf97',
+                background: 'rgba(0,0,0,0.78)',
+                padding: '6px 8px',
+                borderRadius: 8,
                 pointerEvents: 'none',
               }}
             >
-              tap to open: {perfMs} ms
+              TOTAL {perf.total} ms
+              <br />rendu JS {perf.render} ms
+              <br />paint/compo {perf.paint} ms
             </div>
           )}
           {/* Ambiance cosmos : DESKTOP UNIQUEMENT. Sur mobile rien n'est monte
