@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import CookieConsent from './components/CookieConsent';
 import { useAnalytics } from './hooks/useAnalytics';
 import PageTransition from './components/blocks/PageTransition';
+import AssistantAssutempo from './assistant/AssistantAssutempo';
 
 /* Table de routage unique, partagée entre le client (App.jsx, pages lazy)
    et le serveur (entry-server.jsx, pages eager). Le shell doit être
@@ -86,6 +87,7 @@ function AppShell({ pages }) {
         </AnimatePresence>
       </Suspense>
       <CookieConsent />
+      <AssistantAssutempo />
     </div>
   );
 }

@@ -72,6 +72,7 @@ function Pricing() {
 
         {/* Wrapper iframe */}
         <m.div
+          data-assistant-target="tarif-iframe"
           variants={fadeUp}
           initial="hidden"
           animate="visible"

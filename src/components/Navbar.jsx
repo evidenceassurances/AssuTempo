@@ -103,6 +103,7 @@ function Navbar() {
         {/* CTA desktop */}
         <div className="nav-desktop">
           <button
+            data-assistant-target="devis"
             onClick={() => navigate('/tarification')}
             className="btn-gold"
             style={{ padding: '10px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600 }}
