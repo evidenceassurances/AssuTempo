@@ -124,10 +124,12 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Hauteur reservee au header fixe : on ne place jamais une cible dessous.
 const HEADER_OFFSET = 88;
+// Position du HAUT d'une grande cible (formulaire/iframe) sous le header.
+const FORM_TOP_OFFSET = 124; // ~110-130 px du haut de la fenetre
 
 // Amene la cible bien en vue en tenant compte du header fixe.
-//  - large (formulaire/iframe) : son HAUT vers ~20 % du haut de la fenetre,
-//    pour voir le formulaire ET la pop-up ensemble.
+//  - large (formulaire/iframe, plus haut que la fenetre) : on aligne son HAUT
+//    juste sous le header (jamais block:'center' qui montrerait son milieu blanc).
 //  - petite cible : centree verticalement, jamais cachee sous le header.
 function scrollToTarget(el, { large, reduced }) {
   if (!el || typeof window === 'undefined') return;
@@ -136,7 +138,7 @@ function scrollToTarget(el, { large, reduced }) {
   const vh = window.innerHeight;
   let desiredTop;
   if (large) {
-    desiredTop = Math.max(HEADER_OFFSET + 16, vh * 0.2);
+    desiredTop = FORM_TOP_OFFSET;
   } else {
     desiredTop = Math.max(HEADER_OFFSET + 16, (vh - rect.height) / 2);
   }
@@ -522,22 +524,15 @@ export default function AssistantAssutempo() {
         setTourRect(null);
         return;
       }
-      // Centrage tenant compte du header fixe (jamais un simple block:'center'
-      // qui cacherait la cible derriere le header ou centrerait une iframe haute).
+      // Cadrage (haut aligne pour le formulaire). Le suivi en temps reel est
+      // assure par la boucle requestAnimationFrame ci-dessous : la cible est
+      // mesuree a chaque frame, y compris pendant ce scroll programmatique
+      // d'arrivee -> le surlignage suit sans saut, et epouse la taille de
+      // l'iframe des qu'elle se charge (re-mesure continue, pas de delai decalant).
       scrollToTarget(el, { large: !!step.frame, reduced: reducedRef.current });
-      await delay(reducedRef.current ? 60 : 480);
       if (cancelled) return;
       tourElRef.current = el;
-      measure(el);
-      // Grand formulaire/iframe : re-mesure apres chargement / pose du layout
-      // pour que l'encadre epouse la vraie taille (plus de cadre vide ni decale).
-      if (step.frame) {
-        [350, 900, 1700].forEach((ms) =>
-          setTimeout(() => {
-            if (!cancelled && tourElRef.current === el) measure(el);
-          }, ms),
-        );
-      }
+      measure(el); // premiere pose immediate; la boucle rAF prend le relais
     })();
 
     return () => {
@@ -545,27 +540,43 @@ export default function AssistantAssutempo() {
     };
   }, [tour.active, tour.flowKey, tour.step, navigate, measure]);
 
-  /* recalcule le surlignage au scroll / resize, throttle via requestAnimationFrame,
-     listeners passifs et bien nettoyes a la fermeture du tour */
+  /* Suivi en TEMPS REEL : tant qu'une etape est active, on mesure la cible a
+     chaque frame (requestAnimationFrame) et on ne met a jour l'etat que si la
+     position/taille a change (>0.5px) -> surlignage parfaitement colle pendant
+     tout scroll (programmatique d'arrivee ou utilisateur), zero saut, zero
+     re-rendu inutile a l'arret. Aucune transition de position : c'est cette
+     boucle qui assure la fluidite, pas une animation CSS (qui derive au scroll). */
   useEffect(() => {
-    if (!tour.active) return undefined;
+    if (!tour.active || detectMobile()) return undefined;
     let raf = 0;
-    const onMove = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        if (tourElRef.current) measure(tourElRef.current);
-      });
+    let last = null;
+    const pad = 8;
+    const tick = () => {
+      const el = tourElRef.current;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const next = {
+          top: r.top - pad,
+          left: r.left - pad,
+          width: r.width + pad * 2,
+          height: r.height + pad * 2,
+        };
+        if (
+          !last ||
+          Math.abs(next.top - last.top) > 0.5 ||
+          Math.abs(next.left - last.left) > 0.5 ||
+          Math.abs(next.width - last.width) > 0.5 ||
+          Math.abs(next.height - last.height) > 0.5
+        ) {
+          last = next;
+          setTourRect(next);
+        }
+      }
+      raf = requestAnimationFrame(tick);
     };
-    const scrollOpts = { capture: true, passive: true };
-    window.addEventListener('scroll', onMove, scrollOpts);
-    window.addEventListener('resize', onMove, { passive: true });
-    return () => {
-      if (raf) cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onMove, scrollOpts);
-      window.removeEventListener('resize', onMove);
-    };
-  }, [tour.active, tour.step, measure]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [tour.active, tour.step]);
 
   if (!mounted) return null;
 
@@ -582,24 +593,18 @@ export default function AssistantAssutempo() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const isFrame = !!step.frame;
-    const tipW = 330;
 
     // Tour desktop uniquement. Position du tooltip : en mode encadre (grand
     // formulaire), dans une marge libre (cote avec le plus de place) sans recouvrir
     // la zone surlignee ; sinon pres de la cible (au-dessus/en dessous).
     let tipStyle;
     if (isFrame && tourRect) {
-      const roomLeft = tourRect.left;
+      // top-alignee avec le HAUT de la zone surlignee (on lit l'explication ET on
+      // voit le haut du formulaire au meme niveau), du cote avec le plus de marge.
+      const top = Math.min(Math.max(tourRect.top, 16), vh - 240);
       const roomRight = vw - (tourRect.left + tourRect.width);
-      if (roomRight >= tipW + 24) {
-        tipStyle = { right: 16, top: '50%', transform: 'translateY(-50%)' };
-      } else if (roomLeft >= tipW + 24) {
-        tipStyle = { left: 16, top: '50%', transform: 'translateY(-50%)' };
-      } else {
-        // marges trop etroites : epinglee en bas a droite, sous les premiers
-        // champs (la zone de saisie reste visible).
-        tipStyle = { right: 16, bottom: 20 };
-      }
+      const roomLeft = tourRect.left;
+      tipStyle = roomRight >= roomLeft ? { right: 16, top } : { left: 16, top };
     } else if (!tourRect) {
       tipStyle = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
     } else {
@@ -634,13 +639,13 @@ export default function AssistantAssutempo() {
             }}
           />
         )}
-        {/* grand formulaire/iframe : encadre dore lumineux, sans trou sombre */}
+        {/* grand formulaire/iframe : encadre dore lumineux, sans trou sombre.
+            Position via transform (GPU) -> suivi fluide au scroll, pas de reflow. */}
         {tourRect && isFrame && (
           <div
             className="atp-tour-frame"
             style={{
-              top: tourRect.top,
-              left: tourRect.left,
+              transform: `translate(${tourRect.left}px, ${tourRect.top}px)`,
               width: tourRect.width,
               height: tourRect.height,
             }}

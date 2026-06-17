@@ -440,6 +440,7 @@ export const ASSISTANT_CSS = `
    sans deriver. */
 .atp-tour-frame {
   position: fixed;
+  top: 0; left: 0; /* position reelle portee par transform: translate(...) */
   z-index: 2147482100;
   border-radius: 16px;
   box-shadow:
@@ -447,6 +448,7 @@ export const ASSISTANT_CSS = `
     0 0 24px 5px rgba(201,168,76,0.5),
     0 0 72px 16px rgba(201,168,76,0.22);
   pointer-events: none;
+  will-change: transform;
   animation: atp-fade-in 0.3s var(--atp-ease) both;
 }
 .atp-tour-pointer {
@@ -532,7 +534,8 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-nebula-blob,
   .atp-root .atp-typing span,
   .atp-root .atp-star,
-  .atp-root .atp-tour-pointer { animation: none; }
+  .atp-root .atp-tour-pointer,
+  .atp-root .atp-tour-frame { animation: none; }
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-chip:hover::after { animation: none; }
   .atp-root .atp-send--spark::after { animation: none; opacity: 0; }
