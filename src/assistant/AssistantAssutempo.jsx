@@ -22,15 +22,15 @@ import { TOUR_FLOWS } from './tourSteps';
 const STYLE_ID = 'atp-styles';
 
 const WELCOME =
-  'Bonjour, je suis Tempo, votre concierge Assutempo. Je reponds a vos questions sur l\'assurance auto temporaire et la carte grise, et je peux vous guider pas a pas jusqu\'a la souscription. Comment puis-je vous aider ?';
+  `Bonjour, je suis Tempo, votre concierge Assutempo. Je réponds à vos questions sur l'assurance auto temporaire et la carte grise, et je peux vous guider pas à pas jusqu'à la souscription. Comment puis-je vous aider ?`;
 
 const ERROR_MSG =
-  'Je rencontre un souci technique a l\'instant. Je peux toutefois vous accompagner pas a pas jusqu\'au formulaire, ou vous pouvez joindre un conseiller au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).';
+  `Je rencontre un souci technique à l'instant. Je peux toutefois vous accompagner pas à pas jusqu'au formulaire, ou vous pouvez joindre un conseiller au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).`;
 
 const STARTERS = [
-  'Qu\'est-ce que l\'assurance temporaire ?',
-  'Quels documents pour rouler ?',
-  'Assurer un vehicule etranger ?',
+  `Qu'est-ce que l'assurance temporaire ?`,
+  `Quels documents pour rouler ?`,
+  `Assurer un véhicule étranger ?`,
 ];
 
 /* ----------------------------- petites icones ----------------------------- */
@@ -280,7 +280,7 @@ export default function AssistantAssutempo() {
         {
           role: 'assistant',
           content:
-            'Et voila, vous etes au bon endroit. Je reste disponible si vous avez la moindre question pendant votre demarche.',
+            `Et voilà, vous êtes au bon endroit. Je reste disponible si vous avez la moindre question pendant votre démarche.`,
         },
       ]);
     }
@@ -430,11 +430,11 @@ export default function AssistantAssutempo() {
           className={'atp-tooltip' + (isMobile ? ' atp-tooltip--sheet' : '')}
           style={tipStyle || undefined}
           role="dialog"
-          aria-label="Etape du guide"
+          aria-label="Étape du guide"
         >
           <Stars field={TOOLTIP_STARS} />
           <div className="atp-tooltip-step">
-            {flow.label} · Etape {tour.step + 1} / {flow.steps.length}
+            {flow.label} · Étape {tour.step + 1} / {flow.steps.length}
           </div>
           <h3 className="atp-tooltip-title atp-serif">{step.title}</h3>
           <p className="atp-tooltip-text">{step.text}</p>
@@ -449,7 +449,7 @@ export default function AssistantAssutempo() {
             </div>
             {tour.step > 0 && (
               <button type="button" className="atp-tour-btn atp-tour-btn--ghost" onClick={tourPrev}>
-                Precedent
+                Précédent
               </button>
             )}
             <button type="button" className="atp-tour-btn atp-tour-btn--solid" onClick={tourNext}>
@@ -487,7 +487,7 @@ export default function AssistantAssutempo() {
           className="atp-chip atp-chip--primary"
           onClick={() => setShowFlows(true)}
         >
-          M'aider a souscrire
+          M'aider à souscrire
         </button>
         {offerGuide && (
           <button type="button" className="atp-chip" onClick={() => setShowFlows(true)}>
@@ -539,7 +539,7 @@ export default function AssistantAssutempo() {
               <button
                 type="button"
                 className="atp-icon-btn"
-                aria-label="Reduire l'assistant"
+                aria-label="Réduire l'assistant"
                 onClick={closePanel}
               >
                 <Icon name="chevron-down" size={18} />
@@ -560,7 +560,7 @@ export default function AssistantAssutempo() {
             ))}
             {sending && (
               <div className="atp-row atp-row--bot">
-                <div className="atp-bubble atp-bubble--bot atp-typing" aria-label="Tempo ecrit">
+                <div className="atp-bubble atp-bubble--bot atp-typing" aria-label="Tempo écrit">
                   <span /><span /><span />
                 </div>
               </div>
