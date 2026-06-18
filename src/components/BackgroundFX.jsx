@@ -2,9 +2,20 @@ import { useSyncExternalStore } from 'react';
 import { useScroll, useTransform, m } from 'framer-motion';
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+// "Mobile" = pointeur grossier (tactile) OU viewport etroit. Sur ces ecrans, le
+// GPU ne tient pas les orbes en filter: blur(110px) : la moindre recomposition de
+// couche (ex. ouverture de l'assistant en portail par-dessus la page) force une
+// re-rasterisation de ces enormes surfaces floutees -> gel de plusieurs secondes.
+const MOBILE_QUERY = '(pointer: coarse), (max-width: 820px)';
 
 function subscribeReducedMotion(callback) {
   const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+  mq.addEventListener('change', callback);
+  return () => mq.removeEventListener('change', callback);
+}
+
+function subscribeMobile(callback) {
+  const mq = window.matchMedia(MOBILE_QUERY);
   mq.addEventListener('change', callback);
   return () => mq.removeEventListener('change', callback);
 }
@@ -114,6 +125,20 @@ function BackgroundFX() {
     () => false,
   );
 
+  // Snapshot serveur false (suppose desktop) : la bascule mobile se fait apres
+  // hydratation, comme pour reduced-motion (evite le mismatch React #418).
+  const isMobile = useSyncExternalStore(
+    subscribeMobile,
+    () => window.matchMedia(MOBILE_QUERY).matches,
+    () => false,
+  );
+
+  // Sur mobile : aucun filter: blur (degrade fatal au GPU mobile). Les orbes sont
+  // deja des radial-gradient transparents : sans le flou, le glow reste doux et la
+  // rasterisation devient triviale (plus de gel a l'ouverture de l'assistant).
+  const orbBlur = isMobile ? 'none' : 'blur(110px)';
+  const orbWillChange = isMobile ? 'auto' : 'transform';
+
   return (
     <div
       aria-hidden
@@ -144,9 +169,9 @@ function BackgroundFX() {
           height: 600,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)',
-          filter: 'blur(110px)',
-          animation: 'orb-drift-1 28s ease-in-out infinite alternate',
-          willChange: 'transform',
+          filter: orbBlur,
+          animation: isMobile ? 'none' : 'orb-drift-1 28s ease-in-out infinite alternate',
+          willChange: orbWillChange,
         }}
       />
       <div
@@ -158,9 +183,9 @@ function BackgroundFX() {
           height: 700,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(168,134,47,0.04) 0%, transparent 70%)',
-          filter: 'blur(110px)',
-          animation: 'orb-drift-2 35s ease-in-out infinite alternate',
-          willChange: 'transform',
+          filter: orbBlur,
+          animation: isMobile ? 'none' : 'orb-drift-2 35s ease-in-out infinite alternate',
+          willChange: orbWillChange,
         }}
       />
       <div
@@ -172,17 +197,18 @@ function BackgroundFX() {
           height: 500,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(201,168,76,0.045) 0%, transparent 70%)',
-          filter: 'blur(110px)',
-          animation: 'orb-drift-3 32s ease-in-out infinite alternate',
-          willChange: 'transform',
+          filter: orbBlur,
+          animation: isMobile ? 'none' : 'orb-drift-3 32s ease-in-out infinite alternate',
+          willChange: orbWillChange,
         }}
       />
 
       {/* COUCHE 3 - Champ d'étoiles (CSS pur) */}
       <Stars />
 
-      {/* COUCHE 3b - Particules dorées au scroll */}
-      {prefersReduced ? <StaticParticles /> : <ScrollParticles />}
+      {/* COUCHE 3b - Particules dorées au scroll (statiques sur mobile / reduced :
+          le parallaxe scroll-lie sur 20 elements est inutilement lourd au tactile) */}
+      {prefersReduced || isMobile ? <StaticParticles /> : <ScrollParticles />}
 
       {/* COUCHE 4 - Grille technique */}
       <div

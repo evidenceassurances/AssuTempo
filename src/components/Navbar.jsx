@@ -32,11 +32,23 @@ function Navbar() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  // Tactile : pas de backdrop-filter (resample couteux, re-rasterise a chaque
+  // recomposition de couche -> participe au gel mobile). On compense par un fond
+  // plus opaque, visuellement equivalent.
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(pointer: coarse), (max-width: 820px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
   }, []);
 
   return (
@@ -51,9 +63,9 @@ function Navbar() {
         display: 'flex',
         alignItems: 'center',
         transition: 'background 300ms ease, border-color 300ms ease, padding 300ms ease',
-        background: scrolled ? 'rgba(10,10,10,0.72)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        background: scrolled ? (isMobile ? 'rgba(10,10,10,0.94)' : 'rgba(10,10,10,0.72)') : 'transparent',
+        backdropFilter: scrolled && !isMobile ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: scrolled && !isMobile ? 'blur(12px)' : 'none',
         borderBottom: `1px solid ${scrolled ? 'rgba(201,168,76,0.15)' : 'transparent'}`,
         paddingTop: scrolled ? 4 : 0,
         paddingBottom: scrolled ? 4 : 0,
