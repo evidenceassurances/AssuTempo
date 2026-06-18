@@ -113,7 +113,12 @@ export const ASSISTANT_CSS = `
   font-weight: 500;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  pointer-events: none;          /* purement decoratif, ne bloque pas le clic */
+  cursor: pointer;               /* meme affordance que le launcher */
+  pointer-events: none;          /* base : non cliquable pendant le delai et la
+                                    pause ; passe a auto seulement quand visible
+                                    (voir keyframe) -> aucune zone invisible cliquable.
+                                    La bulle est enfant du <button> : un clic dessus
+                                    remonte au launcher et ouvre le chatbot. */
   opacity: 0;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
   animation: at-infos 7s ease-in-out infinite;
@@ -129,13 +134,15 @@ export const ASSISTANT_CSS = `
   flex: none;                    /* petit point dore avant le texte */
 }
 /* apparait + remonte, reste 2-3s, disparait, puis pause avant la boucle.
-   translateX(-50%) conserve dans chaque etape -> centrage maintenu pendant l'anim */
+   translateX(-50%) conserve dans chaque etape -> centrage maintenu pendant l'anim.
+   pointer-events: auto seulement pendant la phase visible -> la bulle est
+   cliquable (et ouvre le chatbot) uniquement quand on la voit, jamais en pause. */
 @keyframes at-infos {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
-  6%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  40%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  50%  { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
+  6%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+  40%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+  50%  { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
 }
 
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
