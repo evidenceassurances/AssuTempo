@@ -84,7 +84,7 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
-/* ===== ETIQUETTE "Une question ?" : pastille sobre, centree sur le launcher ===
+/* ===== ETIQUETTE "Infos" : pastille sobre, centree sur le launcher ===========
    Additif pur : aucun element du logo n'est modifie. Pastille arrondie (sans
    pointe facon bulle BD), fond sombre, fin lisere dore, texte dore avec un petit
    point dore avant. En overlay absolu sur le launcher (64px, deja position:
