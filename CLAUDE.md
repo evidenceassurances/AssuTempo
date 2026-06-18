@@ -1,7 +1,7 @@
 # AssuTempo - Référence projet
 
 > Document de contexte pour le site assutempo.fr. À placer à la racine du projet (CLAUDE.md) pour que Claude Code dispose du contexte à chaque session.
-> Dernière mise à jour : 11 juin 2026.
+> Dernière mise à jour : 18 juin 2026.
 
 ---
 
@@ -94,6 +94,19 @@ assutempo.fr (Evidence Assurances) est totalement distinct de assutempo.com (ASS
 ### En cours de correction
 - Jambages tronqués du H1 (le "g" de "change" coupé par le masque overflow-hidden) : padding-bottom 0.15em + margin-bottom -0.15em sur les spans, line-height min 1.1
 - Diagnostic animations qui ne se jouent pas (suspect : composant `motion.*` résiduel bloquant LazyMotion strict)
+
+### Session du 18 juin 2026 (assistant Tempo + pages de conversion)
+Travail livré et poussé sur `main` (Vercel redéployé). À reprendre demain à partir d'ici.
+
+- **Gel mobile à l'ouverture de l'assistant corrigé (cause racine = fond de page, pas l'assistant).** Le panneau se monte en portail par-dessus la page, ce qui forçait Safari mobile à re-rasteriser des surfaces lourdes. Sur mobile (`matchMedia('(pointer: coarse), (max-width: 820px)')`) : `BackgroundFX.jsx` sans `filter: blur(110px)` (radial-gradients seuls, orbes statiques, particules statiques) et `Navbar.jsx` sans `backdrop-filter` (fond plus opaque). Desktop inchangé. Règle retenue : jamais de `filter: blur()` grand rayon ni `backdrop-filter` actifs sur mobile.
+- **Page Tarification (`src/pages/Pricing.jsx`) habillée** : grille 3 colonnes autour de l'iframe (rail gauche = parcours pas à pas, rail droit = carte chat "Discuter avec Tempo" + téléphone), rails sticky, bandeau confiance, section GEO, FAQ, maillage interne. Responsive sous 1180px (empilement, iframe en premier). JSON-LD BreadcrumbList + Service + FAQPage. Iframe JL Assure inchangé, `data-assistant-target="tarif-iframe"` conservé, hauteur portée à 1450.
+- **Page Carte grise (`src/pages/CarteGrise.jsx`) habillée de façon symétrique** : le module Certimat passe en grille 3 colonnes (rail gauche = checklist "Préparez votre demande", rail droit = chat + téléphone), rails sticky. Ajout JSON-LD BreadcrumbList + Service + FAQPage et balises Open Graph/Twitter. Iframe Certimat inchangé (`partner=1153`, `data-assistant-target`, lazy, allow payment, GA4, auto-resize postMessage, lien de secours).
+- **Ouverture pilotée de l'assistant** : `AssistantAssutempo.jsx` écoute `window` pour `CustomEvent('assutempo:open-assistant')`. Les boutons "Discuter avec Tempo" des deux pages le déclenchent.
+- **Indice "?" sur le launcher** (`src/assistant/AssistantAssutempo.jsx` + `src/assistant/styles.js`) : PATH SVG en stroke qui se trace façon serpent (`stroke-dashoffset`) en sortant du point doré (le point doré sert de point du "?"), flotte, puis se rétracte, en boucle. Première apparition après 5s, 100 % CSS, `pointer-events:none`, hors flux (aucun layout shift), `prefers-reduced-motion` géré. Classes `at-draw` / `at-bob` / `at-emit`.
+
+À vérifier visuellement demain (déjà en prod) : largeur de l'iframe Tarification entre ~1000 et 1180px, rendu mobile des deux pages, et calibrage de l'indice "?" (taille via `width/height` du svg, épaisseur du trait, galbe du crochet via le `d`, hauteur de flottement). Pistes d'ajustement notées dans le dernier message de session.
+
+> Workflow validé le 18 juin 2026 : commit + push automatiques après CHAQUE modification, sans demander.
 
 ---
 
