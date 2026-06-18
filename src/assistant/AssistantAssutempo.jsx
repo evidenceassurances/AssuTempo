@@ -872,9 +872,11 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
-          {/* Indice "?" : trait SVG qui se trace en sortant du point dore (le
-              point dore sert de point du "?"). Additif, pointer-events:none
-              (clic launcher intact), hors flux : aucun element existant modifie. */}
+          {/* Indice "?" : filament dore qui se trace en sortant du point dore
+              (le point dore sert de point du "?"). Additif, pointer-events:none
+              (clic launcher intact), hors flux : aucun element existant modifie.
+              Le "?" est un vrai PATH en stroke (pas un glyphe). L'origine SVG
+              (0,0) coincide pile avec le centre du badge dore. */}
           <svg
             className="atp-hint"
             viewBox="-15 -55 30 64"
@@ -883,28 +885,43 @@ export default function AssistantAssutempo() {
             aria-hidden
             focusable="false"
           >
-            {/* onde qui se libere du point au moment ou le trait sort */}
+            {/* onde tres discrete qui se libere du point dore (centree dessus) */}
             <circle
-              className="at-emit"
-              cx="0" cy="0" r="6"
-              fill="none" stroke="#E8C97A" strokeWidth="1.5"
+              className="at-question-emit"
+              cx="0" cy="0" r="4.5"
+              fill="none" stroke="#F2D98E" strokeWidth="1.2" strokeOpacity="0"
+              pointerEvents="none"
             />
-            {/* le "?" (halo + trait), enveloppe par le flottement (bob) */}
-            <g className="at-bob">
-              <path
-                className="at-draw"
-                d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -4 -50, -10 -48, -10 -42 C -10 -37, -6 -32, 0 -31"
-                fill="none" stroke="#E8C97A" strokeOpacity="0.14" strokeWidth="7"
-                strokeLinecap="round" strokeLinejoin="round"
-                pathLength="100" strokeDasharray="100"
-              />
-              <path
-                className="at-draw"
-                d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -4 -50, -10 -48, -10 -42 C -10 -37, -6 -32, 0 -31"
-                fill="none" stroke="#F2D98E" strokeWidth="3.2"
-                strokeLinecap="round" strokeLinejoin="round"
-                pathLength="100" strokeDasharray="100"
-              />
+            {/* groupe externe = placement exact sur le point (translate + scale).
+                groupe interne = flottement (bob), pour ne pas ecraser le placement.
+                3 paths superposes : halo doux, reflet subtil, trait principal net. */}
+            <g className="at-question-position" transform="translate(0 0) scale(1.1)">
+              <g className="at-question-bob">
+                <path
+                  className="at-question-draw at-question-halo"
+                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
+                  fill="none" stroke="#E8C97A" strokeOpacity="0.11" strokeWidth="6.5"
+                  strokeLinecap="round" strokeLinejoin="round"
+                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
+                  pointerEvents="none"
+                />
+                <path
+                  className="at-question-draw at-question-soft"
+                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
+                  fill="none" stroke="#FFE7A3" strokeOpacity="0.26" strokeWidth="4.2"
+                  strokeLinecap="round" strokeLinejoin="round"
+                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
+                  pointerEvents="none"
+                />
+                <path
+                  className="at-question-draw at-question-main"
+                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
+                  fill="none" stroke="#F4D98B" strokeWidth="2.45"
+                  strokeLinecap="round" strokeLinejoin="round"
+                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
+                  pointerEvents="none"
+                />
+              </g>
             </g>
           </svg>
         </button>
