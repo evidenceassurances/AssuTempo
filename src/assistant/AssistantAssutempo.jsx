@@ -872,11 +872,13 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
-          {/* Etiquette "Infos" : petite pastille sobre au-dessus du launcher qui
-              apparait apres 5s, reste 2-3s puis disparait, en boucle. Additive,
-              pointer-events:none (clic launcher intact), en overlay absolu hors
-              flux (aucun decalage). Aucun element du logo n'est modifie. */}
-          <div className="at-infos" aria-hidden>Infos</div>
+          {/* Etiquette "Une question ?" : petite pastille sobre centree sur l'axe
+              du launcher qui apparait apres 5s, reste 2-3s puis disparait, en
+              boucle. Additive, pointer-events:none (clic launcher intact), en
+              overlay absolu hors flux (aucun decalage). Le launcher (64px, deja
+              position: relative) est l'ancetre positionne : left:50% = centre du
+              logo. Aucun element du logo n'est modifie. */}
+          <div className="at-infos" aria-hidden>Une question ?</div>
         </button>
       )}
 

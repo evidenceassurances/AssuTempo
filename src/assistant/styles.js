@@ -84,17 +84,19 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
-/* ===== ETIQUETTE "Infos" : pastille sobre au-dessus du launcher =====
+/* ===== ETIQUETTE "Une question ?" : pastille sobre, centree sur le launcher ===
    Additif pur : aucun element du logo n'est modifie. Pastille arrondie (sans
    pointe facon bulle BD), fond sombre, fin lisere dore, texte dore avec un petit
-   point dore avant. En overlay absolu sur le launcher (deja position: relative),
-   hors flux et invisible au repos (opacity 0) : aucun decalage de mise en page.
+   point dore avant. En overlay absolu sur le launcher (64px, deja position:
+   relative) : left:50% + translateX(-50%) -> centre exact sur l'axe du logo.
+   Hors flux et invisible au repos (opacity 0) : aucun decalage de mise en page.
    pointer-events: none -> le clic launcher reste intact. 100% CSS, transform /
-   opacity uniquement. right: 0 -> s'etend vers la gauche (jamais hors viewport). */
+   opacity uniquement. */
 .at-infos {
   position: absolute;
-  bottom: calc(100% + 12px);    /* juste au-dessus du launcher */
-  right: 0;                      /* aligne a droite, s'etend vers la gauche */
+  bottom: calc(100% + 12px);     /* juste au-dessus du launcher */
+  left: 50%;                     /* centre sur l'axe du launcher */
+  transform: translateX(-50%) translateY(8px) scale(0.96);
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -123,13 +125,14 @@ export const ASSISTANT_CSS = `
   background: #E8C97A;
   flex: none;                    /* petit point dore avant le texte */
 }
-/* apparait + remonte, reste 2-3s, disparait, puis pause avant la boucle */
+/* apparait + remonte, reste 2-3s, disparait, puis pause avant la boucle.
+   translateX(-50%) conserve dans chaque etape -> centrage maintenu pendant l'anim */
 @keyframes at-infos {
-  0%   { opacity: 0; transform: translateY(8px) scale(0.96); }
-  6%   { opacity: 1; transform: translateY(0) scale(1); }
-  40%  { opacity: 1; transform: translateY(0) scale(1); }
-  50%  { opacity: 0; transform: translateY(8px) scale(0.96); }
-  100% { opacity: 0; transform: translateY(8px) scale(0.96); }
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
+  6%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  40%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  50%  { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
 }
 
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
