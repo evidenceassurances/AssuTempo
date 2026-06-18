@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, Phone, ShieldCheck, BadgeCheck, FileCheck, CreditCard,
-  Car, FileText, Home, Lock,
+  Car, FileText, Home, Lock, MessageCircle, Check,
 } from 'lucide-react';
 import Footer from '../components/Footer';
 import AccordionItem from '../components/ui/AccordionItem';
@@ -80,6 +80,58 @@ const FAQ = [
   },
 ];
 
+/* ── Documents a preparer (rail gauche du module) ─────────────────────────── */
+const DOCS = [
+  `Votre plaque ou numéro de formule`,
+  `Le certificat de cession ou l'ancienne carte grise`,
+  `Un justificatif de domicile récent`,
+  `Le contrôle technique en cours de validité, si requis`,
+  `Une pièce d'identité et un moyen de paiement`,
+];
+
+/* ── Donnees structurees (SEO / GEO) ──────────────────────────────────────── */
+const JSONLD_BREADCRUMB = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://assutempo.fr/' },
+    { '@type': 'ListItem', position: 2, name: 'Carte grise', item: 'https://assutempo.fr/carte-grise' },
+  ],
+};
+
+const JSONLD_SERVICE = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Demande de carte grise en ligne',
+  name: 'Carte grise en ligne AssuTempo',
+  description:
+    `Demande de carte grise 100 % en ligne via un partenaire habilité par le Ministère de l'Intérieur : CERFA préremplis, certificat provisoire immédiat et carte grise livrée à domicile.`,
+  provider: { '@type': 'Organization', name: 'AssuTempo', url: 'https://assutempo.fr/' },
+  areaServed: 'FR',
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: 'https://assutempo.fr/carte-grise',
+    servicePhone: '+33974197820',
+  },
+};
+
+const JSONLD_FAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const cardBase = {
+  background: 'var(--bg-card)',
+  border: '1px solid var(--gold-border)',
+  borderRadius: 16,
+  padding: '22px 20px',
+};
+
 function CarteGrise() {
   const [stepsRef, stepsInView] = useScrollReveal();
   const [badgesRef, badgesInView] = useScrollReveal();
@@ -87,6 +139,13 @@ function CarteGrise() {
 
   const iframeRef = useRef(null);
   const [iframeHeight, setIframeHeight] = useState(null);
+
+  /* Ouvre l'assistant Tempo depuis n'importe quel bouton de la page. */
+  const openAssistant = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('assutempo:open-assistant'));
+    }
+  };
 
   /* CTA hero : defilement doux vers le module + event GA4 */
   const handleStartClick = () => {
@@ -130,6 +189,14 @@ function CarteGrise() {
         <title>Carte grise en ligne, certificat provisoire immédiat | AssuTempo</title>
         <meta name="description" content="Faites votre carte grise 100% en ligne avec notre partenaire agréé, habilité par le Ministère de l'Intérieur : CERFA préremplis, certificat provisoire immédiat et carte grise livrée chez vous." />
         <link rel="canonical" href="https://assutempo.fr/carte-grise" />
+        <meta property="og:title" content="Carte grise en ligne, certificat provisoire immédiat | AssuTempo" />
+        <meta property="og:description" content="Faites votre carte grise 100% en ligne avec notre partenaire agréé, habilité par le Ministère de l'Intérieur : CERFA préremplis, certificat provisoire immédiat et carte grise livrée chez vous." />
+        <meta property="og:url" content="https://assutempo.fr/carte-grise" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+        <script type="application/ld+json">{JSON.stringify(JSONLD_BREADCRUMB)}</script>
+        <script type="application/ld+json">{JSON.stringify(JSONLD_SERVICE)}</script>
+        <script type="application/ld+json">{JSON.stringify(JSONLD_FAQ)}</script>
       </Helmet>
 
       {/* ── A. Hero ──────────────────────────────────────────────────────── */}
@@ -392,58 +459,151 @@ function CarteGrise() {
       </section>
 
       {/* ── D. Module Certimat (iframe officielle) ───────────────────────── */}
-      <section id="demande" style={{ background: 'var(--bg)', padding: '104px 0' }}>
-        <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px', width: '100%' }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <h2 style={{
-              fontSize: 'clamp(1.6rem, 3.2vw, 2.2rem)',
-              fontWeight: 700,
-              color: 'var(--text)',
-              margin: '0 0 12px',
-              letterSpacing: '-0.025em',
+      <section id="demande" style={{ background: 'var(--bg)', padding: '104px 24px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto 36px', textAlign: 'center' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.6rem, 3.2vw, 2.2rem)',
+            fontWeight: 700,
+            color: 'var(--text)',
+            margin: '0 0 12px',
+            letterSpacing: '-0.025em',
+          }}>
+            Faites votre carte grise maintenant
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7 }}>
+            Démarche sécurisée, propulsée par notre partenaire agréé Certimat.
+          </p>
+        </div>
+
+        {/* GRILLE 3 colonnes : documents / module / aide */}
+        <div className="cg-demande-grid">
+
+          {/* ---------- RAIL GAUCHE : documents a preparer ---------- */}
+          <aside className="cg-col cg-col-left cg-rail" aria-label="Documents à préparer">
+            <div style={cardBase}>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fff', margin: '0 0 16px' }}>
+                Préparez votre demande
+              </h3>
+              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 13 }}>
+                {DOCS.map((d, i) => (
+                  <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span
+                      aria-hidden
+                      style={{
+                        flexShrink: 0, width: 22, height: 22, borderRadius: 7, marginTop: 1,
+                        background: 'var(--gold-dim)', border: '1px solid var(--gold-border)',
+                        color: 'var(--gold-light)', display: 'grid', placeItems: 'center',
+                      }}
+                    >
+                      <Check size={13} strokeWidth={2.5} />
+                    </span>
+                    <span style={{ fontSize: 13.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>{d}</span>
+                  </li>
+                ))}
+              </ul>
+              <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '16px 0 0', lineHeight: 1.55 }}>
+                Le formulaire vous indique précisément les pièces selon votre situation.
+              </p>
+            </div>
+          </aside>
+
+          {/* ---------- CENTRE : iframe Certimat ---------- */}
+          <div className="cg-col cg-col-iframe">
+            <div data-assistant-target="carte-grise-iframe" style={{
+              background: '#111',
+              border: '1px solid rgba(201,168,76,0.28)',
+              borderRadius: 20,
+              padding: 12,
+              overflow: 'hidden',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(232,201,122,0.05), 0 0 60px rgba(201,168,76,0.06)',
             }}>
-              Faites votre carte grise maintenant
-            </h2>
-            <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7 }}>
-              Démarche sécurisée, propulsée par notre partenaire agréé Certimat.
+              <iframe
+                ref={iframeRef}
+                src={CERTIMAT_IFRAME_URL}
+                title="Demande de carte grise Certimat"
+                loading="lazy"
+                allow="payment"
+                onLoad={handleIframeLoad}
+                className="cg-iframe"
+                style={{
+                  width: '100%',
+                  border: 0,
+                  display: 'block',
+                  borderRadius: 'inherit',
+                  height: iframeHeight ? `${iframeHeight}px` : undefined,
+                }}
+              />
+            </div>
+
+            <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-muted)', margin: '18px 0 0' }}>
+              Le module ne s'affiche pas ?{' '}
+              <a href={CERTIMAT_IFRAME_URL} style={{ color: 'var(--gold-light)', textDecoration: 'underline' }}>
+                Ouvrir la demande
+              </a>
+            </p>
+            <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-subtle)', margin: '10px 0 0' }}>
+              Service fourni par notre partenaire Certimat (AssuCarteGrise).
             </p>
           </div>
 
-          <div data-assistant-target="carte-grise-iframe" style={{
-            background: '#111',
-            border: '1px solid rgba(201,168,76,0.28)',
-            borderRadius: 20,
-            padding: 12,
-            overflow: 'hidden',
-            boxShadow: '0 24px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(232,201,122,0.05), 0 0 60px rgba(201,168,76,0.06)',
-          }}>
-            <iframe
-              ref={iframeRef}
-              src={CERTIMAT_IFRAME_URL}
-              title="Demande de carte grise Certimat"
-              loading="lazy"
-              allow="payment"
-              onLoad={handleIframeLoad}
-              className="cg-iframe"
-              style={{
-                width: '100%',
-                border: 0,
-                display: 'block',
-                borderRadius: 'inherit',
-                height: iframeHeight ? `${iframeHeight}px` : undefined,
-              }}
-            />
-          </div>
+          {/* ---------- RAIL DROIT : aide et chat ---------- */}
+          <aside className="cg-col cg-col-right cg-rail" aria-label="Aide à la demande">
+            <div style={{ ...cardBase, background: 'rgba(201,168,76,0.05)' }}>
+              <span
+                aria-hidden
+                style={{
+                  width: 40, height: 40, borderRadius: 11,
+                  background: 'var(--gold-dim)', border: '1px solid var(--gold-border)',
+                  color: 'var(--gold-light)', display: 'grid', placeItems: 'center', marginBottom: 14,
+                }}
+              >
+                <MessageCircle size={19} strokeWidth={1.75} />
+              </span>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>
+                Une question ? On vous guide
+              </h3>
+              <p style={{ fontSize: 13.5, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 16px' }}>
+                Un doute pendant votre demande ? Notre concierge Tempo vous répond en direct,
+                tout de suite.
+              </p>
+              <button
+                type="button"
+                onClick={openAssistant}
+                style={{
+                  width: '100%',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  fontFamily: 'inherit', fontSize: 14, fontWeight: 600,
+                  padding: '12px 16px', borderRadius: 12, cursor: 'pointer',
+                  border: '1px solid transparent',
+                  background: 'linear-gradient(135deg, var(--gold), var(--gold-deep))',
+                  color: '#1a1206',
+                }}
+              >
+                <MessageCircle size={17} strokeWidth={2} aria-hidden />
+                Discuter avec Tempo
+              </button>
+            </div>
 
-          <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-muted)', margin: '18px 0 0' }}>
-            Le module ne s'affiche pas ?{' '}
-            <a href={CERTIMAT_IFRAME_URL} style={{ color: 'var(--gold-light)', textDecoration: 'underline' }}>
-              Ouvrir la demande
-            </a>
-          </p>
-          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-subtle)', margin: '10px 0 0' }}>
-            Service fourni par notre partenaire Certimat (AssuCarteGrise).
-          </p>
+            <div style={{ ...cardBase, textAlign: 'center' }}>
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 6px' }}>
+                Vous préférez la voix ?
+              </p>
+              <a
+                href="tel:0974197820"
+                style={{ fontSize: 20, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+              >
+                <Phone size={18} strokeWidth={1.75} aria-hidden />
+                09 74 19 78 20
+              </a>
+              <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '8px 0 0' }}>
+                Lun-Ven 9h-21h | Sam 9h-20h
+              </p>
+            </div>
+
+            <p style={{ fontSize: 12, color: 'var(--text-subtle)', lineHeight: 1.5, margin: 0, textAlign: 'center' }}>
+              Service habilité par le Ministère de l'Intérieur, données traitées de façon sécurisée.
+            </p>
+          </aside>
         </div>
       </section>
 
@@ -541,6 +701,32 @@ function CarteGrise() {
 
       <style>{`
         .cg-iframe { min-height: 820px; }
+        .cg-demande-grid {
+          display: grid;
+          grid-template-columns: 230px minmax(0, 1fr) 230px;
+          gap: 24px;
+          align-items: start;
+          max-width: 1360px;
+          margin: 0 auto;
+        }
+        .cg-rail {
+          position: sticky;
+          top: 96px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        @media (max-width: 1180px) {
+          .cg-demande-grid {
+            grid-template-columns: 1fr;
+            max-width: 760px;
+            gap: 24px;
+          }
+          .cg-rail { position: static; top: auto; }
+          .cg-col-iframe { order: 0; }
+          .cg-col-left { order: 1; }
+          .cg-col-right { order: 2; }
+        }
         @media (max-width: 900px) {
           .cg-trustband { grid-template-columns: repeat(2, 1fr) !important; row-gap: 28px !important; }
           .cg-badge:nth-child(3) { border-left: none !important; }
