@@ -872,13 +872,41 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
-          {/* Indice "?" qui emerge du point dore (badge), 100% CSS et
-              pointer-events:none : n'intercepte aucun clic, ne decale rien. */}
-          <span className="atp-hint-pulse" aria-hidden />
-          <span className="atp-hint" aria-hidden>
-            <span className="atp-hint-glow" />
-            ?
-          </span>
+          {/* Indice "?" : trait SVG qui se trace en sortant du point dore (le
+              point dore sert de point du "?"). Additif, pointer-events:none
+              (clic launcher intact), hors flux : aucun element existant modifie. */}
+          <svg
+            className="atp-hint"
+            viewBox="-15 -55 30 64"
+            width="24"
+            height="51"
+            aria-hidden
+            focusable="false"
+          >
+            {/* onde qui se libere du point au moment ou le trait sort */}
+            <circle
+              className="at-emit"
+              cx="0" cy="0" r="6"
+              fill="none" stroke="#E8C97A" strokeWidth="1.5"
+            />
+            {/* le "?" (halo + trait), enveloppe par le flottement (bob) */}
+            <g className="at-bob">
+              <path
+                className="at-draw"
+                d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -4 -50, -10 -48, -10 -42 C -10 -37, -6 -32, 0 -31"
+                fill="none" stroke="#E8C97A" strokeOpacity="0.14" strokeWidth="7"
+                strokeLinecap="round" strokeLinejoin="round"
+                pathLength="100" strokeDasharray="100"
+              />
+              <path
+                className="at-draw"
+                d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -4 -50, -10 -48, -10 -42 C -10 -37, -6 -32, 0 -31"
+                fill="none" stroke="#F2D98E" strokeWidth="3.2"
+                strokeLinecap="round" strokeLinejoin="round"
+                pathLength="100" strokeDasharray="100"
+              />
+            </g>
+          </svg>
         </button>
       )}
 
