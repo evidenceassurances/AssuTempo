@@ -28,7 +28,10 @@ export const ASSISTANT_CSS = `
 
   position: fixed;
   z-index: 2147483000;
-  right: max(20px, env(safe-area-inset-right));
+  /* 50px (au lieu de 20) : recule le widget du bord droit pour que la bulle
+     "Besoin d'aide ?", centree sur l'axe du launcher, ne deborde pas du viewport
+     (centre du launcher a ~82px du bord, marge a droite de la bulle ~11px). */
+  right: max(50px, env(safe-area-inset-right));
   bottom: max(20px, env(safe-area-inset-bottom));
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--atp-cream);
@@ -84,7 +87,7 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
-/* ===== ETIQUETTE "Infos" : pastille sobre, centree sur le launcher ===========
+/* ===== ETIQUETTE "Besoin d'aide ?" : pastille sobre, centree sur le launcher ==
    Additif pur : aucun element du logo n'est modifie. Pastille arrondie (sans
    pointe facon bulle BD), fond sombre, fin lisere dore, texte dore avec un petit
    point dore avant. En overlay absolu sur le launcher (64px, deja position:
