@@ -345,6 +345,18 @@ export default function AssistantAssutempo() {
     };
   }, [open]);
 
+  /* Ouverture pilotee de l'exterieur : n'importe quelle page peut demander
+     l'ouverture du panneau via window.dispatchEvent(new CustomEvent('assutempo:open-assistant')).
+     Utilise par la page Tarification ("Discuter avec Tempo"). Idempotent. */
+  useEffect(() => {
+    const onOpenRequest = () => {
+      setClosing(false);
+      setOpen(true);
+    };
+    window.addEventListener('assutempo:open-assistant', onOpenRequest);
+    return () => window.removeEventListener('assutempo:open-assistant', onOpenRequest);
+  }, []);
+
   /* Suit l'etat du bandeau cookies via les evenements de CookieConsent (couplage
      leger, pas d'import) pour masquer/reafficher le launcher au bon moment. */
   useEffect(() => {
