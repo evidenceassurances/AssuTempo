@@ -156,7 +156,7 @@ Travail livré et poussé sur `main` (Vercel redéployé). À reprendre demain �
 - **Aucun em-dash (U+2014) nulle part**, ni code ni contenu. Vérifier avec `rg`.
 - **Contenu YMYL (assurance)** : vérifier les faits par recherche web avant d'écrire (amendes, articles de loi, règles de couverture). Ne jamais générer de mémoire.
 - **Animations** : transform et opacity uniquement (GPU), jamais width/height/top/left/margin. Aucun layout shift.
-- **Build** : toujours `npm run build` (jamais `npm run dev` en arrière-plan) — le script enchaîne Vite build puis `prerender.mjs` (prérendu statique). `git push` après chaque session pour déclencher le redéploiement Vercel.
+- **Build** : toujours `npm run build` (jamais `npm run dev` en arrière-plan) : le script enchaîne Vite build puis `prerender.mjs` (prérendu statique). `git push` après chaque session pour déclencher le redéploiement Vercel.
 - **npm install** : toujours passer `--legacy-peer-deps` (configuré dans `.npmrc`) sinon l'install échoue.
 - **Clés d'objet JS avec tiret** : toujours entre guillemets (ex. `"republique-tcheque"`, `"bosnie-herzegovine"`).
 - **Éviter les spécificités volatiles** dans le contenu pays (prix exacts, montants d'amendes, limites de zones) pour garder le contenu juste dans le temps.
