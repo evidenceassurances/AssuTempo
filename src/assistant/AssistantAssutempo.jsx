@@ -38,6 +38,57 @@ const STARTERS = [
   `Assurer un véhicule étranger ?`,
 ];
 
+/* ---------------------- garde-fous anti-abus / anti-cout ------------------- */
+// Plafond de messages VISITEUR par session : au-dela, on n'appelle plus l'API
+// (protege contre les boucles couteuses). Facile a ajuster.
+const MAX_MESSAGES_UTILISATEUR = 12;
+
+// Reponse fixe (sans appel API) quand le visiteur repose une question identique.
+const DOUBLON_MSG =
+  `Vous m'avez déjà posé cette question. Pour un cas précis ou personnalisé, le mieux est d'appeler l'équipe au 09 74 19 78 20 ou d'obtenir un devis en ligne.`;
+
+// Message de cloture (plafond atteint ou marqueur [FIN] detecte).
+const CLOTURE_MSG =
+  `Pour aller plus loin sur votre situation, contactez l'équipe au 09 74 19 78 20 (Lun-Ven 9h à 21h, Sam 9h à 20h) ou obtenez votre devis en ligne.`;
+
+// Normalisation pour l'anti-doublon : minuscules, ponctuation retiree, espaces
+// reduits. \p{L}\p{N} (avec /u) garde lettres accentuees et chiffres.
+function normaliser(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Nettoyage Markdown -> texte simple, sans aucune etoile. Retire gras/italique
+// en gardant le texte, titres et puces en debut de ligne, backticks, puis les
+// espaces superflus. Sans dependance (regex seules).
+function nettoyerMarkdown(s) {
+  let t = String(s || '');
+  t = t.replace(/^\s{0,3}#{1,6}\s+/gm, '');     // titres (#, ##, ...)
+  t = t.replace(/^\s{0,3}[-*+]\s+/gm, '');       // puces (-, *, + suivis d'un espace)
+  t = t.replace(/\*\*([^*]+)\*\*/g, '$1');       // **gras** -> gras
+  t = t.replace(/__([^_]+)__/g, '$1');           // __gras__ -> gras
+  t = t.replace(/\*([^*]+)\*/g, '$1');           // *italique* -> italique
+  t = t.replace(/_([^_]+)_/g, '$1');             // _italique_ -> italique
+  t = t.replace(/`+/g, '');                      // backticks
+  t = t.replace(/\*+/g, '');                     // residus d'etoiles isolees -> aucune etoile
+  t = t.replace(/[ \t]{2,}/g, ' ');              // espaces multiples
+  t = t.replace(/\n{3,}/g, '\n\n');              // sauts de ligne multiples
+  return t.trim();
+}
+
+// Detecte le marqueur de cloture (insensible a la casse).
+function contientFin(s) {
+  return /\[fin\]/i.test(String(s || ''));
+}
+
+// Reponse assistant prete a afficher : retrait du marqueur [FIN] puis nettoyage.
+function nettoyerReponse(s) {
+  return nettoyerMarkdown(String(s || '').replace(/\[fin\]/gi, ''));
+}
+
 /* ----------------------------- petites icones ----------------------------- */
 function Icon({ name, size = 18 }) {
   const common = {
@@ -225,6 +276,9 @@ export default function AssistantAssutempo() {
   const [showFlows, setShowFlows] = useState(false);
   const [offerGuide, setOfferGuide] = useState(false);
   const [spark, setSpark] = useState(false);
+  // Conversation cloturee (plafond atteint ou marqueur [FIN]) : la saisie et le
+  // bouton d'envoi sont desactives, le fil reste lisible. Un rechargement repart a zero.
+  const [closed, setClosed] = useState(false);
   // Accompagnement mobile : { ctaLabel, path, scrollTarget } ou null.
   const [mobileCta, setMobileCta] = useState(null);
   // Bandeau cookies affiche ? Si oui, on masque le launcher pour ne pas recouvrir
@@ -241,6 +295,11 @@ export default function AssistantAssutempo() {
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const tourElRef = useRef(null);
+  // Anti-doublon : ensemble des messages visiteur normalises deja envoyes (session).
+  const sentNormalizedRef = useRef(null);
+  if (sentNormalizedRef.current === null) sentNormalizedRef.current = new Set();
+  // Garde anti-double-cloture : le message de cloture n'est ajoute qu'une fois.
+  const closedRef = useRef(false);
 
   // Mesure de latence d'ouverture, decomposee : rendu JS (tap -> commit React) vs
   // paint/composite (commit -> premiere frame peinte). Visible uniquement avec
@@ -416,10 +475,42 @@ export default function AssistantAssutempo() {
   }, [open, tour.active]);
 
   /* ------------------------------ conversation ----------------------------- */
+  // Cloture la conversation : ajoute (une seule fois) le message de cloture et
+  // desactive la saisie. Appelee quand le plafond est atteint ou sur [FIN].
+  const cloreConversation = useCallback(() => {
+    if (closedRef.current) return;
+    closedRef.current = true;
+    setClosed(true);
+    setMessages((m) => [...m, { role: 'assistant', content: CLOTURE_MSG }]);
+  }, []);
+
   const send = useCallback(
     async (raw) => {
       const content = (raw || '').trim();
-      if (!content || sending) return;
+      if (!content || sending || closed) return;
+
+      // (a) Plafond de messages visiteur : au-dela, aucun appel API -> cloture.
+      const userCount = messages.filter((m) => m.role === 'user').length;
+      if (userCount >= MAX_MESSAGES_UTILISATEUR) {
+        cloreConversation();
+        return;
+      }
+
+      // (b) Anti-doublon : meme question deja posee -> reponse fixe, aucun appel API.
+      const norm = normaliser(content);
+      if (norm && sentNormalizedRef.current.has(norm)) {
+        setMessages((m) => [
+          ...m,
+          { role: 'user', content },
+          { role: 'assistant', content: DOUBLON_MSG },
+        ]);
+        setInput('');
+        setShowFlows(false);
+        setMobileCta(null);
+        return;
+      }
+      if (norm) sentNormalizedRef.current.add(norm);
+
       const next = [...messages, { role: 'user', content }];
       setMessages(next);
       setInput('');
@@ -441,7 +532,13 @@ export default function AssistantAssutempo() {
         const data = await res.json();
         const reply = data && typeof data.text === 'string' ? data.text.trim() : '';
         if (!reply) throw new Error('empty');
-        setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+        // Nettoyage Markdown + retrait du marqueur [FIN] avant affichage.
+        const fin = contientFin(reply);
+        setMessages((m) => [...m, { role: 'assistant', content: nettoyerReponse(reply) }]);
+        // Cloture si [FIN] detecte, ou si ce message atteint le plafond.
+        if (fin || userCount + 1 >= MAX_MESSAGES_UTILISATEUR) {
+          cloreConversation();
+        }
       } catch {
         setMessages((m) => [...m, { role: 'assistant', content: ERROR_MSG }]);
       } finally {
@@ -449,7 +546,7 @@ export default function AssistantAssutempo() {
         setOfferGuide(true);
       }
     },
-    [messages, sending],
+    [messages, sending, closed, cloreConversation],
   );
 
   // Ouverture immediate. Declenchee sur pointerdown (au contact) pour court-circuiter
@@ -804,8 +901,24 @@ export default function AssistantAssutempo() {
     );
   }
 
+  // Ouvre la page de devis (cloture) et referme le panneau.
+  function goToDevis() {
+    if (window.location.pathname !== '/tarification') navigate('/tarification');
+    closePanel();
+  }
+
   /* ----------------------------- rendu : actions --------------------------- */
   function renderActions() {
+    // Conversation cloturee : on ne propose plus que le devis (envoi desactive).
+    if (closed) {
+      return (
+        <div className="atp-actions" style={{ flexDirection: 'column' }}>
+          <button type="button" className="atp-cta" onClick={goToDevis}>
+            Obtenir mon devis
+          </button>
+        </div>
+      );
+    }
     if (mobileCta) {
       return (
         <div className="atp-actions" style={{ flexDirection: 'column' }}>
@@ -977,17 +1090,18 @@ export default function AssistantAssutempo() {
               ref={inputRef}
               className="atp-input"
               rows={1}
-              placeholder="Posez votre question..."
+              placeholder={closed ? 'Conversation terminée' : 'Posez votre question...'}
               value={input}
               onChange={onInputChange}
               onKeyDown={onInputKey}
+              disabled={closed}
               aria-label="Votre message"
             />
             <button
               type="button"
               className={'atp-send' + (spark ? ' atp-send--spark' : '')}
               aria-label="Envoyer"
-              disabled={!input.trim() || sending}
+              disabled={!input.trim() || sending || closed}
               onClick={() => {
                 send(input);
                 if (inputRef.current) inputRef.current.style.height = 'auto';

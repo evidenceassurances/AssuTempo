@@ -467,6 +467,7 @@ export const ASSISTANT_CSS = `
 }
 .atp-input::placeholder { color: var(--atp-muted); }
 .atp-input:focus { outline: none; border-color: var(--atp-line-strong); }
+.atp-input:disabled { opacity: 0.55; cursor: not-allowed; } /* conversation cloturee */
 .atp-send {
   position: relative;
   flex-shrink: 0;
