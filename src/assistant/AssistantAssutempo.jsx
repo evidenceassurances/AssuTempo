@@ -872,6 +872,13 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
+          {/* Indice "?" qui emerge du point dore (badge), 100% CSS et
+              pointer-events:none : n'intercepte aucun clic, ne decale rien. */}
+          <span className="atp-hint-pulse" aria-hidden />
+          <span className="atp-hint" aria-hidden>
+            <span className="atp-hint-glow" />
+            ?
+          </span>
         </button>
       )}
 

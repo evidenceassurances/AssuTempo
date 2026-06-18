@@ -84,6 +84,75 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
+/* ===== INDICE "?" : emerge du point dore (badge) en boucle =====
+   Ajout 100 % additif : aucun element existant n'est modifie. Anime en
+   transform/opacity uniquement (compositeur GPU), pointer-events:none (le clic
+   sur le launcher reste intact), hors flux et invisible au repos (opacity 0)
+   donc aucun decalage de mise en page. Valeurs calibrees pour un launcher de
+   64px : le centre du badge dore est a ~4px des bords haut/droit, et le "?"
+   flotte a ~un rayon (32px) au-dessus. */
+.atp-hint {
+  position: absolute;
+  right: -6px;          /* bas-centre du "?" ancre sur le centre du badge */
+  bottom: 60px;
+  width: 20px; height: 26px;
+  display: grid; place-items: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 24px; font-weight: 700; line-height: 1;
+  color: #F2D98E;
+  text-shadow: 0 0 8px rgba(242,217,142,0.5);
+  z-index: 3;
+  pointer-events: none;
+  transform-origin: 50% 100%;          /* le "?" grandit DEPUIS le point dore */
+  transform: translate(0, 0) scale(0.35);
+  opacity: 0;
+  animation: at-chatbot-hint 7.5s ease-in-out infinite;
+  animation-delay: 5s;                 /* premiere apparition apres 5s */
+  will-change: transform, opacity;
+}
+/* glow discret derriere le "?", se deplace avec lui */
+.atp-hint-glow {
+  position: absolute;
+  left: 50%; top: 52%;
+  width: 30px; height: 30px;
+  margin: -15px 0 0 -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242,217,142,0.45) 0%, transparent 65%);
+  z-index: -1;
+  pointer-events: none;
+}
+/* pulse pose sur le point dore source, synchronise avec la sortie du "?" */
+.atp-hint-pulse {
+  position: absolute;
+  top: -3px; right: -3px;              /* superpose exactement le badge dore */
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: rgba(242,217,142,0.55);
+  z-index: 2;
+  pointer-events: none;
+  transform-origin: center;
+  opacity: 0;
+  animation: at-chatbot-pulse 7.5s ease-in-out infinite;
+  animation-delay: 5s;
+  will-change: transform, opacity;
+}
+@keyframes at-chatbot-hint {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.35); }
+  9%   { opacity: 1; transform: translate(3px, -28px) scale(1); }
+  17%  { transform: translate(3px, -30px) scale(1); }
+  30%  { transform: translate(3px, -28px) scale(1); }
+  43%  { transform: translate(3px, -30px) scale(1); }
+  52%  { opacity: 1; transform: translate(3px, -27px) scale(1); }
+  60%  { opacity: 0; transform: translate(0, 0) scale(0.35); }
+  100% { opacity: 0; transform: translate(0, 0) scale(0.35); }
+}
+@keyframes at-chatbot-pulse {
+  0%, 60%, 100% { opacity: 0; transform: scale(1); }
+  10% { opacity: 0.45; transform: scale(1.7); }
+  35% { opacity: 0.28; transform: scale(1.4); }
+  52% { opacity: 0.18; transform: scale(1.15); }
+}
+
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
 .atp-sigil { position: relative; width: 34px; height: 34px; }
 .atp-sigil-ring {
@@ -554,6 +623,8 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-star,
   .atp-root .atp-tour-pointer,
   .atp-root .atp-tour-frame { animation: none; }
+  .atp-root .atp-hint,
+  .atp-root .atp-hint-pulse { animation: none; opacity: 0; }
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-chip:hover::after { animation: none; }
   .atp-root .atp-send--spark::after { animation: none; opacity: 0; }
