@@ -84,15 +84,15 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
-/* ===== INDICE "?" : filament dore qui se trace en sortant du point dore =====
+/* ===== INDICE "?" : trait SVG qui se trace en sortant du point dore =====
    Additif pur : aucun element existant du logo n'est modifie. Le "?" est un
    vrai PATH en stroke (pas un glyphe) trace via stroke-dashoffset (effet
-   filament/serpent), anime uniquement en stroke-dashoffset / opacity /
-   transform. pointer-events: none (le clic launcher reste intact), hors flux et
-   invisible au repos (dashoffset 100 + opacity 0) donc aucun decalage de mise en
-   page. Le SVG est cale pile sur le point dore : son origine (0,0) coincide avec
-   le centre du badge en haut a droite du launcher 64px. Trois paths superposes
-   (halo doux, reflet subtil, trait net) pour un rendu premium et discret. */
+   serpent), anime uniquement en stroke-dashoffset / transform / opacity.
+   pointer-events: none (le clic launcher reste intact), hors flux et invisible
+   au repos (dashoffset 100 + opacity 0) donc aucun decalage de mise en page. Le
+   SVG est cale pile sur le point dore : son origine (0,0) coincide avec le
+   centre du badge en haut a droite du launcher 64px. Deux paths superposes
+   (halo doux derriere, trait net devant) + une onde qui se libere du point. */
 .atp-hint {
   position: absolute;
   top: -40px;
@@ -103,52 +103,48 @@ export const ASSISTANT_CSS = `
   pointer-events: none;
   z-index: 3;
 }
-.at-question-draw {
+.at-draw {
   stroke-dashoffset: 100;     /* invisible au repos (avant et entre les cycles) */
-  opacity: 0;
   pointer-events: none;
-  animation: at-question-draw 8.4s cubic-bezier(0.65, 0, 0.25, 1) infinite;
+  animation: at-draw 7.5s ease-in-out infinite;
   animation-delay: 5s;        /* premiere apparition apres 5s */
-  will-change: stroke-dashoffset, opacity;
+  will-change: stroke-dashoffset;
 }
-.at-question-bob {
+.at-bob {
   transform-box: fill-box;
   transform-origin: center;
   pointer-events: none;
-  animation: at-question-bob 8.4s ease-in-out infinite;
+  animation: at-bob 7.5s ease-in-out infinite;
   animation-delay: 5s;
   will-change: transform;
 }
-.at-question-emit {
+.at-emit {
   opacity: 0;                 /* invisible au repos */
   transform-box: fill-box;
   transform-origin: center;
   pointer-events: none;
-  animation: at-question-emit 8.4s ease-out infinite;
+  animation: at-emit 7.5s ease-in-out infinite;
   animation-delay: 5s;
   will-change: transform, opacity;
 }
-/* le "?" se trace en sortant du point dore (filament), flotte brievement, puis
-   se retracte dans le point ; vraie pause entre les cycles pour rester elegant */
-@keyframes at-question-draw {
-  0%   { stroke-dashoffset: 100; opacity: 0; }
-  6%   { opacity: 1; }
-  20%  { stroke-dashoffset: 0; opacity: 1; }   /* trace complet (sort du point) */
-  46%  { stroke-dashoffset: 0; opacity: 1; }   /* reste affiche */
-  62%  { stroke-dashoffset: 100; opacity: 1; } /* se retracte dans le point */
-  70%  { opacity: 0; }
-  100% { stroke-dashoffset: 100; opacity: 0; } /* pause */
+/* ? qui se dessine en sortant du point jaune, facon serpent */
+@keyframes at-draw {
+  0%   { stroke-dashoffset: 100; }   /* invisible */
+  13%  { stroke-dashoffset: 0; }     /* trace complet (sort du point) */
+  48%  { stroke-dashoffset: 0; }     /* reste affiche */
+  60%  { stroke-dashoffset: 100; }   /* se retracte dans le point */
+  100% { stroke-dashoffset: 100; }   /* pause */
 }
-@keyframes at-question-bob {
-  0%, 20%, 62%, 100% { transform: translate3d(0, 0, 0); }
-  34% { transform: translate3d(0, -1.8px, 0); }   /* suspension discrete */
-  46% { transform: translate3d(0, 0, 0); }
+@keyframes at-bob {
+  0%, 13%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-2.5px); }   /* leger flottement en suspension */
+  48% { transform: translateY(0); }
 }
-@keyframes at-question-emit {
-  0%   { opacity: 0; transform: scale(0.55); }
-  7%   { opacity: 0.32; transform: scale(1); }
-  20%  { opacity: 0; transform: scale(1.85); }   /* onde qui se libere du point */
-  100% { opacity: 0; transform: scale(1.85); }
+@keyframes at-emit {
+  0%   { opacity: 0; transform: scale(0.5); }
+  5%   { opacity: 0.5; transform: scale(1); }
+  16%  { opacity: 0; transform: scale(2.1); }   /* onde qui se libere du point */
+  100% { opacity: 0; transform: scale(2.1); }
 }
 
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
@@ -621,11 +617,10 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-star,
   .atp-root .atp-tour-pointer,
   .atp-root .atp-tour-frame { animation: none; }
-  .atp-root .at-question-draw,
-  .atp-root .at-question-bob,
-  .atp-root .at-question-emit { animation: none; }
-  .atp-root .at-question-draw { stroke-dashoffset: 0; opacity: 1; } /* ? reste dessine, sans mouvement */
-  .atp-root .at-question-emit { opacity: 0; }
+  .atp-root .at-draw,
+  .atp-root .at-bob,
+  .atp-root .at-emit { animation: none; }
+  .atp-root .at-draw { stroke-dashoffset: 0; } /* ? reste dessine, sans mouvement */
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-chip:hover::after { animation: none; }
   .atp-root .atp-send--spark::after { animation: none; opacity: 0; }

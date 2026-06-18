@@ -872,11 +872,13 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
-          {/* Indice "?" : filament dore qui se trace en sortant du point dore
-              (le point dore sert de point du "?"). Additif, pointer-events:none
-              (clic launcher intact), hors flux : aucun element existant modifie.
-              Le "?" est un vrai PATH en stroke (pas un glyphe). L'origine SVG
-              (0,0) coincide pile avec le centre du badge dore. */}
+          {/* Indice "?" : trait SVG qui se trace en sortant du point dore (le
+              point dore sert de point du "?"), facon serpent, puis se retracte
+              dans le point, en boucle. Additif, pointer-events:none (clic
+              launcher intact), hors flux et invisible au repos : aucun element
+              existant modifie. Le "?" est un vrai PATH en stroke (pas un glyphe).
+              L'origine SVG (0,0) coincide pile avec le centre du badge dore en
+              haut a droite du launcher 64px. */}
           <svg
             className="atp-hint"
             viewBox="-15 -55 30 64"
@@ -885,38 +887,31 @@ export default function AssistantAssutempo() {
             aria-hidden
             focusable="false"
           >
-            {/* onde tres discrete qui se libere du point dore (centree dessus) */}
+            {/* onde qui se libere du point au moment ou le trait sort */}
             <circle
-              className="at-question-emit"
-              cx="0" cy="0" r="4.5"
-              fill="none" stroke="#F2D98E" strokeWidth="1.2" strokeOpacity="0"
+              className="at-emit"
+              cx="0" cy="0" r="6"
+              fill="none" stroke="#E8C97A" strokeWidth="1.5"
               pointerEvents="none"
             />
-            {/* groupe externe = placement exact sur le point (translate + scale).
-                groupe interne = flottement (bob), pour ne pas ecraser le placement.
-                3 paths superposes : halo doux, reflet subtil, trait principal net. */}
-            <g className="at-question-position" transform="translate(0 0) scale(1.1)">
-              <g className="at-question-bob">
+            {/* groupe externe = placement / echelle sur le point (transform attr).
+                groupe interne = flottement (bob) : separe pour ne jamais ecraser
+                le placement. 2 paths superposes (meme d) : halo doux derriere,
+                trait net devant. */}
+            <g transform="translate(0 0) scale(0.92)">
+              <g className="at-bob">
                 <path
-                  className="at-question-draw at-question-halo"
-                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
-                  fill="none" stroke="#E8C97A" strokeOpacity="0.11" strokeWidth="6.5"
+                  className="at-draw"
+                  d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -3 -50, -9 -48, -10 -43"
+                  fill="none" stroke="#E8C97A" strokeOpacity="0.14" strokeWidth="7"
                   strokeLinecap="round" strokeLinejoin="round"
                   pathLength="100" strokeDasharray="100" strokeDashoffset="100"
                   pointerEvents="none"
                 />
                 <path
-                  className="at-question-draw at-question-soft"
-                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
-                  fill="none" stroke="#FFE7A3" strokeOpacity="0.26" strokeWidth="4.2"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
-                  pointerEvents="none"
-                />
-                <path
-                  className="at-question-draw at-question-main"
-                  d="M 0 -6 C 0 -12, 1 -17, 3 -22 C 6 -29, 15 -28, 16 -20 C 17 -13, 11 -9, 5 -7 C 1 -5, 0 -3, 0 0"
-                  fill="none" stroke="#F4D98B" strokeWidth="2.45"
+                  className="at-draw"
+                  d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -3 -50, -9 -48, -10 -43"
+                  fill="none" stroke="#F2D98E" strokeWidth="3.2"
                   strokeLinecap="round" strokeLinejoin="round"
                   pathLength="100" strokeDasharray="100" strokeDashoffset="100"
                   pointerEvents="none"
