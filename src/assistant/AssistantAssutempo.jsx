@@ -872,53 +872,11 @@ export default function AssistantAssutempo() {
         >
           <Sigil />
           <span className="atp-launcher-badge" aria-hidden />
-          {/* Indice "?" : trait SVG qui se trace en sortant du point dore (le
-              point dore sert de point du "?"), facon serpent, puis se retracte
-              dans le point, en boucle. Additif, pointer-events:none (clic
-              launcher intact), hors flux et invisible au repos : aucun element
-              existant modifie. Le "?" est un vrai PATH en stroke (pas un glyphe).
-              L'origine SVG (0,0) coincide pile avec le centre du badge dore en
-              haut a droite du launcher 64px. */}
-          <svg
-            className="atp-hint"
-            viewBox="-15 -55 30 64"
-            width="24"
-            height="51"
-            aria-hidden
-            focusable="false"
-          >
-            {/* onde qui se libere du point au moment ou le trait sort */}
-            <circle
-              className="at-emit"
-              cx="0" cy="0" r="6"
-              fill="none" stroke="#E8C97A" strokeWidth="1.5"
-              pointerEvents="none"
-            />
-            {/* groupe externe = placement / echelle sur le point (transform attr).
-                groupe interne = flottement (bob) : separe pour ne jamais ecraser
-                le placement. 2 paths superposes (meme d) : halo doux derriere,
-                trait net devant. */}
-            <g transform="translate(0 0) scale(0.92)">
-              <g className="at-bob">
-                <path
-                  className="at-draw"
-                  d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -3 -50, -9 -48, -10 -43"
-                  fill="none" stroke="#E8C97A" strokeOpacity="0.14" strokeWidth="7"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
-                  pointerEvents="none"
-                />
-                <path
-                  className="at-draw"
-                  d="M 0 -7 C 0 -13, 1 -19, 1 -26 C 3 -30, 12 -33, 12 -39 C 12 -45, 9 -50, 2 -50 C -3 -50, -9 -48, -10 -43"
-                  fill="none" stroke="#F2D98E" strokeWidth="3.2"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  pathLength="100" strokeDasharray="100" strokeDashoffset="100"
-                  pointerEvents="none"
-                />
-              </g>
-            </g>
-          </svg>
+          {/* Etiquette "Infos" : petite pastille sobre au-dessus du launcher qui
+              apparait apres 5s, reste 2-3s puis disparait, en boucle. Additive,
+              pointer-events:none (clic launcher intact), en overlay absolu hors
+              flux (aucun decalage). Aucun element du logo n'est modifie. */}
+          <div className="at-infos" aria-hidden>Infos</div>
         </button>
       )}
 

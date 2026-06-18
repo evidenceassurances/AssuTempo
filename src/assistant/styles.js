@@ -84,67 +84,52 @@ export const ASSISTANT_CSS = `
   animation: atp-pop 0.5s var(--atp-ease) both;
 }
 
-/* ===== INDICE "?" : trait SVG qui se trace en sortant du point dore =====
-   Additif pur : aucun element existant du logo n'est modifie. Le "?" est un
-   vrai PATH en stroke (pas un glyphe) trace via stroke-dashoffset (effet
-   serpent), anime uniquement en stroke-dashoffset / transform / opacity.
-   pointer-events: none (le clic launcher reste intact), hors flux et invisible
-   au repos (dashoffset 100 + opacity 0) donc aucun decalage de mise en page. Le
-   SVG est cale pile sur le point dore : son origine (0,0) coincide avec le
-   centre du badge en haut a droite du launcher 64px. Deux paths superposes
-   (halo doux derriere, trait net devant) + une onde qui se libere du point. */
-.atp-hint {
+/* ===== ETIQUETTE "Infos" : pastille sobre au-dessus du launcher =====
+   Additif pur : aucun element du logo n'est modifie. Pastille arrondie (sans
+   pointe facon bulle BD), fond sombre, fin lisere dore, texte dore avec un petit
+   point dore avant. En overlay absolu sur le launcher (deja position: relative),
+   hors flux et invisible au repos (opacity 0) : aucun decalage de mise en page.
+   pointer-events: none -> le clic launcher reste intact. 100% CSS, transform /
+   opacity uniquement. right: 0 -> s'etend vers la gauche (jamais hors viewport). */
+.at-infos {
   position: absolute;
-  top: -40px;
-  right: -8px;
-  width: 24px;
-  height: 51px;
-  overflow: visible;          /* ne clippe ni le halo ni l'onde */
-  pointer-events: none;
-  z-index: 3;
-}
-.at-draw {
-  stroke-dashoffset: 100;     /* invisible au repos (avant et entre les cycles) */
-  pointer-events: none;
-  animation: at-draw 7.5s ease-in-out infinite;
-  animation-delay: 5s;        /* premiere apparition apres 5s */
-  will-change: stroke-dashoffset;
-}
-.at-bob {
-  transform-box: fill-box;
-  transform-origin: center;
-  pointer-events: none;
-  animation: at-bob 7.5s ease-in-out infinite;
-  animation-delay: 5s;
-  will-change: transform;
-}
-.at-emit {
-  opacity: 0;                 /* invisible au repos */
-  transform-box: fill-box;
-  transform-origin: center;
-  pointer-events: none;
-  animation: at-emit 7.5s ease-in-out infinite;
-  animation-delay: 5s;
+  bottom: calc(100% + 12px);    /* juste au-dessus du launcher */
+  right: 0;                      /* aligne a droite, s'etend vers la gauche */
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  background: rgba(14, 14, 14, 0.92);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  color: #E8C97A;
+  font-family: inherit;          /* police du site (Inter), jamais une serif */
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;          /* purement decoratif, ne bloque pas le clic */
+  opacity: 0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  animation: at-infos 7s ease-in-out infinite;
+  animation-delay: 5s;           /* premiere apparition apres 5s */
   will-change: transform, opacity;
 }
-/* ? qui se dessine en sortant du point jaune, facon serpent */
-@keyframes at-draw {
-  0%   { stroke-dashoffset: 100; }   /* invisible */
-  13%  { stroke-dashoffset: 0; }     /* trace complet (sort du point) */
-  48%  { stroke-dashoffset: 0; }     /* reste affiche */
-  60%  { stroke-dashoffset: 100; }   /* se retracte dans le point */
-  100% { stroke-dashoffset: 100; }   /* pause */
+.at-infos::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #E8C97A;
+  flex: none;                    /* petit point dore avant le texte */
 }
-@keyframes at-bob {
-  0%, 13%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-2.5px); }   /* leger flottement en suspension */
-  48% { transform: translateY(0); }
-}
-@keyframes at-emit {
-  0%   { opacity: 0; transform: scale(0.5); }
-  5%   { opacity: 0.5; transform: scale(1); }
-  16%  { opacity: 0; transform: scale(2.1); }   /* onde qui se libere du point */
-  100% { opacity: 0; transform: scale(2.1); }
+/* apparait + remonte, reste 2-3s, disparait, puis pause avant la boucle */
+@keyframes at-infos {
+  0%   { opacity: 0; transform: translateY(8px) scale(0.96); }
+  6%   { opacity: 1; transform: translateY(0) scale(1); }
+  40%  { opacity: 1; transform: translateY(0) scale(1); }
+  50%  { opacity: 0; transform: translateY(8px) scale(0.96); }
+  100% { opacity: 0; transform: translateY(8px) scale(0.96); }
 }
 
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
@@ -617,10 +602,7 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-star,
   .atp-root .atp-tour-pointer,
   .atp-root .atp-tour-frame { animation: none; }
-  .atp-root .at-draw,
-  .atp-root .at-bob,
-  .atp-root .at-emit { animation: none; }
-  .atp-root .at-draw { stroke-dashoffset: 0; } /* ? reste dessine, sans mouvement */
+  .atp-root .at-infos { animation: none; opacity: 0; }
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-chip:hover::after { animation: none; }
   .atp-root .atp-send--spark::after { animation: none; opacity: 0; }
