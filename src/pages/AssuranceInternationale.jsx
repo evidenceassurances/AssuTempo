@@ -7,6 +7,7 @@ import Footer from '../components/Footer';
 import TempoDial from '../components/TempoDial';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { trackEvent } from '../lib/analytics';
 
 const PAYS = [
   { slug: 'albanie',           nom: 'Albanie',            flag: '🇦🇱' },
@@ -172,8 +173,10 @@ function DevisForm({ initialPays }) {
       const formData = new FormData(e.target);
       const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
       const data = await res.json();
-      if (data.success) setStatus('succes');
-      else setStatus('erreur');
+      if (data.success) {
+        setStatus('succes');
+        trackEvent('generate_lead', { "form_type": 'international' });
+      } else setStatus('erreur');
     } catch {
       setStatus('erreur');
     }

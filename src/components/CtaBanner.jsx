@@ -2,8 +2,14 @@ import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { trackEvent } from '../lib/analytics';
 
 const TARGET = 'https://assutempo.fr/tarification';
+
+function openDevis(label) {
+  trackEvent('cta_devis_click', { "cta_label": label, "page_path": window.location.pathname });
+  window.open(TARGET);
+}
 
 /* CTA #1 - Après VehicleMarquee : barre centrée sobre */
 export function CtaAfterVehicles() {
@@ -35,7 +41,7 @@ export function CtaAfterVehicles() {
         </p>
         <button
           className="btn-gold"
-          onClick={() => window.open(TARGET)}
+          onClick={() => openDevis('Obtenir mon devis')}
           style={{
             padding: '13px 26px',
             fontSize: 15,
@@ -105,7 +111,7 @@ export function CtaAfterProcess() {
           </div>
           <button
             className="btn-gold"
-            onClick={() => window.open(TARGET)}
+            onClick={() => openDevis('Souscrire maintenant')}
             style={{ flexShrink: 0, padding: '13px 24px', fontSize: 15 }}
           >
             Souscrire maintenant
@@ -207,7 +213,7 @@ export function CtaAfterCountries() {
         </p>
         <button
           className="btn-glass"
-          onClick={() => window.open(TARGET)}
+          onClick={() => openDevis('Voir les tarifs')}
         >
           Voir les tarifs
         </button>

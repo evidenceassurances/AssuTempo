@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Zap, Globe, Check } from 'lucide-react';
 import TempoDial from './TempoDial';
 import { EASE_PREMIUM } from '../lib/motion';
+import { trackEvent } from '../lib/analytics';
 
 const lineContainerVar = {
   hidden: {},
@@ -164,14 +165,20 @@ function Hero() {
           >
             <button
               className="btn-gold"
-              onClick={() => navigate('/tarification')}
+              onClick={() => {
+                trackEvent('cta_devis_click', { "cta_label": 'Obtenir mon devis', "page_path": window.location.pathname });
+                navigate('/tarification');
+              }}
               style={{ padding: '14px 28px', fontSize: 16 }}
             >
               Obtenir mon devis
             </button>
             <button
               className="btn-glass"
-              onClick={() => navigate('/tarification')}
+              onClick={() => {
+                trackEvent('cta_devis_click', { "cta_label": 'Voir les tarifs', "page_path": window.location.pathname });
+                navigate('/tarification');
+              }}
               style={{ fontSize: 16 }}
             >
               Voir les tarifs

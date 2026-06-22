@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { isAnalyticsAllowed } from '../components/CookieConsent';
+import { trackEvent, trackPageView } from '../lib/analytics';
 
 const GA_ID = import.meta.env.VITE_GA_ID;
 
@@ -18,19 +19,27 @@ function loadGA() {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  window.gtag('config', GA_ID, { anonymize_ip: true });
+  // send_page_view: false -> le page_view initial est desactive ici. Tous les
+  // page_view (y compris celui du premier chargement) sont emis par le suivi de
+  // route ci-dessous, ce qui evite un double comptage au demarrage.
+  window.gtag('config', GA_ID, { anonymize_ip: true, send_page_view: false });
 }
+
+// Libelles des CTA de devis a tracker (clic sur un lien menant vers /tarification).
+const DEVIS_CTA_LABELS = /obtenir mon devis|voir les tarifs|souscrire maintenant/i;
 
 export function useAnalytics() {
   const location = useLocation();
 
+  // 1. Chargement de GA et gestion du consentement.
   useEffect(() => {
-    // Analytics active par défaut : charge GA dès que l'utilisateur n'a pas refusé.
+    // Mesure d'audience active par defaut : on charge GA tant que l'utilisateur
+    // n'a pas explicitement refuse.
     if (isAnalyticsAllowed()) loadGA();
 
     const handler = (e) => {
       if (e.detail?.analytics === false) {
-        // Refus explicite : désactive GA pour la session en cours.
+        // Refus explicite : desactive GA pour la session en cours.
         if (GA_ID) window['ga-disable-' + GA_ID] = true;
       } else if (e.detail?.analytics === true) {
         loadGA();
@@ -40,9 +49,48 @@ export function useAnalytics() {
     return () => window.removeEventListener('cookie-consent', handler);
   }, []);
 
+  // 2. Suivi des clics d'intention par delegation globale.
+  //    Ne modifie aucune navigation : on observe simplement les clics.
+  //    - liens tel: -> tel_click
+  //    - liens internes vers /tarification dont le libelle est un CTA de devis
+  //      -> cta_devis_click (exclut les liens de menu "Tarification").
   useEffect(() => {
-    if (window.gtag) {
-      window.gtag('event', 'page_view', { page_path: location.pathname });
+    function onDocumentClick(e) {
+      const target = e.target;
+      const anchor = target && target.closest ? target.closest('a[href]') : null;
+      if (!anchor) return;
+
+      const rawHref = anchor.getAttribute('href') || '';
+
+      if (rawHref.startsWith('tel:')) {
+        trackEvent('tel_click', { "page_path": window.location.pathname });
+        return;
+      }
+
+      try {
+        const url = new URL(anchor.href, window.location.origin);
+        if (url.origin !== window.location.origin || url.pathname !== '/tarification') return;
+        const label = (anchor.textContent || '').trim();
+        if (DEVIS_CTA_LABELS.test(label)) {
+          trackEvent('cta_devis_click', {
+            "cta_label": label,
+            "page_path": window.location.pathname,
+          });
+        }
+      } catch {
+        /* href non analysable : on ignore */
+      }
     }
+
+    document.addEventListener('click', onDocumentClick);
+    return () => document.removeEventListener('click', onDocumentClick);
+  }, []);
+
+  // 3. page_view a chaque changement de route + evenements de page dedies.
+  useEffect(() => {
+    trackPageView(location.pathname);
+
+    if (location.pathname === '/tarification') trackEvent('view_tarification');
+    else if (location.pathname === '/carte-grise') trackEvent('view_carte_grise');
   }, [location.pathname]);
 }

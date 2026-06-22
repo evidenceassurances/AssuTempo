@@ -18,6 +18,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSISTANT_CSS } from './styles';
 import { TOUR_FLOWS } from './tourSteps';
+import { trackEvent } from '../lib/analytics';
 
 // Ambiance cosmos (canvas + boucle requestAnimationFrame) : DESKTOP UNIQUEMENT.
 // Import dynamique => le code cosmos n'est jamais charge ni execute sur mobile
@@ -903,6 +904,7 @@ export default function AssistantAssutempo() {
 
   // Ouvre la page de devis (cloture) et referme le panneau.
   function goToDevis() {
+    trackEvent('cta_devis_click', { "cta_label": 'Obtenir mon devis', "page_path": window.location.pathname });
     if (window.location.pathname !== '/tarification') navigate('/tarification');
     closePanel();
   }

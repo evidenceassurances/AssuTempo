@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 
 const links = [
   { label: 'Tarification', href: '/tarification' },
@@ -116,7 +117,10 @@ function Navbar() {
         <div className="nav-desktop">
           <button
             data-assistant-target="devis"
-            onClick={() => navigate('/tarification')}
+            onClick={() => {
+              trackEvent('cta_devis_click', { "cta_label": 'Obtenir mon devis', "page_path": window.location.pathname });
+              navigate('/tarification');
+            }}
             className="btn-gold"
             style={{ padding: '10px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600 }}
           >
@@ -187,7 +191,11 @@ function Navbar() {
             ))}
             <m.div variants={mobileLinkVariants}>
               <button
-                onClick={() => { navigate('/tarification'); setOpen(false); }}
+                onClick={() => {
+                  trackEvent('cta_devis_click', { "cta_label": 'Obtenir mon devis', "page_path": window.location.pathname });
+                  navigate('/tarification');
+                  setOpen(false);
+                }}
                 className="btn-gold"
                 style={{ width: '100%', borderRadius: 10, fontSize: 16, padding: '14px 20px' }}
               >

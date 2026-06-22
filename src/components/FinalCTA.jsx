@@ -2,6 +2,7 @@ import { m } from 'framer-motion';
 import { Phone, IdCard, ClipboardList, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { trackEvent } from '../lib/analytics';
 
 function FinalCTA() {
   const navigate = useNavigate();
@@ -108,7 +109,10 @@ function FinalCTA() {
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
             <button
               className="btn-gold"
-              onClick={() => navigate('/tarification')}
+              onClick={() => {
+                trackEvent('cta_devis_click', { "cta_label": 'Souscrire maintenant', "page_path": window.location.pathname });
+                navigate('/tarification');
+              }}
               style={{ padding: '14px 28px', fontSize: 15, position: 'relative', overflow: 'hidden' }}
             >
               Souscrire maintenant

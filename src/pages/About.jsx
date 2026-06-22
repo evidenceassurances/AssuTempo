@@ -4,6 +4,7 @@ import { m } from 'framer-motion';
 import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet, Check } from 'lucide-react';
 import { fadeUp, stagger, slideLeft } from '../animations';
 import Footer from '../components/Footer';
+import { trackEvent } from '../lib/analytics';
 
 const values = [
   { title: 'Efficace', description: 'Processus fluide, prise en charge rapide, réponse sous 24h.', icon: ShieldCheck },
@@ -124,6 +125,7 @@ function PartnerForm() {
       if (data.success) {
         setStatus('succes');
         setForm(EMPTY_FORM);
+        trackEvent('generate_lead', { "form_type": 'b2b' });
       } else {
         setStatus('erreur');
       }
