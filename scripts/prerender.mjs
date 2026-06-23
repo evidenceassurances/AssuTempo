@@ -45,8 +45,27 @@ const ROUTES = [
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
   '/cookies',
+  '/conditions-generales',
   '/assurance-internationale',
 ];
+
+// ── Métadonnées sitemap ──────────────────────────────────────────────────────
+// Le sitemap est généré à partir de ROUTES (source unique) : impossible qu'il
+// diverge à nouveau de la liste prérendue. Date stable (mise à jour manuelle
+// lors d'un changement de contenu) pour ne pas signaler "tout a changé" à
+// chaque build, ce qui érode la confiance dans <lastmod>.
+const SITE = 'https://assutempo.fr';
+const SITEMAP_LASTMOD = '2026-06-23';
+
+function sitemapMeta(route) {
+  if (route === '/' || route === '/tarification') return { changefreq: 'weekly', priority: '1.0' };
+  if (route.startsWith('/articles/')) return { changefreq: 'monthly', priority: '0.7' };
+  if (route.startsWith('/carte/')) return { changefreq: 'yearly', priority: '0.6' };
+  if (route === '/cookies' || route === '/conditions-generales') return { changefreq: 'yearly', priority: '0.3' };
+  // Pages de contenu et commerciales : /faq, /articles, /qui-sommes-nous,
+  // /carte, /carte-grise, /assurance-internationale.
+  return { changefreq: 'monthly', priority: '0.8' };
+}
 
 // ── 1. Build SSR bundle ───────────────────────────────────────────────────────
 console.log('⚙️  Compilation du bundle SSR…');
@@ -157,6 +176,20 @@ for (const route of ROUTES) {
   console.log(`  ✓  ${route}`);
 }
 
-// ── 4. Nettoyage ─────────────────────────────────────────────────────────────
+// ── 4. Génération du sitemap (depuis ROUTES, source unique) ───────────────────
+const sitemapBody = ROUTES.map((route) => {
+  const loc = route === '/' ? `${SITE}/` : `${SITE}${route}`;
+  const { changefreq, priority } = sitemapMeta(route);
+  return `  <url><loc>${loc}</loc><lastmod>${SITEMAP_LASTMOD}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+}).join('\n');
+
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapBody}\n</urlset>\n`;
+
+// dist/ = artefact déployé ; public/ = source committée (servie en dev, lisible).
+writeFileSync(path.join(root, 'dist/sitemap.xml'), sitemapXml);
+writeFileSync(path.join(root, 'public/sitemap.xml'), sitemapXml);
+console.log(`\n🗺️  sitemap.xml généré (${ROUTES.length} URLs).`);
+
+// ── 5. Nettoyage ─────────────────────────────────────────────────────────────
 rmSync(distSsr, { recursive: true, force: true });
 console.log('\n✅  Pré-rendu terminé !');
