@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -118,6 +118,45 @@ export const articles = [
     icone: Gauge,
     accent: '#8A6B9E',
     categorie: 'Essai & achat',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-temporaire-resilie-par-assureur',
+    titre: 'Résilié par votre assureur : quelles solutions ?',
+    extrait:
+      "Résilié pour impayé, sinistres ou fausse déclaration ? Selon le motif, une assurance temporaire vous remet en règle en 5 minutes, le temps de retrouver un contrat annuel.",
+    reponseRapide:
+      "La responsabilité civile reste obligatoire (article L211-1). Résilié pour impayé ou non-renouvellement, une assurance temporaire peut vous couvrir immédiatement ; résilié pour sinistre, la solution passe par un assureur spécialisé ou le Bureau central de tarification.",
+    icone: ShieldAlert,
+    accent: '#C2705A',
+    categorie: 'Résiliation',
+    readTime: '5 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-temporaire-utilitaire-demenagement',
+    titre: 'Déménager avec un utilitaire : bien assuré à la journée',
+    extrait:
+      "Utilitaire loué, prêté ou tout juste acheté ? Assurez-le pour la durée exacte du déménagement, attestation immédiate, responsabilité civile incluse. 1 à 90 jours.",
+    reponseRapide:
+      "Un utilitaire doit être assuré au minimum en responsabilité civile, même pour un aller-retour. En location, l'assurance est souvent incluse ; pour un utilitaire prêté ou acheté, une assurance temporaire à votre nom vous couvre pour la durée du déménagement.",
+    icone: Truck,
+    accent: '#6E92A8',
+    categorie: 'Utilitaire',
+    readTime: '5 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-temporaire-vehicule-proche-decede',
+    titre: "Assurer la voiture d'un proche décédé",
+    extrait:
+      "Au décès, le contrat auto se transmet aux héritiers mais ne vous couvre pas toujours. Une assurance temporaire vous permet de déplacer ou vendre le véhicule, attestation immédiate.",
+    reponseRapide:
+      "Au décès, le contrat se transmet de plein droit aux héritiers (article L121-10), mais l'héritier qui conduit n'est pas toujours couvert. Une assurance temporaire à votre nom vous couvre immédiatement pour déplacer ou vendre le véhicule, sans dépendre du contrat du défunt.",
+    icone: ScrollText,
+    accent: '#8E86A6',
+    categorie: 'Succession',
+    readTime: '5 min',
     hasPage: true,
   },
 ];

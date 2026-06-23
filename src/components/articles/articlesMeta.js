@@ -2,6 +2,7 @@
    Additif uniquement : ne modifie pas la source de donnees des articles. */
 import {
   AlertTriangle, ShoppingCart, Globe, FileText, Briefcase, Users, Gauge,
+  ShieldAlert, Truck, ScrollText,
 } from 'lucide-react';
 
 export const EASE = [0.22, 1, 0.36, 1];
@@ -34,6 +35,9 @@ export const CATEGORY_META = {
   pro:           { key: 'pro',            label: 'Pro',            accent: '#7E9AB8', Icon: Briefcase,     subtitle: 'Partenariat professionnel' },
   pret:          { key: 'pret',           label: 'Prêt',           accent: '#7E9B79', Icon: Users,         subtitle: 'Prêt entre proches, conducteur désigné' },
   essai:         { key: 'essai',          label: 'Essai',          accent: '#A88FB0', Icon: Gauge,         subtitle: 'Essai avant achat' },
+  resiliation:   { key: 'resiliation',   label: 'Résiliation',   accent: '#C2705A', Icon: ShieldAlert,   subtitle: 'Résilié, réassurance, BCT' },
+  utilitaire:    { key: 'utilitaire',    label: 'Utilitaire',    accent: '#6E92A8', Icon: Truck,         subtitle: 'Déménagement, camionnette' },
+  succession:    { key: 'succession',    label: 'Succession',    accent: '#8E86A6', Icon: ScrollText,    subtitle: "Véhicule d'un proche décédé" },
 };
 
 export const FALLBACK_META = {
@@ -60,6 +64,9 @@ export function catKey(categorie = '') {
   if (n.includes('pret')) return 'pret';
   if (n.includes('essai')) return 'essai';
   if (n.includes('achat')) return 'achat';
+  if (n.includes('resiliation') || n.includes('resilie')) return 'resiliation';
+  if (n.includes('utilitaire')) return 'utilitaire';
+  if (n.includes('succession') || n.includes('decede')) return 'succession';
   return 'autre';
 }
 

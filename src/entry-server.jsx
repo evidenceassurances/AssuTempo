@@ -22,6 +22,9 @@ import PretVehicule from './pages/articles/PretVehicule';
 import ConvoyageProfessionnel from './pages/articles/ConvoyageProfessionnel';
 import EssaiVehicule from './pages/articles/EssaiVehicule';
 import CarteGrise from './pages/articles/CarteGrise';
+import ResilieAssureur from './pages/articles/ResilieAssureur';
+import UtilitaireDemenagement from './pages/articles/UtilitaireDemenagement';
+import VehiculeProcheDecede from './pages/articles/VehiculeProcheDecede';
 import CarteGriseService from './pages/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
@@ -43,6 +46,9 @@ const PAGES = {
   ConvoyageProfessionnel,
   EssaiVehicule,
   CarteGrise,
+  ResilieAssureur,
+  UtilitaireDemenagement,
+  VehiculeProcheDecede,
   CarteGriseService,
   Carte,
   Cookies,
