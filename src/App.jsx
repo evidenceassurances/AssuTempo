@@ -36,6 +36,15 @@ const PAGES = { Home };
 for (const [name, importer] of Object.entries(IMPORTERS)) {
   PAGES[name] = lazy(importer);
 }
+/* Sections sous le pli de la Home : lazy côté client (le hero s'hydrate
+   seul au démarrage), eager côté serveur. React déclenche le chargement
+   dès le rendu de la Home ; le HTML prérendu reste affiché en attendant. */
+const importHomeSections = () => import('./pages/HomeSections');
+PAGES.HomeSections = lazy(importHomeSections);
+/* Prechauffe : le telechargement du chunk part DES l'évaluation du module,
+   en parallèle de l'hydratation (import() dédupliqué avec le lazy) : le
+   Suspense des sections se réhydrate quasi immédiatement. */
+if (typeof window !== 'undefined') importHomeSections();
 
 /* Ordre de prefetch : les destinations de navigation probables d'abord,
    le reste ensuite. Tout est petit (2 a 50 KB gzip par chunk). */

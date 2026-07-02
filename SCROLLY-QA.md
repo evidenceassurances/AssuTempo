@@ -117,3 +117,44 @@ Ecart assume (point 4 de la spec) : 6 couches promues statiquement (cadran, come
 - Desktop : gold-shift anime conserve, grain overlay conserve, partition de scroll identique a mobile (210vh).
 - reduced-motion : module pilote a l'opacite seule, texte sorti, 0 erreur ; la boucle unique ne s'auto-planifie pas (re-armement par evenements).
 - Bonus batterie : plus aucun repaint au repos sur le hero mobile (1 Paint en 2,5 s contre ~2/frame avant).
+
+## Audit chargement du 3 juillet (constat "6 s sur iPhone") : mesures, causes, corrections
+Branche perf/audit-chargement. QA **25/25** (audit) + non-regressions **52/52** (lanceur) et **40/40** (hero). Lint 0 erreur. Total dist : 345,6 KB gzip (+3 KB de decoupage, mais chemin critique en forte baisse).
+
+### Mesures AVANT (Lighthouse mobile, 3 runs, medianes)
+- Local (vite preview, build main) : Perf 93, FCP 2256 ms, LCP 2766 ms, TBT 67 ms. Le build etait sain et conforme a l'audit de juillet.
+- **Production reelle : Perf 86 median avec forte variance (76 a 90), LCP 3193 ms median, pointe a 4866 ms** : c'est cette variance reseau/tiers qui rejoint le ressenti 6 s sur iPhone.
+- Redirections : https://assutempo.fr direct = 0 redirection ; www = 1 saut (https) a 2 sauts (http), +0,25 a +0,37 s mesures sur bonne connexion (davantage en 4G).
+- HTML prerendu : 16 KB brotli transfere (sain). Polices non bloquantes (sain).
+
+### Causes identifiees (composition mesuree du chemin critique)
+1. **Pile analytics de ~310 KB au demarrage** : gtag GA4 (165 KB) chargee au montage React, qui chaine une propriete **Universal Analytics MORTE** (UA-264084182-1, 123 KB, sunset 2023) + l'ancien analytics.js (21 KB). Le tout en concurrence de bande passante et de CPU avec l'hydratation.
+2. **Chunk principal de 62,5 KB gzip dont la moitie n'avait rien a y faire** (attribution par sourcemap) : `countries-content.js` 83 KB source (TOUT le contenu redactionnel des 34 pages pays, importe par la section pays de la Home pour 3 champs) + l'assistant complet ~80 KB source (composant + styles + tour), monte dans le shell.
+3. **Fenetre de loader sur les acces directs** (prexistant, verifie empiriquement sur /faq : chunk ralenti = HTML prerendu remplace par le loader plein ecran pendant tout le vol) : seuls les chunks partages etaient en modulepreload, jamais celui de la page.
+
+### Corrections
+- **Index pays leger** (`src/data/countries-index.js`) : la Home n'importe plus que slug/nom/drapeau ; le contenu complet reste dans le chunk lazy de la Carte.
+- **Assistant en chunk differe** : monte apres load + requestIdleCallback (secours 4 s), parite SSR stricte (rien rendu des deux cotes a l'hydratation) ; une demande d'ouverture pendant la fenetre charge immediatement et ouvre au montage (drapeau `__assutempoOpenPending`, verifie).
+- **Sections sous le pli de la Home en chunk differe** (pattern etabli des routes : eager cote serveur via entry-server, lazy cote client via la table de pages, exposee par `PagesContext`) : le hero s'hydrate seul au demarrage ; prerendu SEO strictement complet (verifie) ; import de prechauffe des l'evaluation du module + `transitionsReady` attend la resolution du chunk = **aucune fenetre de disparition mesurable (echantillonnage 100 ms x 15 : 0 manque)**.
+- **GA differe sans perte** : stub dataLayer synchrone (le page_view initial et tous les evenements s'empilent), script gtag injecte apres load + idle (verifie : insertion a readyState complete, page_view present en queue, refus de consentement pose ga-disable avant l'arrivee).
+- **modulepreload du chunk de page dans chaque HTML prerendu** (manifest Vite + injection par prerender.mjs, imports transitifs, zero doublon avec le template) : /faq precharge Faq + AccordionItem, la Home precharge HomeSections + Footer + countries-index, chaque page pays precharge le chunk Carte. La fenetre de loader des acces directs disparait.
+
+### Mesures APRES
+| Metrique | Avant | Apres |
+|---|---|---|
+| Chunk principal (gzip) | 62,5 KB | **19,1 KB (-70 %)** |
+| JS critique execute au demarrage (gzip) | ~200 KB | **~158 KB** (vendor 71 + framer 51,7 + main 19,1 + icons 10,4 + css 4,9) |
+| Analytics au demarrage | ~310 KB + ~150 ms JS | **0 (apres load + idle)** |
+| Assistant au demarrage | dans le main | **15 KB apres idle** |
+| Acces direct a une page lazy | loader plein ecran pendant le vol du chunk | **chunk precharge dans le HTML** |
+| Hydratation au demarrage | Home entiere | **hero + shell seulement** |
+| Lighthouse local (3 runs) | 90-93 | 89-93 (bruit machine ; TBT 60-106 ms stable) |
+
+Le banc simule ne valorise pas les octets deplaces (LCP simule domine par HTML+CSS+animation d'entree) : les gains reels sont le reseau critique, l'execution avant interactivite et la variance prod (GA sorti du chemin). A re-mesurer sur assutempo.fr apres deploiement.
+
+### Regle #418 supplementaire (apprise en QA, regression provoquee puis corrigee)
+`transitionsReady` (bascule AnimatePresence post-montage) doit rester une mise a jour **SYNCHRONE** : passee en startTransition, la bascule devient interruptible et remodele l'arbre autour des Suspense de routes encore deshydrates -> React #418 sur TOUTES les routes lazy (reproduit 12/12, corrige, re-verifie 12/12 propres). Elle attend desormais en plus la resolution du chunk des sections Home avant de basculer (aucun impact : les transitions ne servent qu'aux navigations).
+
+### Actions restantes cote Ayoub (hors code)
+1. **Debrancher la propriete UA morte dans l'admin GA4** : Admin > Flux de donnees > flux web assutempo.fr > "Balises de site connectees" (ou "Connected Site Tags") > supprimer UA-264084182-1. Gain : -144 KB de reseau et une requete tierce en moins sur CHAQUE visite, cote serveur Google (aucun deploiement necessaire).
+2. **www.assutempo.fr** : garder les liens et communications sur https://assutempo.fr (0 redirection). La chaine www coute 1 a 2 sauts ; verifier chez IONOS que www pointe en CNAME vers Vercel (redirection 308 en un saut, deja le cas en https).

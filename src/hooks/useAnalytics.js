@@ -6,16 +6,14 @@ import { trackEvent, trackPageView } from '../lib/analytics';
 const GA_ID = import.meta.env.VITE_GA_ID;
 
 let gaLoaded = false;
+let gaScriptAsked = false;
 
-function loadGA() {
-  if (gaLoaded || !GA_ID) return;
-  gaLoaded = true;
-
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(script);
-
+/* Stub synchrone SANS reseau : dataLayer + gtag qui empile. Tous les
+   evenements emis avant l'arrivee du script (dont le page_view initial du
+   suivi de route) s'accumulent dans la queue et sont traites par gtag.js
+   a son chargement. Aucun evenement perdu. */
+function ensureStub() {
+  if (typeof window.gtag === 'function') return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
@@ -23,6 +21,36 @@ function loadGA() {
   // page_view (y compris celui du premier chargement) sont emis par le suivi de
   // route ci-dessous, ce qui evite un double comptage au demarrage.
   window.gtag('config', GA_ID, { anonymize_ip: true, send_page_view: false });
+}
+
+/* Injection du script gtag.js APRES load + idle : la pile analytics
+   (~310 KB de reseau, ~150 ms de JS mesures au profil du 3 juillet) ne
+   concurrence plus jamais l'hydratation, le LCP ni le bundle applicatif.
+   Un refus de consentement pose ga-disable-<id> avant le chargement :
+   gtag.js le respecte a l'arrivee. */
+function injectScript() {
+  if (gaScriptAsked) return;
+  gaScriptAsked = true;
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(script);
+}
+
+function loadGA() {
+  if (gaLoaded || !GA_ID) return;
+  gaLoaded = true;
+  ensureStub();
+
+  const whenIdle = () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(injectScript, { timeout: 5000 });
+    } else {
+      setTimeout(injectScript, 2500);
+    }
+  };
+  if (document.readyState === 'complete') whenIdle();
+  else window.addEventListener('load', whenIdle, { once: true });
 }
 
 // Libelles des CTA de devis a tracker (clic sur un lien menant vers /tarification).

@@ -427,6 +427,12 @@ export default function AssistantAssutempo() {
       setClosing(false);
       setOpen(true);
     };
+    /* Demande d'ouverture arrivee PENDANT la fenetre de chargement differe
+       du chunk (drapeau pose par AppShell) : on ouvre des le montage. */
+    if (typeof window !== 'undefined' && window.__assutempoOpenPending) {
+      delete window.__assutempoOpenPending;
+      onOpenRequest();
+    }
     window.addEventListener('assutempo:open-assistant', onOpenRequest);
     return () => window.removeEventListener('assutempo:open-assistant', onOpenRequest);
   }, []);

@@ -1,17 +1,15 @@
+import { Suspense, useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import HeroScrollytelling from '../components/HeroScrollytelling';
-import VehicleMarquee from '../components/VehicleMarquee';
-import Stats from '../components/Stats';
-import Advantages from '../components/Advantages';
-import Process from '../components/Process';
-import UseCases from '../components/UseCases';
-import Countries from '../components/Countries';
-import Faq from '../components/Faq';
-import FinalCTA from '../components/FinalCTA';
-import Footer from '../components/Footer';
-import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries, CtaInternational } from '../components/CtaBanner';
+import { PagesContext } from '../AppShell';
 
 function Home() {
+  /* Sections sous le pli fournies par le shell : eager cote serveur
+     (prerendu complet), lazy cote client (le hero s'hydrate seul au
+     demarrage). Le Suspense existe dans les DEUX arbres : parite
+     d'hydratation stricte (regle #418 du shell). */
+  const pages = useContext(PagesContext);
+  const Sections = pages.HomeSections;
   return (
     <>
       <Helmet>
@@ -30,19 +28,9 @@ function Home() {
           desactiverait le position: sticky de l'etage du scrollytelling */}
       <main style={{ overflowX: 'clip' }}>
       <HeroScrollytelling />
-      <VehicleMarquee />
-      <CtaAfterVehicles />
-      <Stats />
-      <Advantages />
-      <Process />
-      <CtaAfterProcess />
-      <UseCases />
-      <Countries />
-      <CtaInternational />
-      <CtaAfterCountries />
-      <Faq />
-      <FinalCTA />
-      <Footer />
+      <Suspense fallback={null}>
+        <Sections />
+      </Suspense>
     </main>
     </>
   );

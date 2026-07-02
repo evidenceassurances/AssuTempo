@@ -104,6 +104,73 @@ if (!existsSync(templatePath)) {
 }
 const template = readFileSync(templatePath, 'utf-8');
 
+// ── Modulepreload du chunk de page ───────────────────────────────────────────
+// Le template ne precharge que les chunks partages (runtime, framer,
+// react-vendor, icons) : le chunk de la PAGE arrivait apres l'hydratation et
+// l'ecran passait par le loader. On lit le manifest Vite pour injecter, dans
+// chaque HTML prerendu, le modulepreload de son propre chunk (+ imports).
+const manifestPath = path.join(root, 'dist/.vite/manifest.json');
+const manifest = existsSync(manifestPath)
+  ? JSON.parse(readFileSync(manifestPath, 'utf-8'))
+  : null;
+if (!manifest) console.warn('⚠️  manifest Vite absent : pas de modulepreload de page');
+
+const ROUTE_MODULES = {
+  '/':                        'src/pages/HomeSections.jsx', // Home est dans l'entry ; ses sections lazy, non
+  '/faq':                     'src/pages/Faq.jsx',
+  '/tarification':            'src/pages/Pricing.jsx',
+  '/qui-sommes-nous':         'src/pages/About.jsx',
+  '/articles':                'src/pages/Articles.jsx',
+  '/articles/voiture-immobilisee-defaut-assurance':          'src/pages/articles/VoitureImmobilisee.jsx',
+  '/articles/controle-sans-assurance-risques-amende':        'src/pages/articles/ControleSansAssurance.jsx',
+  '/articles/assurer-vehicule-achete-chez-particulier':      'src/pages/articles/AcheterVehiculeParticulier.jsx',
+  '/articles/combien-de-jours-assurance-sortir-fourriere':   'src/pages/articles/CombienDeJoursAssurance.jsx',
+  '/articles/assurance-temporaire-vehicule-etranger-france': 'src/pages/articles/AssuranceVehiculeEtranger.jsx',
+  '/articles/assurance-temporaire-pret-de-vehicule':         'src/pages/articles/PretVehicule.jsx',
+  '/articles/assurance-temporaire-convoyage-professionnel':  'src/pages/articles/ConvoyageProfessionnel.jsx',
+  '/articles/assurance-temporaire-essai-vehicule-avant-achat': 'src/pages/articles/EssaiVehicule.jsx',
+  '/articles/assurance-temporaire-rouler-en-attendant-carte-grise': 'src/pages/articles/CarteGrise.jsx',
+  '/articles/assurance-temporaire-resilie-par-assureur':     'src/pages/articles/ResilieAssureur.jsx',
+  '/articles/assurance-temporaire-utilitaire-demenagement':  'src/pages/articles/UtilitaireDemenagement.jsx',
+  '/articles/assurance-temporaire-vehicule-proche-decede':   'src/pages/articles/VehiculeProcheDecede.jsx',
+  '/carte':                   'src/pages/Carte.jsx',
+  '/carte-grise':             'src/pages/CarteGrise.jsx',
+  '/cookies':                 'src/pages/Cookies.jsx',
+  '/conditions-generales':    'src/pages/CGV.jsx',
+  '/assurance-internationale': 'src/pages/AssuranceInternationale.jsx',
+};
+
+// fichiers deja charges/precharges par le template : jamais dupliques
+const templateAssets = new Set(
+  [...template.matchAll(/(?:href|src)="(\/assets\/[^"]+)"/g)].map((m) => m[1]),
+);
+
+function preloadLinksFor(route) {
+  if (!manifest) return '';
+  const moduleId = route.startsWith('/carte/')
+    ? 'src/pages/Carte.jsx'
+    : ROUTE_MODULES[route];
+  if (!moduleId) return '';
+  if (!manifest[moduleId]) {
+    console.warn(`⚠️  module absent du manifest pour ${route} : ${moduleId}`);
+    return '';
+  }
+  const seen = new Set();
+  const files = [];
+  (function walk(id) {
+    const entry = manifest[id];
+    if (!entry || seen.has(id)) return;
+    seen.add(id);
+    const file = '/' + entry.file;
+    if (!templateAssets.has(file) && !files.includes(file)) files.push(file);
+    (entry.imports || []).forEach(walk);
+  })(moduleId);
+  return files
+    .map((f) => `    <link rel="modulepreload" crossorigin href="${f}">`)
+    .join('\n');
+}
+
+
 // ── 3. Rendre chaque route ───────────────────────────────────────────────────
 console.log(`\n🖨️  Pré-rendu de ${ROUTES.length} routes…`);
 
@@ -173,6 +240,12 @@ for (const route of ROUTES) {
       /<meta\s+name="description"\s+content="[^"]*"/i,
       `<meta name="description" content="${descMatch[1]}"`,
     );
+  }
+
+  // Injecter les modulepreload du chunk de page avant </head>
+  const preloads = preloadLinksFor(route);
+  if (preloads) {
+    pageHtml = pageHtml.replace('</head>', `${preloads}\n  </head>`);
   }
 
   // Injecter le canonical avant </head>

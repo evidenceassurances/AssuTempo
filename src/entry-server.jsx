@@ -9,6 +9,7 @@ import AppShell from './AppShell';
    serait remplacé par le fallback du Suspense. Le shell reste AppShell,
    strictement identique au client (voir App.jsx). */
 import Home from './pages/Home';
+import HomeSections from './pages/HomeSections';
 import Faq from './pages/Faq';
 import Pricing from './pages/Pricing';
 import About from './pages/About';
@@ -33,6 +34,7 @@ import AssuranceInternationale from './pages/AssuranceInternationale';
 
 const PAGES = {
   Home,
+  HomeSections,
   Faq,
   Pricing,
   About,

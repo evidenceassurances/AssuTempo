@@ -2,7 +2,9 @@ import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import { COUNTRIES } from '../data/countries-content';
+/* Index leger uniquement : le contenu complet des 34 pays (~80 KB source)
+   ne doit JAMAIS entrer dans le bundle critique de la Home */
+import { COUNTRIES_INDEX as COUNTRIES } from '../data/countries-index';
 
 function Countries() {
   const [ref, inView] = useScrollReveal();
