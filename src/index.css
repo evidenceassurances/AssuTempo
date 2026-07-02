@@ -392,6 +392,20 @@ h1, h2 {
   animation: gold-shift 6s ease-in-out infinite;
 }
 
+/* MOBILE : degrade fige (mi-course, meme rendu dore). background-position
+   n'est pas compositable : l'animation repeignait le H1 a CHAQUE frame
+   (424 Paint mesures sur 3,2 s de scroll, 1er coupable du jank telephone),
+   re-rasterisant en DPR3 toute la couche texte pendant sa translation.
+   Meme regle pour le blend du grain : une surface plein ecran en
+   mix-blend-mode se re-melange avec la page a chaque frame de scroll. */
+@media (max-width: 820px), (pointer: coarse) {
+  .gold-text-animated {
+    animation: none;
+    background-position: 50% 50%;
+  }
+  .grain-overlay { mix-blend-mode: normal; }
+}
+
 /* ─── Ping permanent sur la France (carte Europe) ─── */
 @keyframes carte-ping {
   0%   { transform: scale(1);   opacity: 0.5; }

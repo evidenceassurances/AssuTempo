@@ -7,8 +7,10 @@ import './CadranAssutempo.css';
    scopees ici par .atc pour ne pas toucher les autres pages.
    Par-dessus : une couche SVG (arc de remplissage, aiguille-point,
    90 graduations allumables) generee et pilotee apres hydratation.
-   Machine a etats de rotation : idle > interacting > resuming > idle,
-   servie par un seul requestAnimationFrame. */
+   Machine a etats de rotation : idle > interacting > resuming > idle.
+   Le cadran ne possede PAS sa propre boucle rAF : il expose frame(ts),
+   appele par la boucle unique de HeroScrollytelling (fusion scroll +
+   rotation = un seul callback par frame). */
 
 const R = 34.6;                      /* rayon de l'orbite, en unites viewBox (100) */
 const CIRC = +(2 * Math.PI * R).toFixed(3);
@@ -33,7 +35,6 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     dashAngle: 0,
     speed: IDLE_SPEED,
     mode: 'idle',
-    raf: 0,
     last: 0,
     active: true,
     started: false,
@@ -44,6 +45,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     zeroed: true,     /* cadran "pur" (retour en haut) */
     lastP2: -1,
     grads: [],
+    nums: [],         /* chiffres reperes {el, angle} pour le fondu de proximite */
     geom: null,       /* geometrie mobile (invalidee au resize) */
   }).current;
 
@@ -76,6 +78,18 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     return { mobile: true, baseD, baseCY, targetD, targetCY };
   };
 
+  /* Fondu de proximite (detail horloger) : tout repere chiffre a moins de
+     14 degres de l'aiguille (= tete de l'arc) s'estompe a 0 en 200 ms et
+     revient quand elle s'eloigne. days=0 (cadran pur, acte 1) : tout revient,
+     l'aiguille masquee ne doit jamais eteindre le 90 du haut. */
+  const fadeNearNumerals = (days) => {
+    const needle = (days * 4) % 360;
+    for (const n of st.nums) {
+      const d = Math.abs(((needle - n.angle + 540) % 360) - 180);
+      n.el.classList.toggle('atc-num-off', days > 0 && d < 14);
+    }
+  };
+
   /* Applique une valeur de jours a l'arc, l'aiguille et aux graduations */
   const applyVisual = (days, animate) => {
     const fill = fillRef.current;
@@ -86,6 +100,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     arcRef.current.style.strokeDashoffset = offset;
     arcGlowRef.current.style.strokeDashoffset = offset;
     needleRef.current.style.transform = `rotate(${days * 4}deg)`;
+    fadeNearNumerals(days);
 
     const grads = st.grads;
     if (grads.length) {
@@ -103,12 +118,13 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     }
   };
 
-  /* Boucle unique du cadran : rotation de la comete (lissage exponentiel).
+  /* Pas de rotation, appele chaque frame par la boucle UNIQUE du hero.
      Garde sur la ref : entre le detachement du DOM (navigation) et le
-     cleanup de l'effet, un frame en attente peut encore se presenter. */
-  const loop = (ts) => {
-    if (!st.active || !cometRef.current) { st.raf = 0; return; }
-    if (!st.last) st.last = ts;
+     cleanup de l'effet, un frame en attente peut encore se presenter.
+     st.last remis a zero apres une pause (>0,5 s) : pas de saut d'angle. */
+  const frame = (ts) => {
+    if (!st.active || !st.started || !cometRef.current) return;
+    if (!st.last || ts - st.last > 500) st.last = ts;
     const dt = Math.min((ts - st.last) / 1000, 0.05);
     st.last = ts;
 
@@ -131,14 +147,6 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     const kIdle = Math.max(0, Math.min(1, st.speed / IDLE_SPEED));
     const breathe = 0.86 + 0.14 * Math.sin(ts / 636.6);
     trailRef.current.style.opacity = (1 - kIdle + breathe * kIdle).toFixed(3);
-
-    st.raf = requestAnimationFrame(loop);
-  };
-
-  const startLoop = () => {
-    if (!st.started || st.raf || !st.active || st.reduced) return;
-    st.last = 0;
-    st.raf = requestAnimationFrame(loop);
   };
 
   useEffect(() => {
@@ -172,22 +180,28 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     /* Finition 2 : chiffres reperes graves aux graduations majeures.
        Toujours droits (jamais tournes vers le centre : un chiffre a
        l'envers en bas de cadran est illisible), poses sur un cercle
-       interieur, centres optiquement via dy. Le 90 se lit a midi. */
+       interieur, centres optiquement via dy. Le 90 se lit a midi.
+       Classe par valeur (atc-num-v30...) : le CSS mobile retire 30 et 60,
+       qui traversaient la ligne "JOURS DE COUVERTURE" de la face. */
     const R_NUM = 29.2;
     const nums = numsRef.current;
     nums.textContent = '';
+    st.nums = [];
     for (let v = 15; v <= 90; v += 15) {
       const na = (v * 4 * Math.PI) / 180;
       const t = document.createElementNS(NS, 'text');
       t.setAttribute('x', (50 + R_NUM * Math.sin(na)).toFixed(2));
       t.setAttribute('y', (50 - R_NUM * Math.cos(na)).toFixed(2));
       t.setAttribute('dy', '1.1');
-      t.setAttribute('class', 'atc-num');
+      t.setAttribute('class', `atc-num atc-num-v${v}`);
       t.textContent = String(v);
       nums.appendChild(t);
+      st.nums.push({ el: t, angle: (v * 4) % 360 });
     }
+    if (!st.zeroed) fadeNearNumerals(st.days);
 
-    /* Prise de controle des rotations CSS sans saut : on lit l'angle courant */
+    /* Prise de controle des rotations CSS sans saut : on lit l'angle courant.
+       La rotation est ensuite servie par frame(ts), appele par le hero. */
     if (!st.reduced) {
       const readAngle = (el) => {
         const mtx = getComputedStyle(el).transform;
@@ -200,7 +214,6 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       cometRef.current.style.animation = 'none';
       dashRef.current.style.animation = 'none';
       st.started = true;
-      startLoop();
     }
 
     /* Geometrie instrument recalculee au prochain setPresence apres resize */
@@ -213,8 +226,6 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
 
     return () => {
       st.active = false;
-      if (st.raf) cancelAnimationFrame(st.raf);
-      st.raf = 0;
       clearTimeout(st.timer);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('orientationchange', onResize);
@@ -270,11 +281,14 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       }
     },
 
-    /* Pause hors viewport / onglet cache */
+    /* Un pas d'animation (rotation + respiration), pilote par la boucle
+       unique du hero. No-op si inactif, reduced-motion ou non demarre. */
+    frame,
+
+    /* Pause hors viewport / onglet cache (le hero cesse aussi d'appeler frame) */
     setActive(on) {
       st.active = on;
-      if (on) startLoop();
-      else if (st.raf) { cancelAnimationFrame(st.raf); st.raf = 0; }
+      if (on) st.last = 0; /* reprise sans saut d'angle apres la pause */
     },
   }));
 

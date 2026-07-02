@@ -90,7 +90,14 @@ function HeroScrollytelling() {
     navigate(`/tarification?duree=${days}`);
   };
 
-  /* Orchestration : un seul listener scroll (passive) throttle par rAF */
+  /* Orchestration : UNE seule boucle rAF pour toute la zone. Elle applique la
+     progression p seulement quand scrollY a change (geometrie de zone mise en
+     cache, aucune lecture de layout par frame) puis sert la rotation du cadran
+     (cadran.frame). Active uniquement zone visible + onglet au premier plan.
+     Partition resserree (zone 210vh) : sortie du texte sur p 0 -> 0.30
+     (mouvement ease-out, fondu LINEAIRE pour un vrai tuilage), entree du
+     module sur p 0.26 -> 0.52 (fondu croise, jamais de cadran seul a l'ecran),
+     puis courte respiration avant la section suivante. */
   useEffect(() => {
     const zone = zoneRef.current;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -98,30 +105,39 @@ function HeroScrollytelling() {
     let inView = true;
     let pageHidden = document.hidden;
     let revealSent = false;
+    let zoneTop = 0;
+    let span = 1;
+    let lastY = -1;
+    let forced = true; /* premiere application et re-application apres resize */
 
-    const apply = () => {
-      raf = 0;
+    const measure = () => {
+      zoneTop = zone.getBoundingClientRect().top + window.scrollY;
+      span = zone.offsetHeight - window.innerHeight;
+      forced = true;
+    };
+
+    const apply = (p) => {
       /* Garde : un frame en attente peut arriver apres le detachement du
          DOM (navigation), quand les refs sont deja nulles */
       const copy = copyRef.current;
       if (!copy || !modRef.current || !hintRef.current) return;
-      const rect = zone.getBoundingClientRect();
-      const span = zone.offsetHeight - window.innerHeight;
-      const p = clamp01(span > 0 ? -rect.top / span : 0);
       const rm = reduce.matches;
 
-      /* Acte 1 : seul le bloc texte s'eleve et s'estompe */
-      const e1 = easeOutCubic(clamp01(p / 0.38));
+      /* Acte 1 : le bloc texte s'eleve (ease-out) et s'estompe (lineaire :
+         l'ease-out sur l'opacite le faisait disparaitre des p~0.15, ouvrant
+         un temps mort ou l'ecran ne montrait que le cercle vide) */
+      const tRaw = clamp01(p / 0.30);
+      const e1 = easeOutCubic(tRaw);
       copy.style.transform = rm ? '' : `translate3d(0, ${(-140 * e1).toFixed(1)}px, 0)`;
-      copy.style.opacity = (1 - e1).toFixed(3);
-      copy.style.visibility = e1 >= 0.985 ? 'hidden' : '';
-      copy.style.pointerEvents = e1 > 0.5 ? 'none' : '';
+      copy.style.opacity = (1 - tRaw).toFixed(3);
+      copy.style.visibility = tRaw >= 0.995 ? 'hidden' : '';
+      copy.style.pointerEvents = tRaw > 0.5 ? 'none' : '';
 
       /* Indice de scroll : disparait dans les premiers 12 % */
       hintRef.current.style.opacity = (1 - clamp01(p / 0.12)).toFixed(3);
 
-      /* Acte 2 : le module Devis express entre par le bas */
-      const p2 = easeOutCubic(clamp01((p - 0.42) / 0.33));
+      /* Acte 2 : le module entre pendant que le texte finit de sortir */
+      const p2 = easeOutCubic(clamp01((p - 0.26) / 0.26));
       const mod = modRef.current;
       mod.style.transform = rm
         ? ''
@@ -138,43 +154,62 @@ function HeroScrollytelling() {
       }
     };
 
-    const schedule = () => {
-      if (!raf && inView && !pageHidden) raf = requestAnimationFrame(apply);
+    const tick = (ts) => {
+      raf = 0;
+      if (!inView || pageHidden) return;
+      const y = window.scrollY;
+      if (forced || y !== lastY) {
+        lastY = y;
+        forced = false;
+        apply(clamp01(span > 0 ? (y - zoneTop) / span : 0));
+      }
+      cadranRef.current?.frame(ts);
+      /* reduced-motion : rien ne tourne, on ne boucle pas a vide ; les
+         evenements scroll/resize relancent un tick a la demande */
+      if (!reduce.matches) raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (!raf && inView && !pageHidden) raf = requestAnimationFrame(tick);
     };
 
     const onVisibility = () => {
       pageHidden = document.hidden;
       cadranRef.current?.setActive(inView && !pageHidden);
-      if (!pageHidden) schedule();
+      if (!pageHidden) start();
     };
 
     /* Tout s'arrete hors ecran et onglet cache */
     const io = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       cadranRef.current?.setActive(inView && !pageHidden);
-      if (inView) schedule();
+      if (inView) start();
     }, { threshold: 0 });
     io.observe(zone);
 
-    const onResize = () => { roundNumFont(); schedule(); };
-    window.addEventListener('scroll', schedule, { passive: true });
+    const onResize = () => { roundNumFont(); measure(); start(); };
+    const onPageShow = () => { measure(); start(); };
+    window.addEventListener('scroll', start, { passive: true });
     window.addEventListener('resize', onResize);
-    window.addEventListener('orientationchange', schedule);
-    window.addEventListener('pageshow', schedule);
-    reduce.addEventListener?.('change', schedule);
+    window.addEventListener('orientationchange', onResize);
+    window.addEventListener('pageshow', onPageShow);
+    document.addEventListener('visibilitychange', onVisibility);
+    reduce.addEventListener?.('change', start);
 
     roundNumFont();
     renderDays(daysRef.current);
-    apply(); /* etat correct des le montage (rechargement a mi-page, bfcache) */
+    measure();
+    tick(performance.now()); /* etat correct des le montage (rechargement a mi-page, bfcache) */
 
     return () => {
       if (raf) cancelAnimationFrame(raf);
       io.disconnect();
-      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('scroll', start);
       window.removeEventListener('resize', onResize);
-      window.removeEventListener('orientationchange', schedule);
-      window.removeEventListener('pageshow', schedule);
-      reduce.removeEventListener?.('change', schedule);
+      window.removeEventListener('orientationchange', onResize);
+      window.removeEventListener('pageshow', onPageShow);
+      document.removeEventListener('visibilitychange', onVisibility);
+      reduce.removeEventListener?.('change', start);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

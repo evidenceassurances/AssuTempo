@@ -3,9 +3,11 @@
    (dimensions reservees des le CSS initial). */
 
 /* ── Zone et etage ─────────────────────────────────────────────────────── */
+/* 210vh (contre 280) : transition resserree, fondu croise texte/module,
+   plus de plage de scroll ou l'ecran ne montre que le cercle vide */
 .scy-zone{
   position: relative;
-  height: 280vh;
+  height: 210vh;
 }
 .scy-stage{
   position: sticky;
@@ -135,10 +137,12 @@
   line-height: 1;
 }
 
+/* letter-spacing contenu (.14em au lieu de .24) : la ligne tient largement
+   dans le cercle interieur du cadran mobile, air >= 12% du diametre par cote */
 .dx-label{
   margin: -4px 0 0;
   font-size: 12px;
-  letter-spacing: .24em;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--text-muted);
 }

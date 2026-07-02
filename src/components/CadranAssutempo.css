@@ -82,6 +82,16 @@
   }
   .atc-needle-line{ stroke-width: .45; }
 
+  /* Cadran epure : 30 et 60 (diagonales basses) traversaient la ligne
+     "JOURS DE COUVERTURE" de la face. On garde 15 - 45 - 75 - 90. */
+  .atc-num-v30,
+  .atc-num-v60{ display: none; }
+
+  /* Le micro-blur de la trainee (TempoDial) coute une passe de filtre GPU
+     par frame de rotation : retire sur mobile, le degrade conique suffit.
+     Scope .atc : le TempoDial d'AssuranceInternationale reste intact. */
+  .atc .atd-trail{ filter: none; }
+
   /* Mode instrument (acte 2 mobile) : cercle entier, sans le fondu de
      masque vertical du hero : aucun arc coupe, aucune lueur tronquee */
   .atc.atc-instr{
@@ -101,7 +111,11 @@
   text-anchor: middle;
   fill: #C9A84C;
   opacity: .25;
+  transition: opacity .2s ease;
 }
+/* Fondu de proximite : repere a moins de 14 degres de l'aiguille (= tete de
+   l'arc), pose par JS. Le chiffre s'efface plutot que d'etre traverse. */
+.atc-num-off{ opacity: 0; }
 
 /* Graduations allumables (SVG, par-dessus les ticks de base) */
 .atc-grad{
@@ -137,6 +151,7 @@
   .atc-arc,
   .atc-arc-glow,
   .atc-needle,
+  .atc-num,
   .atc-grad{ transition: none !important; }
   .atc-grad.on{ animation: none !important; }
 }

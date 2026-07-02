@@ -69,3 +69,51 @@ Branche fix/chat-launcher-mobile. QA Playwright dediee **51/51 PASS** (chromium,
 - **Header opaque au scroll (mobile)** : sur la section vehicules, background calcule rgb(10, 10, 10) plein ; avant, rgba(10,10,10,.94) laissait transparaitre les vignettes AUTOCAR/PICK-UP derriere le logo. Hauteur inchangee (68 px), desktop conserve translucide + blur 12 (vrai masquage), capture de controle : les vignettes se coupent nettement au bord du header.
 - **Reduced-motion** : pulsation coupee (animation none, lisere statique invisible), etiquette affichee et masquee sans animation (bascule 0,01 ms via la regle globale du site), meme calendrier, verifie par styles calcules.
 - Lint : 0 erreur ; 2 warnings nouveaux react-hooks/set-state-in-effect, du meme type que les 3 preexistants sur main (pattern etabli du fichier assistant).
+
+## Affinage du 3 juillet (fluidite, collisions, rythme) : profil avant/apres et verification
+Branche polish/hero-fluidite. QA dediee **40/40 PASS** + re-profil complet. Budget : **+274 B gzip**. Console 0 erreur sur tous les contextes.
+
+### Chasse au jank : profil AVANT (390x844 DPR3, CPU 4x, scroll de transition 3,2 s, trace CDP)
+Constat prealable : le banc Mac ne sature pas (60,3 fps au 4x et encore 59,7 au 14x), la saccade iPhone ne s'y reproduit donc pas en fps. Les coupables ont ete identifies par les compteurs de travail par frame (ce qui sature un GPU/CPU de telephone) puis confirmes par neutralisation A/B une cause a la fois.
+
+Les 3 coupables mesures :
+1. **gold-shift, l'animation du degrade de "tout." dans le H1** (background-position, propriete NON compositable) : **424 evenements Paint / 127 ms** sur 3,2 s de scroll, soit 2 repaints par frame, qui invalidaient et re-rasterisaient en DPR3 toute la couche du bloc texte pendant sa translation. Preuve causale : gold-shift coupe seul, Paint tombe a 1. L'animation tournait aussi au repos (boucle infinie 6 s) : memes repaints par frame a l'arret, hero a l'ecran.
+2. **Trois callbacks rAF par frame** : boucle scroll du hero + boucle de rotation du cadran + sonde CTA du lanceur (5 elementsFromPoint par frame). FunctionCall 541x/80 ms sur la fenetre, 2,5 appels JS par frame.
+3. **Surfaces compositeur sur mobile** : grain-overlay plein viewport en mix-blend-mode overlay (re-melange avec toute la page a chaque frame de scroll) + filter blur(.5px) sur la trainee en rotation continue + double masque radial. Cout invisible sur le GPU d'un Mac, reel sur un GPU de telephone (retires sur mobile par principe, cf. spec).
+
+Verifies au passage : **aucun feGaussianBlur** dans le SVG du cadran (lueurs = degrades radiaux pre-composes, conforme) ; **aucun layout force** pendant le scroll (Layout = 0 dans toutes les traces) ; aucun backdrop-filter dans l'etage sticky.
+
+### Corrections et profil APRES (meme protocole)
+- gold-shift **fige sur mobile** (degrade statique a mi-course, rendu dore identique) via media query pointer coarse / <=820px ; **conserve sur desktop** (61 fps prouves de longue date).
+- **Fusion des boucles** : le cadran n'a plus de rAF propre, il expose frame(ts) appele par la boucle unique du hero ; la progression n'est appliquee que si scrollY a change, avec geometrie de zone en cache (zero getBoundingClientRect par frame) ; reprise sans saut apres pause (>0,5 s) ; reduced-motion : la boucle ne tourne pas a vide, re-armee par les evenements.
+- **Sonde CTA du lanceur throttlee a 200 ms** avec rattrapage trainant en fin de geste (~5 sondes/s au lieu de 60 pendant un scroll).
+- Mobile : **grain en blend normal** (texture conservee, surface de blend supprimee) et **trainee sans blur** (scope .atc : le TempoDial d'AssuranceInternationale garde son blur et sa rotation CSS 17 s, verifie).
+
+| Metrique (scroll transition 3,2 s, CPU 4x) | Avant | Apres |
+|---|---|---|
+| Paint (main thread) | 424x / 127 ms | **1x / 1 ms** |
+| Recalculs de style | 66-85 ms | 56 ms |
+| JS (FunctionCall) | 541x / 80 ms | 522x / 72 ms |
+| Layout force | 0 | 0 |
+| FPS banc Mac 4x | 60,3 | 60,3 (>=55 : valide) |
+| Repaints au repos (hero a l'ecran, 2,5 s) | ~2/frame (gold-shift en boucle) | **1 au total** |
+
+Ecart assume (point 4 de la spec) : 6 couches promues statiquement (cadran, comete, anneau dashe, trainee, bloc texte, module) au lieu de 3-4 posees/retirees dynamiquement. Chacune est ecrite chaque frame (rotation continue) ou chaque frame de scroll ; un will-change togglable declencherait une re-rasterisation exactement au demarrage du geste, le pire moment. Census documente, aucune couche inutile.
+
+### Collisions typographiques (375x812 et 390x844)
+- **30 et 60 retires sur mobile** (classes atc-num-v30/v60, display none sous 768px) : plus rien ne traverse "JOURS DE COUVERTURE". Restent 15 - 45 - 75 - 90 sur les diagonales et l'axe vertical (verifie : caches=[30,60], visibles=[15,45,75,90]).
+- **Letter-spacing du label reduit** (.24em -> .14em) : "JOURS DE COUVERTURE" mesure 177 px pour un plafond a 76 % du diametre de 257 px (375) / 267 px (390), soit un air > 12 % du diametre de chaque cote.
+- **Fondu de proximite** (detail horloger) : tout repere a moins de 14 degres de l'aiguille (= tete de l'arc) s'estompe a opacite 0 en 200 ms et revient quand elle s'eloigne. Verifie aux 5 valeurs imposees : 1 j -> 90 estompe (aiguille a 4 deg de midi), 15 j -> 15, 45 j -> 45, 60 j -> rien a proximite (60 n'existe plus sur mobile, voisins a 60 deg), 90 j -> 90 estompe sous l'aiguille. Retour acte 1 (cadran pur) : aiguille masquee, tous les reperes reviennent.
+- **Zero chevauchement** aux 5 valeurs : boites englobantes des reperes visibles et du point d'aiguille testees contre eyebrow, odometre, label et date : aucune intersection.
+
+### Rythme (zone 210vh, fondu croise)
+- Zone de scroll **280vh -> 210vh**. Nouvelle partition : sortie du texte sur p 0 -> 0,30 (mouvement ease-out conserve, **fondu lineaire** : l'ease-out sur l'opacite faisait disparaitre le texte des p~0,15 et ouvrait le temps mort constate) ; entree du module sur p 0,26 -> 0,52 (tuilage) ; module entierement en place mesure a **p = 0,50** ; le reste de la zone est une respiration courte.
+- **Balayage par pas de 5 %** (21 pas, 0 -> 1) : a chaque pas, max(opacite texte, opacite module) >= 0,1 : l'ecran ne montre JAMAIS le cadran seul (releve complet conserve, fondu croise capture a p = 0,28).
+- Seuils deriere p2 (pointer-events a 0,6, evenement GA devis_express_view) inchanges en semantique.
+
+### Non-regressions
+- Lanceur : 56 px bas-droite (16/16), dock efface pendant le drag du slider et de retour a l'arret, valeur slider + CTA intacts apres drag.
+- TempoDial /assurance-internationale : blur(.5px) et rotation CSS 17 s intacts (surcharges scopees .atc uniquement).
+- Desktop : gold-shift anime conserve, grain overlay conserve, partition de scroll identique a mobile (210vh).
+- reduced-motion : module pilote a l'opacite seule, texte sorti, 0 erreur ; la boucle unique ne s'auto-planifie pas (re-armement par evenements).
+- Bonus batterie : plus aucun repaint au repos sur le hero mobile (1 Paint en 2,5 s contre ~2/frame avant).

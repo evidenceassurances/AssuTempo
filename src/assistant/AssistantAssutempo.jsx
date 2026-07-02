@@ -529,7 +529,6 @@ export default function AssistantAssutempo() {
       );
     };
     const check = () => {
-      raf = 0;
       const b = launcherRef.current;
       if (!b) return;
       const r = b.getBoundingClientRect();
@@ -550,14 +549,35 @@ export default function AssistantAssutempo() {
       }
       setCtaOverlap(pts.some(([x, y]) => hitsCta(x, y)));
     };
+    /* Cadence 200 ms maxi (le dim a 40 % n'a pas besoin de la precision
+       frame) : pendant un scroll continu, ~5 sondes/s au lieu de 60, et un
+       rattrapage en fin de geste via le timeout trainant. Une sonde par
+       frame pesait sur le budget JS du scroll mobile (5 elementsFromPoint
+       par frame, profil du 3 juillet). */
+    let last = 0;
+    let trailing = 0;
+    const run = () => {
+      raf = 0;
+      last = performance.now();
+      check();
+    };
     const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(check);
+      const wait = 200 - (performance.now() - last);
+      if (wait <= 0) {
+        if (!raf) raf = requestAnimationFrame(run);
+      } else if (!trailing) {
+        trailing = setTimeout(() => {
+          trailing = 0;
+          schedule();
+        }, wait);
+      }
     };
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     schedule();
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      clearTimeout(trailing);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
     };
