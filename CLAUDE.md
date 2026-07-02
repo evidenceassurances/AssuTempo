@@ -108,6 +108,15 @@ Travail livré et poussé sur `main` (Vercel redéployé). À reprendre demain �
 
 > Workflow validé le 18 juin 2026 : commit + push automatiques après CHAQUE modification, sans demander.
 
+### Session du 2 juillet 2026 (hero scrollytelling "Cadran Assutempo") : mergée en prod
+Le hero de la Home est devenu un scrollytelling en deux actes, validé par Ayoub puis mergé sur `main` (fast-forward, 13 commits).
+
+- **Architecture** : zone 280vh + étage sticky 100svh. `src/components/HeroScrollytelling.jsx` (orchestration : une seule progression p, un listener scroll passif + rAF, tout dérive de p) et `CadranAssutempo.jsx` (couche SVG post-hydratation sur l'esthétique atd existante : arc de remplissage, aiguille-point, 90 graduations allumables, chiffres gravés 15..90 ; machine à états idle > interacting > resuming dans un seul rAF). `Hero.jsx` supprimé (JSX porté dans HeroScrollytelling). `main` de Home en `overflow-x: clip` (un overflow hidden ancêtre casse position: sticky).
+- **Acte 2 "Devis express"** : curseur 1..90 (défaut 7), odomètre, date de fin incluse (J + N-1), CTA vers `/tarification?duree=N` ; l'iframe JL Assure se pré-remplit nativement via le paramètre GET `duree` (input caché `pref_duree` rendu côté serveur, vérifié). Aucun prix affiché. Événements GA4 : `devis_express_view`, `cta_devis_click` avec `duree_jours`.
+- **Finitions** : contre-rotation 180s, chiffres repères, éclat d'allumage, respiration idle, odomètre, micro-zoom scroll, vibration Android aux dizaines. Règle de Chanel appliquée : sillage d'aiguille retiré (doublait la tête de l'arc).
+- **QA prouvée** (`SCROLLY-PLAN.md` + `SCROLLY-QA.md` à la racine) : +4,17 KB gzip / budget 9 KB, LCP stable, CLS 0, 61 fps y compris CPU x4, 40/40 Playwright, reduced-motion complet, TempoDial d'AssuranceInternationale intact (surcharges scopées `.atc`).
+- **Pièges repo notés** : `dist/` est commité (un build non commité bloque `git checkout` ; assets orphelins untracked à nettoyer) ; `html { scroll-behavior: smooth }` impose `behavior: 'instant'` aux scrollTo programmatiques (tests) ; gardes de refs obligatoires dans rAF/timers (fenêtre détachement DOM / cleanup React).
+
 ---
 
 ## 6. Plan SEO / backlinks
