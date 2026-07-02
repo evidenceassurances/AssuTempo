@@ -20,6 +20,48 @@
   overflow: clip;
 }
 
+/* ── Choregraphie d'entree 100% CSS ────────────────────────────────────────
+   Joue des le premier paint (le HTML est prerendu) : le H1 et le reste du
+   hero n'attendent plus le telechargement du JS sur mobile. Timings et
+   courbe identiques a l'ancienne version framer (EASE_PREMIUM). */
+@keyframes scy-rise{
+  from{ transform: translateY(110%); }
+  to{ transform: translateY(0); }
+}
+@keyframes scy-up{
+  from{ opacity: 0; transform: translateY(24px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+@keyframes scy-down{
+  from{ opacity: 0; transform: translateY(-12px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+@keyframes scy-pop{
+  from{ opacity: 0; transform: scale(.96); }
+  to{ opacity: 1; transform: scale(1); }
+}
+@keyframes scy-show{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+.scy-in-line{
+  display: block;
+  animation: scy-rise .8s cubic-bezier(.22,1,.36,1) .15s both;
+}
+.scy-in-line2{ animation-delay: .27s; }
+.scy-in-badge{ animation: scy-down .6s cubic-bezier(.22,1,.36,1) both; }
+.scy-in-sub{ animation: scy-up .6s cubic-bezier(.22,1,.36,1) .55s both; }
+.scy-in-ctas{ animation: scy-pop .6s cubic-bezier(.22,1,.36,1) .7s both; }
+.scy-in-trust{ animation: scy-show .6s ease .85s both; }
+
+@media (prefers-reduced-motion: reduce){
+  .scy-in-line,
+  .scy-in-badge,
+  .scy-in-sub,
+  .scy-in-ctas,
+  .scy-in-trust{ animation: none; }
+}
+
 /* ── Acte 1 : bloc hero (anime en transform/opacity, jamais demonte) ───── */
 .scy-copy{
   position: relative;

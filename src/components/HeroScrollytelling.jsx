@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { m, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Zap, Globe, Check } from 'lucide-react';
 import CadranAssutempo from './CadranAssutempo';
-import { EASE_PREMIUM } from '../lib/motion';
 import { trackEvent } from '../lib/analytics';
 import './HeroScrollytelling.css';
 
@@ -12,7 +10,12 @@ import './HeroScrollytelling.css';
    le bloc hero s'eleve et s'estompe (acte 1), le module Devis express
    entre par le bas (acte 2). Tout derive d'une seule progression p,
    recalculee a chaque frame : systeme idempotent (scroll rapide,
-   rechargement a mi-page, retour navigateur, rotation d'ecran). */
+   rechargement a mi-page, retour navigateur, rotation d'ecran).
+
+   La choregraphie d'entree (badge, H1, sous-titre, CTAs, confiance) est
+   en CSS pur (classes scy-in-*) : elle joue des le premier paint, sans
+   attendre l'hydratation JS. Le LCP (ligne du H1) ne depend plus du
+   telechargement du bundle sur mobile. */
 
 const INITIAL_DAYS = 7;
 const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -23,20 +26,8 @@ const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const fmtDateFin = (days) =>
   new Date(Date.now() + (days - 1) * 864e5).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
 
-const lineContainerVar = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
-};
-
-const lineVar = {
-  hidden: { y: '110%' },
-  show: { y: 0, transition: { duration: 0.8, ease: EASE_PREMIUM } },
-};
-
 function HeroScrollytelling() {
   const navigate = useNavigate();
-  const prefersReducedMotion = useReducedMotion();
-  const skip = prefersReducedMotion;
 
   const zoneRef = useRef(null);
   const copyRef = useRef(null);
@@ -192,10 +183,8 @@ function HeroScrollytelling() {
               flexShrink: 0,
             }}
           >
-            <m.div
-              initial={skip ? false : { opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={skip ? { duration: 0 } : { duration: 0.6, ease: EASE_PREMIUM }}
+            <div
+              className="scy-in-badge"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -222,7 +211,7 @@ function HeroScrollytelling() {
                 }}
               />
               Couverture immédiate &middot; 34 pays européens
-            </m.div>
+            </div>
           </div>
 
           {/* Titre + sous-titre + CTAs */}
@@ -251,33 +240,26 @@ function HeroScrollytelling() {
                   color: 'var(--text)',
                 }}
               >
-                <m.span
-                  variants={lineContainerVar}
-                  initial={skip ? false : 'hidden'}
-                  animate="show"
-                  style={{ display: 'block' }}
-                >
+                <span style={{ display: 'block' }}>
                   {/* Ligne 1 */}
                   <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
-                    <m.span variants={lineVar} style={{ display: 'block' }}>
+                    <span className="scy-in-line">
                       L&apos;assurance temporaire
-                    </m.span>
+                    </span>
                   </span>
                   {/* Ligne 2 */}
                   <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
-                    <m.span variants={lineVar} style={{ display: 'block' }}>
+                    <span className="scy-in-line scy-in-line2">
                       qui change{' '}
                       <span className="gold-text-animated">tout.</span>
-                    </m.span>
+                    </span>
                   </span>
-                </m.span>
+                </span>
               </h1>
 
               {/* Sous-titre */}
-              <m.p
-                initial={skip ? false : { opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.55, ease: EASE_PREMIUM }}
+              <p
+                className="scy-in-sub"
                 style={{
                   color: 'var(--text-muted)',
                   fontSize: 'clamp(1rem, 2vw, 1.15rem)',
@@ -289,13 +271,11 @@ function HeroScrollytelling() {
                 De 1 à 90 jours. Attestation en 5 minutes.
                 <br />
                 Sans engagement, sans mauvaise surprise.
-              </m.p>
+              </p>
 
               {/* CTAs */}
-              <m.div
-                initial={skip ? false : { opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.7, ease: EASE_PREMIUM }}
+              <div
+                className="scy-in-ctas"
                 style={{
                   display: 'flex',
                   gap: 16,
@@ -324,13 +304,11 @@ function HeroScrollytelling() {
                 >
                   Voir les tarifs
                 </button>
-              </m.div>
+              </div>
 
               {/* Ligne de confiance */}
-              <m.p
-                initial={skip ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={skip ? { duration: 0 } : { duration: 0.6, delay: 0.85, ease: EASE_PREMIUM }}
+              <p
+                className="scy-in-trust"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -351,7 +329,7 @@ function HeroScrollytelling() {
                 <span style={{ color: 'var(--text-subtle)', margin: '0 5px' }}>·</span>
                 <Check size={16} strokeWidth={2} style={{ color: '#C9A84C', flexShrink: 0, marginRight: 4 }} aria-hidden />
                 <span>Prix fixe, zéro surprise</span>
-              </m.p>
+              </p>
 
             </div>
           </div>
