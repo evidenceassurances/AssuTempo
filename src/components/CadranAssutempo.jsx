@@ -18,6 +18,7 @@ const DASH_SPEED = 360 / 180;        /* contre-rotation : 1 tour en 3 min, sens 
 const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   const rootRef = useRef(null);
   const cometRef = useRef(null);
+  const trailRef = useRef(null);
   const dashRef = useRef(null);
   const gradsRef = useRef(null);
   const numsRef = useRef(null);
@@ -97,6 +98,12 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     /* Finition 1 : contre-rotation lente et constante, deux vitesses opposees */
     st.dashAngle = (st.dashAngle - DASH_SPEED * dt) % 360;
     dashRef.current.style.transform = `rotate(${st.dashAngle.toFixed(3)}deg)`;
+
+    /* Finition 5 : respiration de la lueur au repos (cycle ~4 s, faible
+       amplitude), amortie proportionnellement quand la rotation s'arrete */
+    const kIdle = Math.max(0, Math.min(1, st.speed / IDLE_SPEED));
+    const breathe = 0.86 + 0.14 * Math.sin(ts / 636.6);
+    trailRef.current.style.opacity = (1 - kIdle + breathe * kIdle).toFixed(3);
 
     st.raf = requestAnimationFrame(loop);
   };
@@ -269,7 +276,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       </svg>
 
       <div className="atd-comet" ref={cometRef}>
-        <span className="atd-trail" />
+        <span className="atd-trail" ref={trailRef} />
         <span className="atd-dot" />
       </div>
     </div>

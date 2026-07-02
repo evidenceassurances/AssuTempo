@@ -20,6 +20,9 @@
   will-change: transform;
 }
 
+/* Respiration de la lueur au repos (finition 5), pilotee par le meme rAF */
+.atc .atd-trail{ will-change: opacity; }
+
 /* Graduations de base re-calees sur 90 jours : 1 tick tous les 4 degres,
    majeures toutes les 10 (40 degres). Le from negatif centre chaque tick
    sur son angle exact pour un alignement pixel avec la couche SVG. */
