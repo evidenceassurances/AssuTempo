@@ -94,6 +94,10 @@
   max-width: 620px;
   text-align: center;
 }
+/* Desktop : les deux groupes se fondent dans la colonne (rendu identique
+   a la version une seule colonne). Le mobile les redefinit plus bas. */
+.dx-face,
+.dx-controls{ display: contents; }
 .dx-eyebrow{
   margin: 0;
   font-size: 11px;
@@ -259,13 +263,41 @@
   z-index: 1;
 }
 
-/* ── Mobile ────────────────────────────────────────────────────────────── */
+/* ── Mobile : l'acte 2 devient un instrument ───────────────────────────────
+   Le cadran n'est plus un fond debordant : cercle entier ~90vw (max 420px)
+   avec la face (eyebrow + nombre + label) centree DANS le cercle et les
+   controles en dessous. La geometrie (--scy-dial-d) est posee par le
+   cadran lui-meme, qui vient se caler sur la boite .dx-face. */
 @media (max-width: 767px){
   .scy-stage{
     padding-top: 72px;
     padding-bottom: 40px;
   }
-  .scy-module{ padding: 76px 20px 48px; }
+  .scy-module{ padding: 76px 20px 36px; }
+  .dx{
+    height: 100%;
+    justify-content: center;
+    gap: 0;
+  }
+  .dx-face{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    width: 100%;
+    height: var(--scy-dial-d, 340px);
+  }
+  .dx-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+    margin-top: 16px;
+    width: 100%;
+  }
+  .dx-num{ font-size: clamp(58px, 19vw, 84px); }
   .scy-hint{ bottom: 16px; }
 }
 

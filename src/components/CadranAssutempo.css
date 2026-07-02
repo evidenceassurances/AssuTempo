@@ -81,6 +81,14 @@
     transform-origin: center;
   }
   .atc-needle-line{ stroke-width: .45; }
+
+  /* Mode instrument (acte 2 mobile) : cercle entier, sans le fondu de
+     masque vertical du hero : aucun arc coupe, aucune lueur tronquee */
+  .atc.atc-instr{
+    -webkit-mask: none;
+            mask: none;
+    opacity: 1;
+  }
 }
 
 /* Chiffres reperes graves (finition 2) : police systeme du site,

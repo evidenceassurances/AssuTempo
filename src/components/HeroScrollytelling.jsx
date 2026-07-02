@@ -363,19 +363,25 @@ function HeroScrollytelling() {
           }}
         >
           <div className="dx">
-            <p className="dx-eyebrow">Devis express</p>
+            {/* Face de l'instrument : sur mobile, ce groupe est centre DANS
+                le cercle du cadran (hauteur = diametre via --scy-dial-d) ;
+                sur desktop, display:contents le fond dans la colonne */}
+            <div className="dx-face">
+              <p className="dx-eyebrow">Devis express</p>
 
-            {/* Grand nombre de jours (le curseur porte la valeur accessible) */}
-            <div className="dx-num" ref={numRef} aria-hidden="true" style={{ transform: 'translateX(-0.5ch)' }}>
-              <span className="dx-col" ref={tensRef} style={{ transform: 'translateY(0em)', opacity: 0 }}>
-                {DIGITS.map((d) => <span key={d}>{d}</span>)}
-              </span>
-              <span className="dx-col" ref={unitsRef} style={{ transform: `translateY(${-(INITIAL_DAYS % 10)}em)` }}>
-                {DIGITS.map((d) => <span key={d}>{d}</span>)}
-              </span>
+              {/* Grand nombre de jours (le curseur porte la valeur accessible) */}
+              <div className="dx-num" ref={numRef} aria-hidden="true" style={{ transform: 'translateX(-0.5ch)' }}>
+                <span className="dx-col" ref={tensRef} style={{ transform: 'translateY(0em)', opacity: 0 }}>
+                  {DIGITS.map((d) => <span key={d}>{d}</span>)}
+                </span>
+                <span className="dx-col" ref={unitsRef} style={{ transform: `translateY(${-(INITIAL_DAYS % 10)}em)` }}>
+                  {DIGITS.map((d) => <span key={d}>{d}</span>)}
+                </span>
+              </div>
+              <p className="dx-label">Jours de couverture</p>
             </div>
-            <p className="dx-label">Jours de couverture</p>
 
+            <div className="dx-controls">
             <p className="dx-date">Couvert dès aujourd&apos;hui<span ref={dateRef} /></p>
 
             <input
@@ -394,6 +400,7 @@ function HeroScrollytelling() {
               Continuer mon devis · 2 min
             </button>
             <p className="dx-note">Sans engagement · Aucun paiement avant le récapitulatif</p>
+            </div>
           </div>
         </div>
 

@@ -44,7 +44,37 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     zeroed: true,     /* cadran "pur" (retour en haut) */
     lastP2: -1,
     grads: [],
+    geom: null,       /* geometrie mobile (invalidee au resize) */
   }).current;
+
+  /* Geometrie du mode instrument mobile : le cadran quitte sa position de
+     fond du hero pour devenir un cercle entier (~90vw, max 420px) cale sur
+     la boite .dx-face du module (interpolation liee a p2, transform only).
+     Publie --scy-dial-d sur l'etage pour que le CSS du module s'aligne. */
+  const measureGeom = () => {
+    const root = rootRef.current;
+    if (!root || !root.parentElement) return { mobile: false };
+    if (!window.matchMedia('(max-width: 767px)').matches) return { mobile: false };
+    const stage = root.parentElement;
+    const targetD = Math.min(window.innerWidth * 0.9, 420);
+    stage.style.setProperty('--scy-dial-d', `${targetD.toFixed(0)}px`);
+    const baseD = root.offsetWidth;
+    const baseCY = stage.clientHeight * 0.58; /* top: 58% du CSS mobile */
+    const face = stage.querySelector('.dx-face');
+    let targetCY = 84 + targetD / 2;
+    if (face) {
+      /* mesure la position de repos de la face : le transform d'entree du
+         module (translateY + scale a p2 faible) fausserait le rect */
+      const mod = face.closest('.scy-module');
+      const prev = mod ? mod.style.transform : '';
+      if (mod) mod.style.transform = 'none';
+      const fr = face.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      if (mod) mod.style.transform = prev;
+      targetCY = fr.top - sr.top + fr.height / 2;
+    }
+    return { mobile: true, baseD, baseCY, targetD, targetCY };
+  };
 
   /* Applique une valeur de jours a l'arc, l'aiguille et aux graduations */
   const applyVisual = (days, animate) => {
@@ -173,11 +203,21 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       startLoop();
     }
 
+    /* Geometrie instrument recalculee au prochain setPresence apres resize */
+    const onResize = () => {
+      st.geom = null;
+      st.lastP2 = -1; /* force une reapplication meme si p2 n'a pas bouge */
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+
     return () => {
       st.active = false;
       if (st.raf) cancelAnimationFrame(st.raf);
       st.raf = 0;
       clearTimeout(st.timer);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -203,8 +243,20 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       st.lastP2 = v;
       fill.style.opacity = v;
 
-      /* Finition 7 : zoom imperceptible, le cadran s'avance quand il devient l'outil */
-      if (!st.reduced) {
+      if (!st.geom) st.geom = measureGeom();
+      if (st.geom.mobile) {
+        /* Mobile : interpolation hero -> instrument (translate + scale).
+           Fonctionnel (pas decoratif) : appliquee aussi en reduced-motion,
+           pilotee par le geste de scroll de l'utilisateur. */
+        const g = st.geom;
+        const s = 1 + (g.targetD / g.baseD - 1) * p2;
+        const dy = (g.targetCY - g.baseCY) * p2;
+        rootRef.current.style.transform =
+          `translate(-50%, calc(-50% + ${dy.toFixed(1)}px)) scale(${s.toFixed(4)})`;
+        /* mode instrument : cercle entier, sans le fondu de masque du hero */
+        rootRef.current.classList.toggle('atc-instr', p2 > 0.35);
+      } else if (!st.reduced) {
+        /* Finition 7 : zoom imperceptible, le cadran s'avance quand il devient l'outil */
         rootRef.current.style.transform = `translate(-50%, -50%) scale(${(1 + 0.03 * p2).toFixed(4)})`;
       }
 
