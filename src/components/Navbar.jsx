@@ -64,7 +64,10 @@ function Navbar() {
         display: 'flex',
         alignItems: 'center',
         transition: 'background 300ms ease, border-color 300ms ease, padding 300ms ease',
-        background: scrolled ? (isMobile ? 'rgba(10,10,10,0.94)' : 'rgba(10,10,10,0.72)') : 'transparent',
+        /* Mobile : fond PLEIN (pas de backdrop-filter possible, cf. gel Safari) ;
+           a 0.94 d'alpha, les vignettes vehicules transparaissaient derriere le
+           logo. Desktop : translucide + blur (vrai masquage), inchange. */
+        background: scrolled ? (isMobile ? '#0A0A0A' : 'rgba(10,10,10,0.72)') : 'transparent',
         backdropFilter: scrolled && !isMobile ? 'blur(12px)' : 'none',
         WebkitBackdropFilter: scrolled && !isMobile ? 'blur(12px)' : 'none',
         borderBottom: `1px solid ${scrolled ? 'rgba(201,168,76,0.15)' : 'transparent'}`,

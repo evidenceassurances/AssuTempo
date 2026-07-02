@@ -28,11 +28,11 @@ export const ASSISTANT_CSS = `
 
   position: fixed;
   z-index: 2147483000;
-  /* 50px (au lieu de 20) : recule le widget du bord droit pour que la bulle
-     "Besoin d'aide ?", centree sur l'axe du launcher, ne deborde pas du viewport
-     (centre du launcher a ~82px du bord, marge a droite de la bulle ~11px). */
-  right: max(50px, env(safe-area-inset-right));
-  bottom: max(20px, env(safe-area-inset-bottom));
+  /* Regle absolue : le widget est ancre en bas a DROITE sur tous les ecrans.
+     Jamais de left sur ce conteneur (un left+right etirait le root en bande
+     pleine largeur sur mobile et envoyait le launcher au bord gauche, coupe). */
+  right: max(16px, env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--atp-cream);
   -webkit-font-smoothing: antialiased;
@@ -47,102 +47,104 @@ export const ASSISTANT_CSS = `
 }
 
 /* ====================== LANCEUR (FAB) ====================== */
+/* Dock = etiquette + bouton dans un MEME conteneur flex, ancre a droite via
+   .atp-root. L'etiquette s'etend vers la gauche : le bouton ne bouge jamais.
+   C'est aussi le dock entier qui s'estompe (chevauchement CTA, drag du curseur). */
+.atp-dock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s var(--atp-ease);
+}
+/* chevauche un CTA de la page : escamote a 40 %, reste cliquable */
+.atp-dock--dim { opacity: 0.4; }
+/* curseur du cadran en cours de drag : disparait completement */
+.atp-dock--away { opacity: 0; pointer-events: none; }
+
+/* Bouton circulaire 56 px, famille du cadran : fond #141210, fin anneau dore,
+   bulle doree centree. AUCUN enfant ni pseudo-element ne depasse du cercle. */
 .atp-launcher {
   position: relative;
-  width: 64px; height: 64px;
+  width: 56px; height: 56px;
+  flex: none;
   border-radius: 50%;
-  border: 1px solid var(--atp-line-strong);
-  background:
-    radial-gradient(120% 120% at 30% 25%, #1c150d 0%, #0c0907 70%);
+  border: 1px solid rgba(232,199,102,0.4);
+  background: #141210;
+  color: var(--atp-gold-light);
   cursor: pointer;
   padding: 0;
   display: grid; place-items: center;
-  box-shadow: var(--atp-shadow);
+  overflow: hidden; /* garantie : rien ne deborde du cercle */
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
   transition: transform 0.18s var(--atp-ease), box-shadow 0.45s var(--atp-ease);
-  will-change: transform;
   touch-action: manipulation; /* supprime le delai de click (double-tap-zoom) iOS */
   -webkit-tap-highlight-color: transparent;
 }
-.atp-launcher:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.22); }
+.atp-launcher:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 22px rgba(201,168,76,0.18); }
 /* retour visuel net au tap (pression rapide) */
-.atp-launcher:active { transform: scale(0.88); transition-duration: 0.07s; }
+.atp-launcher:active { transform: scale(0.9); transition-duration: 0.07s; }
 .atp-launcher:focus-visible { outline: 2px solid var(--atp-gold-light); outline-offset: 3px; }
-.atp-launcher--hidden { opacity: 0; transform: scale(0.6); pointer-events: none; }
 
-/* halo qui respire derriere le lanceur */
+/* Pulsation CONTENUE : le lisere dore respire en opacite (cycle ~3 s) a
+   l'interieur des 56 px (inset 0, la bordure se dessine dans la boite).
+   Remplace les anneaux concentriques qui s'etendaient hors du bouton. */
 .atp-launcher::before {
   content: '';
-  position: absolute; inset: -8px;
+  position: absolute; inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,168,76,0.28) 0%, transparent 65%);
-  opacity: 0.7;
-  z-index: -1;
-  animation: atp-breathe 4.2s var(--atp-ease) infinite;
-}
-.atp-launcher-badge {
-  position: absolute; top: -3px; right: -3px;
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--atp-gold-light);
-  border: 2px solid var(--atp-panel);
-  animation: atp-pop 0.5s var(--atp-ease) both;
+  border: 1px solid rgba(232,199,102,0.85);
+  opacity: 0;
+  pointer-events: none;
+  animation: atp-ring-breathe 3s ease-in-out infinite;
 }
 
-/* ===== ETIQUETTE "Besoin d'aide ?" : pastille sobre, centree sur le launcher ==
-   Additif pur : aucun element du logo n'est modifie. Pastille arrondie (sans
-   pointe facon bulle BD), fond sombre, fin lisere dore, texte dore avec un petit
-   point dore avant. En overlay absolu sur le launcher (64px, deja position:
-   relative) : left:50% + translateX(-50%) -> centre exact sur l'axe du logo.
-   Hors flux et invisible au repos (opacity 0) : aucun decalage de mise en page.
-   pointer-events: none -> le clic launcher reste intact. 100% CSS, transform /
-   opacity uniquement. */
-.at-infos {
-  position: absolute;
-  bottom: calc(100% + 12px);     /* juste au-dessus du launcher */
-  left: 50%;                     /* centre sur l'axe du launcher */
-  transform: translateX(-50%) translateY(8px) scale(0.96);
+/* ===== ETIQUETTE "Besoin d'aide ?" : pastille SOLIDAIRE du bouton =====
+   Flex item a gauche du launcher (jamais orpheline). Pilotee par JS
+   (data-show) : apparait 1,5 s apres le chargement, reste 5 s, se replie
+   (transform/opacity uniquement, origine a droite -> effet de repli vers le
+   bouton), puis ne revient qu'apres 30 s d'inactivite sur la meme page.
+   Invisible = visibility:hidden + pointer-events:none (aucune zone fantome). */
+.atp-hint {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 14px;
+  padding: 8px 14px;
   border-radius: 9999px;
-  background: rgba(14, 14, 14, 0.92);
-  border: 1px solid rgba(201, 168, 76, 0.35);
-  color: #E8C97A;
+  background: rgba(20, 18, 16, 0.94);
+  border: 1px solid rgba(232, 199, 102, 0.35);
+  color: var(--atp-gold-light);
   font-family: inherit;          /* police du site (Inter), jamais une serif */
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  cursor: pointer;               /* meme affordance que le launcher */
-  pointer-events: none;          /* base : non cliquable pendant le delai et la
-                                    pause ; passe a auto seulement quand visible
-                                    (voir keyframe) -> aucune zone invisible cliquable.
-                                    La bulle est enfant du <button> : un clic dessus
-                                    remonte au launcher et ouvre le chatbot. */
-  opacity: 0;
+  cursor: pointer;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  animation: at-infos 7s ease-in-out infinite;
-  animation-delay: 5s;           /* premiere apparition apres 5s */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(10px) scaleX(0.8);
+  transform-origin: right center;
+  transition:
+    opacity 0.35s var(--atp-ease),
+    transform 0.35s var(--atp-ease),
+    visibility 0s linear 0.35s;
   will-change: transform, opacity;
 }
-.at-infos::before {
+.atp-hint::before {
   content: "";
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #E8C97A;
+  background: var(--atp-gold-light);
   flex: none;                    /* petit point dore avant le texte */
 }
-/* apparait + remonte, reste 2-3s, disparait, puis pause avant la boucle.
-   translateX(-50%) conserve dans chaque etape -> centrage maintenu pendant l'anim.
-   pointer-events: auto seulement pendant la phase visible -> la bulle est
-   cliquable (et ouvre le chatbot) uniquement quand on la voit, jamais en pause. */
-@keyframes at-infos {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
-  6%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
-  40%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
-  50%  { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); pointer-events: none; }
+.atp-hint[data-show] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0s;
 }
 
 /* ============ SIGIL SIGNATURE : anneau + particule en orbite ============ */
@@ -180,9 +182,10 @@ export const ASSISTANT_CSS = `
 
 /* ============ MOBILE LEGER (.atp-root--lite) ============ */
 /* Sur mobile, l'ambiance cosmos (canvas + rAF, nebuleuse, aura) n'est meme pas
-   montee (gere en JS). Ici on coupe les animations decoratives lourdes (avatar
-   planete statique), mais on GARDE le halo d'attente discret du bouton (::before,
-   un seul element, transform/opacity, perf-safe) pour montrer qu'il est interactif. */
+   montee (gere en JS). Ici on coupe les animations decoratives lourdes du sigil
+   (avatar du header du panneau), mais on GARDE la pulsation du lisere du bouton
+   (::before, opacite seule sur 56 px, perf-safe) : c'est elle qui montre qu'il
+   est interactif. */
 .atp-root--lite .atp-launcher { will-change: auto; }
 .atp-root--lite .atp-sigil-orbit { animation: none; }
 .atp-root--lite .atp-sigil-core { animation: none; }
@@ -220,17 +223,22 @@ export const ASSISTANT_CSS = `
 }
 .atp-panel--closing { animation: atp-panel-out 0.28s var(--atp-ease) both; }
 
-@media (max-width: 520px) {
-  .atp-root {
-    right: max(12px, env(safe-area-inset-right));
-    left: max(12px, env(safe-area-inset-left));
-    bottom: max(12px, env(safe-area-inset-bottom));
-  }
+/* Mobile : la fenetre devient une FEUILLE ancree en bas, pleine largeur,
+   ~92svh, coins superieurs arrondis, fermeture visible en haut (header du
+   panneau). position:fixed -> decorrelee du root (qui reste le point d'ancrage
+   bas-droite du launcher, sans left, jamais etire en bande pleine largeur). */
+@media (max-width: 640px) {
   .atp-panel {
-    width: auto; left: 0; right: 0;
-    height: min(80vh, calc(100vh - 24px));
-    height: min(80dvh, calc(100dvh - 24px));
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    width: auto;
+    height: 92vh;  /* secours anciens navigateurs */
+    height: 92svh; /* svh : stable avec la barre Safari */
+    border-radius: 20px 20px 0 0;
+    border-left: none; border-right: none; border-bottom: none;
   }
+  /* dernier element de la feuille : ecarte de l'indicateur home iOS */
+  .atp-legal { padding-bottom: max(12px, calc(6px + env(safe-area-inset-bottom))); }
 }
 
 /* ambiance animee en fond, jamais derriere le texte (cantonnee a l'en-tete) */
@@ -584,10 +592,10 @@ export const ASSISTANT_CSS = `
 .atp-tour-close:hover { transform: rotate(90deg); }
 
 /* ====================== KEYFRAMES ====================== */
-@keyframes atp-breathe { 0%,100% { opacity: 0.45; transform: scale(0.94); } 50% { opacity: 0.85; transform: scale(1.06); } }
+/* respiration du lisere dore du launcher : opacite seule, rien ne s'etend */
+@keyframes atp-ring-breathe { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
 @keyframes atp-orbit { to { transform: rotate(360deg); } }
 @keyframes atp-spin { to { transform: rotate(360deg); } }
-@keyframes atp-pop { from { transform: scale(0); } to { transform: scale(1); } }
 @keyframes atp-panel-in { from { opacity: 0; transform: translateY(14px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes atp-panel-out { to { opacity: 0; transform: translateY(14px) scale(0.92); } }
 /* mobile : ouverture/fermeture sans scale (pas de re-raster de l'ombre plein ecran) */
@@ -616,7 +624,10 @@ export const ASSISTANT_CSS = `
   .atp-root .atp-star,
   .atp-root .atp-tour-pointer,
   .atp-root .atp-tour-frame { animation: none; }
-  .atp-root .at-infos { animation: none; opacity: 0; }
+  /* pulsation du lisere desactivee ; etiquette affichee/masquee sans animation */
+  .atp-root .atp-launcher::before { animation: none; opacity: 0; }
+  .atp-root .atp-hint { transition: none; }
+  .atp-root .atp-dock { transition: none; }
   .atp-root .atp-star { opacity: 0.32; } /* version statique, sans scintillement */
   .atp-root .atp-chip:hover::after { animation: none; }
   .atp-root .atp-send--spark::after { animation: none; opacity: 0; }

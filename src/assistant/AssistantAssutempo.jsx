@@ -118,6 +118,8 @@ function Icon({ name, size = 18 }) {
       return (<svg {...common}><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z" /></svg>);
     case 'chevron-down':
       return (<svg {...common}><path d="m6 9 6 6 6-6" /></svg>);
+    case 'bubble':
+      return (<svg {...common}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>);
     default:
       return null;
   }
@@ -285,6 +287,12 @@ export default function AssistantAssutempo() {
   // Bandeau cookies affiche ? Si oui, on masque le launcher pour ne pas recouvrir
   // ses boutons (bug mobile : le FAB volait le tap du bouton "Refuser").
   const [cookieBannerUp, setCookieBannerUp] = useState(() => !consentChosen());
+  // Etiquette "Besoin d'aide ?" : visibilite pilotee par timers (effet dedie).
+  const [labelShown, setLabelShown] = useState(false);
+  // Cohabitation : le launcher chevauche un CTA de la page -> dock a 40 %.
+  const [ctaOverlap, setCtaOverlap] = useState(false);
+  // Drag du curseur du Devis express en cours -> dock escamote completement.
+  const [instrumentDrag, setInstrumentDrag] = useState(false);
 
   // tour : { active, flowKey, step }
   const [tour, setTour] = useState({ active: false, flowKey: null, step: 0 });
@@ -296,6 +304,12 @@ export default function AssistantAssutempo() {
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const tourElRef = useRef(null);
+  // Dock du launcher : bouton + etiquette (mesures pour la sonde CTA).
+  const launcherRef = useRef(null);
+  const hintRef = useRef(null);
+  // La premiere apparition de l'etiquette (1,5 s apres chargement) ne joue qu'une
+  // fois par session, pas a chaque fermeture du panneau ni a chaque navigation.
+  const introDoneRef = useRef(false);
   // Anti-doublon : ensemble des messages visiteur normalises deja envoyes (session).
   const sentNormalizedRef = useRef(null);
   if (sentNormalizedRef.current === null) sentNormalizedRef.current = new Set();
@@ -430,6 +444,124 @@ export default function AssistantAssutempo() {
       window.removeEventListener('open-cookie-settings', onReopen);
     };
   }, []);
+
+  /* Le launcher est-il a l'ecran ? (sert aux effets etiquette + sonde CTA) */
+  const launcherShown = !open && !tour.active && !cookieBannerUp;
+
+  /* Etiquette "Besoin d'aide ?" : apparait 1,5 s apres le chargement, reste 5 s,
+     se replie. Elle ne REVIENT ensuite qu'apres 30 s sans aucune activite
+     (scroll, tap, touche, molette) sur la meme page. Navigation ou fermeture du
+     panneau = repli + compteur d'inactivite remis a zero. Timers uniquement :
+     aucun cout par frame. */
+  useEffect(() => {
+    if (!launcherShown) {
+      setLabelShown(false);
+      return undefined;
+    }
+    let shown = false;
+    let showT = 0;
+    let hideT = 0;
+    let idleT = 0;
+    const arm = () => {
+      clearTimeout(idleT);
+      idleT = setTimeout(show, 30000);
+    };
+    const hide = () => {
+      shown = false;
+      setLabelShown(false);
+      arm();
+    };
+    function show() {
+      shown = true;
+      setLabelShown(true);
+      clearTimeout(hideT);
+      hideT = setTimeout(hide, 5000);
+    }
+    // Toute activite repousse le retour ; une etiquette visible finit ses 5 s.
+    const onActivity = () => {
+      if (!shown) arm();
+    };
+    if (introDoneRef.current) {
+      setLabelShown(false); // navigation pendant l'affichage : jamais d'etiquette figee
+      arm();
+    } else {
+      showT = setTimeout(() => {
+        introDoneRef.current = true;
+        show();
+      }, 1500);
+    }
+    const evs = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
+    evs.forEach((t) => window.addEventListener(t, onActivity, { passive: true }));
+    window.addEventListener('scroll', onActivity, { passive: true });
+    return () => {
+      clearTimeout(showT);
+      clearTimeout(hideT);
+      clearTimeout(idleT);
+      evs.forEach((t) => window.removeEventListener(t, onActivity));
+      window.removeEventListener('scroll', onActivity);
+    };
+  }, [launcherShown, location.pathname]);
+
+  /* Le curseur du Devis express (HeroScrollytelling) signale son drag : le dock
+     s'efface completement pendant la manipulation et revient a l'arret. */
+  useEffect(() => {
+    const onDrag = (e) => setInstrumentDrag(!!(e.detail && e.detail.dragging));
+    window.addEventListener('assutempo:instrument-drag', onDrag);
+    return () => window.removeEventListener('assutempo:instrument-drag', onDrag);
+  }, []);
+
+  /* Cohabitation : le launcher ne recouvre jamais un CTA. A chaque scroll/resize
+     (throttle rAF), on sonde quelques points du bouton (et de l'etiquette si
+     visible) via elementsFromPoint : un CTA du site (.btn-gold / .btn-glass)
+     sous l'un d'eux -> dock escamote a 40 % tant que le chevauchement existe.
+     elementsFromPoint respecte visibility -> le CTA du module Devis express
+     masque (acte 2 replie) ne declenche rien. */
+  useEffect(() => {
+    if (!launcherShown) {
+      setCtaOverlap(false);
+      return undefined;
+    }
+    let raf = 0;
+    const hitsCta = (x, y) => {
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) return false;
+      return document.elementsFromPoint(x, y).some(
+        (el) => el.closest && el.closest('.btn-gold, .btn-glass'),
+      );
+    };
+    const check = () => {
+      raf = 0;
+      const b = launcherRef.current;
+      if (!b) return;
+      const r = b.getBoundingClientRect();
+      const pts = [
+        [r.left + r.width / 2, r.top + r.height / 2],
+        [r.left + 6, r.top + 6],
+        [r.right - 6, r.top + 6],
+        [r.left + 6, r.bottom - 6],
+        [r.right - 6, r.bottom - 6],
+      ];
+      const h = hintRef.current;
+      if (h && labelShown) {
+        const l = h.getBoundingClientRect();
+        pts.push(
+          [l.left + 4, l.top + l.height / 2],
+          [l.left + l.width / 2, l.top + l.height / 2],
+        );
+      }
+      setCtaOverlap(pts.some(([x, y]) => hitsCta(x, y)));
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    schedule();
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [launcherShown, labelShown]);
 
   /* mobile vs desktop : reevalue au resize / rotation / changement de pointeur */
   useEffect(() => {
@@ -977,26 +1109,41 @@ export default function AssistantAssutempo() {
   /* ------------------------------ rendu : panneau -------------------------- */
   const node = (
     <div className={'atp-root' + (isMobile ? ' atp-root--lite' : '')}>
-      {!open && !tour.active && !cookieBannerUp && (
-        <button
-          type="button"
-          className="atp-launcher"
-          aria-label="Ouvrir l'assistant Assutempo"
-          onPointerDown={openPanel}
-          onClick={openPanel}
+      {launcherShown && (
+        /* Dock = etiquette + bouton dans un meme conteneur flex ancre bas-droite.
+           L'etiquette est SOLIDAIRE du bouton (jamais orpheline) et s'etend vers
+           la gauche : le bouton, cale a droite, ne bouge jamais. Le dock entier
+           s'estompe a 40 % sur chevauchement d'un CTA et disparait pendant le
+           drag du curseur du cadran. */
+        <div
+          className={
+            'atp-dock' +
+            (instrumentDrag ? ' atp-dock--away' : ctaOverlap ? ' atp-dock--dim' : '')
+          }
         >
-          <Sigil />
-          <span className="atp-launcher-badge" aria-hidden />
-          {/* Etiquette "Besoin d'aide ?" : petite pastille sobre centree sur
-              l'axe du launcher qui apparait apres 5s, reste 2-3s puis disparait,
-              en boucle. Le widget est recule du bord droit (.atp-root right:50px)
-              pour que cette bulle large, centree, ne deborde pas du viewport.
-              Additive, pointer-events:none (clic launcher intact), en overlay
-              absolu hors flux (aucun decalage). Le launcher (64px, deja position:
-              relative) est l'ancetre positionne : left:50% = centre du logo.
-              Aucun element du logo n'est modifie. */}
-          <div className="at-infos" aria-hidden>Besoin d&apos;aide ?</div>
-        </button>
+          <button
+            type="button"
+            ref={hintRef}
+            className="atp-hint"
+            data-show={labelShown ? '' : undefined}
+            aria-hidden="true"
+            tabIndex={-1}
+            onPointerDown={openPanel}
+            onClick={openPanel}
+          >
+            Besoin d&apos;aide ?
+          </button>
+          <button
+            type="button"
+            ref={launcherRef}
+            className="atp-launcher"
+            aria-label="Ouvrir l'assistant Assutempo"
+            onPointerDown={openPanel}
+            onClick={openPanel}
+          >
+            <Icon name="bubble" size={24} />
+          </button>
+        </div>
       )}
 
       {open && (
@@ -1054,13 +1201,15 @@ export default function AssistantAssutempo() {
               </span>
             </span>
             <span className="atp-header-actions">
+              {/* Mobile (feuille plein ecran) : fermeture explicite en X.
+                  Desktop (panneau flottant) : chevron de reduction. */}
               <button
                 type="button"
                 className="atp-icon-btn"
-                aria-label="Réduire l'assistant"
+                aria-label={isMobile ? "Fermer l'assistant" : "Réduire l'assistant"}
                 onClick={closePanel}
               >
-                <Icon name="chevron-down" size={18} />
+                <Icon name={isMobile ? 'close' : 'chevron-down'} size={18} />
               </button>
             </span>
           </header>

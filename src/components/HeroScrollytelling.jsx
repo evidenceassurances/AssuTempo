@@ -73,6 +73,13 @@ function HeroScrollytelling() {
     cadranRef.current?.interact(days);
   };
 
+  /* Drag du curseur signale au reste de la page (le lanceur de l'assistant
+     s'efface pendant la manipulation et revient a l'arret). Le pointer capture
+     natif du <input range> garantit le pointerup meme si le doigt sort du champ. */
+  const emitDrag = (dragging) => {
+    window.dispatchEvent(new CustomEvent('assutempo:instrument-drag', { detail: { dragging } }));
+  };
+
   const goTunnel = () => {
     const days = daysRef.current;
     trackEvent('cta_devis_click', {
@@ -393,6 +400,10 @@ function HeroScrollytelling() {
               step="1"
               defaultValue={INITIAL_DAYS}
               onInput={onDays}
+              onPointerDown={() => emitDrag(true)}
+              onPointerUp={() => emitDrag(false)}
+              onPointerCancel={() => emitDrag(false)}
+              onLostPointerCapture={() => emitDrag(false)}
               aria-label="Durée de couverture en jours"
             />
 
