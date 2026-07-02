@@ -118,6 +118,14 @@ Le hero de la Home est devenu un scrollytelling en deux actes, validé par Ayoub
 - **QA prouvée** (`SCROLLY-PLAN.md` + `SCROLLY-QA.md` à la racine) : +4,17 KB gzip / budget 9 KB, LCP stable, CLS 0, 61 fps y compris CPU x4, 40/40 Playwright, reduced-motion complet, TempoDial d'AssuranceInternationale intact (surcharges scopées `.atc`).
 - **Pièges repo notés** : `dist/` est commité (un build non commité bloque `git checkout` ; assets orphelins untracked à nettoyer) ; `html { scroll-behavior: smooth }` impose `behavior: 'instant'` aux scrollTo programmatiques (tests) ; gardes de refs obligatoires dans rAF/timers (fenêtre détachement DOM / cleanup React).
 
+### Session du 2 juillet 2026 (suite) : audit qualité + performance mobile, mergé en prod
+- **Bug d'hydratation site-wide corrigé (React #418 sur les 11 routes lazy en accès direct, préexistant depuis juin)** : AnimatePresence désynchronisait l'arbre client pendant l'hydratation d'un chunk en suspens, chaque page se re-rendait entièrement côté client. Fix : AnimatePresence (initial=false) activée seulement après le premier montage (`AppShell.jsx`), transitions de navigation inchangées. Règle : jamais de mécanique de présence framer autour d'un lazy pendant l'hydratation.
+- **Temps morts de navigation supprimés** : prefetch en idle de tous les chunks de routes (`App.jsx`, coupé si saveData/2G) : /faq en 142 ms après prefetch ; bandeaux CTA de la Home réparés (`window.open` remplacé par navigate : plus de nouvel onglet ni de rechargement complet).
+- **LCP mobile 6,5 s → ~2,8 s (perf Lighthouse 73 → 90-93)** : chorégraphie d'entrée du hero en CSS pur (classes `scy-in-*`, ne dépend plus du JS), fonts Inter non bloquantes et réduites aux graisses 400-800, PageTransition sans opacity:0 au premier montage (le HTML prérendu est visible dès le premier paint sur toutes les pages).
+- **Partage social réparé site-wide** : les balises og:/twitter: sont hissées dans le `<head>` du prérendu (`prerender.mjs`, même mécanisme que la description ; ne jamais y toucher aux scripts ld+json). Balises ajoutées aux 12 articles (`ArticleLayout.jsx`) et à la page internationale.
+- **Durcissements** : contrôle d'origine exact sur `api/chat.js` (startsWith était contournable), compteur d'attestations déterministe au premier rendu (mismatch d'hydratation), JSON-LD échappé via `src/lib/seo.js` (helper `jsonLd()`, à utiliser pour tout nouveau schéma), 23 fichiers morts supprimés, Tailwind inerte retiré (les directives n'étaient jamais compilées ; le `bg-white` du body était un piège latent), barre de lecture des articles en scaleX GPU (`ScrollProgress`).
+- Coût total du lot : +0,8 KB gzip. Vérifié : hydratation 12/12 routes propres, QA hero 40/40, transitions animées. Note : l'iframe Certimat refuse le framing hors assutempo.fr (CSP côté partenaire), donc invisible en preview locale/Vercel : normal.
+
 ---
 
 ## 6. Plan SEO / backlinks
