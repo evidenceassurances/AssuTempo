@@ -3,6 +3,9 @@
    Regle : transform et opacity uniquement (stroke-dashoffset pour l'arc,
    technique standard, ne declenche aucun layout). */
 
+/* Zoom imperceptible lie au scroll (finition 7) */
+.atc{ will-change: transform; }
+
 /* Comete au repos ralentie : 1 tour en 75 s (la Home uniquement) */
 .atc .atd-comet{
   animation-duration: 75s;

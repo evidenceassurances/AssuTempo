@@ -163,6 +163,11 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       st.lastP2 = v;
       fillRef.current.style.opacity = v;
 
+      /* Finition 7 : zoom imperceptible, le cadran s'avance quand il devient l'outil */
+      if (!st.reduced) {
+        rootRef.current.style.transform = `translate(-50%, -50%) scale(${(1 + 0.03 * p2).toFixed(4)})`;
+      }
+
       if (p2 <= 0.02 && !st.zeroed) {
         /* Retour en haut : cadran pur (arc vide, graduations eteintes, aiguille masquee) */
         st.zeroed = true;
