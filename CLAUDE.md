@@ -1,7 +1,7 @@
 # AssuTempo - Référence projet
 
 > Document de contexte pour le site assutempo.fr. À placer à la racine du projet (CLAUDE.md) pour que Claude Code dispose du contexte à chaque session.
-> Dernière mise à jour : 18 juin 2026.
+> Dernière mise à jour : 2 juillet 2026.
 
 ---
 
@@ -63,7 +63,8 @@ assutempo.fr (Evidence Assurances) est totalement distinct de assutempo.com (ASS
 - FAQ, Tarification, Articles, Carte, International, Qui sommes-nous, Partenaires
 
 ### Animations existantes
-- Hero "Cadran Tempo" : anneaux concentriques, graduations, comète orbitale (CSS / GPU pur)
+- Hero scrollytelling "Cadran Assutempo" (en prod depuis le 2 juillet 2026) : zone 280vh, cadran épinglé, deux actes au scroll (bloc hero puis module "Devis express" : curseur 1-90 jours, odomètre, date de fin, CTA qui pré-remplit la durée du tunnel via `?duree=N`). Composants `HeroScrollytelling.jsx` + `CadranAssutempo.jsx` ; détails en section 5 et dans SCROLLY-PLAN.md / SCROLLY-QA.md
+- Le TempoDial d'origine (anneaux concentriques, comète orbitale, CSS / GPU pur) reste utilisé tel quel sur `/assurance-internationale` (`TempoDial.jsx`, intact)
 - Marquee véhicules
 - Compteur d'attestations `CompteurAttestations.jsx` (incrément déterministe quotidien, sans backend)
 
