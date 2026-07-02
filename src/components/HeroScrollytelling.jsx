@@ -41,6 +41,16 @@ function HeroScrollytelling() {
   const rangeRef = useRef(null);
   const daysRef = useRef(INITIAL_DAYS);
 
+  /* Police de l'odometre arrondie au pixel entier : 22vw donne des em
+     fractionnaires et les translations de colonnes laissent alors un
+     lisere du chiffre voisin sur iOS (residu au repos) */
+  const roundNumFont = () => {
+    const el = numRef.current;
+    if (!el) return;
+    el.style.fontSize = '';
+    el.style.fontSize = `${Math.round(parseFloat(getComputedStyle(el).fontSize))}px`;
+  };
+
   /* Grand nombre + piste du curseur + date de fin (aucun etat React : zero re-render) */
   const renderDays = (days) => {
     const t = Math.floor(days / 10);
@@ -139,12 +149,14 @@ function HeroScrollytelling() {
     }, { threshold: 0 });
     io.observe(zone);
 
+    const onResize = () => { roundNumFont(); schedule(); };
     window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+    window.addEventListener('resize', onResize);
     window.addEventListener('orientationchange', schedule);
     window.addEventListener('pageshow', schedule);
     reduce.addEventListener?.('change', schedule);
 
+    roundNumFont();
     renderDays(daysRef.current);
     apply(); /* etat correct des le montage (rechargement a mi-page, bfcache) */
 
@@ -152,7 +164,7 @@ function HeroScrollytelling() {
       if (raf) cancelAnimationFrame(raf);
       io.disconnect();
       window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('orientationchange', schedule);
       window.removeEventListener('pageshow', schedule);
       reduce.removeEventListener?.('change', schedule);

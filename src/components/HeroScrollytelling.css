@@ -121,8 +121,12 @@
   display: block;
   transition: transform .45s cubic-bezier(.25,.9,.3,1), opacity .3s ease;
 }
+/* Chaque cellule centre l'encre du chiffre dans exactement 1em : aucun
+   chiffre voisin ne peut deborder dans la fenetre au repos */
 .dx-col > span{
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 1em;
   line-height: 1;
 }
