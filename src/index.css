@@ -7,10 +7,6 @@ html, body {
   color-scheme: dark only;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* ═══════════════════════════════════════════
    DESIGN SYSTEM - AssuTempo
 ═══════════════════════════════════════════ */
