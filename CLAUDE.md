@@ -136,6 +136,16 @@ Correctif du widget "Besoin d'aide ?" qui débordait du bord GAUCHE sur mobile (
 - **Header mobile scrollé** : fond `#0A0A0A` plein (l'alpha 0.94 laissait transparaître les vignettes véhicules derrière le logo), hauteur inchangée, desktop translucide + blur conservé.
 - QA Playwright dédiée **51/51** (375x812 et 390x844, horloge pilotée pour les 30 s, preuve du dim 40 % par CTA injecté, reduced-motion, desktop non régressé), captures contrôlées, **+915 B gzip**, console 0 erreur. Section complète dans SCROLLY-QA.md.
 
+### Session du 3 juillet 2026 : affinage hero (fluidité, collisions, rythme), mergé en prod
+Retour iPhone d'Ayoub : scroll saccadé, « 30/60 » traversant "JOURS DE COUVERTURE", aiguille masquant le « 90 », transition trop longue. Branche `polish/hero-fluidite`, profilage AVANT correction (exigé), validé sur preview puis fast-forward sur `main`.
+
+- **Jank, coupable n°1 mesuré** : l'animation `gold-shift` du dégradé de « tout. » (H1) anime `background-position`, propriété NON compositable : 424 Paint/127 ms sur 3,2 s de scroll (2 repaints/frame, aussi au repos), re-rasterisant la couche texte en DPR3. Figée sur mobile (dégradé statique mi-course), conservée desktop. Paint : 424 → 1. **Règle : jamais d'animation background-* dans une couche transformée au scroll ; les shimmer texte sont interdits sur mobile.**
+- **Coupable n°2** : 3 callbacks rAF/frame. Fusion : `CadranAssutempo` n'a plus de boucle propre, il expose `frame(ts)` appelé par la boucle unique du hero ; progression appliquée seulement si `scrollY` change, géométrie de zone en cache (0 gBCR/frame) ; sonde CTA du lanceur throttlée à 200 ms. Au passage : `visibilitychange` était défini mais jamais enregistré (corrigé).
+- **Coupable n°3 (compositeur mobile)** : `grain-overlay` passe en blend `normal` sur mobile (surface `mix-blend-mode: overlay` plein écran re-mélangée à chaque frame) et traînée sans `blur(.5px)` (scopé `.atc` : TempoDial internationale intact, vérifié blur + 17 s). Desktop inchangé.
+- **Collisions** : repères 30/60 retirés sur mobile (classes `atc-num-vNN`), letter-spacing du label `.24em → .14em` (air > 12 % du diamètre par côté), fondu de proximité : repère à < 14° de l'aiguille estompé à 0 en 200 ms, retour à l'éloignement, gated hors cadran pur (acte 1 : rien ne s'éteint). Zéro chevauchement vérifié à 1/15/45/60/90 j.
+- **Rythme** : zone 280vh → 210vh ; sortie texte p 0 → 0,30 (transform ease-out, **opacité LINÉAIRE** : l'ease-out d'opacité vidait l'écran dès p≈0,15, c'était le temps mort) ; entrée module p 0,26 → 0,52 (fondu croisé) ; balayage par pas de 5 % : jamais le cadran seul.
+- QA **40/40**, **+274 B gzip**, console 0 erreur partout ; profil avant/après en tableau dans SCROLLY-QA.md. Banc Mac non saturable (60,3 fps au 4x, 59,7 au 14x) : les preuves téléphone sont les compteurs par frame (Paint, recalc, JS), pas le fps du banc.
+
 ---
 
 ## 6. Plan SEO / backlinks
