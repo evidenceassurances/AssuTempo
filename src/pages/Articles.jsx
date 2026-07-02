@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { jsonLd } from '../lib/seo';
 import { Helmet } from 'react-helmet-async';
 import { LazyMotion, domMax, m, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Footer from '../components/Footer';
@@ -131,9 +132,9 @@ function Articles() {
         <meta name="twitter:card" content="summary" />
       </Helmet>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(itemListSchema) }} />
 
       <ScrollProgress />
 

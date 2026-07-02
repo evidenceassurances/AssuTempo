@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { jsonLd as jsonLdString } from '../lib/seo';
 import { m } from 'framer-motion';
 import {
   Building2, ShieldCheck, Scale, FileText, Lock,
@@ -154,7 +155,7 @@ function CGV() {
         />
         <link rel="canonical" href="https://assutempo.fr/conditions-generales" />
         <meta name="robots" content="noindex, follow" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{jsonLdString(jsonLd)}</script>
       </Helmet>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo, memo } from 'react';
+import { jsonLd } from '../lib/seo';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
@@ -1275,12 +1276,12 @@ function Carte() {
         <title>{seoTitle}</title>
         <meta name="description" content={seoDesc} />
         <link rel="canonical" href={canonical} />
-        <script type="application/ld+json">{JSON.stringify(jsonLdBase)}</script>
+        <script type="application/ld+json">{jsonLd(jsonLdBase)}</script>
         {!selectedCountry && (
-          <script type="application/ld+json">{JSON.stringify(JSONLD_PAYS_COUVERTS)}</script>
+          <script type="application/ld+json">{jsonLd(JSONLD_PAYS_COUVERTS)}</script>
         )}
         {!selectedCountry && (
-          <script type="application/ld+json">{JSON.stringify(JSONLD_SUR_DEMANDE)}</script>
+          <script type="application/ld+json">{jsonLd(JSONLD_SUR_DEMANDE)}</script>
         )}
       </Helmet>
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { jsonLd } from '../lib/seo';
 import { Helmet } from 'react-helmet-async';
 import { Link, useLocation } from 'react-router-dom';
 import { m } from 'framer-motion';
@@ -136,9 +137,9 @@ function Pricing() {
         <meta property="og:url" content="https://assutempo.fr/tarification" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
-        <script type="application/ld+json">{JSON.stringify(JSONLD_BREADCRUMB)}</script>
-        <script type="application/ld+json">{JSON.stringify(JSONLD_SERVICE)}</script>
-        <script type="application/ld+json">{JSON.stringify(JSONLD_FAQ)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_SERVICE)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_FAQ)}</script>
       </Helmet>
 
       <div

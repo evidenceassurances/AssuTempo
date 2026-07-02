@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { jsonLd } from '../lib/seo';
+import { trackEvent } from '../lib/analytics';
 import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
@@ -149,9 +151,7 @@ function CarteGrise() {
 
   /* CTA hero : defilement doux vers le module + event GA4 */
   const handleStartClick = () => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'clic_carte_grise');
-    }
+    trackEvent('clic_carte_grise');
     if (typeof document !== 'undefined') {
       const target = document.getElementById('demande');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -160,9 +160,7 @@ function CarteGrise() {
 
   /* Event GA4 au chargement de l'iframe */
   const handleIframeLoad = () => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'carte_grise_view');
-    }
+    trackEvent('carte_grise_view');
   };
 
   /* Auto-redimensionnement defensif : on n'accepte que les messages de Certimat */
@@ -194,9 +192,9 @@ function CarteGrise() {
         <meta property="og:url" content="https://assutempo.fr/carte-grise" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
-        <script type="application/ld+json">{JSON.stringify(JSONLD_BREADCRUMB)}</script>
-        <script type="application/ld+json">{JSON.stringify(JSONLD_SERVICE)}</script>
-        <script type="application/ld+json">{JSON.stringify(JSONLD_FAQ)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_SERVICE)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_FAQ)}</script>
       </Helmet>
 
       {/* ── A. Hero ──────────────────────────────────────────────────────── */}

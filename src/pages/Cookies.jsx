@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { jsonLd as jsonLdString } from '../lib/seo';
 import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence } from 'framer-motion';
 import {
@@ -296,7 +297,7 @@ function Cookies() {
         />
         <link rel="canonical" href="https://assutempo.fr/cookies" />
         <meta name="robots" content="noindex, follow" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{jsonLdString(jsonLd)}</script>
       </Helmet>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
