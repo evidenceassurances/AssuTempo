@@ -65,6 +65,8 @@ function HeroScrollytelling() {
 
   const onDays = (e) => {
     const days = +e.target.value;
+    /* Bonus haptique : pulsation discrete a chaque dizaine franchie (Android) */
+    if (Math.floor(days / 10) !== Math.floor(daysRef.current / 10)) navigator.vibrate?.(5);
     daysRef.current = days;
     renderDays(days);
     cadranRef.current?.interact(days);
