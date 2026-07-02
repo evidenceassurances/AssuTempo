@@ -140,16 +140,18 @@
   color: var(--text-muted);
 }
 
-/* Curseur 1 a 90 jours : zone tactile de 44 px, piste remplie via --f */
+/* Curseur 1 a 90 jours : zone tactile de 44 px, piste arrondie remplie
+   d'un degrade dore jusqu'au pouce (--f recalcule en JS a chaque input) */
 .dx-range{
   --f: 6.7%;
-  width: min(360px, 84vw);
+  width: min(360px, 86vw);
   height: 44px;
   margin: 4px 0 2px;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .dx-range:focus-visible{
   outline: 2px solid var(--gold);
@@ -157,37 +159,38 @@
   border-radius: 8px;
 }
 .dx-range::-webkit-slider-runnable-track{
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--gold) var(--f), rgba(201,168,76,.22) var(--f));
+  height: 5.5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+    #C9A84C 0%, #E8C97A var(--f), rgba(232,199,102,.15) var(--f));
 }
 .dx-range::-webkit-slider-thumb{
   -webkit-appearance: none;
-  width: 26px;
-  height: 26px;
-  margin-top: -11.5px;
+  width: 27px;
+  height: 27px;
+  margin-top: -10.75px;
   border-radius: 50%;
-  border: none;
+  border: 1px solid rgba(246,231,182,.85);
   background: radial-gradient(circle at 35% 30%, #F6E7B6, #C9A84C 72%);
-  box-shadow: 0 0 14px rgba(232,201,122,.45), 0 2px 8px rgba(0,0,0,.55);
+  box-shadow: 0 0 12px rgba(232,201,122,.4), 0 2px 8px rgba(0,0,0,.55);
 }
 .dx-range::-moz-range-track{
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(201,168,76,.22);
+  height: 5.5px;
+  border-radius: 3px;
+  background: rgba(232,199,102,.15);
 }
 .dx-range::-moz-range-progress{
-  height: 3px;
-  border-radius: 2px;
-  background: var(--gold);
+  height: 5.5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #C9A84C, #E8C97A);
 }
 .dx-range::-moz-range-thumb{
-  width: 26px;
-  height: 26px;
-  border: none;
+  width: 27px;
+  height: 27px;
+  border: 1px solid rgba(246,231,182,.85);
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #F6E7B6, #C9A84C 72%);
-  box-shadow: 0 0 14px rgba(232,201,122,.45), 0 2px 8px rgba(0,0,0,.55);
+  box-shadow: 0 0 12px rgba(232,201,122,.4), 0 2px 8px rgba(0,0,0,.55);
 }
 
 .dx-cta{
