@@ -1,19 +1,23 @@
 import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
 
-const TARGET = 'https://assutempo.fr/tarification';
-
-function openDevis(label) {
-  trackEvent('cta_devis_click', { "cta_label": label, "page_path": window.location.pathname });
-  window.open(TARGET);
+/* Navigation SPA vers la tarification (et non window.open : un nouvel
+   onglet rechargeait tout le site, temps mort garanti sur mobile). */
+function useOpenDevis() {
+  const navigate = useNavigate();
+  return (label) => {
+    trackEvent('cta_devis_click', { "cta_label": label, "page_path": window.location.pathname });
+    navigate('/tarification');
+  };
 }
 
 /* CTA #1 - Après VehicleMarquee : barre centrée sobre */
 export function CtaAfterVehicles() {
   const [ref, inView] = useScrollReveal();
+  const openDevis = useOpenDevis();
 
   return (
     <section
@@ -61,6 +65,7 @@ export function CtaAfterVehicles() {
 /* CTA #2 - Après Process : bandeau pleine largeur glass */
 export function CtaAfterProcess() {
   const [ref, inView] = useScrollReveal();
+  const openDevis = useOpenDevis();
 
   return (
     <section
@@ -185,6 +190,7 @@ export function CtaInternational() {
 /* CTA #3 - Après Countries : centré, sobre, bouton outline */
 export function CtaAfterCountries() {
   const [ref, inView] = useScrollReveal();
+  const openDevis = useOpenDevis();
 
   return (
     <section
