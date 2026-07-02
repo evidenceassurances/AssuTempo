@@ -78,9 +78,11 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     }
   };
 
-  /* Boucle unique du cadran : rotation de la comete (lissage exponentiel) */
+  /* Boucle unique du cadran : rotation de la comete (lissage exponentiel).
+     Garde sur la ref : entre le detachement du DOM (navigation) et le
+     cleanup de l'effet, un frame en attente peut encore se presenter. */
   const loop = (ts) => {
-    if (!st.active) { st.raf = 0; return; }
+    if (!st.active || !cometRef.current) { st.raf = 0; return; }
     if (!st.last) st.last = ts;
     const dt = Math.min((ts - st.last) / 1000, 0.05);
     st.last = ts;
@@ -194,17 +196,22 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
         /* Sillage visible pendant le remplissage, evanoui a l'arret */
         wakeRef.current.style.opacity = 1;
         clearTimeout(st.wakeTimer);
-        st.wakeTimer = setTimeout(() => { wakeRef.current.style.opacity = 0; }, 650);
+        st.wakeTimer = setTimeout(() => {
+          const w = wakeRef.current;
+          if (w) w.style.opacity = 0;
+        }, 650);
       }
       applyVisual(days, !st.reduced);
     },
 
     /* Presence de l'acte 2 (p2 du scroll) : materialise arc + aiguille */
     setPresence(p2) {
+      const fill = fillRef.current;
+      if (!fill) return;
       const v = p2.toFixed(3);
       if (v === st.lastP2) return;
       st.lastP2 = v;
-      fillRef.current.style.opacity = v;
+      fill.style.opacity = v;
 
       /* Finition 7 : zoom imperceptible, le cadran s'avance quand il devient l'outil */
       if (!st.reduced) {

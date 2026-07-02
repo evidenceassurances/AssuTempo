@@ -93,6 +93,10 @@ function HeroScrollytelling() {
 
     const apply = () => {
       raf = 0;
+      /* Garde : un frame en attente peut arriver apres le detachement du
+         DOM (navigation), quand les refs sont deja nulles */
+      const copy = copyRef.current;
+      if (!copy || !modRef.current || !hintRef.current) return;
       const rect = zone.getBoundingClientRect();
       const span = zone.offsetHeight - window.innerHeight;
       const p = clamp01(span > 0 ? -rect.top / span : 0);
@@ -100,7 +104,6 @@ function HeroScrollytelling() {
 
       /* Acte 1 : seul le bloc texte s'eleve et s'estompe */
       const e1 = easeOutCubic(clamp01(p / 0.38));
-      const copy = copyRef.current;
       copy.style.transform = rm ? '' : `translate3d(0, ${(-140 * e1).toFixed(1)}px, 0)`;
       copy.style.opacity = (1 - e1).toFixed(3);
       copy.style.visibility = e1 >= 0.985 ? 'hidden' : '';
