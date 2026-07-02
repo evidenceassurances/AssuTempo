@@ -139,16 +139,19 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     st.lit = 0;
     if (!st.zeroed) applyVisual(st.days, false);
 
-    /* Finition 2 : chiffres reperes graves aux graduations majeures,
-       orientes vers le centre. Le 90 se lit a midi : l'echelle du cadran
-       est racontee sans un mot. */
+    /* Finition 2 : chiffres reperes graves aux graduations majeures.
+       Toujours droits (jamais tournes vers le centre : un chiffre a
+       l'envers en bas de cadran est illisible), poses sur un cercle
+       interieur, centres optiquement via dy. Le 90 se lit a midi. */
+    const R_NUM = 29.2;
     const nums = numsRef.current;
     nums.textContent = '';
     for (let v = 15; v <= 90; v += 15) {
+      const na = (v * 4 * Math.PI) / 180;
       const t = document.createElementNS(NS, 'text');
-      t.setAttribute('x', '50');
-      t.setAttribute('y', '20.9');
-      t.setAttribute('transform', `rotate(${v * 4} 50 50)`);
+      t.setAttribute('x', (50 + R_NUM * Math.sin(na)).toFixed(2));
+      t.setAttribute('y', (50 - R_NUM * Math.cos(na)).toFixed(2));
+      t.setAttribute('dy', '1.1');
       t.setAttribute('class', 'atc-num');
       t.textContent = String(v);
       nums.appendChild(t);
