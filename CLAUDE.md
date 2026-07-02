@@ -126,6 +126,16 @@ Le hero de la Home est devenu un scrollytelling en deux actes, validé par Ayoub
 - **Durcissements** : contrôle d'origine exact sur `api/chat.js` (startsWith était contournable), compteur d'attestations déterministe au premier rendu (mismatch d'hydratation), JSON-LD échappé via `src/lib/seo.js` (helper `jsonLd()`, à utiliser pour tout nouveau schéma), 23 fichiers morts supprimés, Tailwind inerte retiré (les directives n'étaient jamais compilées ; le `bg-white` du body était un piège latent), barre de lecture des articles en scaleX GPU (`ScrollProgress`).
 - Coût total du lot : +0,8 KB gzip. Vérifié : hydratation 12/12 routes propres, QA hero 40/40, transitions animées. Note : l'iframe Certimat refuse le framing hors assutempo.fr (CSP côté partenaire), donc invisible en preview locale/Vercel : normal.
 
+### Session du 2 juillet 2026 (fin) : correctif lanceur chatbot mobile + header, mergé en prod
+Correctif du widget "Besoin d'aide ?" qui débordait du bord GAUCHE sur mobile (bouton coupé, anneaux hors viewport, étiquette orpheline). Cause racine : sous 520px, `.atp-root` recevait `left`+`right` (bande pleine largeur pour l'ancien panneau), le bouton, enfant en flux, partait au bord gauche. Branche `fix/chat-launcher-mobile` validée par Ayoub sur preview puis fast-forward sur `main`.
+
+- **Lanceur** : dock flex [étiquette | bouton] ancré bas-droite (`right: 16px`, `bottom: calc(16px + env(safe-area-inset-bottom))`, plus JAMAIS de `left` sur `.atp-root`). Bouton 56px fond `#141210`, anneau doré 1px, bulle dorée ; halo -8px et badge supprimés ; pulsation = liseré qui respire en opacité (3s) en `inset: 0` + `overflow: hidden` (rien ne sort du cercle).
+- **Étiquette solidaire** : apparaît 1,5s après chargement, visible 5s, repli transform/opacity (origine côté bouton), retour uniquement après 30s d'inactivité sur la même page (timers JS, `introDoneRef` une fois par session, reset à la navigation).
+- **Cohabitation** : sonde `elementsFromPoint` (rAF sur scroll/resize) sur `.btn-gold`/`.btn-glass` → dock à 40 % pendant un chevauchement (ignore nativement les CTA masqués / pointer-events none). Le slider du hero émet `CustomEvent('assutempo:instrument-drag', {detail:{dragging}})` → dock effacé pendant le drag, retour à l'arrêt.
+- **Mobile** : panneau de chat en feuille `position: fixed` pleine largeur 92svh, coins arrondis en haut, fermeture X explicite (chevron conservé desktop), safe-area sur la mention légale. Logique conversationnelle (API, plafonds, transcript) inchangée.
+- **Header mobile scrollé** : fond `#0A0A0A` plein (l'alpha 0.94 laissait transparaître les vignettes véhicules derrière le logo), hauteur inchangée, desktop translucide + blur conservé.
+- QA Playwright dédiée **51/51** (375x812 et 390x844, horloge pilotée pour les 30 s, preuve du dim 40 % par CTA injecté, reduced-motion, desktop non régressé), captures contrôlées, **+915 B gzip**, console 0 erreur. Section complète dans SCROLLY-QA.md.
+
 ---
 
 ## 6. Plan SEO / backlinks
