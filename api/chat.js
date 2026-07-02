@@ -74,9 +74,16 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'method_not_allowed' });
   }
 
-  // Controle d'origine (allowlist).
-  const origin = req.headers.origin || req.headers.referer || '';
-  if (ALLOWED_ORIGINS.length && !ALLOWED_ORIGINS.some((o) => origin.startsWith(o))) {
+  // Controle d'origine (allowlist) : comparaison EXACTE de l'origine.
+  // startsWith etait contournable (https://assutempo.fr.evil.com passait).
+  const rawOrigin = req.headers.origin || req.headers.referer || '';
+  let originHost = '';
+  try {
+    originHost = new URL(rawOrigin).origin;
+  } catch {
+    /* en-tete absent ou invalide : originHost reste vide et sera refuse */
+  }
+  if (ALLOWED_ORIGINS.length && !ALLOWED_ORIGINS.includes(originHost)) {
     return res.status(403).json({ error: 'forbidden' });
   }
 
