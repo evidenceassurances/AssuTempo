@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import BackgroundFX from './components/BackgroundFX';
@@ -66,28 +66,50 @@ function AppShell({ pages }) {
   useAnalytics();
   const pageKey = location.pathname.replace(/^(\/carte)\/.+$/, '$1');
 
+  /* AnimatePresence n'est activee qu'apres le premier montage : pendant
+     l'hydratation d'une page lazy (chunk en suspens), sa mecanique de
+     presence desynchronise l'arbre client du HTML prerendu et React
+     rejoue toute la page cote client (erreur #418 + re-rendu complet).
+     Les transitions de route ne servent qu'aux navigations, toujours
+     posterieures au montage : rien ne change visuellement.
+     PageTransition (le <main>) reste rendu des le SSR, lui. */
+  const [transitionsReady, setTransitionsReady] = useState(false);
+  useEffect(() => { setTransitionsReady(true); }, []);
+
+  const routes = (
+    <Routes location={location} key={pageKey}>
+      {ROUTE_TABLE.map(([path, name]) => {
+        const Page = pages[name];
+        return (
+          <Route
+            key={path}
+            path={path}
+            element={<PageTransition><Page /></PageTransition>}
+          />
+        );
+      })}
+    </Routes>
+  );
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
       <BackgroundFX />
       <div aria-hidden className="grain-overlay" />
       <Navbar />
       <Suspense fallback={<PageLoader />}>
-        <AnimatePresence mode="wait" onExitComplete={() => {
-          if (typeof window !== 'undefined') window.scrollTo(0, 0);
-        }}>
-          <Routes location={location} key={pageKey}>
-            {ROUTE_TABLE.map(([path, name]) => {
-              const Page = pages[name];
-              return (
-                <Route
-                  key={path}
-                  path={path}
-                  element={<PageTransition><Page /></PageTransition>}
-                />
-              );
-            })}
-          </Routes>
-        </AnimatePresence>
+        {transitionsReady ? (
+          <AnimatePresence
+            initial={false}
+            mode="wait"
+            onExitComplete={() => {
+              if (typeof window !== 'undefined') window.scrollTo(0, 0);
+            }}
+          >
+            {routes}
+          </AnimatePresence>
+        ) : (
+          routes
+        )}
       </Suspense>
       <CookieConsent />
       <AssistantAssutempo />
