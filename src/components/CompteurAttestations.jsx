@@ -30,14 +30,19 @@ function computeCount(now = new Date()) {
 }
 
 export default function CompteurAttestations() {
-  const target = computeCount();
-  const [display, setDisplay] = useState(target);
+  /* Rendu initial deterministe (START_COUNT) : le HTML prerendu au build et
+     le premier rendu client restent identiques quel que soit le jour de la
+     visite, donc zero mismatch d'hydratation. La valeur du jour est
+     calculee apres montage, puis animee a l'apparition. */
+  const [display, setDisplay] = useState(START_COUNT);
   const ref      = useRef(null);
   const animated = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const target = computeCount();
+    setDisplay(target);
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !animated.current) {
         animated.current = true;
@@ -55,7 +60,7 @@ export default function CompteurAttestations() {
     }, { threshold: 0.4 });
     io.observe(el);
     return () => io.disconnect();
-  }, [target]);
+  }, []);
 
   return (
     <div ref={ref} style={{ textAlign: 'center', marginBottom: 40 }}>
