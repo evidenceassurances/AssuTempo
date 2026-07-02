@@ -71,6 +71,18 @@
 }
 .atc-needle-dot{ fill: #F6E7B6; }
 
+/* Halo du point-aiguille reduit de moitie sur mobile (le cadran y est
+   plus petit, un glow plein format y est disproportionne et vient
+   mordre sur le texte) */
+@media (max-width: 767px){
+  .atc-needle-glow{
+    transform: scale(.5);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .atc-needle-line{ stroke-width: .45; }
+}
+
 /* Chiffres reperes graves (finition 2) : police systeme du site,
    px = unites utilisateur dans le viewBox de 100 */
 .atc-num{
