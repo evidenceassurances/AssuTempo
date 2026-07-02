@@ -234,10 +234,11 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
           </radialGradient>
         </defs>
 
-        <g ref={gradsRef} />
         <g ref={numsRef} />
 
+        {/* Tout ce qui se materialise avec l'acte 2 (opacite = p2) vit ici */}
         <g ref={fillRef} className="atc-fill" style={{ opacity: 0 }}>
+          <g ref={gradsRef} />
           <circle ref={arcGlowRef} className="atc-arc-glow" cx="50" cy="50" r={R} style={{ strokeDashoffset: CIRC }} />
           <circle ref={arcRef} className="atc-arc" cx="50" cy="50" r={R} style={{ strokeDashoffset: CIRC }} />
           <g ref={needleRef} className="atc-needle" style={{ transform: 'rotate(0deg)' }}>

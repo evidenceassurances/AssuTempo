@@ -87,13 +87,27 @@
   opacity: 0;
   transition: opacity .3s ease;
 }
-.atc-grad.on{ opacity: .55; }
+/* Finition 3 : eclat d'allumage, sur-brillance breve puis retombee doree.
+   L'animation rejoue a chaque pose de classe : au remplissage rapide du
+   curseur, chaque graduation etincelle a son tour. */
+.atc-grad.on{
+  opacity: .55;
+  animation: atc-flash-min .25s ease-out;
+}
 .atc-grad-maj{ stroke-width: .4; }
-.atc-grad-maj.on{ opacity: .85; }
+.atc-grad-maj.on{
+  opacity: .85;
+  animation: atc-flash-maj .25s ease-out;
+}
+@keyframes atc-flash-min{ from{ opacity: 1; } to{ opacity: .55; } }
+@keyframes atc-flash-maj{ from{ opacity: 1; } to{ opacity: .85; } }
 
 /* Reset instantane (retour en haut du scroll) */
 .atc-notrans,
-.atc-notrans *{ transition: none !important; }
+.atc-notrans *{
+  transition: none !important;
+  animation: none !important;
+}
 
 /* Accessibilite : aucun mouvement decoratif */
 @media (prefers-reduced-motion: reduce){
