@@ -146,6 +146,9 @@ Retour iPhone d'Ayoub : scroll saccadé, « 30/60 » traversant "JOURS DE COUVER
 - **Rythme** : zone 280vh → 210vh ; sortie texte p 0 → 0,30 (transform ease-out, **opacité LINÉAIRE** : l'ease-out d'opacité vidait l'écran dès p≈0,15, c'était le temps mort) ; entrée module p 0,26 → 0,52 (fondu croisé) ; balayage par pas de 5 % : jamais le cadran seul.
 - QA **40/40**, **+274 B gzip**, console 0 erreur partout ; profil avant/après en tableau dans SCROLLY-QA.md. Banc Mac non saturable (60,3 fps au 4x, 59,7 au 14x) : les preuves téléphone sont les compteurs par frame (Paint, recalc, JS), pas le fps du banc.
 
+### Session du 3 juillet 2026 (suite) : audit chargement, mergé en prod
+Constat "6 s sur iPhone". Causes mesurées : ~310 KB d'analytics au démarrage (dont propriété UA morte UA-264084182-1 chaînée côté admin GA, action Ayoub : la débrancher dans Admin > Flux > Balises de site connectées), main de 62,5 KB gzip dont la moitié indue (contenu des 34 pays importé par la Home + assistant), fenêtre de loader sur accès directs (chunk de page jamais préchargé). Corrections : **main 19,1 KB (-70 %)** via `countries-index.js` léger, assistant et sections Home sous le pli en chunks différés (PagesContext, eager SSR / lazy client, préchauffe), GA en stub dataLayer + script après load+idle (0 événement perdu), **modulepreload du chunk de page injecté par prerender.mjs (manifest Vite) sur les 56 pages**. QA 25/25 + 52/52 + 40/40, hydratation 12 routes propre. **Règle #418 n°2 : `transitionsReady` reste SYNC, jamais startTransition (reproduit : #418 sur toutes les routes lazy).** Rapport complet dans SCROLLY-QA.md. Workflow : depuis cette session, merge direct en prod après QA, sans attente de validation.
+
 ---
 
 ## 6. Plan SEO / backlinks
