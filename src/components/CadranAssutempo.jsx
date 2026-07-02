@@ -20,6 +20,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   const cometRef = useRef(null);
   const dashRef = useRef(null);
   const gradsRef = useRef(null);
+  const numsRef = useRef(null);
   const fillRef = useRef(null);
   const arcRef = useRef(null);
   const arcGlowRef = useRef(null);
@@ -129,6 +130,21 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     st.lit = 0;
     if (!st.zeroed) applyVisual(st.days, false);
 
+    /* Finition 2 : chiffres reperes graves aux graduations majeures,
+       orientes vers le centre. Le 90 se lit a midi : l'echelle du cadran
+       est racontee sans un mot. */
+    const nums = numsRef.current;
+    nums.textContent = '';
+    for (let v = 15; v <= 90; v += 15) {
+      const t = document.createElementNS(NS, 'text');
+      t.setAttribute('x', '50');
+      t.setAttribute('y', '20.9');
+      t.setAttribute('transform', `rotate(${v * 4} 50 50)`);
+      t.setAttribute('class', 'atc-num');
+      t.textContent = String(v);
+      nums.appendChild(t);
+    }
+
     /* Prise de controle des rotations CSS sans saut : on lit l'angle courant */
     if (!st.reduced) {
       const readAngle = (el) => {
@@ -219,6 +235,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
         </defs>
 
         <g ref={gradsRef} />
+        <g ref={numsRef} />
 
         <g ref={fillRef} className="atc-fill" style={{ opacity: 0 }}>
           <circle ref={arcGlowRef} className="atc-arc-glow" cx="50" cy="50" r={R} style={{ strokeDashoffset: CIRC }} />

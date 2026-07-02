@@ -68,6 +68,18 @@
 }
 .atc-needle-dot{ fill: #F6E7B6; }
 
+/* Chiffres reperes graves (finition 2) : police systeme du site,
+   px = unites utilisateur dans le viewBox de 100 */
+.atc-num{
+  font-family: inherit;
+  font-size: 3.2px;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+  fill: #C9A84C;
+  opacity: .25;
+}
+
 /* Graduations allumables (SVG, par-dessus les ticks de base) */
 .atc-grad{
   stroke: #E8C97A;
