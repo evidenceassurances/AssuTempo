@@ -73,7 +73,13 @@
   font-variant-numeric: tabular-nums;
   text-shadow: 0 0 36px rgba(232,201,122,.16);
 }
-.dx-col{ display: block; }
+/* Finition 6 : odometre, les chiffres roulent verticalement en transform.
+   La colonne des dizaines s'estompe sous 10 et le bloc se recentre. */
+.dx-num{ transition: transform .45s cubic-bezier(.25,.9,.3,1); }
+.dx-col{
+  display: block;
+  transition: transform .45s cubic-bezier(.25,.9,.3,1), opacity .3s ease;
+}
 .dx-col > span{
   display: block;
   height: 1em;
