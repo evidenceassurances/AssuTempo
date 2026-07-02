@@ -1,0 +1,81 @@
+/* Cadran Assutempo (hero scrollytelling) : surcharges scopees .atc
+   par-dessus TempoDial.css + couche SVG interactive.
+   Regle : transform et opacity uniquement (stroke-dashoffset pour l'arc,
+   technique standard, ne declenche aucun layout). */
+
+/* Comete au repos ralentie : 1 tour en 75 s (la Home uniquement) */
+.atc .atd-comet{
+  animation-duration: 75s;
+  will-change: transform;
+}
+
+/* Graduations de base re-calees sur 90 jours : 1 tick tous les 4 degres,
+   majeures toutes les 10 (40 degres). Le from negatif centre chaque tick
+   sur son angle exact pour un alignement pixel avec la couche SVG. */
+.atc .atd-ticks{
+  background: repeating-conic-gradient(from -0.09deg,
+    rgba(201,168,76,.26) 0deg .18deg, transparent .18deg 4deg);
+}
+.atc .atd-ticks-major{
+  background: repeating-conic-gradient(from -0.21deg,
+    rgba(232,201,122,.40) 0deg .42deg, transparent .42deg 40deg);
+}
+
+/* Couche SVG epinglee sur le meme carre que le cadran */
+.atc-svg{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Arc de remplissage : demarre a midi, sens horaire, 90 jours = cercle complet */
+.atc-arc,
+.atc-arc-glow{
+  fill: none;
+  stroke-dasharray: 217.399;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset .45s cubic-bezier(.25,.9,.3,1);
+}
+.atc-arc{ stroke: url(#atcArc); stroke-width: .9; }
+.atc-arc-glow{ stroke: rgba(232,201,122,.26); stroke-width: 2.2; }
+
+/* Aiguille-point : positionnement avec un leger rebond elastique */
+.atc-needle{
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform .55s cubic-bezier(.34,1.45,.55,1);
+}
+.atc-needle-line{
+  stroke: #E8C97A;
+  stroke-width: .55;
+  stroke-linecap: round;
+  opacity: .9;
+}
+.atc-needle-dot{ fill: #F6E7B6; }
+
+/* Graduations allumables (SVG, par-dessus les ticks de base) */
+.atc-grad{
+  stroke: #E8C97A;
+  stroke-width: .26;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.atc-grad.on{ opacity: .55; }
+.atc-grad-maj{ stroke-width: .4; }
+.atc-grad-maj.on{ opacity: .85; }
+
+/* Reset instantane (retour en haut du scroll) */
+.atc-notrans,
+.atc-notrans *{ transition: none !important; }
+
+/* Accessibilite : aucun mouvement decoratif */
+@media (prefers-reduced-motion: reduce){
+  .atc-arc,
+  .atc-arc-glow,
+  .atc-needle,
+  .atc-grad{ transition: none !important; }
+}

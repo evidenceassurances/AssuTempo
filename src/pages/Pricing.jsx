@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
   Phone, MessageCircle, ShieldCheck, Clock, Lock, Globe,
@@ -98,8 +98,25 @@ const cardBase = {
   padding: '22px 20px',
 };
 
+/* URL du tunnel JL Assure. Le parametre GET duree (1 a 90) est le mecanisme
+   de pre-remplissage natif du tunnel : il alimente son champ cache pref_duree
+   cote serveur. Structure du tunnel intacte. */
+const IFRAME_SRC = 'https://www.jlassure.com/sousfiche/assure_tempo_rapide_mb.php?cat=&&tip=09.74.19.78.20&&id=1323&&cd=13ELA322&&adrsite=https://assutempo.fr/';
+
 function Pricing() {
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const iframeRef = useRef(null);
+  const { search } = useLocation();
+
+  /* Duree pre-choisie depuis le hero (?duree=N) : appliquee apres hydratation
+     pour garder le HTML prerendu identique cote client et serveur. */
+  useEffect(() => {
+    const n = parseInt(new URLSearchParams(search).get('duree'), 10);
+    const el = iframeRef.current;
+    if (el && Number.isInteger(n) && n >= 1 && n <= 90 && !el.src.includes('&duree=')) {
+      el.src = `${IFRAME_SRC}&duree=${n}`;
+    }
+  }, [search]);
 
   // Ouvre l'assistant Tempo depuis n'importe quel bouton de la page.
   const openAssistant = () => {
@@ -248,7 +265,8 @@ function Pricing() {
             }}
           >
             <iframe
-              src="https://www.jlassure.com/sousfiche/assure_tempo_rapide_mb.php?cat=&&tip=09.74.19.78.20&&id=1323&&cd=13ELA322&&adrsite=https://assutempo.fr/"
+              ref={iframeRef}
+              src={IFRAME_SRC}
               width="100%"
               height="1450"
               frameBorder="0"

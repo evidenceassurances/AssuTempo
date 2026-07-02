@@ -1,0 +1,224 @@
+/* Hero scrollytelling : zone de defilement + etage sticky + module Devis express.
+   Regle : transform et opacity uniquement, aucun layout shift
+   (dimensions reservees des le CSS initial). */
+
+/* ── Zone et etage ─────────────────────────────────────────────────────── */
+.scy-zone{
+  position: relative;
+  height: 280vh;
+}
+.scy-stage{
+  position: sticky;
+  top: 0;
+  height: 100vh;   /* repli */
+  height: 100svh;  /* iOS Safari : barre d'adresse dynamique */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; /* repli */
+  overflow: clip;
+}
+
+/* ── Acte 1 : bloc hero (anime en transform/opacity, jamais demonte) ───── */
+.scy-copy{
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+/* ── Acte 2 : module Devis express ─────────────────────────────────────── */
+.scy-module{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 88px 24px 56px;
+  will-change: transform, opacity;
+}
+.dx{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+}
+.dx-eyebrow{
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Grand nombre de jours : deux colonnes de chiffres clippees a 1em */
+.dx-num{
+  display: inline-flex;
+  height: 1em;
+  overflow: hidden;
+  font-size: clamp(72px, 22vw, 104px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 36px rgba(232,201,122,.16);
+}
+.dx-col{ display: block; }
+.dx-col > span{
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+
+.dx-label{
+  margin: -4px 0 0;
+  font-size: 12px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.dx-date{
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+/* Curseur 1 a 90 jours : zone tactile de 44 px, piste remplie via --f */
+.dx-range{
+  --f: 6.7%;
+  width: min(360px, 84vw);
+  height: 44px;
+  margin: 4px 0 2px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.dx-range:focus-visible{
+  outline: 2px solid var(--gold);
+  outline-offset: 8px;
+  border-radius: 8px;
+}
+.dx-range::-webkit-slider-runnable-track{
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold) var(--f), rgba(201,168,76,.22) var(--f));
+}
+.dx-range::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -11.5px;
+  border-radius: 50%;
+  border: none;
+  background: radial-gradient(circle at 35% 30%, #F6E7B6, #C9A84C 72%);
+  box-shadow: 0 0 14px rgba(232,201,122,.45), 0 2px 8px rgba(0,0,0,.55);
+}
+.dx-range::-moz-range-track{
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(201,168,76,.22);
+}
+.dx-range::-moz-range-progress{
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+.dx-range::-moz-range-thumb{
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #F6E7B6, #C9A84C 72%);
+  box-shadow: 0 0 14px rgba(232,201,122,.45), 0 2px 8px rgba(0,0,0,.55);
+}
+
+.dx-cta{
+  padding: 14px 30px;
+  font-size: 16px;
+}
+.dx-note{
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-subtle);
+}
+
+/* ── Indice de scroll : petit texte + trait lumineux ───────────────────── */
+.scy-hint{
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  pointer-events: none;
+  animation: scy-hint-in .5s ease 1.4s backwards;
+}
+.scy-hint-line{
+  position: relative;
+  width: 1px;
+  height: 28px;
+  overflow: hidden;
+  background: rgba(201,168,76,.15);
+}
+.scy-hint-pulse{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 10px;
+  background: linear-gradient(to bottom, transparent, rgba(232,201,122,.9));
+  animation: scy-hint-drop 1.8s cubic-bezier(.4,0,.2,1) infinite;
+}
+@keyframes scy-hint-in{ from{ opacity: 0; } }
+@keyframes scy-hint-drop{
+  from{ transform: translateY(-10px); }
+  to{ transform: translateY(28px); }
+}
+
+/* ── Fondu vers la section suivante ────────────────────────────────────── */
+.scy-fade{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--bg-2));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Mobile ────────────────────────────────────────────────────────────── */
+@media (max-width: 767px){
+  .scy-stage{
+    padding-top: 72px;
+    padding-bottom: 40px;
+  }
+  .scy-module{ padding: 76px 20px 48px; }
+  .scy-hint{ bottom: 16px; }
+}
+
+/* ── Accessibilite : aucun mouvement decoratif ─────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  .scy-hint,
+  .scy-hint-pulse{ animation: none; }
+  .dx-num,
+  .dx-col{ transition: none !important; }
+}

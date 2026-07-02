@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Hero from '../components/Hero';
+import HeroScrollytelling from '../components/HeroScrollytelling';
 import VehicleMarquee from '../components/VehicleMarquee';
 import Stats from '../components/Stats';
 import Advantages from '../components/Advantages';
@@ -26,8 +26,10 @@ function Home() {
         <meta name="twitter:title" content="Assurance Temporaire Auto en Ligne, 1 à 90 Jours | AssuTempo" />
         <meta name="twitter:description" content="Assurance auto temporaire de 1 à 90 jours. Attestation immédiate en 5 minutes, sans relevé d'information. 34 pays couverts. Devis gratuit en ligne." />
       </Helmet>
-      <main style={{ overflow: 'hidden' }}>
-      <Hero />
+      {/* overflow-x clip et non hidden : un ancetre overflow hidden
+          desactiverait le position: sticky de l'etage du scrollytelling */}
+      <main style={{ overflowX: 'clip' }}>
+      <HeroScrollytelling />
       <VehicleMarquee />
       <CtaAfterVehicles />
       <Stats />
