@@ -523,6 +523,14 @@ function AssuranceInternationale() {
         <title>Assurance Temporaire Maroc, Turquie, Tunisie | AssuTempo</title>
         <meta name="description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie et plus. Devis personnalisé sous 12h, accompagnement dédié. Voitures et poids lourds." />
         <link rel="canonical" href="https://assutempo.fr/assurance-internationale" />
+        <meta property="og:title" content="Assurance Temporaire Maroc, Turquie, Tunisie | AssuTempo" />
+        <meta property="og:description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie et plus. Devis personnalisé sous 12h, accompagnement dédié." />
+        <meta property="og:url" content="https://assutempo.fr/assurance-internationale" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="AssuTempo" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Assurance Temporaire Maroc, Turquie, Tunisie | AssuTempo" />
+        <meta name="twitter:description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie et plus. Devis personnalisé sous 12h, accompagnement dédié." />
       </Helmet>
 
       {/* Hero */}

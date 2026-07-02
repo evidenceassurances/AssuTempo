@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { jsonLd } from '../lib/seo';
 import { Link } from 'react-router-dom';
 import { m, useReducedMotion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -13,7 +14,7 @@ import {
   User,
   ChevronRight,
 } from 'lucide-react';
-import { useScrollProgress } from '../hooks/useScrollProgress';
+import ScrollProgress from './articles/ScrollProgress';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import AccordionItem from './ui/AccordionItem';
 import Footer from './Footer';
@@ -603,7 +604,6 @@ function StickyCTA() {
 
 /* ─── ArticleLayout ─── */
 function ArticleLayout({ data }) {
-  const progress = useScrollProgress();
   const [openFaq, setOpenFaq] = useState(null);
   const relatedArticles = articles
     .filter((a) => a.slug !== data.slug)
@@ -617,28 +617,25 @@ function ArticleLayout({ data }) {
         <title>{data.seo.title}</title>
         <meta name="description" content={data.seo.description} />
         <link rel="canonical" href={data.seo.canonical} />
+        <meta property="og:title" content={data.seo.title} />
+        <meta property="og:description" content={data.seo.description} />
+        <meta property="og:url" content={data.seo.canonical} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="AssuTempo" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={data.seo.title} />
+        <meta name="twitter:description" content={data.seo.description} />
         {data.seo.jsonLd.map((schema, i) => (
           <script key={i} type="application/ld+json">
-            {JSON.stringify(schema)}
+            {jsonLd(schema)}
           </script>
         ))}
       </Helmet>
 
-      {/* Reading progress bar */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: `${progress * 100}%`,
-          height: 3,
-          background: 'linear-gradient(to right, var(--gold-deep), var(--gold-light))',
-          zIndex: 9999,
-          pointerEvents: 'none',
-          transition: 'width 0.1s linear',
-        }}
-      />
+      {/* Barre de progression de lecture : composant dedie (portal + scaleX
+          GPU), au lieu d'une animation de width qui re-rendait tout
+          l'article a chaque frame de scroll */}
+      <ScrollProgress />
 
       <article style={{ paddingBottom: 80 }}>
         {/* ── Hero header ── */}

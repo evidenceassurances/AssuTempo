@@ -143,6 +143,19 @@ for (const route of ROUTES) {
     appHtml = appHtml.replace(/<link\s+rel="canonical"[^>]*\/?>/gi, '');
   }
 
+  // Extraire les balises og:/article:/twitter: depuis le body. Elles sont
+  // hoistables au meme titre que la description (React 19 reconcilie les
+  // <meta> du <head> sans mismatch) et les scrapers sociaux (WhatsApp,
+  // LinkedIn, Facebook...) ne lisent que le <head> du HTML statique.
+  const socialMetas = [];
+  appHtml = appHtml.replace(/<meta\b[^>]*\/?>/gi, (tag) => {
+    if (/property="(?:og|article):|name="twitter:/i.test(tag)) {
+      socialMetas.push(tag);
+      return '';
+    }
+    return tag;
+  });
+
   // Injecter le contenu dans le template
   let pageHtml = template.replace('<!--ssr-outlet-->', appHtml);
 
@@ -167,6 +180,14 @@ for (const route of ROUTES) {
     pageHtml = pageHtml.replace(
       '</head>',
       `    <link rel="canonical" href="${canonicalMatch[1]}">\n  </head>`,
+    );
+  }
+
+  // Injecter les balises sociales avant </head>
+  if (socialMetas.length) {
+    pageHtml = pageHtml.replace(
+      '</head>',
+      `    ${socialMetas.join('\n    ')}\n  </head>`,
     );
   }
 
