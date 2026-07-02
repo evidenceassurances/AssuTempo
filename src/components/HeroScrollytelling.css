@@ -71,7 +71,6 @@
   letter-spacing: -0.02em;
   color: var(--text);
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 36px rgba(232,201,122,.16);
 }
 /* Finition 6 : odometre, les chiffres roulent verticalement en transform.
    La colonne des dizaines s'estompe sous 10 et le bloc se recentre. */
