@@ -54,6 +54,20 @@
 .atc-arc{ stroke: url(#atcArc); stroke-width: .9; }
 .atc-arc-glow{ stroke: rgba(232,201,122,.26); stroke-width: 2.2; }
 
+/* Sillage d'aiguille (finition 4) : transition transform plus lente que
+   celle de l'aiguille, il traine derriere le point puis le rattrape */
+.atc-wake{
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform .7s cubic-bezier(.25,.9,.3,1), opacity .45s ease;
+}
+.atc-wake-path{
+  fill: none;
+  stroke: url(#atcWake);
+  stroke-width: .8;
+  stroke-linecap: round;
+}
+
 /* Aiguille-point : positionnement avec un leger rebond elastique */
 .atc-needle{
   transform-box: view-box;
@@ -115,4 +129,6 @@
   .atc-arc-glow,
   .atc-needle,
   .atc-grad{ transition: none !important; }
+  .atc-grad.on{ animation: none !important; }
+  .atc-wake{ opacity: 0 !important; transition: none !important; }
 }

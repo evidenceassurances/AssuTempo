@@ -25,6 +25,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   const arcRef = useRef(null);
   const arcGlowRef = useRef(null);
   const needleRef = useRef(null);
+  const wakeRef = useRef(null);
 
   /* Etat mutable hors React : aucune re-render pendant le scroll ou le drag */
   const st = useRef({
@@ -38,6 +39,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     started: false,
     reduced: false,
     timer: 0,
+    wakeTimer: 0,
     days: 7,          /* derniere valeur choisie (re-materialisation) */
     lit: 0,           /* nombre de graduations allumees */
     zeroed: true,     /* cadran "pur" (retour en haut) */
@@ -55,6 +57,9 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     arcRef.current.style.strokeDashoffset = offset;
     arcGlowRef.current.style.strokeDashoffset = offset;
     needleRef.current.style.transform = `rotate(${days * 4}deg)`;
+    /* Finition 4 : le sillage vise le meme angle avec une transition plus
+       lente que l'aiguille, il traine donc derriere elle pendant le mouvement */
+    wakeRef.current.style.transform = `rotate(${days * 4}deg)`;
 
     const grads = st.grads;
     if (grads.length) {
@@ -166,6 +171,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       if (st.raf) cancelAnimationFrame(st.raf);
       st.raf = 0;
       clearTimeout(st.timer);
+      clearTimeout(st.wakeTimer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -178,6 +184,10 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
         st.mode = 'interacting';
         clearTimeout(st.timer);
         st.timer = setTimeout(() => { st.mode = 'resuming'; }, 3000);
+        /* Sillage visible pendant le remplissage, evanoui a l'arret */
+        wakeRef.current.style.opacity = 1;
+        clearTimeout(st.wakeTimer);
+        st.wakeTimer = setTimeout(() => { wakeRef.current.style.opacity = 0; }, 650);
       }
       applyVisual(days, !st.reduced);
     },
@@ -232,6 +242,11 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
             <stop offset="0.4" stopColor="rgba(232,201,122,0.45)" />
             <stop offset="1" stopColor="rgba(232,201,122,0)" />
           </radialGradient>
+          {/* Degrade du sillage : de la queue transparente vers la tete lumineuse */}
+          <linearGradient id="atcWake" gradientUnits="userSpaceOnUse" x1="41.05" y1="16.58" x2="50" y2="15.4">
+            <stop offset="0" stopColor="rgba(246,231,182,0)" />
+            <stop offset="1" stopColor="rgba(246,231,182,0.85)" />
+          </linearGradient>
         </defs>
 
         <g ref={numsRef} />
@@ -241,6 +256,10 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
           <g ref={gradsRef} />
           <circle ref={arcGlowRef} className="atc-arc-glow" cx="50" cy="50" r={R} style={{ strokeDashoffset: CIRC }} />
           <circle ref={arcRef} className="atc-arc" cx="50" cy="50" r={R} style={{ strokeDashoffset: CIRC }} />
+          {/* Finition 4 : sillage de ~15 degres derriere le point-aiguille */}
+          <g ref={wakeRef} className="atc-wake" style={{ transform: 'rotate(0deg)', opacity: 0 }}>
+            <path className="atc-wake-path" d="M 41.05 16.58 A 34.6 34.6 0 0 1 50 15.4" />
+          </g>
           <g ref={needleRef} className="atc-needle" style={{ transform: 'rotate(0deg)' }}>
             <line className="atc-needle-line" x1="50" y1="21.4" x2="50" y2="16.6" />
             <circle className="atc-needle-glow" cx="50" cy="15.4" r="2.6" fill="url(#atcDotGlow)" />
