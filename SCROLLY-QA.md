@@ -42,6 +42,18 @@
 ## Regle de Chanel : finition retiree = sillage d'aiguille (finition 4)
 L'arc qui se remplit est la star, et sa tete (aiguille-point lumineuse + eclats de graduations) constitue deja une trainee de lumiere. Le sillage doublait le meme evenement lumineux, au meme endroit, au meme instant : c'etait le seul raffinement qui concurrencait la hierarchie. Retrait chirurgical en commit dedie (24ea494 pose, retrait apres controle visuel), revert possible.
 
+## Correctif mobile du 2 juillet (acte 2 en instrument) : verification 375 et 390 px
+- **Cadran entier visible** : rect mesure [19, 166, 356, 504] dans 375x812 et [19, 175, 371, 527] dans 390x844 : aucun arc coupe, aucune lueur tronquee (masque de fondu retire en mode instrument). Diametre 90vw plafonne 420 px.
+- **Composition instrument** : eyebrow + odometre + "Jours de couverture" centres DANS le cercle ; date, slider, CTA, reassurance en dessous ; CTA au-dessus du pli (bottom 653 < 812). Bloc centre optiquement, plus de grand vide sous le header.
+- **Aucun texte a l'envers** : reperes 15/30/45/60/75/90 toujours horizontaux (position sur cercle interieur, aucune rotation), verifies lisibles sur captures 1 j, 45 j, 90 j.
+- **Aiguille** : halo reduit de moitie sur mobile (scale .5, transform-box fill-box), trait affine ; la face centree ne chevauche jamais la ligne d'aiguille (l'aiguille vit pres du rail, r 28.6 a 34.6).
+- **Slider stylé** : piste 5,5 px arrondie rgba(232,199,102,.15), remplissage degrade C9A84C vers E8C97A synchronise via --f (JS a chaque input), pouce 27 px a lisere clair et halo, zone tactile 44 px, styles webkit ET moz. Verifie rempli a 1, 45 et 90 jours (captures).
+- **Odometre sans artefact** : encre centree par cellule (flex 1em) + police arrondie au pixel entier (les em fractionnaires de 22vw laissaient un lisere du chiffre voisin sur iOS). Passages 9 vers 10 et 89 vers 90 verifies : aucun residu, aucun saut de layout (recentrage en transform).
+- **Convention de date confirmee** : fin = debut + (jours - 1). 1 jour le 2 juillet affiche "jusqu'au 2 juillet" (capture) ; le tunnel recoit la duree en jours (?duree=N), coherent.
+- **Desktop inchange** : groupes .dx-face/.dx-controls en display:contents (rendu strictement identique), transform scale(1.03) conserve, verifie par capture 1440 px.
+- Transition acte 1 vers acte 2 : le texte hero sort vers le haut, le cadran retrecit et se recentre en douceur (interpolation translate + scale liee a p2, geometrie mesuree sur .dx-face, invalidee au resize et a l'orientation).
+- Note de mesure : suite 37/40 lors de ce passage, les 3 echecs etant les mesures FPS a 31 fps uniformes y compris page blanche temoin (plafond rAF de l'environnement au moment du test, machine throttlee) ; la veille, meme suite a 61 fps partout sous plafond 60. Aucune regression propre au code.
+
 ## Ecarts assumes (complement du SCROLLY-PLAN)
 - Libelle CTA avec point median ("· 2 min") au lieu du tiret long de la spec : regle projet "aucun em-dash".
 - text-shadow du grand nombre retire apres controle visuel : il produisait un pave lumineux disgracieux sur mobile.
