@@ -12,6 +12,14 @@
   will-change: transform;
 }
 
+/* Contre-rotation de l'anneau interieur dashe (finition 1) : deux vitesses
+   opposees = mecanisme. Le CSS couvre l'avant-hydratation, le rAF prend
+   ensuite le relais sans saut. */
+.atc .atd-dash{
+  animation: atd-spin 180s linear infinite reverse;
+  will-change: transform;
+}
+
 /* Graduations de base re-calees sur 90 jours : 1 tick tous les 4 degres,
    majeures toutes les 10 (40 degres). Le from negatif centre chaque tick
    sur son angle exact pour un alignement pixel avec la couche SVG. */

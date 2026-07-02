@@ -13,10 +13,12 @@ import './CadranAssutempo.css';
 const R = 34.6;                      /* rayon de l'orbite, en unites viewBox (100) */
 const CIRC = +(2 * Math.PI * R).toFixed(3);
 const IDLE_SPEED = 360 / 75;         /* comete au repos : 1 tour en 75 s */
+const DASH_SPEED = 360 / 180;        /* contre-rotation : 1 tour en 3 min, sens inverse */
 
 const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   const rootRef = useRef(null);
   const cometRef = useRef(null);
+  const dashRef = useRef(null);
   const gradsRef = useRef(null);
   const fillRef = useRef(null);
   const arcRef = useRef(null);
@@ -26,6 +28,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   /* Etat mutable hors React : aucune re-render pendant le scroll ou le drag */
   const st = useRef({
     angle: 0,
+    dashAngle: 0,
     speed: IDLE_SPEED,
     mode: 'idle',
     raf: 0,
@@ -85,6 +88,10 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     st.angle = (st.angle + st.speed * dt) % 360;
     cometRef.current.style.transform = `rotate(${st.angle.toFixed(3)}deg)`;
 
+    /* Finition 1 : contre-rotation lente et constante, deux vitesses opposees */
+    st.dashAngle = (st.dashAngle - DASH_SPEED * dt) % 360;
+    dashRef.current.style.transform = `rotate(${st.dashAngle.toFixed(3)}deg)`;
+
     st.raf = requestAnimationFrame(loop);
   };
 
@@ -122,15 +129,18 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     st.lit = 0;
     if (!st.zeroed) applyVisual(st.days, false);
 
-    /* Prise de controle de la rotation CSS sans saut : on lit l'angle courant */
+    /* Prise de controle des rotations CSS sans saut : on lit l'angle courant */
     if (!st.reduced) {
-      const comet = cometRef.current;
-      const mtx = getComputedStyle(comet).transform;
-      if (mtx && mtx.startsWith('matrix')) {
+      const readAngle = (el) => {
+        const mtx = getComputedStyle(el).transform;
+        if (!mtx || !mtx.startsWith('matrix')) return 0;
         const [ma, mb] = mtx.slice(7).split(',');
-        st.angle = ((Math.atan2(+mb, +ma) * 180) / Math.PI + 360) % 360;
-      }
-      comet.style.animation = 'none';
+        return ((Math.atan2(+mb, +ma) * 180) / Math.PI + 360) % 360;
+      };
+      st.angle = readAngle(cometRef.current);
+      st.dashAngle = readAngle(dashRef.current);
+      cometRef.current.style.animation = 'none';
+      dashRef.current.style.animation = 'none';
       st.started = true;
       startLoop();
     }
@@ -191,7 +201,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       <div className="atd-bloom" />
       <div className="atd-ring atd-r1" />
       <div className="atd-ring atd-r2" />
-      <div className="atd-ring atd-dash" />
+      <div className="atd-ring atd-dash" ref={dashRef} />
       <div className="atd-ticks" />
       <div className="atd-ticks atd-ticks-major" />
 
