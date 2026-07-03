@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, cloneElement, isValidElement } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
 import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet, Check } from 'lucide-react';
@@ -61,15 +61,28 @@ const inputBase = {
 };
 
 function Field({ label, error, children }) {
+  const child = error && isValidElement(children)
+    ? cloneElement(children, { 'aria-invalid': true })
+    : children;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <label style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>{label}</label>
-      {children}
+      {child}
       {error && (
-        <span style={{ fontSize: 12, color: '#e05c5c' }}>{error}</span>
+        <span className="field-error-msg" role="alert" style={{ fontSize: 12, color: '#e05c5c' }}>{error}</span>
       )}
     </div>
   );
+}
+
+/* Fait defiler la page jusqu'au premier message d'erreur affiche */
+function scrollToFirstError() {
+  requestAnimationFrame(() => {
+    const el = document.querySelector('.field-error-msg');
+    if (!el) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  });
 }
 
 function PartnerForm() {
@@ -77,7 +90,18 @@ function PartnerForm() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // 'idle' | 'envoi' | 'succes' | 'erreur'
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const set = (key) => (e) => {
+    const { value } = e.target;
+    setForm((f) => ({ ...f, [key]: value }));
+    setErrors((errs) => (errs[key] ? { ...errs, [key]: undefined } : errs));
+  };
+
+  /* Telephone : chiffres uniquement, 10 maximum */
+  const setTelephone = (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+    setForm((f) => ({ ...f, telephone: digits }));
+    setErrors((errs) => (errs.telephone ? { ...errs, telephone: undefined } : errs));
+  };
 
   const focusStyle = (e) => {
     e.target.style.borderColor = 'var(--gold-border)';
@@ -98,7 +122,11 @@ function PartnerForm() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       errs.email = 'Adresse email invalide.';
     }
-    if (!form.telephone.trim()) errs.telephone = 'Champ requis.';
+    if (!form.telephone) {
+      errs.telephone = 'Champ requis.';
+    } else if (!/^0[1-9]\d{8}$/.test(form.telephone)) {
+      errs.telephone = 'Numéro invalide : 10 chiffres commençant par 0, ex. 0612345678.';
+    }
     return errs;
   }
 
@@ -108,6 +136,7 @@ function PartnerForm() {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      scrollToFirstError();
       return;
     }
 
@@ -116,6 +145,10 @@ function PartnerForm() {
 
     try {
       const formData = new FormData(e.target);
+      /* Nettoie les espaces parasites avant envoi */
+      for (const [key, value] of [...formData.entries()]) {
+        if (typeof value === 'string') formData.set(key, value.trim());
+      }
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: formData,
@@ -208,6 +241,7 @@ function PartnerForm() {
           name="type_structure"
           value={form.type}
           onChange={set('type')}
+          required
           onFocus={focusStyle}
           onBlur={blurStyle}
           style={{ ...inputBase, appearance: 'none', cursor: 'pointer', color: form.type ? 'var(--text)' : 'var(--text-muted)' }}
@@ -230,6 +264,9 @@ function PartnerForm() {
             onChange={set('societe')}
             onFocus={focusStyle}
             onBlur={blurStyle}
+            autoComplete="organization"
+            maxLength={100}
+            required
             style={inputBase}
           />
         </Field>
@@ -242,6 +279,9 @@ function PartnerForm() {
             onChange={set('contact')}
             onFocus={focusStyle}
             onBlur={blurStyle}
+            autoComplete="name"
+            maxLength={100}
+            required
             style={inputBase}
           />
         </Field>
@@ -257,6 +297,9 @@ function PartnerForm() {
             onChange={set('email')}
             onFocus={focusStyle}
             onBlur={blurStyle}
+            autoComplete="email"
+            maxLength={120}
+            required
             style={inputBase}
           />
         </Field>
@@ -264,11 +307,15 @@ function PartnerForm() {
           <input
             type="tel"
             name="telephone"
-            placeholder="06 00 00 00 00"
+            placeholder="0612345678"
             value={form.telephone}
-            onChange={set('telephone')}
+            onChange={setTelephone}
             onFocus={focusStyle}
             onBlur={blurStyle}
+            autoComplete="tel-national"
+            inputMode="numeric"
+            maxLength={10}
+            required
             style={inputBase}
           />
         </Field>
@@ -283,6 +330,7 @@ function PartnerForm() {
           onChange={set('message')}
           onFocus={focusStyle}
           onBlur={blurStyle}
+          maxLength={2000}
           rows={5}
           style={{ ...inputBase, resize: 'vertical', minHeight: 120 }}
         />

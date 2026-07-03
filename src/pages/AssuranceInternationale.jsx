@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, cloneElement, isValidElement } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { m, useReducedMotion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -61,19 +61,34 @@ const onBlur = (e) => {
 };
 
 function Field({ label, hint, error, children }) {
+  const child = error && isValidElement(children)
+    ? cloneElement(children, { 'aria-invalid': true })
+    : children;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {label && (
         <label style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>{label}</label>
       )}
-      {children}
+      {child}
       {hint && (
         <span style={{ fontSize: 12, color: 'var(--text-subtle)', lineHeight: 1.5 }}>{hint}</span>
       )}
-      {error && <span style={{ fontSize: 12, color: '#e05c5c' }}>{error}</span>}
+      {error && <span className="field-error-msg" role="alert" style={{ fontSize: 12, color: '#e05c5c' }}>{error}</span>}
     </div>
   );
 }
+
+/* Fait defiler la page jusqu'au premier message d'erreur affiche */
+function scrollToFirstError() {
+  requestAnimationFrame(() => {
+    const el = document.querySelector('.field-error-msg');
+    if (!el) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  });
+}
+
+const pad2 = (n) => String(n).padStart(2, '0');
 
 function FormSection({ title, children }) {
   return (
@@ -126,30 +141,112 @@ function DevisForm({ initialPays }) {
   const [status, setStatus] = useState('idle');
   const paysRef = useRef(null);
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  /* Bornes des champs date, posees apres montage (le prerendu statique ne doit pas
+     contenir de valeur dependante de l'horloge : risque de mismatch d'hydratation) */
+  const [dateBounds, setDateBounds] = useState({ minEffet: '', maxNaissance: '', maxPermis: '' });
+  useEffect(() => {
+    const now = new Date();
+    const today = `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
+    const adult = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
+    setDateBounds({
+      minEffet: `${today}T${pad2(now.getHours())}:${pad2(now.getMinutes())}`,
+      maxNaissance: `${adult.getFullYear()}-${pad2(adult.getMonth() + 1)}-${pad2(adult.getDate())}`,
+      maxPermis: today,
+    });
+  }, []);
+
+  const set = (key) => (e) => {
+    const { value } = e.target;
+    setForm((f) => ({ ...f, [key]: value }));
+    setErrors((errs) => (errs[key] ? { ...errs, [key]: undefined } : errs));
+  };
+
+  /* Telephone : chiffres uniquement, 10 maximum */
+  const setTelephone = (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+    setForm((f) => ({ ...f, telephone: digits }));
+    setErrors((errs) => (errs.telephone ? { ...errs, telephone: undefined } : errs));
+  };
+
+  /* Immatriculation : forcee en majuscules dans la valeur envoyee, pas seulement a l'ecran */
+  const setImmat = (e) => {
+    const value = e.target.value.toUpperCase();
+    setForm((f) => ({ ...f, immat: value }));
+    setErrors((errs) => (errs.immat ? { ...errs, immat: undefined } : errs));
+  };
 
   function togglePays(nom) {
     setPays((prev) =>
       prev.includes(nom) ? prev.filter((p) => p !== nom) : [...prev, nom]
     );
+    setErrors((errs) => (errs.pays ? { ...errs, pays: undefined } : errs));
   }
 
   function validate() {
     const errs = {};
     if (pays.length === 0) errs.pays = 'Sélectionnez au moins un pays de destination.';
-    if (!form.dateEffet) errs.dateEffet = 'Champ requis.';
-    if (!form.duree) errs.duree = 'Champ requis.';
+
+    if (!form.dateEffet) {
+      errs.dateEffet = 'Champ requis.';
+    } else {
+      const effet = new Date(form.dateEffet);
+      /* Tolerance d'une heure pour un depart imminent */
+      if (Number.isNaN(effet.getTime()) || effet.getTime() < Date.now() - 60 * 60 * 1000) {
+        errs.dateEffet = "La date d'effet doit être à venir.";
+      }
+    }
+
+    if (!form.duree) {
+      errs.duree = 'Champ requis.';
+    } else {
+      const duree = Number(form.duree);
+      if (!Number.isInteger(duree) || duree < 1 || duree > 90) {
+        errs.duree = 'Indiquez une durée entière entre 1 et 90 jours.';
+      }
+    }
+
     if (!form.genre) errs.genre = 'Champ requis.';
     if (!form.marque.trim()) errs.marque = 'Champ requis.';
     if (!form.modele.trim()) errs.modele = 'Champ requis.';
     if (!form.immat.trim()) errs.immat = 'Champ requis.';
-    if (!form.puissance) errs.puissance = 'Champ requis.';
+
+    if (!form.puissance) {
+      errs.puissance = 'Champ requis.';
+    } else {
+      const cv = Number(form.puissance);
+      if (!Number.isInteger(cv) || cv < 1 || cv > 999) {
+        errs.puissance = 'Indiquez un nombre entier de chevaux fiscaux.';
+      }
+    }
+
+    if (!form.paysImmat.trim()) errs.paysImmat = 'Champ requis.';
     if (!form.usage) errs.usage = 'Champ requis.';
     if (!form.nom.trim()) errs.nom = 'Champ requis.';
     if (!form.prenom.trim()) errs.prenom = 'Champ requis.';
-    if (!form.dateNaissance) errs.dateNaissance = 'Champ requis.';
-    if (!form.datePermis) errs.datePermis = 'Champ requis.';
+
+    if (!form.dateNaissance) {
+      errs.dateNaissance = 'Champ requis.';
+    } else {
+      const naissance = new Date(form.dateNaissance);
+      const majorite = new Date(naissance.getFullYear() + 18, naissance.getMonth(), naissance.getDate());
+      if (Number.isNaN(naissance.getTime()) || majorite.getTime() > Date.now()) {
+        errs.dateNaissance = 'Le conducteur doit être majeur.';
+      }
+    }
+
+    if (!form.datePermis) {
+      errs.datePermis = 'Champ requis.';
+    } else {
+      const permis = new Date(form.datePermis);
+      if (Number.isNaN(permis.getTime()) || permis.getTime() > Date.now()) {
+        errs.datePermis = 'Cette date ne peut pas être dans le futur.';
+      } else if (form.dateNaissance && permis.getTime() <= new Date(form.dateNaissance).getTime()) {
+        errs.datePermis = 'Date incohérente avec la date de naissance.';
+      }
+    }
+
     if (!form.numPermis.trim()) errs.numPermis = 'Champ requis.';
+    if (!form.paysResidence.trim()) errs.paysResidence = 'Champ requis.';
     if (!form.ville.trim()) errs.ville = 'Champ requis.';
     if (!form.condamnation) errs.condamnation = 'Répondez à cette question.';
     if (!form.email.trim()) {
@@ -157,7 +254,11 @@ function DevisForm({ initialPays }) {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       errs.email = 'Adresse email invalide.';
     }
-    if (!form.telephone.trim()) errs.telephone = 'Champ requis.';
+    if (!form.telephone) {
+      errs.telephone = 'Champ requis.';
+    } else if (!/^0[1-9]\d{8}$/.test(form.telephone)) {
+      errs.telephone = 'Numéro invalide : 10 chiffres commençant par 0, ex. 0612345678.';
+    }
     if (!form.consentement) errs.consentement = 'Votre accord est requis.';
     return errs;
   }
@@ -165,12 +266,20 @@ function DevisForm({ initialPays }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      scrollToFirstError();
+      return;
+    }
     setErrors({});
     if (paysRef.current) paysRef.current.value = pays.join(', ');
     setStatus('envoi');
     try {
       const formData = new FormData(e.target);
+      /* Nettoie les espaces parasites avant envoi */
+      for (const [key, value] of [...formData.entries()]) {
+        if (typeof value === 'string') formData.set(key, value.trim());
+      }
       const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.success) {
@@ -255,9 +364,11 @@ function DevisForm({ initialPays }) {
               type="datetime-local"
               name="Date et heure d'effet"
               value={form.dateEffet}
+              min={dateBounds.minEffet || undefined}
               onChange={set('dateEffet')}
               onFocus={onFocus}
               onBlur={onBlur}
+              required
               style={{ ...inputBase, colorScheme: 'dark' }}
             />
           </Field>
@@ -267,11 +378,14 @@ function DevisForm({ initialPays }) {
               name="Durée (jours)"
               min="1"
               max="90"
+              step="1"
+              inputMode="numeric"
               placeholder="Ex. : 7"
               value={form.duree}
               onChange={set('duree')}
               onFocus={onFocus}
               onBlur={onBlur}
+              required
               style={inputBase}
             />
           </Field>
@@ -313,24 +427,24 @@ function DevisForm({ initialPays }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Marque *" error={errors.marque}>
-            <input type="text" name="Marque" placeholder="Ex. : Renault" value={form.marque} onChange={set('marque')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Marque" placeholder="Ex. : Renault" value={form.marque} onChange={set('marque')} onFocus={onFocus} onBlur={onBlur} maxLength={60} required style={inputBase} />
           </Field>
           <Field label="Modèle *" error={errors.modele}>
-            <input type="text" name="Modèle" placeholder="Ex. : Clio" value={form.modele} onChange={set('modele')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Modèle" placeholder="Ex. : Clio" value={form.modele} onChange={set('modele')} onFocus={onFocus} onBlur={onBlur} maxLength={60} required style={inputBase} />
           </Field>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Immatriculation *" error={errors.immat}>
-            <input type="text" name="Immatriculation" placeholder="AB-123-CD" value={form.immat} onChange={set('immat')} onFocus={onFocus} onBlur={onBlur} style={{ ...inputBase, textTransform: 'uppercase' }} />
+            <input type="text" name="Immatriculation" placeholder="AB-123-CD" value={form.immat} onChange={setImmat} onFocus={onFocus} onBlur={onBlur} maxLength={15} required style={{ ...inputBase, textTransform: 'uppercase' }} />
           </Field>
           <Field label="Puissance fiscale (CV) *" error={errors.puissance}>
-            <input type="number" name="Puissance fiscale (CV)" placeholder="Ex. : 6" min="1" value={form.puissance} onChange={set('puissance')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="number" name="Puissance fiscale (CV)" placeholder="Ex. : 6" min="1" max="999" step="1" inputMode="numeric" value={form.puissance} onChange={set('puissance')} onFocus={onFocus} onBlur={onBlur} required style={inputBase} />
           </Field>
         </div>
 
-        <Field label="Pays d'immatriculation *">
-          <input type="text" name="Pays d'immatriculation" value={form.paysImmat} onChange={set('paysImmat')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+        <Field label="Pays d'immatriculation *" error={errors.paysImmat}>
+          <input type="text" name="Pays d'immatriculation" value={form.paysImmat} onChange={set('paysImmat')} onFocus={onFocus} onBlur={onBlur} maxLength={60} required style={inputBase} />
         </Field>
       </FormSection>
 
@@ -338,36 +452,36 @@ function DevisForm({ initialPays }) {
       <FormSection title="Le conducteur">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Nom *" error={errors.nom}>
-            <input type="text" name="Nom" value={form.nom} onChange={set('nom')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Nom" value={form.nom} onChange={set('nom')} onFocus={onFocus} onBlur={onBlur} autoComplete="family-name" maxLength={80} required style={inputBase} />
           </Field>
           <Field label="Prénom *" error={errors.prenom}>
-            <input type="text" name="Prénom" value={form.prenom} onChange={set('prenom')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Prénom" value={form.prenom} onChange={set('prenom')} onFocus={onFocus} onBlur={onBlur} autoComplete="given-name" maxLength={80} required style={inputBase} />
           </Field>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Date de naissance *" error={errors.dateNaissance}>
-            <input type="date" name="Date de naissance" value={form.dateNaissance} onChange={set('dateNaissance')} onFocus={onFocus} onBlur={onBlur} style={{ ...inputBase, colorScheme: 'dark' }} />
+            <input type="date" name="Date de naissance" value={form.dateNaissance} max={dateBounds.maxNaissance || undefined} onChange={set('dateNaissance')} onFocus={onFocus} onBlur={onBlur} autoComplete="bday" required style={{ ...inputBase, colorScheme: 'dark' }} />
           </Field>
           <Field label="Date d'obtention du permis de conduire *" error={errors.datePermis}>
-            <input type="date" name="Date d'obtention du permis" value={form.datePermis} onChange={set('datePermis')} onFocus={onFocus} onBlur={onBlur} style={{ ...inputBase, colorScheme: 'dark' }} />
+            <input type="date" name="Date d'obtention du permis" value={form.datePermis} max={dateBounds.maxPermis || undefined} onChange={set('datePermis')} onFocus={onFocus} onBlur={onBlur} required style={{ ...inputBase, colorScheme: 'dark' }} />
           </Field>
         </div>
 
         <Field label="Numéro du permis de conduire *" error={errors.numPermis}>
-          <input type="text" name="Numéro du permis" value={form.numPermis} onChange={set('numPermis')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <input type="text" name="Numéro du permis" value={form.numPermis} onChange={set('numPermis')} onFocus={onFocus} onBlur={onBlur} maxLength={30} required style={inputBase} />
         </Field>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
-          <Field label="Pays de résidence *">
-            <input type="text" name="Pays de résidence" value={form.paysResidence} onChange={set('paysResidence')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+          <Field label="Pays de résidence *" error={errors.paysResidence}>
+            <input type="text" name="Pays de résidence" value={form.paysResidence} onChange={set('paysResidence')} onFocus={onFocus} onBlur={onBlur} maxLength={60} required style={inputBase} />
           </Field>
           <Field
             label="Ville de résidence *"
             error={errors.ville}
             hint="La souscription n'est pas possible si le conducteur réside en Corse, à Monaco ou en France d'Outre-mer."
           >
-            <input type="text" name="Ville de résidence" value={form.ville} onChange={set('ville')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="text" name="Ville de résidence" value={form.ville} onChange={set('ville')} onFocus={onFocus} onBlur={onBlur} autoComplete="address-level2" maxLength={80} required style={inputBase} />
           </Field>
         </div>
       </FormSection>
@@ -386,7 +500,10 @@ function DevisForm({ initialPays }) {
                   name="Condamnation ou suspension de permis (24 mois)"
                   value={opt}
                   checked={form.condamnation === opt}
-                  onChange={() => setForm((f) => ({ ...f, condamnation: opt }))}
+                  onChange={() => {
+                    setForm((f) => ({ ...f, condamnation: opt }));
+                    setErrors((errs) => (errs.condamnation ? { ...errs, condamnation: undefined } : errs));
+                  }}
                   style={{ accentColor: 'var(--gold)', width: 16, height: 16, cursor: 'pointer' }}
                 />
                 <span style={{ fontSize: 15, color: 'var(--text-muted)' }}>{opt}</span>
@@ -400,10 +517,10 @@ function DevisForm({ initialPays }) {
       <FormSection title="Vos coordonnées">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="intl-row">
           <Field label="Email *" error={errors.email}>
-            <input type="email" name="Email" placeholder="vous@exemple.fr" value={form.email} onChange={set('email')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="email" name="Email" placeholder="vous@exemple.fr" value={form.email} onChange={set('email')} onFocus={onFocus} onBlur={onBlur} autoComplete="email" maxLength={120} required style={inputBase} />
           </Field>
           <Field label="Téléphone *" error={errors.telephone}>
-            <input type="tel" name="Téléphone" placeholder="06 00 00 00 00" value={form.telephone} onChange={set('telephone')} onFocus={onFocus} onBlur={onBlur} style={inputBase} />
+            <input type="tel" name="Téléphone" placeholder="0612345678" value={form.telephone} onChange={setTelephone} onFocus={onFocus} onBlur={onBlur} autoComplete="tel-national" inputMode="numeric" maxLength={10} required style={inputBase} />
           </Field>
         </div>
       </FormSection>
@@ -418,6 +535,7 @@ function DevisForm({ initialPays }) {
             onChange={set('message')}
             onFocus={onFocus}
             onBlur={onBlur}
+            maxLength={2000}
             rows={4}
             style={{ ...inputBase, resize: 'vertical', minHeight: 100 }}
           />
@@ -431,7 +549,11 @@ function DevisForm({ initialPays }) {
             type="checkbox"
             name="Consentement"
             checked={form.consentement}
-            onChange={(e) => setForm((f) => ({ ...f, consentement: e.target.checked }))}
+            onChange={(e) => {
+              const { checked } = e.target;
+              setForm((f) => ({ ...f, consentement: checked }));
+              setErrors((errs) => (errs.consentement ? { ...errs, consentement: undefined } : errs));
+            }}
             style={{ accentColor: 'var(--gold)', width: 16, height: 16, marginTop: 3, flexShrink: 0, cursor: 'pointer' }}
           />
           <span style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
@@ -439,7 +561,7 @@ function DevisForm({ initialPays }) {
           </span>
         </label>
         {errors.consentement && (
-          <span style={{ fontSize: 12, color: '#e05c5c' }}>{errors.consentement}</span>
+          <span className="field-error-msg" role="alert" style={{ fontSize: 12, color: '#e05c5c' }}>{errors.consentement}</span>
         )}
       </div>
 
