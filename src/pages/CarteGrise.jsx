@@ -149,15 +149,6 @@ function CarteGrise() {
     }
   };
 
-  /* CTA hero : defilement doux vers le module + event GA4 */
-  const handleStartClick = () => {
-    trackEvent('clic_carte_grise');
-    if (typeof document !== 'undefined') {
-      const target = document.getElementById('demande');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   /* Event GA4 au chargement de l'iframe */
   const handleIframeLoad = () => {
     trackEvent('carte_grise_view');
@@ -197,10 +188,11 @@ function CarteGrise() {
         <script type="application/ld+json">{jsonLd(JSONLD_FAQ)}</script>
       </Helmet>
 
-      {/* ── A. Hero ──────────────────────────────────────────────────────── */}
+      {/* ── A. Hero compact : le module Certimat est juste dessous, visible
+             des l'arrivee. L'explication tient en trois lignes. ──────────── */}
       <section style={{
-        paddingTop: 170,
-        paddingBottom: 80,
+        paddingTop: 140,
+        paddingBottom: 40,
         textAlign: 'center',
         background: 'var(--bg)',
         position: 'relative',
@@ -225,7 +217,7 @@ function CarteGrise() {
             fontSize: 'clamp(32px, 5vw, 60px)',
             fontWeight: 800,
             color: '#fff',
-            marginBottom: 22,
+            marginBottom: 16,
             letterSpacing: '-0.03em',
           }}>
             Votre carte grise en ligne, sans la paperasse
@@ -234,7 +226,7 @@ function CarteGrise() {
             fontSize: 16,
             color: 'var(--text-muted)',
             maxWidth: 620,
-            margin: '0 auto 28px',
+            margin: '0 auto 20px',
             lineHeight: 1.75,
           }}>
             Service habilité par le Ministère de l'Intérieur. Démarche 100% en ligne,
@@ -247,7 +239,6 @@ function CarteGrise() {
             flexWrap: 'wrap',
             justifyContent: 'center',
             gap: '10px 22px',
-            marginBottom: 38,
           }}>
             {MICRO.map(({ Icon, label }) => (
               <span key={label} style={{
@@ -262,203 +253,13 @@ function CarteGrise() {
               </span>
             ))}
           </div>
-
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <button
-              type="button"
-              onClick={handleStartClick}
-              className="btn-gold"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '14px 28px',
-                fontSize: 15,
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-              }}
-            >
-              Démarrer ma demande
-              <ArrowRight size={16} strokeWidth={2} />
-            </button>
-            <a
-              href="tel:0974197820"
-              className="btn-glass"
-              style={{
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '14px 28px',
-                fontSize: 15,
-              }}
-            >
-              <Phone size={16} strokeWidth={1.5} />
-              Nous appeler
-            </a>
-          </div>
         </m.div>
       </section>
 
-      {/* ── B. Bande de confiance ────────────────────────────────────────── */}
-      <section style={{ background: 'var(--bg)', padding: '0 24px 96px' }}>
-        <m.div
-          ref={badgesRef}
-          initial={{ opacity: 0, y: 24 }}
-          animate={badgesInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: EASE }}
-          className="cg-trustband"
-          style={{
-            maxWidth: 1040,
-            margin: '0 auto',
-            position: 'relative',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 8,
-            background: 'linear-gradient(180deg, rgba(201,168,76,0.10) 0%, rgba(201,168,76,0.03) 100%)',
-            border: '1px solid var(--gold-border)',
-            borderRadius: 22,
-            padding: '34px 28px',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Filet dore superieur */}
-          <span style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 1,
-            background: 'linear-gradient(90deg, transparent, var(--gold-light), transparent)',
-          }} />
-          {BADGES.map(({ Icon, title }, i) => (
-            <div
-              key={title}
-              className="cg-badge"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                gap: 12,
-                padding: '0 14px',
-                borderLeft: i === 0 ? 'none' : '1px solid var(--glass-border)',
-              }}
-            >
-              <Icon size={26} color="var(--gold-light)" strokeWidth={1.5} />
-              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', lineHeight: 1.45 }}>
-                {title}
-              </span>
-            </div>
-          ))}
-        </m.div>
-      </section>
-
-      {/* ── C. Comment ca marche ─────────────────────────────────────────── */}
-      <section style={{ background: 'var(--bg-2)', padding: '104px 0' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
-          <m.div
-            ref={stepsRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={stepsInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: EASE }}
-            style={{ textAlign: 'center', marginBottom: 64 }}
-          >
-            <h2 style={{
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
-              fontWeight: 700,
-              letterSpacing: '-0.025em',
-              color: 'var(--text)',
-              margin: '0 0 14px',
-            }}>
-              Comment ça marche ?
-            </h2>
-            <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
-              Simple, rapide, sans déplacement.
-            </p>
-          </m.div>
-
-          <div className="cg-steps" style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', gap: 24 }}>
-            {/* Connecteur dore */}
-            <span className="cg-connector" aria-hidden="true" style={{
-              position: 'absolute',
-              top: 27,
-              left: '16%',
-              right: '16%',
-              height: 2,
-              background: 'linear-gradient(90deg, transparent, var(--gold-light), var(--gold-light), transparent)',
-              opacity: 0.5,
-            }} />
-            {STEPS.map((step, i) => (
-              <m.div
-                key={step.num}
-                className="cg-step"
-                initial={{ opacity: 0, y: 40 }}
-                animate={stepsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: i * 0.15, ease: EASE }}
-                style={{
-                  position: 'relative',
-                  zIndex: 1,
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  padding: '0 16px',
-                }}
-              >
-                <div style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 16,
-                  background: 'var(--bg-2)',
-                  backgroundImage: 'linear-gradient(180deg, rgba(232,201,122,0.16), rgba(201,168,76,0.04))',
-                  border: '1px solid var(--gold-border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 22,
-                  flexShrink: 0,
-                }}>
-                  <step.Icon size={24} color="var(--gold-light)" strokeWidth={1.5} />
-                </div>
-                <div style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: 'var(--gold-light)',
-                  letterSpacing: '0.15em',
-                  marginBottom: 12,
-                }}>
-                  {step.num}
-                </div>
-                <h3 style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: 'var(--text)',
-                  margin: '0 0 10px',
-                  letterSpacing: '-0.01em',
-                }}>
-                  {step.title}
-                </h3>
-                <p style={{
-                  fontSize: 15,
-                  color: 'var(--text-muted)',
-                  margin: 0,
-                  lineHeight: 1.65,
-                  maxWidth: 260,
-                }}>
-                  {step.body}
-                </p>
-              </m.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── D. Module Certimat (iframe officielle) ───────────────────────── */}
-      <section id="demande" style={{ background: 'var(--bg)', padding: '104px 24px' }}>
-        <div style={{ maxWidth: 760, margin: '0 auto 36px', textAlign: 'center' }}>
+      {/* ── B. Module Certimat (iframe officielle), directement sous le
+             hero : visible des l entree de page, l explication au-dessus. ── */}
+      <section id="demande" style={{ background: 'var(--bg)', padding: '24px 24px 96px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto 28px', textAlign: 'center' }}>
           <h2 style={{
             fontSize: 'clamp(1.6rem, 3.2vw, 2.2rem)',
             fontWeight: 700,
@@ -469,7 +270,8 @@ function CarteGrise() {
             Faites votre carte grise maintenant
           </h2>
           <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7 }}>
-            Démarche sécurisée, propulsée par notre partenaire agréé Certimat.
+            Identifiez votre véhicule, complétez votre dossier, recevez votre titre :
+            tout se passe ci-dessous, avec notre partenaire agréé Certimat.
           </p>
         </div>
 
@@ -603,6 +405,161 @@ function CarteGrise() {
             </p>
           </aside>
         </div>
+      </section>
+
+      {/* ── C. Comment ca marche ─────────────────────────────────────────── */}
+      <section style={{ background: 'var(--bg-2)', padding: '104px 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
+          <m.div
+            ref={stepsRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={stepsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: EASE }}
+            style={{ textAlign: 'center', marginBottom: 64 }}
+          >
+            <h2 style={{
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.025em',
+              color: 'var(--text)',
+              margin: '0 0 14px',
+            }}>
+              Comment ça marche ?
+            </h2>
+            <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
+              Simple, rapide, sans déplacement.
+            </p>
+          </m.div>
+
+          <div className="cg-steps" style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', gap: 24 }}>
+            {/* Connecteur dore */}
+            <span className="cg-connector" aria-hidden="true" style={{
+              position: 'absolute',
+              top: 27,
+              left: '16%',
+              right: '16%',
+              height: 2,
+              background: 'linear-gradient(90deg, transparent, var(--gold-light), var(--gold-light), transparent)',
+              opacity: 0.5,
+            }} />
+            {STEPS.map((step, i) => (
+              <m.div
+                key={step.num}
+                className="cg-step"
+                initial={{ opacity: 0, y: 40 }}
+                animate={stepsInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.7, delay: i * 0.15, ease: EASE }}
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  padding: '0 16px',
+                }}
+              >
+                <div style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 16,
+                  background: 'var(--bg-2)',
+                  backgroundImage: 'linear-gradient(180deg, rgba(232,201,122,0.16), rgba(201,168,76,0.04))',
+                  border: '1px solid var(--gold-border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 22,
+                  flexShrink: 0,
+                }}>
+                  <step.Icon size={24} color="var(--gold-light)" strokeWidth={1.5} />
+                </div>
+                <div style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: 'var(--gold-light)',
+                  letterSpacing: '0.15em',
+                  marginBottom: 12,
+                }}>
+                  {step.num}
+                </div>
+                <h3 style={{
+                  fontSize: 18,
+                  fontWeight: 600,
+                  color: 'var(--text)',
+                  margin: '0 0 10px',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {step.title}
+                </h3>
+                <p style={{
+                  fontSize: 15,
+                  color: 'var(--text-muted)',
+                  margin: 0,
+                  lineHeight: 1.65,
+                  maxWidth: 260,
+                }}>
+                  {step.body}
+                </p>
+              </m.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── D. Bande de confiance ────────────────────────────────────────── */}
+      <section style={{ background: 'var(--bg)', padding: '0 24px 96px' }}>
+        <m.div
+          ref={badgesRef}
+          initial={{ opacity: 0, y: 24 }}
+          animate={badgesInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="cg-trustband"
+          style={{
+            maxWidth: 1040,
+            margin: '0 auto',
+            position: 'relative',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 8,
+            background: 'linear-gradient(180deg, rgba(201,168,76,0.10) 0%, rgba(201,168,76,0.03) 100%)',
+            border: '1px solid var(--gold-border)',
+            borderRadius: 22,
+            padding: '34px 28px',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Filet dore superieur */}
+          <span style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, var(--gold-light), transparent)',
+          }} />
+          {BADGES.map(({ Icon, title }, i) => (
+            <div
+              key={title}
+              className="cg-badge"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                gap: 12,
+                padding: '0 14px',
+                borderLeft: i === 0 ? 'none' : '1px solid var(--glass-border)',
+              }}
+            >
+              <Icon size={26} color="var(--gold-light)" strokeWidth={1.5} />
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', lineHeight: 1.45 }}>
+                {title}
+              </span>
+            </div>
+          ))}
+        </m.div>
       </section>
 
       {/* ── E. FAQ ───────────────────────────────────────────────────────── */}
