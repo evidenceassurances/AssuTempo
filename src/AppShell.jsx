@@ -81,6 +81,9 @@ const ROUTE_TABLE = [
   ['/cookies', 'Cookies'],
   ['/conditions-generales', 'CGV'],
   ['/assurance-internationale', 'AssuranceInternationale'],
+  /* Catch-all : toute URL inconnue rend la page 404 (prerendue en
+     dist/404.html et servie par Vercel avec le statut 404). */
+  ['*', 'NotFound'],
 ];
 
 /* Expose la table `pages` aux pages elles-memes : la Home y prend ses

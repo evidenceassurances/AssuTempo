@@ -27,6 +27,7 @@ const IMPORTERS = {
   Cookies:                    () => import('./pages/Cookies'),
   CGV:                        () => import('./pages/CGV'),
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),
+  NotFound:                   () => import('./pages/NotFound'),
 };
 
 /* Pages lazy côté client (code splitting). Le serveur fournit les mêmes

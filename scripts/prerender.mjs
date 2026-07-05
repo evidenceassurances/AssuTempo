@@ -138,6 +138,7 @@ const ROUTE_MODULES = {
   '/cookies':                 'src/pages/Cookies.jsx',
   '/conditions-generales':    'src/pages/CGV.jsx',
   '/assurance-internationale': 'src/pages/AssuranceInternationale.jsx',
+  '/404':                     'src/pages/NotFound.jsx',
 };
 
 // fichiers deja charges/precharges par le template : jamais dupliques
@@ -174,10 +175,10 @@ function preloadLinksFor(route) {
 // ── 3. Rendre chaque route ───────────────────────────────────────────────────
 console.log(`\n🖨️  Pré-rendu de ${ROUTES.length} routes…`);
 
-for (const route of ROUTES) {
-  let appHtml, helmet;
+function buildPageHtml(route) {
+  let appHtml;
   try {
-    ({ html: appHtml, helmet } = render(route));
+    ({ html: appHtml } = render(route));
   } catch (err) {
     console.error(`❌  Erreur sur ${route}:`, err.message);
     process.exit(1);
@@ -264,6 +265,12 @@ for (const route of ROUTES) {
     );
   }
 
+  return pageHtml;
+}
+
+for (const route of ROUTES) {
+  const pageHtml = buildPageHtml(route);
+
   // Écrire dans dist/<route>/index.html
   const segments = route === '/' ? [] : route.split('/').filter(Boolean);
   const dir = path.join(root, 'dist', ...segments);
@@ -272,6 +279,13 @@ for (const route of ROUTES) {
 
   console.log(`  ✓  ${route}`);
 }
+
+// ── 3 bis. Page 404 ──────────────────────────────────────────────────────────
+// Hors ROUTES (donc hors sitemap) : Vercel sert dist/404.html avec un vrai
+// statut 404 pour toute URL sans fichier. Cote client, la route catch-all "*"
+// rend la meme page NotFound : arbre identique, hydratation propre.
+writeFileSync(path.join(root, 'dist/404.html'), buildPageHtml('/404'));
+console.log('  ✓  /404 (dist/404.html)');
 
 // ── 4. Génération du sitemap (depuis ROUTES, source unique) ───────────────────
 const sitemapBody = ROUTES.map((route) => {

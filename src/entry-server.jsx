@@ -31,6 +31,7 @@ import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
 import AssuranceInternationale from './pages/AssuranceInternationale';
+import NotFound from './pages/NotFound';
 
 const PAGES = {
   Home,
@@ -56,6 +57,7 @@ const PAGES = {
   Cookies,
   CGV,
   AssuranceInternationale,
+  NotFound,
 };
 
 export function render(url) {
