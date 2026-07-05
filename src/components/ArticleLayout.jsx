@@ -40,7 +40,7 @@ function Reveal({ children, delay = 0, style }) {
 }
 
 /* ─── Timeline step ─── */
-function TimelineStep({ step, index, isLast }) {
+function TimelineStep({ step, isLast }) {
   return (
     <div
       style={{
@@ -108,7 +108,7 @@ function TimelineStep({ step, index, isLast }) {
 }
 
 /* ─── Section renderer ─── */
-function RenderSection({ section, index }) {
+function RenderSection({ section }) {
   const delay = 0;
 
   switch (section.type) {

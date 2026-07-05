@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
   { ignores: ['dist', 'scripts'] },
+  js.configs.recommended,
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -22,9 +23,15 @@ export default [
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      // Existing codebase uses setState in effect body for initial sync — warn, not error
+      // Existing codebase uses setState in effect body for initial sync : warn, not error
       'react-hooks/set-state-in-effect': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
+  },
+  // Fichiers CommonJS (fonctions Vercel, module hybride de l'assistant) :
+  // globals Node pour module/require/process
+  {
+    files: ['api/**/*.js', 'src/assistant/knowledge.js'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
 ]

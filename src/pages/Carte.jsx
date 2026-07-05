@@ -152,10 +152,6 @@ const lineVariant = {
   hidden: { scaleX: 0 },
   visible: { scaleX: 1, transition: { duration: 0.55, delay: 0.15, ease: EASE } },
 };
-const cardVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
-};
 
 /* ── Reveal scroll générique ─────────────────────────────────────────────── */
 function Reveal({ children, delay = 0 }) {
@@ -175,7 +171,6 @@ function Reveal({ children, delay = 0 }) {
 
 /* ── Panneau pays animé ───────────────────────────────────────────────────── */
 function CountryPanel({ country }) {
-  const reduce = useReducedMotion();
   const [openFaq, setOpenFaq] = useState(null);
   const { h1, intro, points, flag, nom, slug, faq } = country;
 
@@ -1276,6 +1271,11 @@ function Carte() {
         <title>{seoTitle}</title>
         <meta name="description" content={seoDesc} />
         <link rel="canonical" href={canonical} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDesc} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
         <script type="application/ld+json">{jsonLd(jsonLdBase)}</script>
         {!selectedCountry && (
           <script type="application/ld+json">{jsonLd(JSONLD_PAYS_COUVERTS)}</script>

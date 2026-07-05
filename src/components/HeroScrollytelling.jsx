@@ -211,7 +211,6 @@ function HeroScrollytelling() {
       document.removeEventListener('visibilitychange', onVisibility);
       reduce.removeEventListener?.('change', start);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

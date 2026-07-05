@@ -25,7 +25,7 @@ function hasChosen() {
 function save(analytics) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ analytics, date: new Date().toISOString() }));
-  } catch (e) {}
+  } catch { /* stockage indisponible : le consentement ne persiste pas */ }
   window.dispatchEvent(new CustomEvent('cookie-consent', { detail: { analytics } }));
 }
 
@@ -45,7 +45,7 @@ function clearAnalyticsCookies() {
         }
       });
     window['ga-disable-G-W8M4ZGXZE1'] = true;
-  } catch (e) {}
+  } catch { /* cookies inaccessibles : rien a purger */ }
 }
 
 const C = { card: '#0E0E0E', gold: '#C9A84C', goldLight: '#E8C97A', text: '#F5F5F5', sub: '#A0A0A0' };

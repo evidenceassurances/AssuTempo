@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { articles } from '../data/articlesData';
 import {
   catKey, normalizeText, getReponseRapide,
-  presentCategoryKeys, fadeUpVariants, stagger,
+  presentCategoryKeys, fadeUpVariants,
 } from '../components/articles/articlesMeta';
 import ScrollProgress from '../components/articles/ScrollProgress';
 import ArticlesHero from '../components/articles/ArticlesHero';

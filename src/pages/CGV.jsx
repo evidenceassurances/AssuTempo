@@ -155,6 +155,11 @@ function CGV() {
         />
         <link rel="canonical" href="https://assutempo.fr/conditions-generales" />
         <meta name="robots" content="noindex, follow" />
+        <meta property="og:title" content="Conditions Générales d'Utilisation | AssuTempo - Evidence Assurances" />
+        <meta property="og:description" content="Conditions générales d'utilisation d'AssuTempo. Mentions légales, SIRET 88464152300011, ORIAS 20005719, modalités de souscription, droit de rétractation et médiation." />
+        <meta property="og:url" content="https://assutempo.fr/conditions-generales" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
         <script type="application/ld+json">{jsonLdString(jsonLd)}</script>
       </Helmet>
 

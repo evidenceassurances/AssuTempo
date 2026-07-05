@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { jsonLd as jsonLdString } from '../lib/seo';
 import { Helmet } from 'react-helmet-async';
-import { m, AnimatePresence } from 'framer-motion';
+import { m } from 'framer-motion';
 import {
   Shield, BarChart3, Megaphone, Clock, Scale, Settings,
-  ChevronDown, Info, Phone,
+  Info, Phone,
 } from 'lucide-react';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
@@ -297,6 +297,11 @@ function Cookies() {
         />
         <link rel="canonical" href="https://assutempo.fr/cookies" />
         <meta name="robots" content="noindex, follow" />
+        <meta property="og:title" content="Politique de cookies | AssuTempo - Evidence Assurances" />
+        <meta property="og:description" content="Découvrez comment AssuTempo utilise les cookies : nécessaires, Google Analytics 4, vos droits RGPD et comment gérer vos préférences en un clic." />
+        <meta property="og:url" content="https://assutempo.fr/cookies" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
         <script type="application/ld+json">{jsonLdString(jsonLd)}</script>
       </Helmet>
 
