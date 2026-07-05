@@ -149,6 +149,14 @@ Retour iPhone d'Ayoub : scroll saccadé, « 30/60 » traversant "JOURS DE COUVER
 ### Session du 3 juillet 2026 (suite) : audit chargement, mergé en prod
 Constat "6 s sur iPhone". Causes mesurées : ~310 KB d'analytics au démarrage (dont propriété UA morte UA-264084182-1 chaînée côté admin GA, action Ayoub : la débrancher dans Admin > Flux > Balises de site connectées), main de 62,5 KB gzip dont la moitié indue (contenu des 34 pays importé par la Home + assistant), fenêtre de loader sur accès directs (chunk de page jamais préchargé). Corrections : **main 19,1 KB (-70 %)** via `countries-index.js` léger, assistant et sections Home sous le pli en chunks différés (PagesContext, eager SSR / lazy client, préchauffe), GA en stub dataLayer + script après load+idle (0 événement perdu), **modulepreload du chunk de page injecté par prerender.mjs (manifest Vite) sur les 56 pages**. QA 25/25 + 52/52 + 40/40, hydratation 12 routes propre. **Règle #418 n°2 : `transitionsReady` reste SYNC, jamais startTransition (reproduit : #418 sur toutes les routes lazy).** Rapport complet dans SCROLLY-QA.md. Workflow : depuis cette session, merge direct en prod après QA, sans attente de validation.
 
+### Session des 5-6 juillet 2026 : audit technique + page 404, en prod
+Audit complet (liens, alt, meta, console, imports) : rapport dans AUDIT-REPORT.md à la racine. Sain d'origine : 0 lien interne cassé, 100 % alt, titles/descriptions/canonicals uniques sur les 56 pages, 0 erreur console (balayage Playwright des 56 routes).
+
+- **OG/Twitter complétées sur 37 pages** (`/carte` + 34 pays via Helmet dynamique dans Carte.jsx, `/cookies`, `/conditions-generales`) : og:title, og:description, og:url, twitter:card partout. Reste og:image : AUCUNE page n'en a, il faut créer un visuel 1200x630 (décision Ayoub).
+- **ESLint réparé** : `eslint.config.mjs` importait `@eslint/js` sans appliquer `js.configs.recommended` (no-unused-vars inactif, d'où 9 imports/variables morts, supprimés). Ruleset appliqué + globals Node pour `api/` et `knowledge.js`. Lint : 0 erreur, 12 warnings set-state-in-effect intentionnels.
+- **Vraie page 404** (`src/pages/NotFound.jsx`, "Cette page a expiré", CTA devis/accueil/carte, noindex, 1,4 KB gzip) : route catch-all `*` dans ROUTE_TABLE (câblée dans App.jsx ET entry-server.jsx, parité hydratation), prérendue en `dist/404.html` HORS sitemap par `buildPageHtml()` dans prerender.mjs.
+- **Rewrite catch-all de vercel.json RETIRÉ** : toutes les routes ont leur HTML physique, une URL inconnue tombe sur `dist/404.html` avec un vrai statut 404 (fin du soft-404). **Ne JAMAIS remettre de rewrite vers index.html** : il retransformerait chaque 404 en 200. Slug pays inconnu (`/carte/xyz`) : 404 côté serveur, puis le client retombe en douceur sur la Carte générique (comportement vérifié, 0 erreur). Vérifié en prod : 200 sur les vraies pages, 404 + page stylée sur les inconnues, sitemap 56 URLs intact.
+
 ---
 
 ## 6. Plan SEO / backlinks
