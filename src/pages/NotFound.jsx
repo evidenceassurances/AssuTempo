@@ -90,7 +90,7 @@ function NotFound() {
               lineHeight: 1.15,
             }}
           >
-            Cette page a expiré
+            Cette route ne mène nulle part
           </h1>
 
           <p
@@ -102,9 +102,9 @@ function NotFound() {
               lineHeight: 1.7,
             }}
           >
-            Chez nous, tout est temporaire : nos contrats durent de 1 à 90 jours,
-            cette adresse a duré un peu moins. Votre attestation, elle, reste à
-            5 minutes d'ici.
+            Un lien déplacé, une adresse mal tapée : ça arrive aux meilleurs
+            conducteurs. Faites demi-tour en un clic, votre attestation reste
+            à 5 minutes d'ici.
           </p>
 
           <div
