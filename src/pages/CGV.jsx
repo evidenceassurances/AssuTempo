@@ -253,6 +253,7 @@ function CGV() {
                   { label: 'SIRET', value: '88464152300011' },
                   { label: 'ORIAS', value: '20005719' },
                   { label: 'Téléphone', value: '09 74 19 78 20' },
+                  { label: 'Email', value: 'contact@assutempo.fr' },
                   { label: 'Site web', value: 'assutempo.fr' },
                 ].map(({ label, value }) => (
                   <div
@@ -561,7 +562,7 @@ function CGV() {
                   09 74 19 78 20
                 </a>
                 <a
-                  href="mailto:evidence.assurances@gmail.com"
+                  href="mailto:contact@assutempo.fr"
                   style={{
                     padding: '13px 24px',
                     fontSize: 15,
