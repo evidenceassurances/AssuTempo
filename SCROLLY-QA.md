@@ -204,3 +204,14 @@ Preuves (chromium, vite preview) :
 - Panne simulee : TOUTES les sous-ressources (/assets/* + Google Fonts) retenues 8 s -> hero complet (H1, badge, sous-titre, CTA) peint a 204 ms. Avant le fix, ce scenario = 8 s d'ecran noir.
 - Throttle 4G + CPU x4 : FCP 1020 ms (prod avant) -> 364 ms (local apres).
 - Non-regression : banc compteur 51/51, lisibilite premier paint JS bloque re-verifiee, build 57 HTML OK.
+
+## Correctif du 8 juillet (nuit) : orbes floues coupees des le premier paint (ecran noir iPhone)
+Malgre le CSS inline, Ayoub voyait encore ~7 s de noir sur iPhone. Cause trouvee dans le HTML prerendu : BackgroundFX suppose desktop cote serveur (snapshot SSR false pour eviter le mismatch #418), donc CHAQUE visiteur recevait 3 orbes de 500-700 px en filter: blur(110px) ANIMEES (orb-drift) + 10 particules floutees + le halo CTA 700 px en blur(60px) anime (jamais gate, meme apres hydratation). La regle du 18 juin (jamais de grand blur sur mobile) n'etait appliquee que par JS apres hydratation : pendant toute la fenetre de chargement du JS (des secondes en 4G), le GPU de l'iPhone rasterisait ces surfaces en DPR3 a chaque frame d'animation : rendu fige, ecran noir. Invisible sur banc chromium Mac (GPU desktop).
+
+Correctif : les filtres et animations de ces couches quittent les styles inline pour des classes CSS (fx-orb-1/2/3, fx-halo-cta, fx-pt, fx-pt-blur) avec coupure dans la media query mobile existante (max-width: 820px / pointer: coarse) : appliquee des le premier rendu du HTML, AVANT tout JS, sans risque d'hydratation (classes identiques serveur/client). Le JS de BackgroundFX ne pilote plus que le choix Scroll/Static des particules. Bonus : le halo de FinalCTA et le blur 0.5px des particules statiques sont desormais aussi coupes sur mobile.
+
+Preuves :
+- Pre-hydratation (JS bloque) : mobile 390 = filter none + animation none sur orbes/halo/particules ; desktop 1440 = blur(110px) + orb-drift intacts. Verifie des deux cotes.
+- WebKit reel (moteur Safari, iPhone UA, DPR3) : rendu non-noir 1578 ms (prod avant fix) -> 853 ms (build corrige), FCP 742 -> 126 ms, ET CE SUR GPU DE MAC : sur GPU d'iPhone l'ecart est le gel constate.
+- Non-regression : banc compteur 51/51, lisibilite premier paint OK, hero peint a 80 ms avec toutes les sous-ressources retenues 8 s.
+- Piege de banc note : `playwright install webkit` purge les anciens Chromium du cache ; le chromium_headless_shell (rendu logiciel) donne des fps faux (14 fps au lieu de 60) : toujours utiliser le build complet (channel chromium).

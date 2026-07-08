@@ -15,8 +15,11 @@ function FinalCTA() {
       <div aria-hidden className="hairline-gold" style={{ position: 'absolute', top: 0, left: '10%', right: '10%' }} />
 
       {/* Halo doré central qui pulse */}
+      {/* Halo pulse : blur + animation en CSS (fx-halo-cta), coupes sur
+          mobile des le premier paint par la media query */}
       <div
         aria-hidden
+        className="fx-halo-cta"
         style={{
           position: 'absolute',
           top: '50%',
@@ -26,8 +29,6 @@ function FinalCTA() {
           height: 700,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 60%)',
-          filter: 'blur(60px)',
-          animation: 'halo-pulse 7s ease-in-out infinite',
           pointerEvents: 'none',
         }}
       />

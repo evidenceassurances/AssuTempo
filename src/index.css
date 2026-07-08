@@ -121,6 +121,26 @@ h1, h2 {
   background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
 }
 
+/* Fond atmospherique : orbes floues et halo CTA, desktop seulement.
+   REGLE premier paint : ces filtres vivent en CSS et JAMAIS en style inline
+   pilote par JS. Le HTML prerendu suppose desktop ; si la coupure mobile
+   n'arrive qu'a l'hydratation, un iPhone rasterise pendant toute la fenetre
+   de chargement du JS des surfaces de 500-700px en blur(110px) ANIMEES en
+   DPR3 : plusieurs secondes d'ecran noir constatees. En CSS, la media query
+   coupe tout des le premier rendu. */
+.fx-orb {
+  filter: blur(110px);
+  will-change: transform;
+}
+.fx-orb-1 { animation: orb-drift-1 28s ease-in-out infinite alternate; }
+.fx-orb-2 { animation: orb-drift-2 35s ease-in-out infinite alternate; }
+.fx-orb-3 { animation: orb-drift-3 32s ease-in-out infinite alternate; }
+.fx-halo-cta {
+  filter: blur(60px);
+  animation: halo-pulse 7s ease-in-out infinite;
+}
+.fx-pt-blur { filter: blur(0.5px); }
+
 /* Grain premium global : au-dessus des fonds de section, sous le header */
 .grain-overlay {
   position: fixed;
@@ -404,6 +424,17 @@ h1, h2 {
     background-position: 50% 50%;
   }
   .grain-overlay { mix-blend-mode: normal; }
+  /* Aucun grand blur ni derive d'orbe sur mobile, des le premier paint
+     (le !important couvre les animations posees en style inline par
+     particule : particle-drift-N a duree variable) */
+  .fx-orb,
+  .fx-halo-cta,
+  .fx-pt-blur {
+    filter: none;
+    animation: none;
+    will-change: auto;
+  }
+  .fx-pt { animation: none !important; }
 }
 
 /* ─── Ping permanent sur la France (carte Europe) ─── */

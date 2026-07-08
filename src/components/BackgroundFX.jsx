@@ -51,6 +51,7 @@ function Particle({ p, scrollYProgress }) {
 
   return (
     <m.div
+      className={p.blur ? 'fx-pt fx-pt-blur' : 'fx-pt'}
       style={{
         position: 'absolute',
         left: `${p.x}%`,
@@ -61,7 +62,6 @@ function Particle({ p, scrollYProgress }) {
         background: p.x % 3 === 0
           ? `rgba(232,201,122,${p.opacity})`
           : `rgba(201,168,76,${p.opacity})`,
-        filter: p.blur ? 'blur(0.5px)' : 'none',
         y,
         animation: `particle-drift-${(Math.round(p.x) % 3) + 1} ${p.drift}s ease-in-out infinite alternate`,
       }}
@@ -96,6 +96,7 @@ function StaticParticles() {
       {PARTICLES.map((p, i) => (
         <div
           key={i}
+          className={p.blur ? 'fx-pt fx-pt-blur' : 'fx-pt'}
           style={{
             position: 'absolute',
             left: `${p.x}%`,
@@ -106,7 +107,6 @@ function StaticParticles() {
             background: p.x % 3 === 0
               ? `rgba(232,201,122,${p.opacity})`
               : `rgba(201,168,76,${p.opacity})`,
-            filter: p.blur ? 'blur(0.5px)' : 'none',
           }}
         />
       ))}
@@ -133,11 +133,10 @@ function BackgroundFX() {
     () => false,
   );
 
-  // Sur mobile : aucun filter: blur (degrade fatal au GPU mobile). Les orbes sont
-  // deja des radial-gradient transparents : sans le flou, le glow reste doux et la
-  // rasterisation devient triviale (plus de gel a l'ouverture de l'assistant).
-  const orbBlur = isMobile ? 'none' : 'blur(110px)';
-  const orbWillChange = isMobile ? 'auto' : 'transform';
+  // Sur mobile : aucun filter: blur (degrade fatal au GPU mobile). La coupure
+  // vit desormais en CSS (classes fx-orb + media query 820px/coarse) : elle
+  // s'applique des le premier paint du HTML prerendu, AVANT l'hydratation.
+  // Le JS ne pilote plus que le choix Scroll/Static des particules.
 
   return (
     <div
@@ -159,8 +158,10 @@ function BackgroundFX() {
         }}
       />
 
-      {/* COUCHE 2 - 3 orbes lumineux flous */}
+      {/* COUCHE 2 - 3 orbes lumineux flous (blur + derive en CSS, coupes
+          sur mobile par la media query des le premier paint) */}
       <div
+        className="fx-orb fx-orb-1"
         style={{
           position: 'absolute',
           top: '-10%',
@@ -169,12 +170,10 @@ function BackgroundFX() {
           height: 600,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)',
-          filter: orbBlur,
-          animation: isMobile ? 'none' : 'orb-drift-1 28s ease-in-out infinite alternate',
-          willChange: orbWillChange,
         }}
       />
       <div
+        className="fx-orb fx-orb-2"
         style={{
           position: 'absolute',
           top: '20%',
@@ -183,12 +182,10 @@ function BackgroundFX() {
           height: 700,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(168,134,47,0.04) 0%, transparent 70%)',
-          filter: orbBlur,
-          animation: isMobile ? 'none' : 'orb-drift-2 35s ease-in-out infinite alternate',
-          willChange: orbWillChange,
         }}
       />
       <div
+        className="fx-orb fx-orb-3"
         style={{
           position: 'absolute',
           bottom: '-5%',
@@ -197,9 +194,6 @@ function BackgroundFX() {
           height: 500,
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(201,168,76,0.045) 0%, transparent 70%)',
-          filter: orbBlur,
-          animation: isMobile ? 'none' : 'orb-drift-3 32s ease-in-out infinite alternate',
-          willChange: orbWillChange,
         }}
       />
 
