@@ -104,6 +104,27 @@ if (!existsSync(templatePath)) {
 }
 const template = readFileSync(templatePath, 'utf-8');
 
+// ── CSS critique inline ──────────────────────────────────────────────────────
+// La feuille /assets/index-*.css etait la SEULE ressource bloquant le rendu :
+// sur un lien mobile degrade (Safari la laisse en plus concurrencer les
+// ~150 KB de modulepreload), elle pouvait tenir l'ecran noir plusieurs
+// secondes alors que le HTML prerendu etait deja arrive. Inlinee dans chaque
+// HTML, le premier paint ne depend plus d'AUCUNE sous-ressource : le hero
+// complet se peint des l'arrivee du document (~19 KB bruts, ~5 KB brotli de
+// plus par page d'entree ; les navigations suivantes restent client-side).
+// Verifie : le CSS ne contient que des url(data:) et des refs #fragment,
+// aucune url relative ne casse en changeant de base.
+const cssLinkRe = /<link rel="stylesheet"[^>]*href="(\/assets\/index-[^"]+\.css)"[^>]*>/;
+const cssMatch = template.match(cssLinkRe);
+let templateInlined = template;
+if (cssMatch) {
+  const css = readFileSync(path.join(root, 'dist', cssMatch[1]), 'utf-8');
+  templateInlined = template.replace(cssLinkRe, () => `<style>${css}</style>`);
+  console.log(`🎨  CSS inline dans le template (${(css.length / 1024).toFixed(1)} KB, plus aucune ressource bloquant le rendu)`);
+} else {
+  console.warn('⚠️  lien stylesheet introuvable dans le template : CSS non inline');
+}
+
 // ── Modulepreload du chunk de page ───────────────────────────────────────────
 // Le template ne precharge que les chunks partages (runtime, framer,
 // react-vendor, icons) : le chunk de la PAGE arrivait apres l'hydratation et
@@ -225,7 +246,7 @@ function buildPageHtml(route) {
   });
 
   // Injecter le contenu dans le template
-  let pageHtml = template.replace('<!--ssr-outlet-->', appHtml);
+  let pageHtml = templateInlined.replace('<!--ssr-outlet-->', appHtml);
 
   // Remplacer le <title> générique par le titre extrait
   if (titleMatch) {

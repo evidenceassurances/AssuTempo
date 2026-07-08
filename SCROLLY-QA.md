@@ -194,3 +194,13 @@ Correctif (regle : l'animation est un embellissement, jamais une condition d'aff
 - reduced-motion inchange (animation: none, tout visible instantanement).
 
 Verification (chromium, JS totalement bloque, 390x844) : a 120 ms opacity >= .61 sur les 6 groupes (badge, 2 lignes H1, sous-titre, CTA, confiance), 100 % a 300 ms, capture nette, H1 sans masque. dist/index.html : les 7 contenus critiques presents en dur. Non-regression : banc compteur 51/51 re-passe, lint 0 erreur / 12 warnings (baseline).
+
+## Correctif du 8 juillet (fin) : CSS critique inline, plus aucune ressource bloquant le rendu
+Constat d'Ayoub : page noire ~8 s avant tout affichage sur son telephone. Mesure prod (chromium, 4G lent + CPU x4) : TTFB 70 ms mais premier paint a 1020 ms, et UNE seule ressource bloquante restait : la feuille /assets/index-*.css (18,4 KB bruts), qui sur un lien mobile degrade (et sous Safari iOS, qui la laisse concurrencer les ~150 KB de modulepreload) peut arriver plusieurs secondes apres le HTML : ecran noir tant qu'elle n'est pas la, exactement le symptome.
+
+Correctif (prerender.mjs) : la feuille est inlinee en <style> dans le template de CHAQUE HTML prerendu (57 fichiers). Plus aucune sous-ressource ne conditionne le premier paint : le hero complet se peint des l'arrivee du document. Cout : HTML de la Home 16 -> 20,8 KB gzip. Le fichier .css reste sur disque (plus reference).
+
+Preuves (chromium, vite preview) :
+- Panne simulee : TOUTES les sous-ressources (/assets/* + Google Fonts) retenues 8 s -> hero complet (H1, badge, sous-titre, CTA) peint a 204 ms. Avant le fix, ce scenario = 8 s d'ecran noir.
+- Throttle 4G + CPU x4 : FCP 1020 ms (prod avant) -> 364 ms (local apres).
+- Non-regression : banc compteur 51/51, lisibilite premier paint JS bloque re-verifiee, build 57 HTML OK.
