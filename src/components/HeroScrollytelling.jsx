@@ -424,15 +424,18 @@ function HeroScrollytelling() {
                   color: 'var(--text)',
                 }}
               >
+                {/* Plus de masque overflow:hidden : le reveal clippe est
+                    remplace par un fondu-montee toujours lisible (le texte
+                    ne doit jamais etre invisible au premier paint) */}
                 <span style={{ display: 'block' }}>
                   {/* Ligne 1 */}
-                  <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
+                  <span style={{ display: 'block' }}>
                     <span className="scy-in-line">
                       L&apos;assurance temporaire
                     </span>
                   </span>
                   {/* Ligne 2 */}
-                  <span style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.15em', marginBottom: '-0.15em' }}>
+                  <span style={{ display: 'block' }}>
                     <span className="scy-in-line scy-in-line2">
                       qui change{' '}
                       <span className="gold-text-animated">tout.</span>

@@ -183,3 +183,14 @@ Findings confirmes et corriges : gel du curseur si focus pendant le roulement (r
 QA (chromium headless, vite preview) : hydratation 0 erreur, roulement continu (saut max 0,002 em/frame), bornes dures (min 1,000 / max 90,000 sur echantillonnage par frame pendant les depassements du ressort), zero re-render par frame (2 commits discrets preexistants sur ~90 frames : seuil header + dock assistant), parking entier a l'arret mi-rampe + curseur aligne + CTA = valeur affichee, pouce stable a 90 pendant la pose, gel/resync focus-blur verifies, mobile 390 (instrument, deborde pas), reduced-motion complet, 60,2 fps au CPU x4, TempoDial international intact.
 
 Risque residuel note : repositionnement du pouce natif par ecriture programmatique de input.value pendant le roulement scroll, verifie sous chromium uniquement (Safari/Firefox : comportement standard attendu, a l'oeil au prochain passage sur iPhone).
+
+## Correctif du 8 juillet (suite) : contenu du hero lisible des le premier paint
+Constat d'Ayoub : hero vide plusieurs secondes sur mobile, seul le fond (cadran) visible. Audit prealable : le symptome ne venait PAS du JS (prouve : JS retarde de 8 s puis totalement bloque, en local ET sur assutempo.fr sous 4G lent + CPU x4 : texte complet a 1,3 s, hydratation propre, 0 erreur console, 0 asset en echec). La vraie fenetre d'exposition : au premier paint, TOUT le texte etait a son etat from invisible (H1 clippe a translateY(110%) sous overflow hidden, badge/sous-titre/CTA/confiance a opacity 0) avec des delais cumules jusqu'a 0,85 s et des durees de 0,6-0,8 s, soit ~1,3 s de revelation APRES un premier paint deja tardif sur telephone lent ; le cadran, sans animation d'entree, s'affichait lui immediatement (= la capture d'ecran).
+
+Correctif (regle : l'animation est un embellissement, jamais une condition d'affichage) :
+- Etats from LISIBLES : opacity .6 minimum sur tous les scy-in-*, deplacements legers (6-14 px), scale .97 ; plus aucun etat invisible.
+- H1 : masque overflow:hidden + hack padding-bottom/margin retires (le reveal clippe devient un fondu-montee).
+- Durees <= .4s, delais <= .15s (stagger total .15s, choregraphie complete ~.55s ; avant : 1,3 s). Indice "Faites defiler" aligne (1,4 s -> .15s).
+- reduced-motion inchange (animation: none, tout visible instantanement).
+
+Verification (chromium, JS totalement bloque, 390x844) : a 120 ms opacity >= .61 sur les 6 groupes (badge, 2 lignes H1, sous-titre, CTA, confiance), 100 % a 300 ms, capture nette, H1 sans masque. dist/index.html : les 7 contenus critiques presents en dur. Non-regression : banc compteur 51/51 re-passe, lint 0 erreur / 12 warnings (baseline).
