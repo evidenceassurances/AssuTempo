@@ -1,1 +1,0 @@
-import{a as e,n as t}from"./rolldown-runtime-Cyuzqnbw.js";import{T as n,r,t as i}from"./framer-5rYXpS6P.js";function a(){let e=(0,o.useRef)(null);return[e,r(e,{once:!0,margin:`0px 0px -80px 0px`})]}var o,s=t((()=>{i(),o=e(n())}));export{a as n,s as t};

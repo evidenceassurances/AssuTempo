@@ -108,8 +108,26 @@
   color: var(--gold);
 }
 
+/* Enveloppe du grand nombre : porte le halo dore DERRIERE les chiffres,
+   hors de la fenetre clippee de l'odometre (overflow hidden la rognerait) */
+.dx-numwrap{
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.dx-halo{
+  position: absolute;
+  inset: -90% -35%;
+  background: radial-gradient(closest-side,
+    rgba(232,201,122,.26), rgba(232,201,122,.07) 55%, transparent 75%);
+  opacity: 0;
+  will-change: opacity;
+  pointer-events: none;
+}
+
 /* Grand nombre de jours : deux colonnes de chiffres clippees a 1em */
 .dx-num{
+  position: relative; /* passe devant le halo */
   display: inline-flex;
   height: 1em;
   overflow: hidden;
@@ -120,12 +138,14 @@
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-/* Finition 6 : odometre, les chiffres roulent verticalement en transform.
-   La colonne des dizaines s'estompe sous 10 et le bloc se recentre. */
+/* Recentrage du bloc quand la dizaine apparait / disparait (etat discret,
+   la seule transition CSS restante du compteur) */
 .dx-num{ transition: transform .45s cubic-bezier(.25,.9,.3,1); }
+/* Odometre : les roues sont ecrites en continu par le ressort JS
+   (transform et opacity uniquement), aucune transition retargetee */
 .dx-col{
   display: block;
-  transition: transform .45s cubic-bezier(.25,.9,.3,1), opacity .3s ease;
+  will-change: transform;
 }
 /* Chaque cellule centre l'encre du chiffre dans exactement 1em : aucun
    chiffre voisin ne peut deborder dans la fenetre au repos */
@@ -135,6 +155,20 @@
   justify-content: center;
   height: 1em;
   line-height: 1;
+}
+
+/* Texte statique pour crawlers et lecteurs d'ecran, visuellement masque
+   sans sortir du flux d'accessibilite */
+.dx-sr{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 /* letter-spacing contenu (.14em au lieu de .24) : la ligne tient largement
@@ -309,6 +343,6 @@
 @media (prefers-reduced-motion: reduce){
   .scy-hint,
   .scy-hint-pulse{ animation: none; }
-  .dx-num,
-  .dx-col{ transition: none !important; }
+  .dx-num{ transition: none !important; }
+  .dx-halo{ display: none; }
 }

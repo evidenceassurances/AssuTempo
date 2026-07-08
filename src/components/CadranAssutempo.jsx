@@ -40,9 +40,10 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     started: false,
     reduced: false,
     timer: 0,
-    days: 7,          /* derniere valeur choisie (re-materialisation) */
+    days: 7,          /* dernier jour entier affiche */
+    v: 0,             /* derniere valeur continue recue (re-materialisation) */
     lit: 0,           /* nombre de graduations allumees */
-    zeroed: true,     /* cadran "pur" (retour en haut) */
+    present: false,   /* acte 2 visible (gate du fondu de proximite) */
     lastP2: -1,
     grads: [],
     nums: [],         /* chiffres reperes {el, angle} pour le fondu de proximite */
@@ -80,41 +81,43 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
 
   /* Fondu de proximite (detail horloger) : tout repere chiffre a moins de
      14 degres de l'aiguille (= tete de l'arc) s'estompe a 0 en 200 ms et
-     revient quand elle s'eloigne. days=0 (cadran pur, acte 1) : tout revient,
-     l'aiguille masquee ne doit jamais eteindre le 90 du haut. */
+     revient quand elle s'eloigne. Hors acte 2 (st.present false), tout
+     reste allume : l'aiguille invisible ne doit jamais eteindre le 90. */
   const fadeNearNumerals = (days) => {
     const needle = (days * 4) % 360;
     for (const n of st.nums) {
       const d = Math.abs(((needle - n.angle + 540) % 360) - 180);
-      n.el.classList.toggle('atc-num-off', days > 0 && d < 14);
+      n.el.classList.toggle('atc-num-off', st.present && days > 0 && d < 14);
     }
   };
 
-  /* Applique une valeur de jours a l'arc, l'aiguille et aux graduations */
-  const applyVisual = (days, animate) => {
-    const fill = fillRef.current;
-    if (!fill) return;
-    if (!animate) fill.classList.add('atc-notrans');
-
-    const offset = (CIRC * (1 - days / 90)).toFixed(3);
-    arcRef.current.style.strokeDashoffset = offset;
+  /* Valeur continue de jours (flottante, bornee 1..90 par le hero), poussee
+     par le ressort du compteur : arc, aiguille, graduations et reperes
+     suivent exactement le meme signal que l'odometre. Ecritures directes
+     chaque frame du ressort, plus aucune transition CSS retargetee. */
+  const setDaysLive = (v) => {
+    const arc = arcRef.current;
+    if (!arc) return;
+    st.v = v;
+    const offset = (CIRC * (1 - v / 90)).toFixed(3);
+    arc.style.strokeDashoffset = offset;
     arcGlowRef.current.style.strokeDashoffset = offset;
-    needleRef.current.style.transform = `rotate(${days * 4}deg)`;
-    fadeNearNumerals(days);
+    needleRef.current.style.transform = `rotate(${(v * 4).toFixed(2)}deg)`;
 
-    const grads = st.grads;
-    if (grads.length) {
-      if (days > st.lit) {
-        for (let j = st.lit + 1; j <= days; j++) grads[j].classList.add('on');
-      } else if (days < st.lit) {
-        for (let j = days + 1; j <= st.lit; j++) grads[j].classList.remove('on');
+    /* Graduations et fondu des reperes : au jour entier franchi seulement */
+    const di = Math.round(v);
+    if (di !== st.lit) {
+      const grads = st.grads;
+      if (grads.length) {
+        if (di > st.lit) {
+          for (let j = st.lit + 1; j <= di; j++) grads[j].classList.add('on');
+        } else {
+          for (let j = di + 1; j <= st.lit; j++) grads[j].classList.remove('on');
+        }
       }
-    }
-    st.lit = days;
-
-    if (!animate) {
-      void fill.offsetWidth; /* flush : les prochains changements retransitionnent */
-      fill.classList.remove('atc-notrans');
+      st.lit = di;
+      st.days = di;
+      fadeNearNumerals(di);
     }
   };
 
@@ -175,7 +178,13 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
     }
     st.grads = grads;
     st.lit = 0;
-    if (!st.zeroed) applyVisual(st.days, false);
+    /* Remontage (StrictMode dev, bfcache) : re-materialise l'etat courant
+       sur les graduations tout juste regenerees */
+    if (st.v >= 1) {
+      const v = st.v;
+      st.v = 0;
+      setDaysLive(v);
+    }
 
     /* Finition 2 : chiffres reperes graves aux graduations majeures.
        Toujours droits (jamais tournes vers le centre : un chiffre a
@@ -198,7 +207,7 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
       nums.appendChild(t);
       st.nums.push({ el: t, angle: (v * 4) % 360 });
     }
-    if (!st.zeroed) fadeNearNumerals(st.days);
+    fadeNearNumerals(st.days);
 
     /* Prise de controle des rotations CSS sans saut : on lit l'angle courant.
        La rotation est ensuite servie par frame(ts), appele par le hero. */
@@ -234,16 +243,18 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
   }, []);
 
   useImperativeHandle(ref, () => ({
-    /* Interaction curseur : la rotation decelere (~600 ms), memoire 3 s, reprise douce */
-    interact(days) {
-      st.days = days;
-      if (!st.reduced) {
-        st.mode = 'interacting';
-        clearTimeout(st.timer);
-        st.timer = setTimeout(() => { st.mode = 'resuming'; }, 3000);
-      }
-      applyVisual(days, !st.reduced);
+    /* Manipulation du curseur : la rotation decelere (~600 ms), memoire 3 s,
+       reprise douce. Les visuels de valeur, eux, arrivent en continu par
+       setDaysLive (ressort du hero), plus rien n'est applique ici. */
+    engage() {
+      if (st.reduced) return;
+      st.mode = 'interacting';
+      clearTimeout(st.timer);
+      st.timer = setTimeout(() => { st.mode = 'resuming'; }, 3000);
     },
+
+    /* Valeur continue du compteur (arc, aiguille, graduations, reperes) */
+    setDaysLive,
 
     /* Presence de l'acte 2 (p2 du scroll) : materialise arc + aiguille */
     setPresence(p2) {
@@ -271,13 +282,12 @@ const CadranAssutempo = forwardRef(function CadranAssutempo(_, ref) {
         rootRef.current.style.transform = `translate(-50%, -50%) scale(${(1 + 0.03 * p2).toFixed(4)})`;
       }
 
-      if (p2 <= 0.02 && !st.zeroed) {
-        /* Retour en haut : cadran pur (arc vide, graduations eteintes, aiguille masquee) */
-        st.zeroed = true;
-        applyVisual(0, false);
-      } else if (p2 > 0.06 && st.zeroed) {
-        st.zeroed = false;
-        applyVisual(st.days, !st.reduced);
+      /* Gate du fondu de proximite : en acte 1 (cadran de fond), aucun
+         repere ne s'eteint ; en acte 2, l'aiguille reprend ses droits */
+      const present = p2 > 0.06;
+      if (present !== st.present) {
+        st.present = present;
+        fadeNearNumerals(st.days);
       }
     },
 

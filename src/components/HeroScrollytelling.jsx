@@ -1,16 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  cubicBezier,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import { Zap, Globe, Check } from 'lucide-react';
 import CadranAssutempo from './CadranAssutempo';
 import { trackEvent } from '../lib/analytics';
+import { EASE_PREMIUM } from '../lib/motion';
 import './HeroScrollytelling.css';
 
 /* Hero scrollytelling "Cadran Assutempo".
-   Zone de ~280vh avec etage sticky plein ecran : le cadran est epingle,
+   Zone de ~210vh avec etage sticky plein ecran : le cadran est epingle,
    le bloc hero s'eleve et s'estompe (acte 1), le module Devis express
    entre par le bas (acte 2). Tout derive d'une seule progression p,
    recalculee a chaque frame : systeme idempotent (scroll rapide,
    rechargement a mi-page, retour navigateur, rotation d'ecran).
+
+   Le compteur de jours vit dans des motion values (aucun etat React,
+   zero re-render au scroll comme au drag) : le scroll remonte la cible
+   de 1 vers la valeur choisie (fenetre RAMP), le curseur la retarget,
+   et un seul ressort (useSpring) lisse le tout. L'odometre, l'arc du
+   cadran, l'aiguille, les graduations, le halo et la date derivent tous
+   de ce meme signal continu : un seul point de mutation, renderCounter.
 
    La choregraphie d'entree (badge, H1, sous-titre, CTAs, confiance) est
    en CSS pur (classes scy-in-*) : elle joue des le premier paint, sans
@@ -18,16 +34,43 @@ import './HeroScrollytelling.css';
    telechargement du bundle sur mobile. */
 
 const INITIAL_DAYS = 7;
-const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+/* 11e cellule : le 0 de bouclage, l'unite franchit 9 -> 0 vers l'avant
+   au lieu de rembobiner toute la colonne (defaut de l'ancien odometre) */
+const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
-/* Date de fin incluse : 1 jour = couvert aujourd'hui seulement */
-const fmtDateFin = (days) =>
-  new Date(Date.now() + (days - 1) * 864e5).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+
+/* Fenetre de scroll (valeurs de p) qui remonte le compteur de 1 vers la
+   valeur choisie, calee sur l'entree du module (p 0.26 -> 0.52) avec une
+   fin legerement posterieure : le roulement se pose quand le module est la */
+const RAMP_START = 0.30;
+const RAMP_SPAN = 0.25;
+const easeRamp = cubicBezier(...EASE_PREMIUM);
+
+/* Ressort du compteur : amortissement ~0.95 de la valeur critique, soit un
+   leger depassement absorbe en une oscillation, jamais de rebond multiple */
+const SPRING_DAYS = { stiffness: 110, damping: 20, mass: 1 };
+
+/* Date de fin incluse : 1 jour = couvert aujourd'hui seulement.
+   Cache par duree (Intl ne reformate plus a chaque evenement), purge au
+   changement de jour : un onglet laisse ouvert apres minuit ou restaure
+   du bfcache n'affiche jamais une date de fin perimee */
+let dateCacheDay = '';
+const dateCache = [];
+const fmtDateFin = (days) => {
+  const today = new Date().toDateString();
+  if (today !== dateCacheDay) {
+    dateCacheDay = today;
+    dateCache.length = 0;
+  }
+  return (dateCache[days] ??= new Date(Date.now() + (days - 1) * 864e5)
+    .toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }));
+};
 
 function HeroScrollytelling() {
   const navigate = useNavigate();
+  const reducedMotion = useReducedMotion();
 
   const zoneRef = useRef(null);
   const copyRef = useRef(null);
@@ -37,9 +80,29 @@ function HeroScrollytelling() {
   const numRef = useRef(null);
   const tensRef = useRef(null);
   const unitsRef = useRef(null);
+  const haloRef = useRef(null);
   const dateRef = useRef(null);
   const rangeRef = useRef(null);
   const daysRef = useRef(INITIAL_DAYS);
+  const draggingRef = useRef(false);
+  const shownDayRef = useRef(INITIAL_DAYS);
+  const revealSentRef = useRef(false);
+
+  /* Chaine du compteur : cible = 1 + (choix - 1) * remontee, ou la remontee
+     vaut la fenetre de scroll easee, court-circuitee a 1 des la premiere
+     manipulation du curseur (liveMV) pour que l'affichage colle au pouce.
+     Le ressort est la seule source d'animation : tout le reste s'y abonne. */
+  const rampMV = useMotionValue(0);
+  const liveMV = useMotionValue(0);
+  const selMV = useMotionValue(INITIAL_DAYS);
+  /* Cible quantifiee au jour entier : si le scroll s'arrete au milieu de la
+     fenetre RAMP, l'odometre se gare sur un chiffre net, jamais entre deux */
+  const targetMV = useTransform(() =>
+    1 + Math.round((selMV.get() - 1) * Math.max(easeRamp(clamp01(rampMV.get())), liveMV.get()))
+  );
+  const springMV = useSpring(targetMV, SPRING_DAYS);
+  /* reduced-motion : la valeur choisie s'affiche telle quelle, sans roulement */
+  const shownMV = reducedMotion ? selMV : springMV;
 
   /* Police de l'odometre arrondie au pixel entier : 22vw donne des em
      fractionnaires et les translations de colonnes laissent alors un
@@ -51,37 +114,86 @@ function HeroScrollytelling() {
     el.style.fontSize = `${Math.round(parseFloat(getComputedStyle(el).fontSize))}px`;
   };
 
-  /* Grand nombre + piste du curseur + date de fin (aucun etat React : zero re-render) */
-  const renderDays = (days) => {
-    const t = Math.floor(days / 10);
-    const u = days % 10;
-    tensRef.current.style.transform = `translateY(${-t}em)`;
-    tensRef.current.style.opacity = t ? '1' : '0';
-    unitsRef.current.style.transform = `translateY(${-u}em)`;
-    numRef.current.style.transform = t ? 'translateX(0ch)' : 'translateX(-0.5ch)';
-    rangeRef.current.style.setProperty('--f', `${(((days - 1) / 89) * 100).toFixed(1)}%`);
-    rangeRef.current.setAttribute('aria-valuetext', `${days} jours`);
-    dateRef.current.textContent = `, jusqu'au ${fmtDateFin(days)}`;
-  };
+  /* Mises a jour discretes, une fois par jour entier franchi, jamais par
+     frame : date de fin, et piste + valeur du curseur. Le curseur n'est
+     re-ecrit que pour le roulement pilote par le scroll (liveMV a 0) :
+     apres une manipulation, la valeur posee par l'utilisateur fait foi et
+     le ressort ne fait que la rejoindre (aucun retour en arriere du pouce
+     pendant la pose, Safari compris), jamais pendant un drag ni sur un
+     champ focus (clavier, lecteur d'ecran) */
+  const renderDayMeta = useCallback((di) => {
+    const range = rangeRef.current;
+    if (
+      range && liveMV.get() === 0 && !draggingRef.current &&
+      document.activeElement !== range && +range.value !== di
+    ) {
+      range.value = di;
+      range.style.setProperty('--f', `${(((di - 1) / 89) * 100).toFixed(1)}%`);
+      range.setAttribute('aria-valuetext', `${di} ${di > 1 ? 'jours' : 'jour'}`);
+    }
+    if (dateRef.current) dateRef.current.textContent = `, jusqu'au ${fmtDateFin(di)}`;
+  }, [liveMV]);
+
+  /* Point de mutation unique du compteur, abonne au ressort : la valeur ne
+     traverse jamais l'etat React. Mecanique d'odometre reelle : la roue des
+     dizaines n'avance que pendant que l'unite franchit 9 -> 0, chaque roue
+     glisse en continu (transform), le halo suit la vitesse du ressort. */
+  const renderCounter = useCallback((v) => {
+    const num = numRef.current;
+    const tens = tensRef.current;
+    const units = unitsRef.current;
+    if (!num || !tens || !units) return;
+    /* Bornes dures : le depassement du ressort n'affiche jamais <1 ni >90 */
+    const day = v < 1 ? 1 : v > 90 ? 90 : v;
+    const whole = Math.floor(day / 10);
+    const t = whole + Math.max(0, (day % 10) - 9);
+    const u = day - whole * 10;
+    tens.style.transform = `translate3d(0, ${(-t).toFixed(4)}em, 0)`;
+    tens.style.opacity = t >= 1 ? '1' : t.toFixed(3);
+    units.style.transform = `translate3d(0, ${(-u).toFixed(4)}em, 0)`;
+    num.style.transform = t >= 0.5 ? 'translateX(0ch)' : 'translateX(-0.5ch)';
+    if (haloRef.current && !reducedMotion) {
+      const glow = Math.min(1, Math.sqrt(Math.abs(springMV.getVelocity())) / 9);
+      haloRef.current.style.opacity = (glow * 0.8).toFixed(3);
+    }
+    cadranRef.current?.setDaysLive(day);
+    const di = Math.round(day);
+    if (di !== shownDayRef.current) {
+      shownDayRef.current = di;
+      renderDayMeta(di);
+    }
+  }, [reducedMotion, springMV, renderDayMeta]);
+
+  useMotionValueEvent(shownMV, 'change', renderCounter);
 
   const onDays = (e) => {
     const days = +e.target.value;
     /* Bonus haptique : pulsation discrete a chaque dizaine franchie (Android) */
     if (Math.floor(days / 10) !== Math.floor(daysRef.current / 10)) navigator.vibrate?.(5);
     daysRef.current = days;
-    renderDays(days);
-    cadranRef.current?.interact(days);
+    /* Retour immediat sous le doigt : la piste et la valeur accessible
+       suivent le pouce sans lag ; le grand nombre, l'arc et la date
+       suivent le ressort, une fraction de seconde derriere */
+    e.target.style.setProperty('--f', `${(((days - 1) / 89) * 100).toFixed(1)}%`);
+    e.target.setAttribute('aria-valuetext', `${days} ${days > 1 ? 'jours' : 'jour'}`);
+    liveMV.set(1);
+    selMV.set(days);
+    cadranRef.current?.engage();
   };
 
   /* Drag du curseur signale au reste de la page (le lanceur de l'assistant
      s'efface pendant la manipulation et revient a l'arret). Le pointer capture
      natif du <input range> garantit le pointerup meme si le doigt sort du champ. */
   const emitDrag = (dragging) => {
+    draggingRef.current = dragging;
     window.dispatchEvent(new CustomEvent('assutempo:instrument-drag', { detail: { dragging } }));
   };
 
   const goTunnel = () => {
-    const days = daysRef.current;
+    /* La valeur AFFICHEE fait foi : compteur, curseur, date et tunnel
+       montrent et recoivent le meme jour, meme si le scroll s'est arrete
+       au milieu du roulement (jamais daysRef, qui peut differer) */
+    const days = shownDayRef.current;
     trackEvent('cta_devis_click', {
       "cta_label": 'Continuer mon devis',
       "page_path": window.location.pathname,
@@ -104,7 +216,6 @@ function HeroScrollytelling() {
     let raf = 0;
     let inView = true;
     let pageHidden = document.hidden;
-    let revealSent = false;
     let zoneTop = 0;
     let span = 1;
     let lastY = -1;
@@ -148,8 +259,19 @@ function HeroScrollytelling() {
 
       cadranRef.current?.setPresence(p2);
 
-      if (p2 > 0.6 && !revealSent) {
-        revealSent = true;
+      /* Compteur : la fenetre RAMP du scroll remonte la cible du ressort.
+         Module completement sorti = re-armement du roulement (liveMV), la
+         prochaine entree remonte a nouveau de 1 vers la valeur choisie.
+         reduced-motion : rien, l'affichage suit selMV et le ressort ne
+         doit pas travailler dans le vide. */
+      if (!rm) {
+        const ramp = clamp01((p - RAMP_START) / RAMP_SPAN);
+        if (ramp !== rampMV.get()) rampMV.set(ramp);
+        if (p2 <= 0.02 && liveMV.get() !== 0) liveMV.set(0);
+      }
+
+      if (p2 > 0.6 && !revealSentRef.current) {
+        revealSentRef.current = true;
         trackEvent('devis_express_view', { "page_path": window.location.pathname });
       }
     };
@@ -197,7 +319,13 @@ function HeroScrollytelling() {
     reduce.addEventListener?.('change', start);
 
     roundNumFont();
-    renderDays(daysRef.current);
+    /* Etat initial deterministe : colonnes posees sur la valeur courante du
+       ressort (1 en haut de page, module invisible ; valeur choisie en
+       reduced-motion), piste et date posees sur le jour entier correspondant */
+    const v0 = shownMV.get();
+    shownDayRef.current = Math.round(v0 < 1 ? 1 : v0 > 90 ? 90 : v0);
+    renderCounter(v0);
+    renderDayMeta(shownDayRef.current);
     measure();
     tick(performance.now()); /* etat correct des le montage (rechargement a mi-page, bfcache) */
 
@@ -211,7 +339,10 @@ function HeroScrollytelling() {
       document.removeEventListener('visibilitychange', onVisibility);
       reduce.removeEventListener?.('change', start);
     };
-  }, []);
+    /* Deps stables (motion values) + renderCounter : l'effet ne se rejoue
+       qu'a la bascule reduced-motion, et il est idempotent (teardown complet,
+       remesure, re-application de l'etat courant) */
+  }, [rampMV, liveMV, shownMV, renderCounter, renderDayMeta]);
 
   return (
     <section className="scy-zone" ref={zoneRef}>
@@ -410,21 +541,32 @@ function HeroScrollytelling() {
             <div className="dx-face">
               <p className="dx-eyebrow">Devis express</p>
 
-              {/* Grand nombre de jours (le curseur porte la valeur accessible) */}
-              <div className="dx-num" ref={numRef} aria-hidden="true" style={{ transform: 'translateX(-0.5ch)' }}>
-                <span className="dx-col" ref={tensRef} style={{ transform: 'translateY(0em)', opacity: 0 }}>
-                  {DIGITS.map((d) => <span key={d}>{d}</span>)}
-                </span>
-                <span className="dx-col" ref={unitsRef} style={{ transform: `translateY(${-(INITIAL_DAYS % 10)}em)` }}>
-                  {DIGITS.map((d) => <span key={d}>{d}</span>)}
-                </span>
+              {/* Grand nombre de jours (le curseur porte la valeur accessible).
+                  Le halo dore vit derriere les chiffres, hors de la fenetre
+                  clippee de l'odometre, et respire avec la vitesse du ressort */}
+              <div className="dx-numwrap">
+                <span className="dx-halo" ref={haloRef} aria-hidden="true" style={{ opacity: 0 }} />
+                <div className="dx-num" ref={numRef} aria-hidden="true" style={{ transform: 'translateX(-0.5ch)' }}>
+                  <span className="dx-col" ref={tensRef} style={{ transform: 'translateY(0em)', opacity: 0 }}>
+                    {DIGITS.map((d, i) => <span key={i}>{d}</span>)}
+                  </span>
+                  <span className="dx-col" ref={unitsRef} style={{ transform: `translateY(${-(INITIAL_DAYS % 10)}em)` }}>
+                    {DIGITS.map((d, i) => <span key={i}>{d}</span>)}
+                  </span>
+                </div>
               </div>
               <p className="dx-label">Jours de couverture</p>
+              {/* Contenu statique pour crawlers et lecteurs d'ecran : le
+                  nombre anime ci-dessus est decoratif (aria-hidden) */}
+              <p className="dx-sr">Durée au choix de 1 à 90 jours, 7 jours par défaut.</p>
             </div>
 
             <div className="dx-controls">
             <p className="dx-date">Couvert dès aujourd&apos;hui<span ref={dateRef} /></p>
 
+            {/* Un focus pose pendant le roulement (Tab, lecteur d'ecran) gele
+                les ecritures du curseur : onBlur resynchronise des que le
+                focus s'en va */}
             <input
               className="dx-range"
               ref={rangeRef}
@@ -433,11 +575,13 @@ function HeroScrollytelling() {
               max="90"
               step="1"
               defaultValue={INITIAL_DAYS}
+              aria-valuetext={`${INITIAL_DAYS} jours`}
               onInput={onDays}
               onPointerDown={() => emitDrag(true)}
               onPointerUp={() => emitDrag(false)}
               onPointerCancel={() => emitDrag(false)}
               onLostPointerCapture={() => emitDrag(false)}
+              onBlur={() => renderDayMeta(shownDayRef.current)}
               aria-label="Durée de couverture en jours"
             />
 

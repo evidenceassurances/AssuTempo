@@ -158,3 +158,28 @@ Le banc simule ne valorise pas les octets deplaces (LCP simule domine par HTML+C
 ### Actions restantes cote Ayoub (hors code)
 1. **Debrancher la propriete UA morte dans l'admin GA4** : Admin > Flux de donnees > flux web assutempo.fr > "Balises de site connectees" (ou "Connected Site Tags") > supprimer UA-264084182-1. Gain : -144 KB de reseau et une requete tierce en moins sur CHAQUE visite, cote serveur Google (aucun deploiement necessaire).
 2. **www.assutempo.fr** : garder les liens et communications sur https://assutempo.fr (0 redirection). La chaine www coute 1 a 2 sauts ; verifier chez IONOS que www pointe en CNAME vers Vercel (redirection 308 en un saut, deja le cas en https).
+
+## Refonte du compteur de jours du 8 juillet (odometre a ressort, roulement lie au scroll)
+Le compteur passe des transitions CSS retargetees a une chaine framer-motion (useMotionValue + useTransform + useSpring, motion values uniquement, un seul point de mutation renderCounter, zero re-render). Lint 0 erreur / 12 warnings (baseline). Cout : chunk principal +518 B gzip, chunk framer +75 B (deja charge au demarrage).
+
+### Causes des saccades mesurees sur l'ancien chemin
+1. **Transitions CSS retargetees en rafale** : chaque evenement input du curseur (60+/s en drag) relancait une transition de 0,45 s sur les 2 colonnes de chiffres, l'arc (x2), l'aiguille : la valeur trainait derriere le doigt par paquets decelerants.
+2. **Colonne des unites en marche arriere** aux franchissements de dizaines (29 -> 30 : translateY de -9em a 0em, la roue rembobinait 8, 7, 6...) : chiffres volant dans les deux sens en drag rapide.
+3. **Intl a chaque evenement** : new Date + toLocaleDateString par input (desormais cache par duree, purge au changement de jour).
+4. **Aucune animation du nombre pendant le scrollytelling** : le nombre restait fige a 7, le module ne faisait qu'apparaitre.
+
+### Nouveau chemin
+- cible = 1 + round((selection - 1) x max(easeRamp(rampe p 0.30..0.55), liveMV)) ; un seul ressort (stiffness 110, damping 20, ~0.95 critique : leger depassement absorbe) lisse scroll ET curseur ; cible quantifiee au jour entier (jamais de parking entre deux chiffres).
+- Odometre 11 cellules (0..9 + 0 de bouclage) : l'unite franchit 9 -> 0 vers l'avant, la dizaine n'avance que pendant ce franchissement (mecanique reelle).
+- Arc, aiguille, graduations, reperes, halo, date, curseur derivent du meme signal (setDaysLive en continu ; meta au jour entier franchi). applyVisual/zeroed supprimes du cadran, engage() ne gere plus que la pause de rotation.
+- Halo dore derriere les chiffres (radial-gradient, opacity seule) pilote par la vitesse du ressort.
+- Le curseur n'est re-ecrit que pour le roulement pilote par le scroll (liveMV a 0), jamais pendant drag/focus ; resync au blur ; la valeur AFFICHEE part dans le tunnel et GA4 (shownDayRef, plus jamais daysRef).
+- reduced-motion : valeur choisie affichee directement (shownMV = selMV), halo coupe, rampe non alimentee (le ressort dort).
+- SSR : parite stricte (7 affiche des le HTML prerendu), texte statique dx-sr pour crawlers, aria-valuetext initial en dur, pluriel "1 jour" corrige.
+
+### Revue adversariale (workflow multi-agents) puis QA Playwright dediee 51/51
+Findings confirmes et corriges : gel du curseur si focus pendant le roulement (resync au blur), cache de date perime apres minuit (purge par jour), parking entre deux chiffres a l'arret mi-rampe (cible quantifiee), CTA/GA4 divergents de l'affichage (valeur affichee fait foi), retour arriere du pouce post-drag si blur (gate liveMV), pluriel/aria init. Refutes apres verification : paint SVG par frame (deja le cas via les transitions CSS, borne a la fenetre de roulement), couches will-change (2 colonnes de glyphes + halo, negligeable), roulement de ~0,6 s au rechargement mi-page (revelation assumee), "cadran pur" (le groupe fill est a opacity 0 en haut, visuellement identique).
+
+QA (chromium headless, vite preview) : hydratation 0 erreur, roulement continu (saut max 0,002 em/frame), bornes dures (min 1,000 / max 90,000 sur echantillonnage par frame pendant les depassements du ressort), zero re-render par frame (2 commits discrets preexistants sur ~90 frames : seuil header + dock assistant), parking entier a l'arret mi-rampe + curseur aligne + CTA = valeur affichee, pouce stable a 90 pendant la pose, gel/resync focus-blur verifies, mobile 390 (instrument, deborde pas), reduced-motion complet, 60,2 fps au CPU x4, TempoDial international intact.
+
+Risque residuel note : repositionnement du pouce natif par ecriture programmatique de input.value pendant le roulement scroll, verifie sous chromium uniquement (Safari/Firefox : comportement standard attendu, a l'oeil au prochain passage sur iPhone).

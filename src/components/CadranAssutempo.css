@@ -43,7 +43,9 @@
   height: 100%;
 }
 
-/* Arc de remplissage : demarre a midi, sens horaire, 90 jours = cercle complet */
+/* Arc de remplissage : demarre a midi, sens horaire, 90 jours = cercle
+   complet. Aucune transition : l'offset est ecrit en continu par le
+   ressort du compteur (setDaysLive), le lissage vient du ressort. */
 .atc-arc,
 .atc-arc-glow{
   fill: none;
@@ -52,16 +54,15 @@
   transform: rotate(-90deg);
   transform-box: view-box;
   transform-origin: 50% 50%;
-  transition: stroke-dashoffset .45s cubic-bezier(.25,.9,.3,1);
 }
 .atc-arc{ stroke: url(#atcArc); stroke-width: .9; }
 .atc-arc-glow{ stroke: rgba(232,201,122,.26); stroke-width: 2.2; }
 
-/* Aiguille-point : positionnement avec un leger rebond elastique */
+/* Aiguille-point : rotation ecrite en continu par le ressort, le leger
+   depassement amorti vient de la physique du ressort lui-meme */
 .atc-needle{
   transform-box: view-box;
   transform-origin: 50% 50%;
-  transition: transform .55s cubic-bezier(.34,1.45,.55,1);
 }
 .atc-needle-line{
   stroke: #E8C97A;
@@ -139,18 +140,8 @@
 @keyframes atc-flash-min{ from{ opacity: 1; } to{ opacity: .55; } }
 @keyframes atc-flash-maj{ from{ opacity: 1; } to{ opacity: .85; } }
 
-/* Reset instantane (retour en haut du scroll) */
-.atc-notrans,
-.atc-notrans *{
-  transition: none !important;
-  animation: none !important;
-}
-
 /* Accessibilite : aucun mouvement decoratif */
 @media (prefers-reduced-motion: reduce){
-  .atc-arc,
-  .atc-arc-glow,
-  .atc-needle,
   .atc-num,
   .atc-grad{ transition: none !important; }
   .atc-grad.on{ animation: none !important; }
