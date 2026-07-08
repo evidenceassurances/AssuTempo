@@ -164,6 +164,9 @@ Le compteur du module Devis express passe des transitions CSS retargetées (sacc
 ### Session du 8 juillet 2026 (suite) : hero lisible dès le premier paint, en prod
 Constat : hero vide plusieurs secondes sur mobile (seul le cadran visible). L'audit a écarté le JS (prouvé JS bloqué : la chorégraphie d'entrée est en CSS pur et joue sans bundle). La cause : les états `from` des animations d'entrée masquaient TOUT le texte au premier paint (H1 clippé translateY(110%), reste à opacity 0), avec 1,3 s de révélation après un premier paint déjà tardif sur téléphone lent. Correctif : **plus jamais d'état from invisible sur du contenu critique** : opacity 0,6 minimum, déplacements légers, durées 0,4 s max, délais 0,15 s max, masque overflow du H1 retiré. Vérifié JS bloqué : tout lisible à 120 ms, 100 % à 300 ms ; banc compteur 51/51 re-passé. Détails dans SCROLLY-QA.md.
 
+### Session du 8 juillet 2026 (fin) : CSS critique inline, en prod
+Constat d'Ayoub : page noire ~8 s avant tout affichage sur téléphone. Cause : la feuille `/assets/index-*.css` était la SEULE ressource bloquant le rendu ; sur un lien mobile dégradé (et sous Safari iOS où elle concurrence les ~150 KB de modulepreload), elle peut arriver plusieurs secondes après le HTML : écran noir tant qu'elle n'est pas là. Correctif : `prerender.mjs` inline la feuille en `<style>` dans chaque HTML prérendu (57 fichiers) : **plus aucune sous-ressource ne conditionne le premier paint**. Preuves : toutes sous-ressources retenues 8 s, hero peint à 204 ms ; FCP throttle 1020 ms → 364 ms ; Home 16 → 20,8 KB gzip ; banc compteur 51/51. **Règle : ne jamais réintroduire de `<link rel="stylesheet">` bloquant dans le template ; toute nouvelle CSS doit finir dans le bundle inliné ou en chargement asynchrone.**
+
 ---
 
 ## 6. Plan SEO / backlinks
