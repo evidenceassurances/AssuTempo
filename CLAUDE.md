@@ -188,6 +188,7 @@ Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/P
 - `.github/workflows/claude.yml` remplacé par le workflow **Claude Mission** : déclencheurs `issues: opened` et `issue_comment: created` si le corps contient `@claude` ; permissions write (contents, pull-requests, issues) + id-token ; concurrency `claude-mission` sans cancel-in-progress ; timeout 45 min ; `anthropics/claude-code-action@v1` avec `--max-turns 40 --model claude-sonnet-5`.
 - `claude-code-review.yml` (revue automatique de chaque PR, posé par l'installateur) conservé tel quel : il relira aussi les PR produites par les missions.
 - Règles permanentes des exécutions automatiques ajoutées en section 10 (zones interdites, branches draft/PR, pattern article, YMYL, style, design articles).
+- Test réel validé : issue #4 "Test pilote Claude" traitée en 12 s (commentaire correct, aucun fichier modifié). Le commentaire de réponse a re-déclenché le workflow qui s'est bien auto-ignoré (skipped, pas de @claude dans le corps) : pas de boucle possible.
 
 ---
 
