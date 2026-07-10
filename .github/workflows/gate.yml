@@ -1,37 +1,78 @@
 # Portique de controle des Pull Requests + merge automatique.
 #
-# Job "gate" : build complet puis scripts/quality-gate.mjs (tirets interdits,
-# expressions bannies, dependances figees, zones interdites, pages du sitemap
-# presentes dans dist/). Job "automerge" : si le gate est vert, merge en
-# squash les PR draft/ des bots (et les PR dependabot limitees aux workflows),
+# Deux portes d'entree :
+#  - pull_request : PR ouvertes normalement (dependabot, humains).
+#  - workflow_dispatch (pr_number) : appele par Claude Mission en fin de job,
+#    car une PR creee avec GITHUB_TOKEN ne declenche pas les workflows
+#    (anti-boucle GitHub) ; seul workflow_dispatch fait exception.
+#
+# Job "contexte" : resout la PR (branche, auteur, label hold) quelle que soit
+# la porte d'entree. Job "gate" : build complet puis scripts/quality-gate.mjs.
+# Job "automerge" : si le gate est vert, merge en squash les PR draft/ ou
+# claude/ des bots et d'Ayoub (et les PR dependabot limitees aux workflows),
 # sauf si le label "hold" est pose.
 #
-# Point technique : un merge effectue avec le token GitHub Actions ne
-# declenche pas les autres workflows (protection anti-boucle de GitHub).
-# Vercel deploie quand meme (son integration ecoute GitHub directement),
-# mais le workflow IndexNow ne partirait pas : le ping est donc enchaine
-# ici meme, dans le job automerge, apres le merge.
+# Un merge effectue avec le token Actions ne declenche pas les autres
+# workflows : Vercel deploie quand meme (integration directe GitHub), et le
+# ping IndexNow est enchaine ici meme apres le merge.
 name: Gate
 
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, labeled, unlabeled]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Numero de la Pull Request a controler'
+        required: true
 
 permissions:
   contents: read
 
 concurrency:
-  group: gate-${{ github.event.pull_request.number }}
+  group: gate-${{ github.event.pull_request.number || inputs.pr_number }}
   cancel-in-progress: true
 
 jobs:
+  contexte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      pr: ${{ steps.infos.outputs.pr }}
+      branche: ${{ steps.infos.outputs.branche }}
+      auteur: ${{ steps.infos.outputs.auteur }}
+      hold: ${{ steps.infos.outputs.hold }}
+    steps:
+      - name: Resoudre la PR
+        id: infos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr="${{ github.event.pull_request.number || inputs.pr_number }}"
+          infos=$(gh pr view "$pr" --repo ${{ github.repository }} --json state,headRefName,author,labels)
+          etat=$(echo "$infos" | jq -r '.state')
+          if [ "$etat" != "OPEN" ]; then
+            echo "PR #${pr} non ouverte (etat : ${etat}) : rien a controler."
+            exit 1
+          fi
+          {
+            echo "pr=${pr}"
+            echo "branche=$(echo "$infos" | jq -r '.headRefName')"
+            echo "auteur=$(echo "$infos" | jq -r '.author.login')"
+            echo "hold=$(echo "$infos" | jq -r '[.labels[].name] | contains(["hold"])')"
+          } >> "$GITHUB_OUTPUT"
+
   gate:
+    needs: contexte
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ needs.contexte.outputs.branche }}
           fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
@@ -43,18 +84,18 @@ jobs:
         run: npm run build
       - name: Controles qualite
         env:
-          GATE_AUTHOR: ${{ github.event.pull_request.user.login }}
+          GATE_AUTHOR: ${{ needs.contexte.outputs.auteur }}
         run: node scripts/quality-gate.mjs
 
   automerge:
-    needs: gate
+    needs: [contexte, gate]
     if: >-
-      !contains(github.event.pull_request.labels.*.name, 'hold') &&
+      needs.contexte.outputs.hold != 'true' &&
       (
-        (startsWith(github.event.pull_request.head.ref, 'draft/') &&
-         contains(fromJSON('["claude[bot]", "claude", "github-actions[bot]"]'), github.event.pull_request.user.login)) ||
-        (github.event.pull_request.user.login == 'dependabot[bot]' &&
-         startsWith(github.event.pull_request.head.ref, 'dependabot/'))
+        ((startsWith(needs.contexte.outputs.branche, 'draft/') || startsWith(needs.contexte.outputs.branche, 'claude/')) &&
+         contains(fromJSON('["claude[bot]", "claude", "github-actions[bot]", "github-actions", "evidenceassurances"]'), needs.contexte.outputs.auteur)) ||
+        ((needs.contexte.outputs.auteur == 'dependabot[bot]' || needs.contexte.outputs.auteur == 'dependabot') &&
+         startsWith(needs.contexte.outputs.branche, 'dependabot/'))
       )
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -63,11 +104,11 @@ jobs:
       pull-requests: write
     steps:
       - name: Verifier le perimetre dependabot (workflows uniquement)
-        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        if: startsWith(needs.contexte.outputs.auteur, 'dependabot')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          hors_perimetre=$(gh pr view ${{ github.event.pull_request.number }} \
+          hors_perimetre=$(gh pr view ${{ needs.contexte.outputs.pr }} \
             --repo ${{ github.repository }} --json files \
             --jq '.files[].path | select(startswith(".github/workflows/") | not)')
           if [ -n "$hors_perimetre" ]; then
@@ -80,7 +121,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
-          gh pr merge ${{ github.event.pull_request.number }}
+          gh pr merge ${{ needs.contexte.outputs.pr }}
           --repo ${{ github.repository }} --squash --delete-branch
 
       - name: Checkout de main apres merge

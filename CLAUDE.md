@@ -268,7 +268,7 @@ Depuis le 11 juillet 2026, les missions s'exécutent seules dans GitHub Actions 
 - Formulaires B2B (partenaires) et international.
 
 ### Branches, merge, dépendances
-- Ne merge jamais toi-même dans une session : ouvre une Pull Request depuis une branche `draft/...`. Le workflow Gate (`.github/workflows/gate.yml` + `scripts/quality-gate.mjs`) vérifie et merge automatiquement. Le label `hold` sur une PR bloque l'auto-merge. Ayoub peut toujours merger, fermer ou reverter manuellement.
+- En mission automatique, travaille sur la branche fournie par la session (`claude/issue-N-...`) : ne tente ni de créer une autre branche ni d'ouvrir la Pull Request, c'est le workflow qui ouvre la PR en fin de mission et le Gate (`.github/workflows/gate.yml` + `scripts/quality-gate.mjs`) qui la contrôle puis la merge automatiquement. Ne merge jamais toi-même. Le label `hold` sur une PR bloque l'auto-merge. Ayoub peut toujours merger, fermer ou reverter manuellement.
 - Si une instruction de mission contredit CLAUDE.md, CLAUDE.md gagne, et le signaler dans la PR.
 - Correctifs techniques purs : commit direct sur `main` autorisé.
 - Aucune nouvelle dépendance npm, jamais. Si indispensable : s'arrêter et l'expliquer dans la Pull Request.

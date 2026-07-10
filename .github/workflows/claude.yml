@@ -1,7 +1,9 @@
 # Pilote automatique AssuTempo : toute issue ou commentaire contenant
-# @claude declenche Claude Code dans le cloud GitHub. Il travaille seul
-# (redaction, build, branche draft, Pull Request) ; le merge reste la
-# decision d'Ayoub. Les regles permanentes sont dans CLAUDE.md.
+# @claude declenche Claude Code dans le cloud GitHub. L'action epingle la
+# mission sur une branche claude/issue-N-* (elle ne peut ni creer d'autre
+# branche ni ouvrir de Pull Request) : le post-traitement en fin de job
+# ouvre donc la PR et declenche le Gate, qui controle puis merge tout seul.
+# Les regles permanentes sont dans CLAUDE.md.
 name: Claude Mission
 
 on:
@@ -30,6 +32,7 @@ jobs:
       pull-requests: write
       issues: write
       id-token: write
+      actions: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -52,3 +55,36 @@ jobs:
             --max-turns 40
             --model claude-sonnet-5
             --allowedTools "WebSearch,WebFetch,Bash(npm ci:*),Bash(npm install:*),Bash(npm run build:*),Bash(node:*)"
+
+      # Ouvre la PR de la mission (si absente) puis declenche le Gate.
+      # Un evenement cree avec GITHUB_TOKEN ne declenche pas les workflows
+      # (anti-boucle GitHub), SAUF workflow_dispatch : c'est l'exception
+      # documentee qui permet d'enchainer sur le Gate sans intervention.
+      - name: Ouvrir la PR et declencher le Gate
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          TITRE: ${{ github.event.issue.title }}
+          EST_PR: ${{ github.event.issue.pull_request != null }}
+        run: |
+          if [ "$EST_PR" = "true" ]; then
+            # Commentaire @claude sur une PR : la PR existe deja, c'est l'issue elle-meme.
+            pr="$ISSUE"
+          else
+            branche=$(git ls-remote --heads origin "claude/issue-${ISSUE}-*" | sed 's|.*refs/heads/||' | sort | tail -1)
+            if [ -z "$branche" ]; then
+              echo "Aucune branche poussee par la mission : rien a publier (reponse en commentaire uniquement)."
+              exit 0
+            fi
+            pr=$(gh pr list --repo "$REPO" --head "$branche" --state open --json number --jq '.[0].number // empty')
+            if [ -z "$pr" ]; then
+              url=$(gh pr create --repo "$REPO" --base main --head "$branche" \
+                --title "draft: $TITRE" \
+                --body "Mission automatique (issue #${ISSUE}). Controlee par le workflow Gate : merge automatique si tous les controles passent. Closes #${ISSUE}.")
+              pr=$(basename "$url")
+            fi
+          fi
+          echo "PR #${pr} : declenchement du Gate."
+          gh workflow run gate.yml --repo "$REPO" --ref main -f pr_number="$pr"
