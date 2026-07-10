@@ -1,7 +1,7 @@
 # AssuTempo - Référence projet
 
 > Document de contexte pour le site assutempo.fr. À placer à la racine du projet (CLAUDE.md) pour que Claude Code dispose du contexte à chaque session.
-> Dernière mise à jour : 2 juillet 2026.
+> Dernière mise à jour : 11 juillet 2026.
 
 ---
 
@@ -183,6 +183,12 @@ Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/P
 - QA : 151 blocs JSON-LD valides sur 57 pages, 0 erreur console (6 routes vérifiées navigateur), 0 tiret interdit, 0 dépendance, JS total inchangé (335,7 KB gz). Audit : perf, redirections (www = 1 saut 308), soft-404 et GA4 déjà en place, rien touché.
 - Actions manuelles restantes pour Ayoub : compte Bing Webmaster Tools (import GSC en 2 clics) + surveiller la couverture GSC. Décision en attente : visuel og:image 1200x630.
 
+### Session du 11 juillet 2026 : pilote automatique GitHub (missions @claude), en prod
+- App GitHub Claude installée via `/install-github-app` (PR #3 de l'installateur mergée), secret `CLAUDE_CODE_OAUTH_TOKEN` posé dans le repo (abonnement Claude, pas de clé API).
+- `.github/workflows/claude.yml` remplacé par le workflow **Claude Mission** : déclencheurs `issues: opened` et `issue_comment: created` si le corps contient `@claude` ; permissions write (contents, pull-requests, issues) + id-token ; concurrency `claude-mission` sans cancel-in-progress ; timeout 45 min ; `anthropics/claude-code-action@v1` avec `--max-turns 40 --model claude-sonnet-5`.
+- `claude-code-review.yml` (revue automatique de chaque PR, posé par l'installateur) conservé tel quel : il relira aussi les PR produites par les missions.
+- Règles permanentes des exécutions automatiques ajoutées en section 10 (zones interdites, branches draft/PR, pattern article, YMYL, style, design articles).
+
 ---
 
 ## 6. Plan SEO / backlinks
@@ -228,7 +234,7 @@ Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/P
 
 ## 8. Règles de travail (à respecter par Claude Code)
 
-- **Aucun em-dash (U+2014) nulle part**, ni code ni contenu. Vérifier avec `rg`.
+- **Aucun tiret cadratin (U+2014) ni demi-cadratin (U+2013) nulle part**, ni code ni contenu. Vérifier avec `rg`.
 - **Contenu YMYL (assurance)** : vérifier les faits par recherche web avant d'écrire (amendes, articles de loi, règles de couverture). Ne jamais générer de mémoire.
 - **Animations** : transform et opacity uniquement (GPU), jamais width/height/top/left/margin. Aucun layout shift.
 - **Build** : toujours `npm run build` (jamais `npm run dev` en arrière-plan) : le script enchaîne Vite build puis `prerender.mjs` (prérendu statique). `git push` après chaque session pour déclencher le redéploiement Vercel.
@@ -247,3 +253,45 @@ Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/P
 - Cellule de souscription d'urgence 24/7 (automatisation hors horaires, à venir)
 - Ancienneté du domaine depuis 2023
 - Programme partenaires B2B avec extranet et commissions mensuelles
+
+---
+
+## 10. Pilote automatique GitHub (missions @claude)
+
+Depuis le 11 juillet 2026, les missions s'exécutent seules dans GitHub Actions : une issue (ou un commentaire) contenant `@claude` déclenche `.github/workflows/claude.yml` (workflow "Claude Mission"). Les règles de la section 8 s'appliquent intégralement ; celles ci-dessous s'y ajoutent pour toute exécution automatique.
+
+### Zones interdites (ne jamais modifier)
+- Header et footer globaux.
+- Page `/tarification` au-delà des balises meta : iframe et logique du tunnel JL Assure figées.
+- Iframe Certimat de `/carte-grise`.
+- Formulaires B2B (partenaires) et international.
+
+### Branches, merge, dépendances
+- Contenu éditorial : toujours sur une branche `draft/...` avec Pull Request vers `main`. Ne jamais merger soi-même : le merge appartient à Ayoub.
+- Correctifs techniques purs : commit direct sur `main` autorisé.
+- Aucune nouvelle dépendance npm, jamais. Si indispensable : s'arrêter et l'expliquer dans la Pull Request.
+- Chaque session se termine par `npm run build` (jamais `npm run dev`) ; corriger jusqu'à build propre.
+
+### Pattern article (obligatoire pour tout nouvel article)
+- Suivre exactement le pattern existant : structure de données, route, prerender, sitemap avec lastmod du jour.
+- JSON-LD Article + FAQPage + BreadcrumbList (toujours via le helper `jsonLd()` de `src/lib/seo.js`).
+- AnswerCapsule en tête : réponse directe de 50 mots max + 3 faits datés.
+- H2/H3 formulés en vraies questions.
+- Maillage interne vers 3 ou 4 pages, dont le duo croisé assurance / carte grise.
+- Title < 60 caractères, meta description < 155, slug court.
+- CTA final vers `/tarification` ou `/carte-grise`.
+
+### YMYL et sources
+- Vérifier tout chiffre légal par recherche web ; citer service-public.fr, legifrance.gouv.fr ou ants.gouv.fr ; dater les faits.
+
+### Style anti-détection IA
+- Varier fortement les longueurs de phrases et de paragraphes.
+- Bannir : "dans un monde où", "il est important de noter", "de nos jours", "n'hésitez pas", "en résumé", "force est de constater".
+- Pas de symétrie mécanique ni d'empilement de puces.
+- 1 à 2 détails concrets crédibles et une nuance honnête par article.
+
+### Design des articles
+- Fond `#0A0A0A`, or `#C9A84C`.
+- Aucun PNG/JPEG dans la zone articles : SVG inline, CSS, texte uniquement.
+- Aucun prix affiché.
+- Contenu 100 % statique dans le DOM ; animations en opacity/transform uniquement.
