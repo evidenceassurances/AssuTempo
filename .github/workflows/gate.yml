@@ -1,0 +1,99 @@
+# Portique de controle des Pull Requests + merge automatique.
+#
+# Job "gate" : build complet puis scripts/quality-gate.mjs (tirets interdits,
+# expressions bannies, dependances figees, zones interdites, pages du sitemap
+# presentes dans dist/). Job "automerge" : si le gate est vert, merge en
+# squash les PR draft/ des bots (et les PR dependabot limitees aux workflows),
+# sauf si le label "hold" est pose.
+#
+# Point technique : un merge effectue avec le token GitHub Actions ne
+# declenche pas les autres workflows (protection anti-boucle de GitHub).
+# Vercel deploie quand meme (son integration ecoute GitHub directement),
+# mais le workflow IndexNow ne partirait pas : le ping est donc enchaine
+# ici meme, dans le job automerge, apres le merge.
+name: Gate
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Installer les dependances
+        run: npm ci
+      - name: Build complet (Vite + prerender)
+        run: npm run build
+      - name: Controles qualite
+        env:
+          GATE_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: node scripts/quality-gate.mjs
+
+  automerge:
+    needs: gate
+    if: >-
+      !contains(github.event.pull_request.labels.*.name, 'hold') &&
+      (
+        (startsWith(github.event.pull_request.head.ref, 'draft/') &&
+         contains(fromJSON('["claude[bot]", "claude", "github-actions[bot]"]'), github.event.pull_request.user.login)) ||
+        (github.event.pull_request.user.login == 'dependabot[bot]' &&
+         startsWith(github.event.pull_request.head.ref, 'dependabot/'))
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Verifier le perimetre dependabot (workflows uniquement)
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          hors_perimetre=$(gh pr view ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} --json files \
+            --jq '.files[].path | select(startswith(".github/workflows/") | not)')
+          if [ -n "$hors_perimetre" ]; then
+            echo "PR dependabot refusee, fichiers hors .github/workflows/ :"
+            echo "$hors_perimetre"
+            exit 1
+          fi
+
+      - name: Merge automatique (squash + suppression de branche)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh pr merge ${{ github.event.pull_request.number }}
+          --repo ${{ github.repository }} --squash --delete-branch
+
+      - name: Checkout de main apres merge
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Rebuild du sitemap sur main mergee
+        run: |
+          npm ci
+          npm run build
+      - name: Ping IndexNow (Bing prevenu en minutes)
+        run: node scripts/indexnow.mjs

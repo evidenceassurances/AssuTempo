@@ -1,0 +1,10 @@
+# Mises a jour automatiques des versions d'actions GitHub (checkout,
+# setup-node, claude-code-action...). Chaque mise a jour arrive en PR ;
+# le workflow Gate la controle puis la merge automatiquement si elle ne
+# touche que .github/workflows/.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
