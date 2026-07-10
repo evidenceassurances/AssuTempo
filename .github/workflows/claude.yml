@@ -10,15 +10,19 @@ on:
   issue_comment:
     types: [created]
 
-concurrency:
-  group: claude-mission
-  cancel-in-progress: false
-
 jobs:
   mission:
     if: |
       (github.event_name == 'issues' && contains(github.event.issue.body, '@claude')) ||
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
+    # Concurrency au niveau du JOB et par issue : un run sans @claude (job
+    # skipped) ne prend pas de place dans la file, et deux missions sur des
+    # issues differentes tournent en parallele sans s'ejecter mutuellement.
+    # GitHub ne garde qu'un seul run en attente par groupe : au niveau
+    # workflow, chaque commentaire ejectait la mission precedente de la file.
+    concurrency:
+      group: claude-mission-${{ github.event.issue.number }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -31,7 +35,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
