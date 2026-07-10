@@ -81,6 +81,25 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-temporaire-vehicule-proche-decede':   'src/data/articles/vehiculeProcheDecede.js',
 };
 
+/* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
+   que la fenetre retomberaient sur la date du commit frontiere, faussant
+   les lastmod. On tente de completer l'historique ; en cas d'echec (pas de
+   reseau, pas de credentials), les dates restent plausibles et le build
+   continue. Local : depot complet, bloc entierement saute. */
+try {
+  const isShallow = execSync('git rev-parse --is-shallow-repository', {
+    cwd: root, stdio: ['ignore', 'pipe', 'ignore'],
+  }).toString().trim() === 'true';
+  if (isShallow) {
+    execSync('git fetch --quiet --unshallow', {
+      cwd: root, stdio: ['ignore', 'ignore', 'ignore'], timeout: 30000,
+    });
+    console.log('🕰️  Historique git complete (clone shallow detecte) : lastmod exacts');
+  }
+} catch {
+  console.warn('⚠️  Clone shallow non complete : lastmod bornes a la fenetre du clone');
+}
+
 const gitDateCache = new Map();
 function gitLastCommitDate(file) {
   if (gitDateCache.has(file)) return gitDateCache.get(file);

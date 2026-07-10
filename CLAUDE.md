@@ -170,6 +170,19 @@ Constat d'Ayoub : page noire ~8 s avant tout affichage sur téléphone. Cause : 
 ### Session du 8 juillet 2026 (nuit) : écran noir iPhone résolu (orbes floutées), en prod
 Malgré le CSS inline, encore ~7 s de noir sur iPhone. Cause : le HTML prérendu suppose desktop (snapshot SSR de BackgroundFX), donc tout mobile recevait 3 orbes de 500-700 px en `blur(110px)` ANIMÉES + halo CTA `blur(60px)` animé, la coupure mobile n'arrivant qu'à l'hydratation : pendant toute la fenêtre de chargement du JS, le GPU de l'iPhone rastérise ces surfaces en DPR3 à chaque frame, rendu figé. Correctif : filtres et animations déplacés des styles inline vers des classes CSS (`fx-orb-*`, `fx-halo-cta`, `fx-pt*`) coupées par la media query mobile existante, effective dès le premier paint sans JS. **Règle générale : tout effet coûteux (blur, animation, blend) d'un composant SSR doit être gaté en CSS media query, jamais par un flag JS post-hydratation : le HTML prérendu vit plusieurs secondes seul sur mobile.** Preuves WebKit : rendu non-noir 1578 → 853 ms et FCP 742 → 126 ms sur GPU de Mac (écart bien plus grand sur iPhone). Banc compteur 51/51. Détails dans SCROLLY-QA.md.
 
+### Session du 10 juillet 2026 : fondations GEO/SEO, en prod
+Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/Perplexity/Gemini/AI Overviews et indexé en heures (PLAN.md, QA.md, RECAP.md à la racine). Push direct sur main, vérifié en live.
+
+- **Entité sitewide** (index.html) : `["Organization","InsuranceAgency"]` + identifier ORIAS 20005719, logo `/logo.png` (créé : les 12 articles référençaient un logo INEXISTANT), sameAs vérifiés (societe.com + annuaire-entreprises, EA AGENCY SIREN 884641523 ; Pappers 403 et orias.fr sans lien profond : exclus).
+- **FAQPage sur Home et /faq** (gap critique : les 2 pages les plus citables n'en avaient pas). Règle : le schéma FAQPage se génère depuis le MÊME tableau que l'accordéon affiché (`src/data/faqHome.js` partagé rendu/schéma pour la Home) ; jamais de contenu invisible.
+- **datePublished** (dates git réelles) ajouté aux 12 articles ; Services /tarification et /carte-grise reliés à l'entité par `@id`, serviceType précisés.
+- **Sitemap lastmod réels** : prerender.mjs calcule par route la dernière date git des fichiers sources (fichier non commité = aujourd'hui, fallback 2026-06-23) ; unshallow automatique sur Vercel. Ne JAMAIS remettre de lastmod fixe.
+- **robots.txt** : sections Allow explicites pour 10 bots IA (GPTBot, OAI-SearchBot, ClaudeBot, Claude-Web, PerplexityBot, Google-Extended, Bingbot, CCBot, Amazonbot, Applebot-Extended).
+- **IndexNow** : clé `333c3e14ba12a91b5b09cf6eaa5315ac` dans public/, `scripts/indexnow.mjs` (Node natif), workflow GitHub à chaque push main. Premier ping : HTTP 200, 56 URL acceptées. Chaque publication est désormais signalée à Bing (l'index de ChatGPT) en minutes.
+- **AnswerCapsule** (`src/components/articles/AnswerCapsule.jsx`) : bloc "La réponse en bref" (réponse de 50 mots max + 3 faits à chips ancrées + date de màj), 100 % statique (contenu critique : pas d'état initial invisible, règle du 8 juillet). Posé sur les 3 articles achat/carte grise via le champ `answerCapsule` des data ; à étendre aux autres articles.
+- QA : 151 blocs JSON-LD valides sur 57 pages, 0 erreur console (6 routes vérifiées navigateur), 0 tiret interdit, 0 dépendance, JS total inchangé (335,7 KB gz). Audit : perf, redirections (www = 1 saut 308), soft-404 et GA4 déjà en place, rien touché.
+- Actions manuelles restantes pour Ayoub : compte Bing Webmaster Tools (import GSC en 2 clics) + surveiller la couverture GSC. Décision en attente : visuel og:image 1200x630.
+
 ---
 
 ## 6. Plan SEO / backlinks
