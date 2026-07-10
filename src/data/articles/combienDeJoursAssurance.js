@@ -16,6 +16,7 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere',
+    datePublished: '2026-06-03',
     dateModified: '2026-06-03',
   },
   {

@@ -15,7 +15,8 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-essai-vehicule-avant-achat',
-    dateModified: '2026-06-03',
+    datePublished: '2026-06-03',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -131,11 +132,33 @@ export const articleData = {
   },
   category: 'Essai & achat',
   readTime: '4 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Essayer un véhicule avant achat, bien assuré',
   immediateAnswer:
     "Essayer un véhicule avant de l'acheter est vivement recommandé, mais qui assure l'essai ? En concession, vous êtes généralement couvert par le professionnel. Chez un particulier, c'est plus flou, et un accident peut coûter cher au vendeur. Une assurance temporaire d'un jour sécurise l'essai sans toucher au contrat de personne.",
+  /* Capsule GEO "La réponse en bref" : résume le contenu réel de l'article
+     (réponse directe + faits ancrés). Affichée à la place du bloc
+     "Réponse immédiate". */
+  answerCapsule: {
+    answer:
+      "En concession, l'assurance flotte du professionnel couvre généralement l'essai. Chez un particulier, c'est un prêt de volant : un accident responsable impacte le bonus-malus du vendeur. Une assurance temporaire d'un jour, à votre nom, sécurise l'essai sans toucher au contrat de personne.",
+    facts: [
+      {
+        anchor: 'Art. L211-1',
+        text: "Tout véhicule essayé sur la voie publique doit avoir une responsabilité civile en cours, quel que soit le conducteur.",
+      },
+      {
+        anchor: 'Dès 1 jour',
+        text: "L'assurance temporaire se souscrit au jour près (jusqu'à 90 jours), attestation en 5 minutes, 100 % en ligne.",
+      },
+      {
+        anchor: 'Avril 2024',
+        text: "Plus de carte verte : la preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA).",
+      },
+    ],
+    updated: '10 juillet 2026',
+  },
   sections: [
     {
       type: 'alert',

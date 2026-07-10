@@ -16,7 +16,8 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier',
-    dateModified: '2026-06-03',
+    datePublished: '2026-06-03',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -125,11 +126,33 @@ export const articleData = {
   },
   category: 'Achat véhicule',
   readTime: '5 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Assurer un véhicule acheté chez un particulier',
   immediateAnswer:
     "Quand vous achetez une voiture ou une moto à un particulier, vous devez être assuré avant le premier kilomètre : la loi ne prévoit aucun délai de grâce après la vente. L'assurance temporaire AssuTempo vous couvre immédiatement, sans attendre que la carte grise soit à votre nom.",
+  /* Capsule GEO "La réponse en bref" : résume le contenu réel de l'article
+     (réponse directe + faits ancrés). Affichée à la place du bloc
+     "Réponse immédiate". */
+  answerCapsule: {
+    answer:
+      "Aucun délai de grâce après un achat entre particuliers : le véhicule doit être assuré avant le premier mètre. Vous pouvez souscrire immédiatement avec la carte grise du vendeur et le certificat de cession, sans attendre que le titre soit à votre nom.",
+    facts: [
+      {
+        anchor: 'Art. L211-1',
+        text: "La responsabilité civile est obligatoire dès le premier trajet, y compris pour ramener le véhicule le jour de l'achat.",
+      },
+      {
+        anchor: 'Avril 2024',
+        text: "La carte verte a disparu : la preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA).",
+      },
+      {
+        anchor: '1 mois',
+        text: "C'est le délai pour mettre la carte grise à votre nom, à partir de la date du certificat de cession (Cerfa 15776).",
+      },
+    ],
+    updated: '10 juillet 2026',
+  },
   sections: [
     {
       type: 'alert',

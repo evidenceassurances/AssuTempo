@@ -16,13 +16,29 @@
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "Organization",
+          "@type": ["Organization", "InsuranceAgency"],
           "@id": "https://assutempo.fr/#organization",
           "name": "AssuTempo",
           "legalName": "Evidence Assurances",
           "url": "https://assutempo.fr",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://assutempo.fr/logo.png",
+            "width": 180,
+            "height": 180
+          },
+          "image": "https://assutempo.fr/logo.png",
           "telephone": "+33974197820",
           "email": "contact@assutempo.fr",
+          "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "ORIAS",
+            "value": "20005719"
+          },
+          "sameAs": [
+            "https://www.societe.com/societe/ea-agency-884641523.html",
+            "https://annuaire-entreprises.data.gouv.fr/entreprise/884641523"
+          ],
           "description": "Assurance auto temporaire de 1 à 90 jours. Attestation immédiate en 5 minutes, sans relevé d'information. 34 pays couverts.",
           "areaServed": "Europe"
         },
@@ -30,7 +46,8 @@
           "@type": "WebSite",
           "@id": "https://assutempo.fr/#website",
           "name": "AssuTempo",
-          "url": "https://assutempo.fr"
+          "url": "https://assutempo.fr",
+          "publisher": { "@id": "https://assutempo.fr/#organization" }
         }
       ]
     }

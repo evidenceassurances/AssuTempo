@@ -16,6 +16,7 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-pret-de-vehicule',
+    datePublished: '2026-06-03',
     dateModified: '2026-06-03',
   },
   {

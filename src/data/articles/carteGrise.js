@@ -16,7 +16,8 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
-    dateModified: '2026-06-03',
+    datePublished: '2026-06-03',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -133,11 +134,33 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '4 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Rouler en attendant sa carte grise définitive',
   immediateAnswer:
     "Entre votre demande de carte grise et la réception du titre définitif, vous pouvez rouler grâce au certificat provisoire d'immatriculation (CPI), à condition d'être assuré dès le premier trajet. L'assurance temporaire couvre exactement cette période de transition, sans attendre votre contrat annuel.",
+  /* Capsule GEO "La réponse en bref" : résume le contenu réel de l'article
+     (réponse directe + faits ancrés). Affichée à la place du bloc
+     "Réponse immédiate". */
+  answerCapsule: {
+    answer:
+      "Oui, vous pouvez rouler en attendant votre carte grise : le certificat provisoire d'immatriculation (CPI) délivré par l'ANTS l'autorise pendant 1 mois en France, à condition d'être assuré dès le premier trajet. L'assurance temporaire couvre exactement cette transition.",
+    facts: [
+      {
+        anchor: 'CPI : 1 mois',
+        text: "Le certificat provisoire autorise à circuler en France uniquement, le temps que le titre définitif arrive par courrier.",
+      },
+      {
+        anchor: 'Dès le 1er trajet',
+        text: "La responsabilité civile est obligatoire quel que soit le statut de la carte grise : rouler sans assurance reste interdit, CPI ou pas.",
+      },
+      {
+        anchor: 'Avril 2024',
+        text: "Plus de carte verte : contrôle à la plaque via le Fichier des Véhicules Assurés (FVA), Mémo Véhicule Assuré et carte internationale (34 pays) par email.",
+      },
+    ],
+    updated: '10 juillet 2026',
+  },
   sections: [
     {
       type: 'alert',

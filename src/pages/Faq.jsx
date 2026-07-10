@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
+import { jsonLd } from '../lib/seo';
 
 const faqs = [
   {
@@ -64,6 +65,28 @@ const faqs = [
 ];
 
 
+/* FAQPage : reprend mot pour mot les 14 questions/reponses du tableau `faqs`
+   ci-dessus, celui-la meme qui alimente l'accordeon affiche. Source unique :
+   jamais de contenu invisible dans ce schema. */
+const JSONLD_FAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
+
+const JSONLD_BREADCRUMB = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://assutempo.fr' },
+    { '@type': 'ListItem', position: 2, name: 'FAQ', item: 'https://assutempo.fr/faq' },
+  ],
+};
+
 function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
@@ -78,6 +101,8 @@ function Faq() {
         <meta property="og:url" content="https://assutempo.fr/faq" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
+        <script type="application/ld+json">{jsonLd(JSONLD_FAQ)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB)}</script>
       </Helmet>
       <section
         style={{

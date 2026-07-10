@@ -77,12 +77,14 @@ const JSONLD_FAQ = {
 const JSONLD_SERVICE = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Assurance automobile temporaire',
+  serviceType: 'Assurance auto temporaire 1 à 90 jours',
   name: 'Assurance auto temporaire AssuTempo',
   description:
     "Assurance auto temporaire de 1 à 90 jours, souscription 100 % en ligne avec attestation immédiate par email, valable dans 34 pays européens.",
-  provider: { '@type': 'Organization', name: 'AssuTempo', url: 'https://assutempo.fr/' },
-  areaServed: 'Europe',
+  /* Reference vers l'entite Organization/InsuranceAgency du template
+     (index.html) : une seule entite etablie sur tout le site. */
+  provider: { '@id': 'https://assutempo.fr/#organization' },
+  areaServed: ['FR', 'Europe'],
   audience: { '@type': 'Audience', audienceType: 'Particuliers et professionnels' },
   availableChannel: {
     '@type': 'ServiceChannel',

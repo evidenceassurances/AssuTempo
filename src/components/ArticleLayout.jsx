@@ -15,6 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import ScrollProgress from './articles/ScrollProgress';
+import AnswerCapsule from './articles/AnswerCapsule';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import AccordionItem from './ui/AccordionItem';
 import Footer from './Footer';
@@ -778,7 +779,12 @@ function ArticleLayout({ data }) {
               </h1>
             </Reveal>
 
-            {/* Immediate answer box (featured snippet) */}
+            {/* Capsule de reponse GEO si l'article en a une (statique, sans
+                animation : contenu critique lisible des le premier paint),
+                sinon bloc "Reponse immediate" historique. */}
+            {data.answerCapsule ? (
+              <AnswerCapsule capsule={data.answerCapsule} />
+            ) : (
             <Reveal delay={0.1}>
               <div
                 style={{
@@ -815,6 +821,7 @@ function ArticleLayout({ data }) {
                 </p>
               </div>
             </Reveal>
+            )}
           </div>
         </section>
 

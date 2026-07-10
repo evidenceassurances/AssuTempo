@@ -1,0 +1,19 @@
+# Notifie IndexNow (Bing, l'index de ChatGPT) a chaque push sur main :
+# les nouvelles pages et les pages modifiees sont decouvertes en minutes
+# au lieu d'attendre le crawl classique.
+name: IndexNow ping
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Ping IndexNow avec le sitemap
+        run: node scripts/indexnow.mjs

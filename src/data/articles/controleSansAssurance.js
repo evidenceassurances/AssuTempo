@@ -14,6 +14,7 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/controle-sans-assurance-risques-amende',
+    datePublished: '2026-06-02',
     dateModified: '2026-06-02',
   },
   {

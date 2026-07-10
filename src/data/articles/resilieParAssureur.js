@@ -16,6 +16,7 @@ const jsonLd = [
     },
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-resilie-par-assureur',
+    datePublished: '2026-06-23',
     dateModified: '2026-06-23',
   },
   {

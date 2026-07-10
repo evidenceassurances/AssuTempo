@@ -1,3 +1,46 @@
+# assutempo.fr : tout le site est ouvert au crawl.
+# Sections explicites pour les crawlers des moteurs generatifs :
+# le site souhaite etre lu, indexe et cite par les assistants IA.
+
 User-agent: *
 Allow: /
+
+# OpenAI (entrainement et recherche ChatGPT)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google (Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Bing (index utilise par ChatGPT)
+User-agent: Bingbot
+Allow: /
+
+# Common Crawl (corpus d'entrainement)
+User-agent: CCBot
+Allow: /
+
+# Amazon (Alexa / Rufus)
+User-agent: Amazonbot
+Allow: /
+
+# Apple (Apple Intelligence)
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://assutempo.fr/sitemap.xml

@@ -492,7 +492,7 @@ function CGV() {
                     <a href="tel:0974197820" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 600 }}>
                       09 74 19 78 20
                     </a>
-                    {' '}- Lun-Ven 9h–21h · Sam 9h–20h
+                    {' '}- Lun-Ven 9h-21h · Sam 9h-20h
                   </span>
                 </div>
               </div>

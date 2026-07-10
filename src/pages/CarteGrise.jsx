@@ -104,11 +104,13 @@ const JSONLD_BREADCRUMB = {
 const JSONLD_SERVICE = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Demande de carte grise en ligne',
+  serviceType: 'Démarches carte grise en ligne, service habilité via partenaire Certimat',
   name: 'Carte grise en ligne AssuTempo',
   description:
     `Demande de carte grise 100 % en ligne via un partenaire habilité par le Ministère de l'Intérieur : CERFA préremplis, certificat provisoire immédiat et carte grise livrée à domicile.`,
-  provider: { '@type': 'Organization', name: 'AssuTempo', url: 'https://assutempo.fr/' },
+  /* Reference vers l'entite Organization/InsuranceAgency du template
+     (index.html) : une seule entite etablie sur tout le site. */
+  provider: { '@id': 'https://assutempo.fr/#organization' },
   areaServed: 'FR',
   availableChannel: {
     '@type': 'ServiceChannel',

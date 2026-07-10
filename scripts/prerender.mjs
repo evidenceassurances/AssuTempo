@@ -15,6 +15,7 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { execSync } from 'node:child_process';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const root = path.resolve(__dirname, '..');
@@ -54,11 +55,69 @@ const ROUTES = [
 
 // ── Métadonnées sitemap ──────────────────────────────────────────────────────
 // Le sitemap est généré à partir de ROUTES (source unique) : impossible qu'il
-// diverge à nouveau de la liste prérendue. Date stable (mise à jour manuelle
-// lors d'un changement de contenu) pour ne pas signaler "tout a changé" à
-// chaque build, ce qui érode la confiance dans <lastmod>.
+// diverge à nouveau de la liste prérendue. <lastmod> = vraie date de dernière
+// modification des fichiers SOURCES de chaque route via git log (un fichier
+// modifié non commité compte pour aujourd'hui). Un lastmod ne bouge donc que
+// si le contenu de la page a réellement changé : signal de fraîcheur crédible,
+// jamais de "tout a changé" à chaque build.
 const SITE = 'https://assutempo.fr';
-const SITEMAP_LASTMOD = '2026-06-23';
+// Filet de sécurité si l'historique git est indisponible (clone sans .git).
+const SITEMAP_FALLBACK_LASTMOD = '2026-06-23';
+
+// Contenu des articles : la page JSX n'est qu'un habillage, la vraie matière
+// vit dans src/data/articles/*.js. La date la plus récente des deux fait foi.
+const ARTICLE_DATA_SOURCES = {
+  '/articles/voiture-immobilisee-defaut-assurance':          'src/data/articles/voitureImmobilisee.js',
+  '/articles/controle-sans-assurance-risques-amende':        'src/data/articles/controleSansAssurance.js',
+  '/articles/assurer-vehicule-achete-chez-particulier':      'src/data/articles/acheterVehiculeParticulier.js',
+  '/articles/combien-de-jours-assurance-sortir-fourriere':   'src/data/articles/combienDeJoursAssurance.js',
+  '/articles/assurance-temporaire-vehicule-etranger-france': 'src/data/articles/assuranceVehiculeEtranger.js',
+  '/articles/assurance-temporaire-pret-de-vehicule':         'src/data/articles/pretVehicule.js',
+  '/articles/assurance-temporaire-convoyage-professionnel':  'src/data/articles/convoyageProfessionnel.js',
+  '/articles/assurance-temporaire-essai-vehicule-avant-achat': 'src/data/articles/essaiVehicule.js',
+  '/articles/assurance-temporaire-rouler-en-attendant-carte-grise': 'src/data/articles/carteGrise.js',
+  '/articles/assurance-temporaire-resilie-par-assureur':     'src/data/articles/resilieParAssureur.js',
+  '/articles/assurance-temporaire-utilitaire-demenagement':  'src/data/articles/utilitaireDemenagement.js',
+  '/articles/assurance-temporaire-vehicule-proche-decede':   'src/data/articles/vehiculeProcheDecede.js',
+};
+
+const gitDateCache = new Map();
+function gitLastCommitDate(file) {
+  if (gitDateCache.has(file)) return gitDateCache.get(file);
+  let date = null;
+  try {
+    // Fichier modifié/ajouté non commité : la modification date d'aujourd'hui.
+    const dirty = execSync(`git status --porcelain -- "${file}"`, {
+      cwd: root, stdio: ['ignore', 'pipe', 'ignore'],
+    }).toString().trim();
+    if (dirty) {
+      date = new Date().toISOString().slice(0, 10);
+    } else {
+      date = execSync(`git log -1 --format=%cs -- "${file}"`, {
+        cwd: root, stdio: ['ignore', 'pipe', 'ignore'],
+      }).toString().trim() || null;
+    }
+  } catch {
+    date = null; // pas de git disponible : fallback plus bas
+  }
+  gitDateCache.set(file, date);
+  return date;
+}
+
+function sitemapSourcesFor(route) {
+  const files = [];
+  const moduleId = route.startsWith('/carte/') ? 'src/pages/Carte.jsx' : ROUTE_MODULES[route];
+  if (moduleId) files.push(moduleId);
+  if (route === '/') files.push('src/pages/Home.jsx', 'src/components/HeroScrollytelling.jsx', 'src/components/Faq.jsx');
+  if (route.startsWith('/carte/')) files.push('src/data/countries-content.js');
+  if (ARTICLE_DATA_SOURCES[route]) files.push(ARTICLE_DATA_SOURCES[route]);
+  return files;
+}
+
+function lastmodFor(route) {
+  const dates = sitemapSourcesFor(route).map(gitLastCommitDate).filter(Boolean);
+  return dates.length ? dates.sort().at(-1) : SITEMAP_FALLBACK_LASTMOD;
+}
 
 function sitemapMeta(route) {
   if (route === '/' || route === '/tarification') return { changefreq: 'weekly', priority: '1.0' };
@@ -312,7 +371,7 @@ console.log('  ✓  /404 (dist/404.html)');
 const sitemapBody = ROUTES.map((route) => {
   const loc = route === '/' ? `${SITE}/` : `${SITE}${route}`;
   const { changefreq, priority } = sitemapMeta(route);
-  return `  <url><loc>${loc}</loc><lastmod>${SITEMAP_LASTMOD}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+  return `  <url><loc>${loc}</loc><lastmod>${lastmodFor(route)}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 }).join('\n');
 
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapBody}\n</urlset>\n`;
