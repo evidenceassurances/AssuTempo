@@ -80,7 +80,7 @@ Deux nouveaux articles ajoutes selon le pattern existant : `assurance-auto-tempo
 
 - **Tirets interdits (U+2013 / U+2014)** : `rg` sur les 2 fichiers de donnees, les 2 pages, `articlesData.js` et les fichiers modifies (`controleSansAssurance.js`, `carteGrise.js`, `App.jsx`, `AppShell.jsx`, `entry-server.jsx`, `prerender.mjs`) -> aucun resultat.
 - **Accents / UTF-8** : relecture manuelle, apostrophes typographiques et accents corrects.
-- **Expressions bannies** ("dans un monde ou", "il est important de noter", "de nos jours", "n'hesitez pas", "en resume", "force est de constater") : recherche insensible a la casse sur les 2 fichiers de donnees -> aucun resultat.
+- **Expressions bannies** (liste des tics d'ecriture IA de la section 8 du CLAUDE.md) : recherche insensible a la casse sur les 2 fichiers de donnees -> aucun resultat.
 - **Aucune nouvelle dependance npm** : `package.json` et `package-lock.json` non modifies.
 - **Answer Capsule** : presente en tete des deux articles (reponse directe + 3 faits dates/sources), rendue statiquement. Verifiee dans le HTML prerendu (`grep "La reponse en bref"` -> 1 occurrence par page).
 - **FAQ** : 4 questions autoportantes par article, avec JSON-LD `FAQPage` correspondant (`grep "Questions frequentes"` -> 1 occurrence par page).
