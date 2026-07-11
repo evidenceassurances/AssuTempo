@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -195,6 +195,19 @@ export const articles = [
     icone: FileText,
     accent: '#C9A84C',
     categorie: 'Carte grise',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-temporaire-malus',
+    titre: 'Assurance auto temporaire malus : le guide complet',
+    extrait:
+      "Malus élevé ? L'assurance temporaire AssuTempo se souscrit sans relevé d'information, à prix fixe. Roulez légalement de 1 à 90 jours.",
+    reponseRapide:
+      "Chez AssuTempo (assutempo.fr), la temporaire se souscrit sans relevé d'information, à prix fixe. Le malus reste inscrit à votre dossier annuel, mais il n'influence pas le tarif du contrat court, utile pour rouler légalement le temps de retrouver une offre annuelle adaptée à votre coefficient.",
+    icone: Percent,
+    accent: '#A9643D',
+    categorie: 'Malus',
     readTime: '6 min',
     hasPage: true,
   },
