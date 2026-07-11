@@ -106,6 +106,14 @@ Deux nouveaux articles ajoutes selon le pattern existant : `assurance-auto-tempo
 
 Quatre pages citees dans les instructions n'existent pas dans le depot : `/assurance-auto-temporaire-1-jour`, `/liste-des-situations-necessitant-une-assurance-temporaire`, `/faire-sa-carte-grise`, `/le-certificat-provisoire-dimmatriculation-plaques-ww`. Le maillage a ete redirige vers les pages/articles reels les plus proches (detail dans la description de la Pull Request).
 
+## Alerte Gate connue : faux positif sur .github/workflows/claude.yml
+
+Cette branche a ete creee avant que la PR #11 (nouvel article "assurance trajet retour achat voiture") et la mise a jour des outils de mission (`.github/workflows/claude.yml`, PR de tuning des outils) ne soient mergees sur `main`. Le contenu de `assuranceTrajetRetourAchat.js`/page/routes a ete recupere depuis `origin/main` et le contenu de `.github/workflows/claude.yml` a ete resynchronise pour etre **strictement identique** a celui de `main` (`git diff origin/main -- .github/workflows/claude.yml` renvoie 0 ligne), afin que le push ne soit pas rejete par la protection GitHub sur les fichiers de workflow.
+
+Malgre ce contenu identique, `scripts/quality-gate.mjs` compare `origin/main...HEAD` (diff a trois points, base sur le merge-base historique de la branche, encore anterieur a ces deux fusions) : il continue donc de signaler `.github/workflows/claude.yml` comme "zone interdite modifiee", alors qu'aucune difference reelle n'existe avec `main`. Les outils git disponibles dans cette session (aucun fetch/rebase/merge/reset/cherry-pick/checkout-de-ref autorise, uniquement add/commit/push) ne permettent pas de corriger le merge-base de la branche pour faire disparaitre ce faux positif.
+
+**Si le Gate echoue uniquement sur ce point** : cliquer sur "Update branch" sur la Pull Request (ou fusionner `main` dans la branche depuis l'interface GitHub), puis relancer le workflow Gate. Aucune correction de contenu n'est necessaire.
+
 ## Build
 
 - `npm ci --legacy-peer-deps` puis `npm run build` : build propre (Vite + prerendu des 58 routes, sitemap 58 URLs).
