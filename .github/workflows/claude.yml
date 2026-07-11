@@ -43,8 +43,13 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Les outils de base de l'action (edition de fichiers, commits, commentaires,
-      # operations GitHub) sont toujours inclus : --allowedTools s'y AJOUTE.
+      # Outils accordes explicitement : le run du 11 juillet a prouve que les
+      # outils de base de l'action ne suffisent PAS (12 refus de permission,
+      # branche claude/issue-* jamais creee, d'ou le HttpError 404 en fin de
+      # job). On accorde donc Bash + outils de fichiers (Edit, Write, Read,
+      # Glob, Grep) et les commandes git de la mission (add, commit, push,
+      # checkout, branch), listees aussi individuellement pour survivre a un
+      # eventuel retrait du Bash global.
       # WebSearch/WebFetch : verification des chiffres legaux en ligne (YMYL).
       # Bash npm/node : npm ci puis npm run build pour livrer un build propre.
       - name: Run Claude Code
@@ -54,7 +59,7 @@ jobs:
           claude_args: |
             --max-turns 200
             --model claude-sonnet-5
-            --allowedTools "WebSearch,WebFetch,Bash(npm ci:*),Bash(npm install:*),Bash(npm run build:*),Bash(node:*)"
+            --allowedTools "Bash,Edit,Write,Read,Glob,Grep,WebSearch,WebFetch,Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git checkout:*),Bash(git branch:*),Bash(npm ci:*),Bash(npm install:*),Bash(npm run build:*),Bash(node:*)"
 
       # Ouvre la PR de la mission (si absente) puis declenche le Gate.
       # Un evenement cree avec GITHUB_TOKEN ne declenche pas les workflows
