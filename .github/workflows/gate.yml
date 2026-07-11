@@ -93,7 +93,7 @@ jobs:
       needs.contexte.outputs.hold != 'true' &&
       (
         ((startsWith(needs.contexte.outputs.branche, 'draft/') || startsWith(needs.contexte.outputs.branche, 'claude/')) &&
-         contains(fromJSON('["claude[bot]", "claude", "github-actions[bot]", "github-actions", "evidenceassurances"]'), needs.contexte.outputs.auteur)) ||
+         contains(fromJSON('["claude[bot]", "claude", "app/claude", "github-actions[bot]", "github-actions", "app/github-actions", "evidenceassurances"]'), needs.contexte.outputs.auteur)) ||
         ((needs.contexte.outputs.auteur == 'dependabot[bot]' || needs.contexte.outputs.auteur == 'dependabot') &&
          startsWith(needs.contexte.outputs.branche, 'dependabot/'))
       )
