@@ -142,6 +142,10 @@ export const articleData = {
       paragraphs: [
         "La priorité est simple : vous remettre en règle. Une assurance auto temporaire couvre votre véhicule de 1 à 90 jours avec la responsabilité civile obligatoire, et vous fournit une attestation immédiate par email. Vous pouvez la présenter tout de suite à l'agent, ou l'utiliser pour lever une immobilisation et récupérer votre véhicule.",
       ],
+      relatedLink: {
+        text: 'Assurance auto temporaire immédiate en ligne : le détail minute par minute',
+        href: '/articles/assurance-auto-temporaire-immediate-en-ligne',
+      },
     },
     {
       type: 'timeline',

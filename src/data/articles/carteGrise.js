@@ -211,6 +211,10 @@ export const articleData = {
       paragraphs: [
         "Les délais de fabrication peuvent dépasser la validité du CPI. Côté immatriculation, vérifiez l'avancement sur votre espace ANTS et, si le délai est largement dépassé, contactez l'ANTS. Côté assurance, vous pouvez ajuster votre couverture temporaire (jusqu'à 90 jours) pour ne jamais rouler non assuré pendant l'attente.",
       ],
+      relatedLink: {
+        text: "Pas encore de CPI ? Comment l'obtenir en urgence",
+        href: '/articles/carte-grise-urgence-cpi-immediat',
+      },
     },
     {
       type: 'text',
