@@ -159,4 +159,30 @@ export const articles = [
     readTime: '5 min',
     hasPage: true,
   },
+  {
+    slug: 'assurance-auto-temporaire-immediate-en-ligne',
+    titre: 'Assurance auto temporaire immédiate en ligne',
+    extrait:
+      "Besoin de rouler dans l'heure ? Attestation d'assurance temporaire en 5 minutes, en ligne. Pièces à préparer, délais réels et FVA expliqués.",
+    reponseRapide:
+      "Une assurance auto temporaire s'obtient 100 % en ligne, attestation envoyée par email en 5 minutes, avec seulement le permis et la carte grise. La garantie démarre dès le paiement validé, même si le Fichier des Véhicules Assurés (FVA) n'est mis à jour que sous 72 heures.",
+    icone: AlertTriangle,
+    accent: '#B05C3A',
+    categorie: 'Urgence',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'carte-grise-urgence-cpi-immediat',
+    titre: 'Carte grise en urgence : certificat provisoire immédiat',
+    extrait:
+      "Besoin de rouler aujourd'hui ? Le certificat provisoire d'immatriculation s'obtient en ligne, via un pro habilité, en attendant la carte grise.",
+    reponseRapide:
+      "Un certificat provisoire d'immatriculation (CPI) s'obtient le jour même via un professionnel habilité par le Ministère de l'Intérieur. Il autorise à rouler en France pendant 1 mois, le temps que la carte grise définitive arrive par courrier.",
+    icone: FileText,
+    accent: '#C9A84C',
+    categorie: 'Carte grise',
+    readTime: '6 min',
+    hasPage: true,
+  },
 ];

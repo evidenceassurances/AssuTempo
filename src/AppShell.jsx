@@ -75,6 +75,8 @@ const ROUTE_TABLE = [
   ['/articles/assurance-temporaire-resilie-par-assureur', 'ResilieAssureur'],
   ['/articles/assurance-temporaire-utilitaire-demenagement', 'UtilitaireDemenagement'],
   ['/articles/assurance-temporaire-vehicule-proche-decede', 'VehiculeProcheDecede'],
+  ['/articles/assurance-auto-temporaire-immediate-en-ligne', 'AssuranceImmediateEnLigne'],
+  ['/articles/carte-grise-urgence-cpi-immediat', 'CarteGriseUrgence'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
