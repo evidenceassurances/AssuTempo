@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -144,6 +144,19 @@ export const articles = [
     accent: '#6E92A8',
     categorie: 'Utilitaire',
     readTime: '5 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-trajet-retour-achat-voiture',
+    titre: 'Assurance trajet retour après achat voiture',
+    extrait:
+      "Vous venez d'acheter une voiture ? Le trajet retour doit être assuré immédiatement, aucun délai de grâce. Attestation en 5 minutes, dès 1 jour.",
+    reponseRapide:
+      "Le trajet retour doit être assuré dès la sortie du parking : la loi ne prévoit aucun délai de grâce après un achat de voiture. Une assurance temporaire, souscrite avec la carte grise du vendeur et le certificat de cession, couvre le véhicule en quelques minutes.",
+    icone: Car,
+    accent: '#C98A3C',
+    categorie: 'Achat véhicule',
+    readTime: '6 min',
     hasPage: true,
   },
   {

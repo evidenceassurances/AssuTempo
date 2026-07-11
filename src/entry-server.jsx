@@ -26,6 +26,7 @@ import CarteGrise from './pages/articles/CarteGrise';
 import ResilieAssureur from './pages/articles/ResilieAssureur';
 import UtilitaireDemenagement from './pages/articles/UtilitaireDemenagement';
 import VehiculeProcheDecede from './pages/articles/VehiculeProcheDecede';
+import AssuranceTrajetRetourAchat from './pages/articles/AssuranceTrajetRetourAchat';
 import CarteGriseService from './pages/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
@@ -52,6 +53,7 @@ const PAGES = {
   ResilieAssureur,
   UtilitaireDemenagement,
   VehiculeProcheDecede,
+  AssuranceTrajetRetourAchat,
   CarteGriseService,
   Carte,
   Cookies,

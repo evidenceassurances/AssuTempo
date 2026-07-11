@@ -45,6 +45,7 @@ const ROUTES = [
   '/articles/assurance-temporaire-resilie-par-assureur',
   '/articles/assurance-temporaire-utilitaire-demenagement',
   '/articles/assurance-temporaire-vehicule-proche-decede',
+  '/articles/assurance-trajet-retour-achat-voiture',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -79,6 +80,7 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-temporaire-resilie-par-assureur':     'src/data/articles/resilieParAssureur.js',
   '/articles/assurance-temporaire-utilitaire-demenagement':  'src/data/articles/utilitaireDemenagement.js',
   '/articles/assurance-temporaire-vehicule-proche-decede':   'src/data/articles/vehiculeProcheDecede.js',
+  '/articles/assurance-trajet-retour-achat-voiture':         'src/data/articles/assuranceTrajetRetourAchat.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -232,6 +234,7 @@ const ROUTE_MODULES = {
   '/articles/assurance-temporaire-resilie-par-assureur':     'src/pages/articles/ResilieAssureur.jsx',
   '/articles/assurance-temporaire-utilitaire-demenagement':  'src/pages/articles/UtilitaireDemenagement.jsx',
   '/articles/assurance-temporaire-vehicule-proche-decede':   'src/pages/articles/VehiculeProcheDecede.jsx',
+  '/articles/assurance-trajet-retour-achat-voiture':         'src/pages/articles/AssuranceTrajetRetourAchat.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/cookies':                 'src/pages/Cookies.jsx',
