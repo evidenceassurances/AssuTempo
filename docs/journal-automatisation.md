@@ -17,17 +17,17 @@ Actions isolé. Cette session lit l'issue, applique les règles du fichier
 CLAUDE.md à la racine du dépôt, puis effectue le travail demandé : écriture
 de contenu, correctifs techniques, ou création de nouveaux fichiers.
 
-## 3. Une Pull Request depuis une branche draft/
+## 3. Une Pull Request ouverte par le workflow
 
-Quand la mission modifie des fichiers, le travail est poussé sur une
-branche dont le nom commence par `draft/`. Ce préfixe a un rôle précis : il
-signale au reste du pipeline qu'il s'agit d'une proposition automatisée,
-candidate à un merge automatique. Une Pull Request est ensuite ouverte vers
-`main` depuis cette branche.
+Quand la mission modifie des fichiers, le travail est poussé sur la branche
+de session créée automatiquement pour l'issue (son nom commence par
+`claude/issue-N`). La session elle-même ne peut ni créer d'autre branche ni
+ouvrir de Pull Request : c'est le workflow qui, en fin de mission, ouvre la
+Pull Request vers `main` depuis cette branche puis déclenche le contrôle.
 
 ## 4. Le workflow Gate qui contrôle
 
-Chaque Pull Request vers `main` déclenche le workflow Gate. Ce contrôle
+Chaque Pull Request candidate passe par le workflow Gate. Ce contrôle
 enchaîne un build complet du site (Vite puis prérendu) et une série de
 vérifications automatiques : absence de tirets cadratins interdits, absence
 d'expressions bannies, zones du site protégées non touchées, dépendances
@@ -38,8 +38,9 @@ là.
 ## 5. Le merge automatique
 
 Si le workflow Gate est vert, et si la Pull Request vient bien d'une
-branche `draft/` ouverte par un compte automatisé, un second job merge la
-Pull Request en squash et supprime la branche. Un label `hold` posé sur la
+branche de mission (`claude/issue-N`) ou d'une branche `draft/` ouverte par
+un compte autorisé, un second job merge la Pull Request en squash, supprime
+la branche et ferme l'issue d'origine. Un label `hold` posé sur la
 Pull Request bloque ce merge automatique, ce qui laisse toujours la main à
 un humain en cas de doute.
 
@@ -60,7 +61,7 @@ par le jeton d'Actions ne redéclenche pas les autres workflows du dépôt.
 ## Vue d'ensemble
 
 Une issue avec `@claude` devient une session GitHub Actions, qui devient une
-Pull Request `draft/`, contrôlée par le workflow Gate, mergée
+Pull Request ouverte par le workflow, contrôlée par le workflow Gate, mergée
 automatiquement si tout est vert, déployée par Vercel, puis signalée aux
 moteurs de recherche par IndexNow. Chaque étape peut être observée dans
 l'onglet Actions du dépôt.

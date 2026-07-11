@@ -190,6 +190,14 @@ Audit complet (AUDIT.md) puis pose des fondations pour être cité par ChatGPT/P
 - Règles permanentes des exécutions automatiques ajoutées en section 10 (zones interdites, branches draft/PR, pattern article, YMYL, style, design articles).
 - Test réel validé : issue #4 "Test pilote Claude" traitée en 12 s (commentaire correct, aucun fichier modifié). Le commentaire de réponse a re-déclenché le workflow qui s'est bien auto-ignoré (skipped, pas de @claude dans le corps) : pas de boucle possible.
 
+### Session du 11 juillet 2026 (suite) : full-auto (Gate + auto-merge + IndexNow), en prod
+Le pipeline éditorial est 100 % automatique : issue @claude > mission cloud > PR ouverte par le workflow > Gate > merge automatique > Vercel > ping IndexNow. Boutons d'urgence : label `hold` (bloque le merge), commentaire @claude (corrige), merge/revert manuel toujours possible.
+
+- **Portique `scripts/quality-gate.mjs`** (Node natif, zéro dépendance) : sur le diff vs origin/main, échoue si tirets interdits ou expressions bannies dans les lignes ajoutées, dependencies/devDependencies touchées, zone interdite modifiée (Navbar, Footer, Pricing, CarteGrise, About, AssuranceInternationale, `.github/`, le portique, indexnow.mjs, vercel.json : liste en dur commentée dans le script), ou URL du sitemap sans page dans dist/. PR dependabot : périmètre `.github/workflows/` uniquement (env `GATE_AUTHOR`).
+- **Gate (`.github/workflows/gate.yml`)** : entrées `pull_request` ET `workflow_dispatch(pr_number)` ; jobs contexte (résout PR, branche, auteur, label hold) > gate (npm ci + build + portique) > automerge (squash, suppression de branche, fermeture explicite de l'issue liée, puis rebuild + ping IndexNow dans le même job : un merge par token Actions ne déclenche pas les autres workflows).
+- **Contraintes de l'action apprises en test réel** : l'action épingle chaque mission sur `claude/issue-N-*` (création de branche et ouverture de PR impossibles depuis la session) ; d'où le post-traitement de claude.yml : `gh pr create` + `gh workflow run gate.yml` (workflow_dispatch est la seule exception documentée à l'anti-boucle GitHub). `--allowedTools` s'AJOUTE aux outils de base ; missions dotées de WebSearch/WebFetch + npm/node ; **max-turns 100** (40 = échec constaté sur mission article). Concurrency par issue au NIVEAU JOB (au niveau workflow, chaque commentaire sans @claude éjectait les missions en attente de la file : vécu sur l'issue #6).
+- **Preuves en conditions réelles** : PR piégée #9 bloquée par le portique (expression bannie, fichier:ligne) ; PR #10 (journal) mergée automatiquement + IndexNow HTTP 200 (56 URL) ; PR dependabot #7 et #8 auto-mergées en autonomie complète (dependabot.yml : actions GitHub, weekly). Revue Claude sautée sur PR dependabot (GitHub ne leur transmet pas les secrets).
+
 ---
 
 ## 6. Plan SEO / backlinks
