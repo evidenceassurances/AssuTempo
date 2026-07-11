@@ -22,6 +22,7 @@ const IMPORTERS = {
   ResilieAssureur:            () => import('./pages/articles/ResilieAssureur'),
   UtilitaireDemenagement:     () => import('./pages/articles/UtilitaireDemenagement'),
   VehiculeProcheDecede:       () => import('./pages/articles/VehiculeProcheDecede'),
+  AssuranceTrajetRetourAchat: () => import('./pages/articles/AssuranceTrajetRetourAchat'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   Cookies:                    () => import('./pages/Cookies'),
