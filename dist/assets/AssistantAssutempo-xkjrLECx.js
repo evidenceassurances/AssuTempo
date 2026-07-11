@@ -1,5 +1,5 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/CosmosCanvas-BuhBSimJ.js","assets/rolldown-runtime-Cyuzqnbw.js","assets/framer-DPWtvxwd.js"])))=>i.map(i=>d[i]);
-import{a as e,n as t}from"./rolldown-runtime-Cyuzqnbw.js";import{O as n,k as r}from"./framer-DPWtvxwd.js";import{c as i,f as a,h as o,l as s,p as c,t as ee}from"./react-vendor-B45kknb5.js";import{o as l,s as te}from"./index-BaKYymaj.js";var ne,u=t((()=>{ne=`
+import{a as e,n as t}from"./rolldown-runtime-Cyuzqnbw.js";import{O as n,k as r}from"./framer-DPWtvxwd.js";import{c as i,f as a,h as o,l as s,p as c,t as ee}from"./react-vendor-B45kknb5.js";import{o as l,s as te}from"./index-7cJgXDcu.js";var ne,u=t((()=>{ne=`
 .atp-root {
   --atp-gold: #C9A84C;
   --atp-gold-light: #E8C97A;
