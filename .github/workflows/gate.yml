@@ -102,6 +102,11 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # issues: write est indispensable a l'etape "Fermer l'issue liee" :
+      # sans elle, gh issue close echoue (Resource not accessible by
+      # integration) et le || true masque l'echec. Constate sur la PR #13
+      # (issue #12 restee ouverte) ; l'issue #6 avait ete fermee a la main.
+      issues: write
     steps:
       - name: Verifier le perimetre dependabot (workflows uniquement)
         if: startsWith(needs.contexte.outputs.auteur, 'dependabot')
