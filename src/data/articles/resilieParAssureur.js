@@ -221,6 +221,10 @@ export const articleData = {
         "Soyons honnêtes : enchaîner les assurances temporaires n'est pas une stratégie de long terme. Leur rôle est de vous garder en règle pendant la période sensible qui suit une résiliation, pas de remplacer un contrat à l'année. Profitez de ce répit pour comparer les assureurs spécialisés dans les profils résiliés.",
         "Si aucun assureur n'accepte de vous couvrir pour la responsabilité civile, vous pouvez saisir le Bureau central de tarification : dès lors que deux assureurs ont refusé, il peut en désigner un et fixer le tarif. La couverture se limite alors au tiers, pour un an, mais elle vous remet durablement dans la légalité.",
       ],
+      relatedLink: {
+        text: 'Comprendre le coût réel du malus, chiffres à l\'appui',
+        href: '/articles/assurance-temporaire-malus',
+      },
     },
     {
       type: 'text',

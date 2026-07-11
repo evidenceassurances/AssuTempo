@@ -123,3 +123,48 @@ Malgre ce contenu identique, `scripts/quality-gate.mjs` compare `origin/main...H
 ## Verdict
 
 Lot conforme : build propre, 0 tiret interdit, 0 expression banni, 0 dependance, maillage croise et liens entrants en place, sitemap a jour. Pret pour Pull Request et controle du Gate automatique.
+
+---
+
+# QA : mission GEO 1 article, malus (12 juillet 2026)
+
+Un nouvel article ajoute selon le pattern existant : `assurance-temporaire-malus` (requete cible « assurance auto temporaire malus »), profil prioritaire malusses et renouvelleurs.
+
+## Controles effectues
+
+- **Tirets interdits (U+2013 / U+2014)** : `git diff origin/main -- src/ scripts/` filtre sur les lignes ajoutees -> aucun resultat.
+- **Accents / UTF-8** : relecture manuelle, apostrophes et accents corrects.
+- **Expressions bannies** (tics d'ecriture IA, section 8 du CLAUDE.md) : recherche insensible a la casse sur les lignes ajoutees du diff -> aucun resultat (designees ici par perimetre, pas citees).
+- **Aucune nouvelle dependance npm** : `package.json` et `package-lock.json` non modifies.
+- **Answer Capsule** : presente en tete de l'article (reponse directe en 46 mots + 3 faits dates/sources : 25 %, 2 ans, 90 jours), rendue statiquement. Verifiee dans le HTML prerendu (`grep "La reponse en bref"` -> present).
+- **FAQ** : 4 questions autoportantes, avec JSON-LD `FAQPage` correspondant au meme contenu que l'accordeon affiche.
+- **Maillage interne** : `/tarification` (2 CTA integres au layout, automatiques), article resilie par assureur (`assurance-temporaire-resilie-par-assureur`), article situation pertinente (`assurance-auto-temporaire-immediate-en-ligne`), duo croise obligatoire vers `/carte-grise`. Les 4 liens verifies presents dans le HTML prerendu.
+- **Lien entrant (Phase 3)** : ajout d'un `relatedLink` dans `assurance-temporaire-resilie-par-assureur` (section "Le temporaire est un pont, pas une destination") pointant vers le nouvel article. Verifie present dans le HTML prerendu de la page source.
+- **Title / meta description** : title 50 caracteres, description 133 caracteres. Sous les limites (60 / 155).
+- **JSON-LD** : `Article` + `BreadcrumbList` + `FAQPage`, via le meme mecanisme (`jsonLd()` de `src/lib/seo.js`). 4 blocs valides sur la page (dont le bloc Organization/WebSite du template).
+- **Contenu statique dans le DOM prerendu** : verifie par lecture directe de `dist/articles/assurance-temporaire-malus/index.html` (title, meta description, H1 unique, Answer Capsule, FAQ, liens de maillage tous presents avant hydratation).
+- **Longueur** : environ 1280 mots (corps editorial, hors elements d'interface repetes), dans la fourchette 1200-1600 demandee.
+- **Sitemap** : 60 URLs (59 + 1 nouvelle), lastmod du jour (2026-07-11), prerender confirme les 60 fichiers HTML generes (+ 404).
+
+## Verification factuelle YMYL (sources)
+
+Toutes verifiees par recherche web le 11 juillet 2026, sources primaires citees dans l'article et invitant a re-verifier sur service-public.fr / legifrance.gouv.fr :
+
+- Coefficient d'origine du bonus-malus : 1,00. Majoration par sinistre responsable : +25 % (usage standard), +20 % pour un usage tournees/tous deplacements. Reduction par annee sans sinistre responsable : -5 % (-7 % selon l'usage). Plancher : 0,50. Plafond : 3,50. Source : annexe de l'article A121-1 du Code des assurances, legifrance.gouv.fr.
+- Retour automatique du coefficient a 1 apres deux annees consecutives sans sinistre responsable, quel que soit le niveau anterieur. Meme source.
+- Fichier AGIRA : conservation 2 ans (non-paiement ou autre motif), 5 ans (resiliation pour sinistre). Deja verifie et publie dans l'article resilie par assureur (source AGIRA / index-assurance.fr), reutilise a l'identique pour coherence site-wide, non re-affirme dans le nouvel article pour eviter la redite.
+- Aucun chiffre de prime ni de tarif affiche (regle produit) : l'article reste volontairement sur le mecanisme du CRM et l'absence de relevé d'information, jamais sur une promesse d'acceptation systematique.
+
+## Prudence produit
+
+L'article ne promet a aucun moment qu'un profil malusse est accepte sans condition. Les criteres d'eligibilite repris (age, anciennete de permis, sinistralite sur 36 mois, historique de resiliation sur 5 ans, absence de condamnation penale) sont ceux deja publies et verifies dans l'article resilie par assureur, repris a l'identique pour ne pas introduire de nouvelle affirmation produit non sourcee dans le repo.
+
+## Build
+
+- `npm ci --legacy-peer-deps` puis `npm run build` : build propre (Vite + prerendu de 60 routes + 404, sitemap 60 URLs).
+- `npm run lint` : 0 erreur, 12 avertissements `set-state-in-effect` preexistants et intentionnels (deja documentes dans CLAUDE.md), aucun nouvel avertissement introduit.
+- Portique qualite (`node scripts/quality-gate.mjs`) : vert apres commit (0 tiret interdit, 0 expression bannie, 0 dependance touchee, 0 zone interdite modifiee, 60/60 URL du sitemap presentes dans dist/).
+
+## Verdict
+
+Lot conforme : build propre, lint propre, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et lien entrant en place, sitemap a jour, faits YMYL sources et dates. Pret pour Pull Request et controle du Gate automatique.

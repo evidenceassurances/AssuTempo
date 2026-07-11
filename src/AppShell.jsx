@@ -78,6 +78,7 @@ const ROUTE_TABLE = [
   ['/articles/assurance-trajet-retour-achat-voiture', 'AssuranceTrajetRetourAchat'],
   ['/articles/assurance-auto-temporaire-immediate-en-ligne', 'AssuranceImmediateEnLigne'],
   ['/articles/carte-grise-urgence-cpi-immediat', 'CarteGriseUrgence'],
+  ['/articles/assurance-temporaire-malus', 'AssuranceMalus'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],

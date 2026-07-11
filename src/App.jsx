@@ -25,6 +25,7 @@ const IMPORTERS = {
   AssuranceTrajetRetourAchat: () => import('./pages/articles/AssuranceTrajetRetourAchat'),
   AssuranceImmediateEnLigne:  () => import('./pages/articles/AssuranceImmediateEnLigne'),
   CarteGriseUrgence:          () => import('./pages/articles/CarteGriseUrgence'),
+  AssuranceMalus:             () => import('./pages/articles/AssuranceMalus'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   Cookies:                    () => import('./pages/Cookies'),
