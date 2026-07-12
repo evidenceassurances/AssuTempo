@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -208,6 +208,32 @@ export const articles = [
     icone: Percent,
     accent: '#A9643D',
     categorie: 'Malus',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-temporaire-attestation-immediate',
+    titre: 'Assurance temporaire : attestation immédiate expliquée',
+    extrait:
+      "Dès le paiement : Mémo Véhicule Assuré et carte internationale d'assurance par email. Valeur en contrôle routier et délais réels du FVA expliqués.",
+    reponseRapide:
+      "Dès le paiement validé, vous recevez par email le Mémo Véhicule Assuré et la carte internationale d'assurance : deux documents qui suffisent en contrôle routier. L'assureur inscrit ensuite le contrat au Fichier des Véhicules Assurés (FVA) sous 72 heures maximum, sans que cela retarde votre couverture.",
+    icone: MailCheck,
+    accent: '#5E7CA8',
+    categorie: 'Attestation',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurer-voiture-sans-carte-grise',
+    titre: 'Assurer une voiture sans carte grise : le guide',
+    extrait:
+      "Carte grise pas encore à votre nom ? Assurez avec le certificat de cession, le numéro VIN ou le CPI. Documents exacts, délais et démarches ANTS.",
+    reponseRapide:
+      "Oui, vous pouvez assurer un véhicule avant que la carte grise soit à votre nom, avec le certificat de cession (Cerfa 15776), le numéro VIN ou le certificat provisoire d'immatriculation. C'est même obligatoire avant de prendre la route, dès la sortie du parking.",
+    icone: FileSignature,
+    accent: '#C9A84C',
+    categorie: 'Carte grise',
     readTime: '6 min',
     hasPage: true,
   },

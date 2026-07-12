@@ -168,3 +168,55 @@ L'article ne promet a aucun moment qu'un profil malusse est accepte sans conditi
 ## Verdict
 
 Lot conforme : build propre, lint propre, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et lien entrant en place, sitemap a jour, faits YMYL sources et dates. Pret pour Pull Request et controle du Gate automatique.
+
+---
+
+# QA : mission GEO 2 articles, attestation immediate + assurer sans carte grise (12 juillet 2026)
+
+Deux nouveaux articles pilier ajoutes selon le pattern existant :
+
+- `assurance-temporaire-attestation-immediate` (requete cible « assurance temporaire attestation immediate ») : ce que le client recoit vraiment a la fin du paiement (Memo Vehicule Assure + carte internationale d'assurance), et la valeur exacte de ces documents en controle routier. Angle volontairement distinct de l'article deja publie sur la souscription immediate en ligne (`assurance-auto-temporaire-immediate-en-ligne`), qui traite lui du tunnel de souscription minute par minute : questions FAQ, sections et exemples concrets differents pour eviter toute cannibalisation.
+- `assurer-voiture-sans-carte-grise` (requete cible « assurer une voiture sans carte grise ») : le pont assurance/immatriculation, avec le certificat de cession (Cerfa 15776), le numero VIN ou le CPI comme justificatifs acceptes.
+
+## Controles effectues
+
+- **Tirets interdits (U+2013 / U+2014)** : recherche des caracteres demi-cadratin et cadratin sur les deux fichiers de donnees et leurs pages -> 0 occurrence.
+- **Accents / UTF-8** : relecture manuelle, apostrophes et accents corrects sur les deux articles.
+- **Expressions bannies** (section 8 du CLAUDE.md) : recherche insensible a la casse sur le contenu ajoute -> aucun resultat.
+- **Aucune nouvelle dependance npm** : `package.json` et `package-lock.json` non modifies. Deux icones lucide-react supplementaires utilisees dans `articlesData.js` (`MailCheck`, `FileSignature`), deja presentes dans la dependance existante.
+- **Answer Capsule** : presente en tete des deux articles (46 et 43 mots, sous la limite de 50), chacune avec 3 faits dates et sourcables. Rendues statiquement, verifiees dans le HTML prerendu (`grep` sur `dist/articles/<slug>/index.html`).
+- **FAQ** : 4 questions autoportantes par article, JSON-LD `FAQPage` genere depuis le meme contenu que l'accordeon affiche.
+- **Maillage interne verifie dans le HTML prerendu** :
+  - Article 1 (attestation immediate) : `/tarification` (CTA automatique du layout), `/articles/voiture-immobilisee-defaut-assurance`, `/assurance-internationale` (34 pays), lien croise vers l'article 2 (`/articles/assurer-voiture-sans-carte-grise`).
+  - Article 2 (assurer sans carte grise) : duo croise obligatoire `/carte-grise` + `/tarification`, `/le-certificat-provisoire-dimmatriculation-plaques-ww`, `/articles/assurance-temporaire-rouler-en-attendant-carte-grise`.
+- **Piege du composant checklist** : `ArticleLayout.jsx` ne rend le champ `relatedLink` que pour les sections de type `text` (confirme aussi sur un article deja publie, `assuranceImmediateEnLigne.js`, dont le lien de checklist vers `/carte-grise` n'apparait pas non plus dans le HTML prerendu). Le lien croise initialement pose sur une section `checklist` de l'article 1 a ete deplace vers une section `text` dediee pour etre effectivement rendu. Composant partage non modifie (hors perimetre de cette mission).
+- **Liens entrants (Phase 4)** : `relatedLink` ajoute dans `assurance-temporaire-rouler-en-attendant-carte-grise` (section "Quels documents pour souscrire ?") vers l'article 2, et dans `assurance-auto-temporaire-immediate-en-ligne` (section "Qu'y a-t-il exactement sur l'attestation recue par email ?") vers l'article 1. `dateModified`/`updatedDate` des deux articles sources mis a jour au 12 juillet 2026 pour refleter la modification reelle.
+- **Title / meta description** : article 1, title 54 caracteres / description 146 caracteres. Article 2, title 47 caracteres / description 144 caracteres. Tous sous les limites (60 / 155).
+- **JSON-LD** : `Article` + `BreadcrumbList` + `FAQPage` par article, via le meme mecanisme (`jsonLd()` de `src/lib/seo.js`). 4 blocs valides par page verifies dans le HTML prerendu.
+- **Contenu statique dans le DOM prerendu** : verifie par `grep` direct dans `dist/articles/<slug>/index.html` (title, meta description, Answer Capsule, FAQ, tous les liens de maillage presents avant hydratation).
+- **Longueur** : 1311 mots (article 1) et 1272 mots (article 2), corps editorial complet (titres, capsule, sections, FAQ), dans la fourchette 1200-1600 demandee.
+- **Sitemap** : 62 URLs (60 + 2 nouvelles), lastmod du jour (2026-07-12), prerender confirme les 62 fichiers HTML generes (+ 404).
+
+## Verification factuelle YMYL (sources, recherches du 12 juillet 2026)
+
+- Suppression de la carte verte papier le 1er avril 2024, remplacee par le controle a la plaque via le Fichier des Vehicules Assures (FVA) : economie.gouv.fr, interieur.gouv.fr.
+- FVA operationnel depuis le 1er janvier 2019, gere par l'Agira ; l'assureur doit y declarer un nouveau contrat sous 72 heures maximum : lafinancepourtous.com (source Agira).
+- Le Memo Vehicule Assure est remis par l'assureur a la souscription et sert de preuve pendant la fenetre precedant la mise a jour du FVA : direct-assurance.fr, interieur.gouv.fr.
+- Defaut d'assurance (article L211-1 du Code des assurances) : amende forfaitaire delictuelle de 500 euros (750 euros avec la majoration de 50 % au profit du FGAO), jusqu'a 3 750 euros devant le tribunal, immobilisation et suspension de permis possibles : service-public.gouv.fr (fiche F34829).
+- Delai legal d'un mois calendaire pour immatriculer un vehicule d'occasion a son nom, a compter de la date de cession (article R322-5 du Code de la route) : legifrance.gouv.fr, cartaplac.com.
+- Certificat provisoire d'immatriculation (CPI) : valable 1 mois pour un vehicule deja immatriculable en France, jusqu'a 4 mois pour un CPI WW lie a un vehicule importe : service-public.gouv.fr (fiche F16542).
+- Certificat de cession (Cerfa 15776), code de cession a 5 chiffres, carte grise barree/datee/signee par les deux parties : cartegrise.com, ants.gouv.fr.
+- Amende pour non-changement de carte grise dans le delai d'un mois : contravention de 4e classe, 135 euros (90 euros minoree, 375 euros majoree, jusqu'a 750 euros au tribunal) : cartaplac.com, actiroute.com (a recouper sur service-public.fr, montant non trouve sur une source officielle de premier niveau).
+- Un assureur peut couvrir un vehicule dont la carte grise n'est pas au nom de l'assure a partir du certificat de cession, d'une facture d'achat ou du numero VIN : francecartegrise.com, legalplace.fr.
+
+Chaque article invite explicitement le lecteur a revérifier les montants sensibles sur service-public.fr, conformement a la consigne de la mission.
+
+## Build
+
+- `npm ci --legacy-peer-deps` puis `npm run build` : build propre (Vite + prerendu de 62 routes + 404, sitemap 62 URLs).
+- `npm run lint` : 0 erreur, 12 avertissements `set-state-in-effect` preexistants et intentionnels (deja documentes dans CLAUDE.md), aucun nouvel avertissement introduit.
+- `dist/` recommite avec le nouveau build (convention du depot, `dist/` est suivi par git).
+
+## Verdict
+
+Lot conforme : build propre, lint propre, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et liens entrants en place (avec correctif du piege checklist/relatedLink), sitemap a jour, faits YMYL sources et dates avec invitation a revérification. Pret pour Pull Request et controle du Gate automatique.

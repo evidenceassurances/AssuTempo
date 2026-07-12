@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
     datePublished: '2026-06-03',
-    dateModified: '2026-07-10',
+    dateModified: '2026-07-12',
   },
   {
     '@context': 'https://schema.org',
@@ -134,7 +134,7 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '4 min',
-  updatedDate: '10 juillet 2026',
+  updatedDate: '12 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Rouler en attendant sa carte grise définitive',
   immediateAnswer:
@@ -222,6 +222,10 @@ export const articleData = {
       paragraphs: [
         "Le permis, le CPI (ou la carte grise / le certificat de cession selon votre situation), un moyen de paiement. Souscription 100 % en ligne, attestation en 5 minutes.",
       ],
+      relatedLink: {
+        text: 'Carte grise pas encore à votre nom ? Comment assurer avec le certificat de cession ou le VIN',
+        href: '/articles/assurer-voiture-sans-carte-grise',
+      },
     },
     {
       type: 'text',
