@@ -14,7 +14,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-auto-temporaire-immediate-en-ligne',
     datePublished: '2026-07-11',
-    dateModified: '2026-07-11',
+    dateModified: '2026-07-12',
   },
   {
     '@context': 'https://schema.org',
@@ -113,7 +113,7 @@ export const articleData = {
   },
   category: 'Urgence',
   readTime: '6 min',
-  updatedDate: '11 juillet 2026',
+  updatedDate: '12 juillet 2026',
   author: 'Evidence Assurances',
   headline: "Assurance auto temporaire immédiate en ligne : rouler dans l'heure",
   answerCapsule: {
@@ -206,6 +206,10 @@ export const articleData = {
       paragraphs: [
         "Deux documents composent l'attestation : le Mémo Véhicule Assuré, qui reprend l'identité de l'assuré, l'immatriculation et la période de garantie, et la carte internationale d'assurance automobile, reconnue dans les 34 pays couverts. Aucun des deux ne remplace un papier à coller sur le pare-brise : depuis 2024, ils se présentent et se vérifient uniquement à la plaque ou sur demande de l'agent, au format numérique ou imprimé.",
       ],
+      relatedLink: {
+        text: 'La valeur exacte de ces documents en contrôle routier',
+        href: '/articles/assurance-temporaire-attestation-immediate',
+      },
     },
     {
       type: 'checklist',

@@ -49,6 +49,8 @@ const ROUTES = [
   '/articles/assurance-auto-temporaire-immediate-en-ligne',
   '/articles/carte-grise-urgence-cpi-immediat',
   '/articles/assurance-temporaire-malus',
+  '/articles/assurance-temporaire-attestation-immediate',
+  '/articles/assurer-voiture-sans-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -87,6 +89,8 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-auto-temporaire-immediate-en-ligne':  'src/data/articles/assuranceImmediateEnLigne.js',
   '/articles/carte-grise-urgence-cpi-immediat':              'src/data/articles/carteGriseUrgence.js',
   '/articles/assurance-temporaire-malus':                    'src/data/articles/assuranceMalus.js',
+  '/articles/assurance-temporaire-attestation-immediate':    'src/data/articles/attestationImmediate.js',
+  '/articles/assurer-voiture-sans-carte-grise':               'src/data/articles/assurerSansCarteGrise.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -244,6 +248,8 @@ const ROUTE_MODULES = {
   '/articles/assurance-auto-temporaire-immediate-en-ligne':  'src/pages/articles/AssuranceImmediateEnLigne.jsx',
   '/articles/carte-grise-urgence-cpi-immediat':              'src/pages/articles/CarteGriseUrgence.jsx',
   '/articles/assurance-temporaire-malus':                    'src/pages/articles/AssuranceMalus.jsx',
+  '/articles/assurance-temporaire-attestation-immediate':    'src/pages/articles/AttestationImmediate.jsx',
+  '/articles/assurer-voiture-sans-carte-grise':               'src/pages/articles/AssurerSansCarteGrise.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/cookies':                 'src/pages/Cookies.jsx',
