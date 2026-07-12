@@ -180,7 +180,7 @@ Deux nouveaux articles pilier ajoutes selon le pattern existant :
 
 ## Controles effectues
 
-- **Tirets interdits (U+2013 / U+2014)** : recherche `[–—]` sur les deux fichiers de donnees et leurs pages -> 0 occurrence.
+- **Tirets interdits (U+2013 / U+2014)** : recherche des caracteres demi-cadratin et cadratin sur les deux fichiers de donnees et leurs pages -> 0 occurrence.
 - **Accents / UTF-8** : relecture manuelle, apostrophes et accents corrects sur les deux articles.
 - **Expressions bannies** (section 8 du CLAUDE.md) : recherche insensible a la casse sur le contenu ajoute -> aucun resultat.
 - **Aucune nouvelle dependance npm** : `package.json` et `package-lock.json` non modifies. Deux icones lucide-react supplementaires utilisees dans `articlesData.js` (`MailCheck`, `FileSignature`), deja presentes dans la dependance existante.
