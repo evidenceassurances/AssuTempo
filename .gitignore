@@ -8,3 +8,4 @@ $(pwd)
 .env
 .env.local
 .env.*.local
+.env*
