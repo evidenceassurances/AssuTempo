@@ -61,16 +61,22 @@ en cas de doute, on bloque plutôt que d'ouvrir.
 Colle ces commandes dans ton terminal, à la racine du projet :
 
 ```bash
-# 1. Génère un jeton au hasard et garde-le sous les yeux
+# 1. Génère un jeton au hasard
 node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
 
-# 2. Pose-le sur Vercel (colle le jeton quand c'est demandé)
-vercel env add GUICHET_ADMIN_TOKEN production
-vercel env add GUICHET_ADMIN_TOKEN preview
+# 2. Pose-le sur Vercel, en remplaçant LE_JETON par ce qui vient de s'afficher.
+#    La CLI n'accepte pas la saisie interactive : le --value et le --yes sont
+#    obligatoires.
+vercel env add GUICHET_ADMIN_TOKEN production --value 'LE_JETON' --yes
+vercel env add GUICHET_ADMIN_TOKEN preview    --value 'LE_JETON' --yes
 ```
 
 Garde ce jeton dans ton gestionnaire de mots de passe. Il ne doit jamais se
 retrouver dans le code, ni dans un mail, ni sur la page.
+
+Pour le changer plus tard (s'il a traîné dans un historique de terminal, par
+exemple), rejoue simplement les deux mêmes commandes avec un nouveau jeton, puis
+redéploie : l'ancien cesse aussitôt de fonctionner.
 
 ---
 
