@@ -81,6 +81,8 @@ const ROUTE_TABLE = [
   ['/articles/assurance-temporaire-malus', 'AssuranceMalus'],
   ['/articles/assurance-temporaire-attestation-immediate', 'AttestationImmediate'],
   ['/articles/assurer-voiture-sans-carte-grise', 'AssurerSansCarteGrise'],
+  ['/articles/prix-assurance-auto-temporaire', 'PrixAssuranceAutoTemporaire'],
+  ['/articles/combien-de-temps-carte-grise', 'DelaiCarteGrise'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],

@@ -2,7 +2,7 @@
    Additif uniquement : ne modifie pas la source de donnees des articles. */
 import {
   AlertTriangle, ShoppingCart, Globe, FileText, Briefcase, Users, Gauge,
-  ShieldAlert, Truck, ScrollText,
+  ShieldAlert, Truck, ScrollText, Tag,
 } from 'lucide-react';
 
 export const EASE = [0.22, 1, 0.36, 1];
@@ -25,8 +25,8 @@ export const stagger = {
    structure, aux liens et aux etats actifs. Les accents ci-dessous ne teintent
    que le tag et l'icone de categorie.
    Les cles "urgence", "achat", "international", "carte-grise" et "pro" viennent
-   du brief. "pret" et "essai" sont ajoutes pour couvrir les 2 categories reelles
-   supplementaires presentes dans les donnees, sans orpheliner d'article. */
+   du brief. "pret", "essai" et "prix" sont ajoutes pour couvrir les categories
+   reelles supplementaires presentes dans les donnees, sans orpheliner d'article. */
 export const CATEGORY_META = {
   urgence:       { key: 'urgence',       label: 'Urgence',       accent: '#D08A5E', Icon: AlertTriangle, subtitle: 'Fourrière, contrôle, immobilisation' },
   achat:         { key: 'achat',         label: 'Achat',         accent: '#CBA24E', Icon: ShoppingCart,  subtitle: "Véhicule d'occasion, particulier" },
@@ -38,6 +38,7 @@ export const CATEGORY_META = {
   resiliation:   { key: 'resiliation',   label: 'Résiliation',   accent: '#C2705A', Icon: ShieldAlert,   subtitle: 'Résilié, réassurance, BCT' },
   utilitaire:    { key: 'utilitaire',    label: 'Utilitaire',    accent: '#6E92A8', Icon: Truck,         subtitle: 'Déménagement, camionnette' },
   succession:    { key: 'succession',    label: 'Succession',    accent: '#8E86A6', Icon: ScrollText,    subtitle: "Véhicule d'un proche décédé" },
+  prix:          { key: 'prix',          label: 'Prix',          accent: '#C9A84C', Icon: Tag,           subtitle: 'Tarifs et grille de prix' },
 };
 
 export const FALLBACK_META = {
@@ -67,6 +68,7 @@ export function catKey(categorie = '') {
   if (n.includes('resiliation') || n.includes('resilie')) return 'resiliation';
   if (n.includes('utilitaire')) return 'utilitaire';
   if (n.includes('succession') || n.includes('decede')) return 'succession';
+  if (n.includes('prix') || n.includes('tarif')) return 'prix';
   return 'autre';
 }
 

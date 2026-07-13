@@ -196,6 +196,10 @@ export const articleData = {
         "Une démarche menée seul auprès de l'ANTS fonctionne, mais le délai de traitement varie d'une à cinq semaines selon le département et la charge du service instructeur. Un professionnel habilité ne contourne pas cette file d'attente institutionnelle : il pré-valide le dossier (CERFA, pièces, calcul des taxes) pour éviter les rejets, qui eux rallongent vraiment les délais.",
         "Un dossier rejeté pour une photo illisible ou une pièce manquante repart en bas de la pile, parfois plusieurs semaines plus tard. C'est là que se gagne le temps réel, pas dans un passe-droit administratif qui n'existe pas : personne ne peut accélérer la fabrication du titre définitif par l'Imprimerie nationale, mais un dossier complet dès le premier envoi évite l'aller-retour qui coûte le plus cher en délai.",
       ],
+      relatedLink: {
+        text: 'Le détail des délais, voie par voie, en un tableau',
+        href: '/articles/combien-de-temps-carte-grise',
+      },
     },
     {
       type: 'text',

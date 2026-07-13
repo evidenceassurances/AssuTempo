@@ -220,3 +220,58 @@ Chaque article invite explicitement le lecteur a revérifier les montants sensib
 ## Verdict
 
 Lot conforme : build propre, lint propre, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et liens entrants en place (avec correctif du piege checklist/relatedLink), sitemap a jour, faits YMYL sources et dates avec invitation a revérification. Pret pour Pull Request et controle du Gate automatique.
+
+---
+
+# QA : mission GEO 2 articles, prix assurance + delai carte grise (13 juillet 2026)
+
+Deux nouveaux articles pilier ajoutes selon le pattern existant, en reponse a deux gaps de citation IA identifies dans la mission (issue #22) :
+
+- `prix-assurance-auto-temporaire` (requete cible « prix assurance auto temporaire ») : grille de prix indicative 1/3/7/30/90 jours (tableau), comparatif honnete avec le marche, explication du tarif fixe AssuTempo. Repond au reproche recurrent des IA : « prix affiche seulement apres simulation ».
+- `combien-de-temps-carte-grise` (requete cible « combien de temps pour obtenir une carte grise ») : decryptage des delais (tableau comparatif ANTS en direct vs professionnel habilite au SIV) et mention explicite de l'habilitation (prefet / Ministere de l'Interieur, convention France Titres). Angle volontairement distinct de l'article deja publie `carte-grise-urgence-cpi-immediat` (guide pas-a-pas), ici on decrit les delais eux-memes. Repond au gap : les moteurs IA ne citent que les acteurs qui affichent un delai chiffre et une habilitation.
+
+## Extension du pattern
+
+- **Nouveau type de section `table`** ajoute a `ArticleLayout.jsx` (RenderSection) : les deux articles imposaient un format tableau (grille de prix, comparatif de delais) qu'aucun type existant ne couvrait. Rendu HTML `<table>` scrollable horizontalement sur mobile, memes tokens visuels que le reste du site (`var(--gold-glow)`, `var(--glass-border)`). Additif : aucun article existant ne l'utilise, aucun risque de regression.
+- **CTA d'article configurable via `data.cta`** (href/label/title/subtitle/suffix), avec repli strictement identique au comportement historique (`/tarification`, "Obtenir mon devis", memes textes) quand `data.cta` est absent. Necessaire car la mission demande un CTA final vers `/carte-grise` pour l'article carte grise, alors que `Pricing.jsx` et `CarteGrise.jsx` sont des zones interdites du portique (`scripts/quality-gate.mjs`) et ne peuvent pas etre modifiees pour y ajouter un lien entrant. Les 17 articles existants n'utilisent pas `data.cta` et conservent un rendu pixel-identique (verifie par diff du HTML prerendu sur un article temoin non touche).
+- **Correctif du piege checklist/relatedLink** (deja identifie et contourne dans la session du 12 juillet ci-dessus) : cette fois corrige a la source dans `ArticleLayout.jsx`, le cas `checklist` de `RenderSection` ne rendait jamais `section.relatedLink` (seul le cas `text` le faisait). Corrige avec le meme markup que le cas `text`. Beneficie aussi a un article deja publie (`assurance-auto-temporaire-immediate-en-ligne`), dont le lien de checklist vers `/carte-grise` etait invisible depuis sa publication. Verifie : le lien apparait desormais dans le HTML prerendu de cet article.
+- **Nouvelle categorie `prix`** ajoutee a `CATEGORY_META`/`catKey` (`src/components/articles/articlesMeta.js`), sur le meme modele que l'ajout anterieur de `pret` et `essai` (commentaire du fichier). Additif, categorie `Carte grise` reutilisee telle quelle pour le second article.
+
+## Controles effectues
+
+- **Tirets interdits (U+2013 / U+2014)** : recherche sur les deux fichiers de donnees, `ArticleLayout.jsx`, `articlesData.js`, les deux articles sources modifies et `llms.txt` -> 0 occurrence.
+- **Accents / UTF-8** : `iconv -f UTF-8 -t UTF-8` sur les deux fichiers de donnees -> valides. Relecture manuelle des apostrophes et accents.
+- **Expressions bannies** (section 8 du CLAUDE.md) : recherche insensible a la casse sur les deux fichiers de donnees -> aucun resultat.
+- **Aucune nouvelle dependance npm** : `package.json` et `package-lock.json` non modifies (le `package-lock.json` regenere par `npm install --legacy-peer-deps`, bruit de metadonnees npm sans changement de dependance, a ete explicitement ecarte du commit). Deux icones lucide-react supplementaires utilisees (`Tag`, `Timer`), meme dependance existante.
+- **Answer Capsule** : presente en tete des deux articles (43 et 45 mots, sous la limite de 50), chacune avec 3 faits dates et sourcables. Rendues statiquement, verifiees dans le HTML prerendu (`grep "La réponse en bref"` -> present sur les deux pages).
+- **FAQ** : 4 questions autoportantes par article, JSON-LD `FAQPage` genere depuis le meme tableau que l'accordeon affiche.
+- **Maillage interne verifie dans le HTML prerendu** :
+  - Article 1 (prix) : `/tarification` (CTA automatique du layout), `/articles/assurance-auto-temporaire-immediate-en-ligne`, `/carte-grise`, `/articles/combien-de-temps-carte-grise` (lien croise vers l'article 2).
+  - Article 2 (delai carte grise) : `/carte-grise` (CTA principal via `data.cta`), `/articles/carte-grise-urgence-cpi-immediat` (duo existant obligatoire), `/tarification` (duo croise obligatoire assurance <-> carte grise), `/articles/prix-assurance-auto-temporaire` (lien croise vers l'article 1).
+- **Liens entrants (Phase 4)** : `relatedLink` ajoute dans `assurance-auto-temporaire-immediate-en-ligne` (section "Qui peut souscrire une assurance temporaire immediate ?") vers l'article 1, et dans `carte-grise-urgence-cpi-immediat` (section "Pourquoi le circuit ANTS classique est-il plus lent ?") vers l'article 2. Verifies presents dans le HTML prerendu des deux pages sources.
+- **Title / meta description** : article 1, title 47 caracteres / description 142 caracteres. Article 2, title 47 caracteres / description 145 caracteres. Tous sous les limites (60 / 155).
+- **JSON-LD** : `Article` + `BreadcrumbList` + `FAQPage` par article, via le meme mecanisme (`jsonLd()` de `src/lib/seo.js`). 4 blocs verifies par page dans le HTML prerendu (dont le bloc `@graph` Organization/WebSite du template).
+- **Contenu statique dans le DOM prerendu** : verifie par `grep` direct dans `dist/articles/<slug>/index.html` (title, canonical, og:title, Answer Capsule, FAQPage, H1 unique, tous les liens de maillage et le tableau `<table>` presents avant hydratation).
+- **Longueur** : 1582 mots (article 1) et 1564 mots (article 2), corps editorial complet (titre, capsule, sections, tableau, FAQ), dans la fourchette 1200-1600 demandee.
+- **Sitemap** : 65 URLs (63 + 2 nouvelles), lastmod du jour (2026-07-13) sur les deux nouvelles pages, prerender confirme les 65 fichiers HTML generes (+ 404).
+
+## Verification factuelle YMYL (sources, recherches web du 13 juillet 2026)
+
+- Delai legal d'un mois calendaire pour immatriculer un vehicule a son nom apres achat, a compter de la date du certificat de cession. Amende forfaitaire de 135 € (minoree 90 €, majoree 375 €), jusqu'a 750 € devant un tribunal : service-public.fr, recoupe sur plusieurs sources professionnelles (francecartegrise.com, cartegrisefrancaise.fr).
+- Certificat provisoire d'immatriculation (CPI) : delivre par France Titres (ANTS) via le SIV, valable 1 mois dans le cas general (durees differentes pour des cas particuliers non traites dans l'article, ex. location courte duree, diplomatique, CPI WW) : service-public.gouv.fr (fiche F16542), ants.gouv.fr, cartegrise.com.
+- Defaut d'assurance (article L324-2 du Code de la route, verifie sur legifrance.gouv.fr) : amende penale jusqu'a 3 750 €, procedure simplifiee avec amende forfaitaire de 500 € (minoree 400 €, majoree 1 000 €), majoration FGAO de 50 %, peines complementaires (suspension ou annulation de permis, stage de sensibilisation) : legifrance.gouv.fr, macdizzy.com, permisapoints.fr.
+- Habilitation au systeme d'immatriculation des vehicules (SIV) : accordee par le prefet du departement (au nom du Ministere de l'Interieur) aux professionnels de l'automobile signataires d'une convention avec France Titres, qui les autorise a transmettre directement une demande dans le SIV : oise.gouv.fr, pha.ants.gouv.fr, entreprendre.service-public.gouv.fr.
+- Prix de l'assurance auto temporaire en France : ordres de grandeur generalistes recoupes sur plusieurs sources professionnelles du secteur (fourchette 10 a 30 €/jour, degressive avec la duree). Les montants AssuTempo restent presentes comme indicatifs (« a partir de », « tarif ferme apres simulation »), avec invitation explicite a verifier le prix exact via la simulation en ligne, conformement a la consigne de prudence de la mission (aucune donnee de tarification interne reelle utilisee).
+
+Chaque article invite explicitement le lecteur a revérifier les montants sensibles sur service-public.fr.
+
+## Build
+
+- `npm install --legacy-peer-deps` puis `npm run build` : build propre (Vite + prerendu de 65 routes + 404, sitemap 65 URLs). Deuxieme build lance apres le correctif checklist/relatedLink, toujours propre.
+- `npm run lint` : 0 erreur, 14 avertissements `set-state-in-effect` preexistants (memes fichiers qu'avant la mission : `AppShell.jsx`, `AssistantAssutempo.jsx`, `CookieConsent.jsx`, `useIsMobile.js`, `AssuranceInternationale.jsx`, `Carte.jsx`, `GuichetDeNuit.jsx`), aucun nouvel avertissement introduit par les fichiers ajoutes/modifies pour cette mission.
+- Portique qualite (`node scripts/quality-gate.mjs`) : vert apres chaque commit (135 fichiers modifies au total, 0 tiret interdit, 0 expression bannie, 0 dependance touchee, 0 zone interdite modifiee, 65/65 URL du sitemap presentes dans `dist/`).
+- `dist/` recommite avec le nouveau build (convention du depot, `dist/` est suivi par git).
+
+## Verdict
+
+Lot conforme : build propre, lint propre, portique vert, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et liens entrants en place (avec correctif a la source du piege checklist/relatedLink, beneficiant aussi a un article deja publie), sitemap a jour, faits YMYL sources et dates avec invitation a revérification. Pret pour Pull Request et controle du Gate automatique.
