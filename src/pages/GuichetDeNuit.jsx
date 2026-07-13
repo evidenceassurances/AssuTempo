@@ -39,7 +39,20 @@ const GUICHET_EMAIL = 'guichetassutempo@gmail.com';
    jamais empecher une demande de partir au guichet. */
 const API_START = '/api/guichet/start';
 const API_STATUS = '/api/guichet/status';
-const POLL_INTERVAL_MS = 20000;
+const POLL_INTERVAL_MS = 15000;
+const TICK_MS = 1000;
+
+/* Ecart d'horloge entre deux battements au-dela duquel on considere que le
+   systeme a GELE l'onglet (Safari iOS suspend un onglet passe en arriere-plan,
+   et ne redemarre ses minuteurs qu'au retour). Un battement en retard de plus
+   de 5 secondes ne se rattrape pas en redessinant : on redemande l'heure au
+   serveur. */
+const SAUT_GEL_MS = 5000;
+
+/* Deux evenements de retour arrivent souvent colles (visibilitychange puis
+   focus). Sans ce delai, on tirait deux requetes de statut pour un seul retour. */
+const ANTI_RAFALE_MS = 2000;
+
 const VEILLE_MS = 30 * 60 * 1000;
 const VEILLE_MINUTES = 30;
 
@@ -81,21 +94,34 @@ async function ouvrirSession(reference) {
   }
 }
 
-/* Relit l'etat d'une session aupres du serveur. Renvoie :
+/* Relit l'etat d'une session aupres du serveur. On interroge par sessionId
+   quand on l'a, sinon par reference : le client garde sa reference sous les
+   yeux, elle suffit a retrouver son dossier meme si le localStorage a ete vide
+   (navigation privee, nettoyage du navigateur).
+
+   Renvoie :
      l'etat        si la session existe ;
-     'introuvable' si le serveur ne la connait plus (expiree) : le front doit
-                   alors nettoyer son localStorage, jamais planter ;
-     null          si la requete a echoue (hors ligne) : on retente plus tard,
-                   sans rien changer a l'affichage. */
-async function lireSession(sessionId) {
+     'introuvable' si le serveur DIT lui-meme ne plus la connaitre (expiree) :
+                   le front nettoie alors son localStorage, sans jamais planter ;
+     null          si la requete a echoue (hors ligne, panne) : on garde la
+                   derniere valeur connue a l'ecran et on retentera.
+
+   Le 404 seul ne condamne pas le dossier : une route momentanement absente
+   (le temps d'un redeploiement) repond elle aussi 404, mais en HTML. On
+   n'oublie une session que sur un `found: false` explicite, en JSON. Sans ce
+   garde-fou, un hoquet de deploiement effacait la session d'un client en
+   pleine attente. */
+async function lireSession({ sessionId, reference }) {
+  const parametre = sessionId
+    ? `sessionId=${encodeURIComponent(sessionId)}`
+    : `reference=${encodeURIComponent(reference || '')}`;
   try {
-    const res = await fetch(`${API_STATUS}?sessionId=${encodeURIComponent(sessionId)}`, {
+    const res = await fetch(`${API_STATUS}?${parametre}`, {
       headers: { Accept: 'application/json' },
     });
-    if (res.status === 404) return 'introuvable';
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data && data.found ? data : 'introuvable';
+    const data = await res.json().catch(() => null);
+    if (!data || typeof data.found !== 'boolean') return null;
+    return data.found ? data : 'introuvable';
   } catch {
     return null;
   }
@@ -553,25 +579,34 @@ function CompteurDeVeille({ reference, session }) {
     return ancreRef.current;
   }, [session]);
 
-  /* Le decompte, derive de l'heure SERVEUR reconstituee. Rien n'est cumule :
-     un onglet gele pendant 20 minutes repart juste au reveil. */
+  /* Le decompte affiche, INTERPOLE entre deux reponses du serveur a partir de
+     l'heure serveur reconstituee (ancre + offset). Rien n'est cumule : un
+     onglet gele pendant vingt minutes repart a la bonne valeur des son premier
+     battement, sans attendre le serveur. Le serveur, lui, ecrase cette
+     interpolation a chaque reponse : c'est lui qui fait foi.
+
+     Renvoie true si ce battement vient de franchir le zero : l'appelant
+     redemande alors le statut sans attendre le prochain sondage. */
   const tick = useCallback(() => {
     /* Le decompte ne tourne QUE pendant la veille. Une fois fige (30 minutes
        ecoulees, session oubliee par le serveur, ou dossier clos), il ne doit
        plus rien reecrire : sinon le cadran repartait a 20:00 sous un titre qui
        annoncait la finalisation. */
-    if (phaseRef.current !== 'veille') return;
+    if (phaseRef.current !== 'veille') return false;
     const { startTime, duree, offset } = ancre();
     const reste = duree - (Date.now() + offset - startTime);
-    if (reste <= 0) {
-      setRestant(0);
-      if (phaseRef.current !== 'finalisation') {
-        phaseRef.current = 'finalisation';
-        setPhase('finalisation');
-      }
-      return;
+    if (reste > 0) {
+      setRestant(reste);
+      return false;
     }
-    setRestant(reste);
+    /* Zero atteint. On fige le cadran, mais l'ecran d'attente affiche ici n'est
+       qu'une SUPPOSITION : seul le serveur sait ou en est vraiment le dossier
+       (le lien de signature est peut-etre deja parti). D'ou le true : on le lui
+       demande immediatement. */
+    setRestant(0);
+    phaseRef.current = 'finalisation';
+    setPhase('finalisation');
+    return true;
   }, [ancre]);
 
   const appliquerEtat = useCallback((etat) => {
@@ -606,14 +641,22 @@ function CompteurDeVeille({ reference, session }) {
     else setRestant(Math.max(0, etat.remaining));
   }, [tick]);
 
-  /* Le recalage sur le serveur. Une panne reseau ne change rien a l'affichage :
-     on retentera. Une session que le serveur ne connait plus (au-dela de son
-     TTL) fige proprement le compteur au lieu de le laisser tourner dans le vide
-     ou de faire planter la page. */
+  /* Le recalage sur le serveur, seul juge du temps et du statut.
+     Une panne reseau ne change rien a l'affichage : on garde la derniere valeur
+     connue, l'interpolation continue, et on retentera au sondage suivant. Le
+     client ne voit jamais d'erreur. Une session que le serveur ne connait plus
+     (au-dela de son TTL) fige proprement le compteur au lieu de le laisser
+     tourner dans le vide. */
   const resync = useCallback(async () => {
+    /* 'pret' est terminal : le lien est chez le client, plus rien ne bougera.
+       Inutile de continuer a sonder le serveur toutes les 15 secondes sur un
+       onglet laisse ouvert. */
+    if (phaseRef.current === 'pret') return;
+
     const id = sessionIdRef.current;
-    if (!id) return;
-    const etat = await lireSession(id);
+    if (!id && !reference) return;
+
+    const etat = await lireSession({ sessionId: id, reference });
     if (etat === null) return;
     if (etat === 'introuvable') {
       writeStoredSession('');
@@ -625,56 +668,81 @@ function CompteurDeVeille({ reference, session }) {
       return;
     }
     appliquerEtat(etat);
-  }, [appliquerEtat]);
+  }, [appliquerEtat, reference]);
 
   useEffect(() => {
     trackEvent('guichet_countdown_start', { source: sessionIdRef.current ? 'serveur' : 'local' });
 
-    let tickId = 0;
-    let pollId = 0;
+    let dernierBattement = Date.now();
+    let dernierSondage = Date.now(); /* le parent vient de lire le serveur */
+    let etaitVisible = document.visibilityState === 'visible';
 
-    const arreter = () => {
-      if (tickId) clearInterval(tickId);
-      if (pollId) clearInterval(pollId);
-      tickId = 0;
-      pollId = 0;
-    };
+    /* UN SEUL minuteur, jamais detruit tant que la page vit.
+       C'est le correctif. La version precedente supprimait ses minuteurs des que
+       l'onglet passait en arriere-plan, et comptait sur `visibilitychange` pour
+       les recreer au retour. Or Safari iOS ne l'emet pas toujours (retour depuis
+       le selecteur d'applications, sortie de veille de l'ecran, onglet suspendu
+       par le systeme) : l'evenement manque, rien ne relance jamais les
+       minuteurs, et le compteur reste cloue sur sa derniere valeur, pour
+       toujours. Un minuteur seulement RALENTI par le navigateur, lui, se
+       reveille tout seul des que l'onglet redevient actif : aucun evenement
+       n'est necessaire pour revenir a la vie. */
+    const battre = (force = false) => {
+      const maintenant = Date.now();
+      const saut = maintenant - dernierBattement;
+      dernierBattement = maintenant;
 
-    /* Les timers ne tournent que page visible : un onglet en arriere-plan ne
-       consomme rien, et de toute facon Safari iOS les gelerait. */
-    const demarrer = () => {
-      arreter();
-      tick();
-      tickId = setInterval(tick, 1000);
-      pollId = setInterval(resync, POLL_INTERVAL_MS);
-    };
-
-    const surVisibilite = () => {
       if (document.visibilityState !== 'visible') {
-        arreter();
-        return;
+        etaitVisible = false;
+        return; /* rien a dessiner, rien a demander : on ne consomme pas */
       }
-      /* Le moment critique : Safari iOS a pu geler cet onglet vingt minutes.
-         L'horloge locale seule afficherait n'importe quoi. On redemande donc
-         l'heure au serveur AVANT de relancer le decompte. */
-      resync();
-      demarrer();
+
+      /* Retour au premier plan, detecte SANS dependre d'un evenement : soit le
+         battement precedent a vu l'onglet cache, soit l'horloge a saute (le
+         minuteur a ete gele). Dans les deux cas, l'affichage est peut-etre faux
+         de plusieurs minutes : on redemande l'heure au serveur. */
+      const retour = force || !etaitVisible || saut > SAUT_GEL_MS;
+      etaitVisible = true;
+
+      /* Redessin immediat a partir de l'ancre serveur : meme avant la reponse
+         du reseau, le compteur affiche deja le bon temps. Il ne reste jamais
+         fige, meme hors ligne. */
+      const franchiZero = tick();
+
+      const echu = maintenant - dernierSondage >= POLL_INTERVAL_MS;
+      const rafale = maintenant - dernierSondage < ANTI_RAFALE_MS;
+
+      if (franchiZero || (retour && !rafale) || echu) {
+        dernierSondage = maintenant;
+        resync();
+      }
     };
 
-    /* Safari restaure parfois une page depuis son cache arriere (bfcache) sans
-       repasser par visibilitychange : pageshow rattrape ce cas. On ne reagit
-       qu'a `persisted`, la vraie restauration de cache. Sans ce filtre, pageshow
-       se declenchait aussi au chargement normal et lancait une seconde requete
-       de statut, redondante avec celle de la reprise, aussitot annulee. */
-    const surPageshow = (e) => { if (e.persisted) surVisibilite(); };
+    const id = setInterval(() => battre(), TICK_MS);
 
-    if (document.visibilityState === 'visible') demarrer();
-    document.addEventListener('visibilitychange', surVisibilite);
+    /* Ces trois evenements ne font qu'ACCELERER le recalage : ils avancent le
+       battement au lieu d'attendre la seconde suivante. Ils ne sont plus le
+       seul chemin de retour : si le navigateur n'en emet aucun, le minuteur
+       ci-dessus recale tout seul. Ceinture, et bretelles.
+         visibilitychange : le cas normal (changement d'onglet) ;
+         focus            : fenetre reactivee alors que l'onglet n'a jamais ete
+                            declare cache (frequent sur iOS) ;
+         pageshow         : restauration depuis le cache arriere, et seulement
+                            elle (`persisted`), sinon un chargement normal
+                            declenchait une requete de statut redondante. */
+    const recaler = () => battre(true);
+    const surPageshow = (e) => { if (e.persisted) recaler(); };
+
+    document.addEventListener('visibilitychange', recaler);
+    window.addEventListener('focus', recaler);
     window.addEventListener('pageshow', surPageshow);
 
+    battre(); /* premier dessin sans attendre la premiere seconde */
+
     return () => {
-      arreter();
-      document.removeEventListener('visibilitychange', surVisibilite);
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', recaler);
+      window.removeEventListener('focus', recaler);
       window.removeEventListener('pageshow', surPageshow);
     };
   }, [tick, resync]);
@@ -957,7 +1025,7 @@ function GuichetDeNuit() {
     let vivant = true;
 
     (async () => {
-      const etatSession = await lireSession(id);
+      const etatSession = await lireSession({ sessionId: id });
       if (!vivant || etatSession === null) return;
 
       if (etatSession === 'introuvable') {
