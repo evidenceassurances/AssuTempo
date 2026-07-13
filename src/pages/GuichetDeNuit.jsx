@@ -10,11 +10,18 @@ import { jsonLd } from '../lib/seo';
 import { trackEvent } from '../lib/analytics';
 import Footer from '../components/Footer';
 
-/* Endpoint AJAX FormSubmit du Guichet de Nuit. La premiere soumission reelle
-   declenche un mail d'activation vers cette adresse : il doit etre confirme
-   une fois pour que les demandes arrivent. */
-const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/guichetassutempo@gmail.com';
+/* Endpoint Web3Forms du Guichet de Nuit. L'envoi est multipart (FormData, pas
+   de JSON) : c'est la seule forme qui accepte les pieces jointes. Les photos
+   partent donc avec la demande, en une seule soumission. */
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+const WEB3FORMS_ACCESS_KEY = '1dbb89c0-8b09-4abe-888d-f89f001d0627';
 const GUICHET_EMAIL = 'guichetassutempo@gmail.com';
+
+/* Web3Forms plafonne la taille totale d'une soumission : au-dela, la requete
+   est rejetee cote serveur. On controle avant l'envoi pour rendre la main a
+   l'utilisateur avec un message utile plutot qu'une erreur reseau opaque. */
+const MAX_FILES_BYTES = 10 * 1024 * 1024;
+const FILE_FIELDS = ['permis_recto', 'permis_verso', 'carte_grise'];
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -103,8 +110,8 @@ const STEPS = [
   {
     num: '02',
     Icon: Camera,
-    title: 'Répondez avec 3 photos',
-    body: 'Permis recto et verso, carte grise : répondez simplement au mail de confirmation.',
+    title: 'Joignez vos 3 photos',
+    body: 'Permis recto et verso, carte grise : les photos partent directement dans le formulaire, depuis votre téléphone.',
   },
   {
     num: '03',
@@ -162,11 +169,11 @@ const FAQ = [
   },
   {
     q: 'Quels documents préparer ?',
-    a: 'Trois photos suffisent : votre permis de conduire recto et verso, et la carte grise du véhicule. Vous les envoyez en répondant simplement au mail de confirmation reçu après votre demande.',
+    a: "Trois photos suffisent : votre permis de conduire recto et verso, et la carte grise du véhicule. Vous les joignez directement dans le formulaire, depuis votre téléphone. Si la carte grise n'est pas sous la main, vous l'enverrez plus tard en répondant au mail de confirmation.",
   },
   {
     q: "En combien de temps l'attestation arrive-t-elle ?",
-    a: "Le devis part dans les 30 minutes qui suivent la réception de vos photos, et l'attestation officielle arrive par mail dès le paiement. Entre le dépôt de la demande et la couverture, tout peut se jouer dans l'heure.",
+    a: "Le devis part dans les 30 minutes qui suivent le dépôt de votre demande complète, et l'attestation officielle arrive par mail dès le paiement. Entre le dépôt de la demande et la couverture, tout peut se jouer dans l'heure.",
   },
   {
     q: 'Que se passe-t-il si je ne signe pas le devis ?',
@@ -257,6 +264,13 @@ function GuichetDeNuit() {
   const [heureDepot, setHeureDepot] = useState('');
   const formStartedRef = useRef(false);
 
+  /* Noms des fichiers choisis (affiches sous chaque champ) et depassement de
+     taille. Le File lui-meme reste dans l'input : c'est lui que FormData lit
+     au moment de l'envoi. */
+  const [fileNames, setFileNames] = useState({ permis_recto: '', permis_verso: '', carte_grise: '' });
+  const [filesTooBig, setFilesTooBig] = useState(false);
+  const filesEventRef = useRef(false);
+
   useEffect(() => {
     trackEvent('guichet_page_view');
   }, []);
@@ -267,19 +281,48 @@ function GuichetDeNuit() {
     trackEvent('guichet_form_start');
   };
 
+  function handleFileChange(field, e) {
+    const file = e.target.files && e.target.files[0];
+    const next = { ...fileNames, [field]: file ? file.name : '' };
+    setFileNames(next);
+    setFilesTooBig(false);
+    /* Les deux photos du permis sont la : la demande est exploitable. */
+    if (!filesEventRef.current && next.permis_recto && next.permis_verso) {
+      filesEventRef.current = true;
+      trackEvent('guichet_form_files_added');
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (formStatus === 'sending') return;
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    /* Un input file vide produit un File de 0 octet : il partirait comme une
+       piece jointe fantome. On les retire et on pese ce qui reste. */
+    let total = 0;
+    for (const field of FILE_FIELDS) {
+      const value = data.get(field);
+      if (value instanceof File) {
+        if (value.size === 0) data.delete(field);
+        else total += value.size;
+      }
+    }
+    if (total > MAX_FILES_BYTES) {
+      setFilesTooBig(true);
+      return;
+    }
+
     trackEvent('guichet_form_submit');
-    const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
     setFormStatus('sending');
     try {
-      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+        body: data,
       });
-      if (!res.ok) throw new Error(String(res.status));
+      const payload = await res.json().catch(() => null);
+      if (!res.ok || !payload || payload.success !== true) throw new Error('envoi refuse');
       setHeureDepot(heureParis());
       setFormStatus('success');
     } catch {
@@ -555,8 +598,8 @@ function GuichetDeNuit() {
               Devis en 30 minutes ou tarif de jour
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 620, margin: '0 auto' }}>
-              Si le guichet met plus de 30 minutes à vous répondre une fois vos photos
-              reçues, la majoration de nuit est offerte.
+              Si le guichet met plus de 30 minutes à vous répondre une fois votre demande
+              complète déposée, photos comprises, la majoration de nuit est offerte.
             </p>
           </m.div>
         </section>
@@ -649,8 +692,8 @@ function GuichetDeNuit() {
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
               <h2 style={h2Style}>Déposer une demande au guichet</h2>
               <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: 0, lineHeight: 1.7 }}>
-                3 minutes, aucun paiement à cette étape. Le tarif de nuit tout compris
-                sera indiqué sur votre devis avant toute signature.
+                3 minutes, photos comprises, et aucun paiement à cette étape. Le tarif de
+                nuit tout compris sera indiqué sur votre devis avant toute signature.
               </p>
             </div>
 
@@ -668,12 +711,11 @@ function GuichetDeNuit() {
             >
               <MailCheck size={28} color="var(--gold-light)" strokeWidth={1.5} aria-hidden="true" />
               <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: '14px 0 12px' }}>
-                Demande reçue au guichet{heureDepot ? ` à ${heureDepot}` : ''}.
+                Demande complète reçue au guichet{heureDepot ? ` à ${heureDepot}` : ''}.
               </h3>
               <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.75, margin: 0 }}>
-                Dernière étape, 30 secondes : répondez au mail de confirmation avec
-                3 photos, votre permis recto et verso et la carte grise du véhicule.
-                Votre devis part dans les 30 minutes qui suivent.
+                Votre devis part dans les 30 minutes. Surveillez votre boîte mail,
+                pensez aux courriers indésirables.
               </p>
             </div>
 
@@ -689,11 +731,13 @@ function GuichetDeNuit() {
                 padding: 'clamp(22px, 4vw, 36px)',
               }}
             >
-              {/* Configuration FormSubmit */}
-              <input type="hidden" name="_subject" value="GUICHET DE NUIT - nouvelle demande" />
-              <input type="hidden" name="_template" value="table" />
-              {/* Piege anti-spam : invisible pour les humains */}
-              <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="gdn-honey" />
+              {/* Configuration Web3Forms */}
+              <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+              <input type="hidden" name="subject" value="GUICHET DE NUIT - nouvelle demande" />
+              <input type="hidden" name="from_name" value="Le Guichet de Nuit" />
+              {/* Piege anti-spam Web3Forms : doit rester decoche. Un robot qui
+                  remplit tout coche la case et la soumission est rejetee. */}
+              <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" className="gdn-honey" />
 
               <div className="gdn-form-grid">
                 <div>
@@ -800,6 +844,96 @@ function GuichetDeNuit() {
                   </div>
                 </fieldset>
 
+                {/* ── Vos 3 photos : jointes a la demande, en une soumission ── */}
+                <div className="gdn-field-full gdn-files">
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>
+                    Vos 3 photos
+                  </h3>
+                  <p style={{ fontSize: 13.5, color: 'var(--text-muted)', margin: '0 0 18px', lineHeight: 1.6 }}>
+                    Une photo nette prise avec votre téléphone suffit.
+                  </p>
+
+                  <div>
+                    <label htmlFor="gdn-permis-recto" className="gdn-label">
+                      Permis de conduire, recto
+                    </label>
+                    <input
+                      id="gdn-permis-recto"
+                      name="permis_recto"
+                      type="file"
+                      required
+                      accept="image/*,.pdf"
+                      capture="environment"
+                      onChange={(e) => handleFileChange('permis_recto', e)}
+                      className="gdn-input gdn-file"
+                    />
+                    <p className="gdn-note" style={{ display: fileNames.permis_recto ? 'block' : 'none', color: 'var(--gold-light)' }}>
+                      {fileNames.permis_recto}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="gdn-permis-verso" className="gdn-label">
+                      Permis de conduire, verso
+                    </label>
+                    <input
+                      id="gdn-permis-verso"
+                      name="permis_verso"
+                      type="file"
+                      required
+                      accept="image/*,.pdf"
+                      capture="environment"
+                      onChange={(e) => handleFileChange('permis_verso', e)}
+                      className="gdn-input gdn-file"
+                    />
+                    <p className="gdn-note" style={{ display: fileNames.permis_verso ? 'block' : 'none', color: 'var(--gold-light)' }}>
+                      {fileNames.permis_verso}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="gdn-carte-grise" className="gdn-label">
+                      Carte grise du véhicule <span style={{ color: 'var(--text-subtle)' }}>(facultatif)</span>
+                    </label>
+                    <input
+                      id="gdn-carte-grise"
+                      name="carte_grise"
+                      type="file"
+                      accept="image/*,.pdf"
+                      capture="environment"
+                      onChange={(e) => handleFileChange('carte_grise', e)}
+                      className="gdn-input gdn-file"
+                      aria-describedby="gdn-carte-grise-note"
+                    />
+                    <p className="gdn-note" style={{ display: fileNames.carte_grise ? 'block' : 'none', color: 'var(--gold-light)' }}>
+                      {fileNames.carte_grise}
+                    </p>
+                    <p id="gdn-carte-grise-note" className="gdn-note">
+                      Pas sous la main, par exemple restée dans le véhicule en fourrière ?
+                      Envoyez-la plus tard en répondant au mail de confirmation.
+                    </p>
+                  </div>
+
+                  {/* Depassement de taille : texte statique, simplement revele. */}
+                  <p
+                    role="alert"
+                    style={{
+                      display: filesTooBig ? 'block' : 'none',
+                      margin: '4px 0 0',
+                      fontSize: 13.5,
+                      lineHeight: 1.6,
+                      color: 'var(--gold-light)',
+                      background: 'var(--gold-dim)',
+                      border: '1px solid var(--gold-border)',
+                      borderRadius: 11,
+                      padding: '12px 14px',
+                    }}
+                  >
+                    Vos photos dépassent 10 Mo au total. Reprenez la plus lourde en photo
+                    simple, sans mode haute définition, puis déposez-la de nouveau.
+                  </p>
+                </div>
+
                 <label className="gdn-field-full gdn-check">
                   <input type="checkbox" name="consentement_rgpd" value="Oui" required />
                   <span>
@@ -853,7 +987,8 @@ function GuichetDeNuit() {
                 >
                   {GUICHET_EMAIL}
                 </a>
-                , votre demande sera traitée de la même façon.
+                . Joignez vos informations et vos photos au mail, votre demande sera
+                traitée de la même façon.
               </p>
             </form>
           </div>
@@ -1017,6 +1152,33 @@ function GuichetDeNuit() {
           cursor: pointer;
         }
         .gdn-check input { flex-shrink: 0; margin-top: 2px; }
+        .gdn-files {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid var(--glass-border);
+          border-radius: 14px;
+          padding: 20px 18px;
+        }
+        .gdn-file {
+          padding: 10px 12px;
+          font-size: 14px;
+          color: var(--text-muted);
+          cursor: pointer;
+        }
+        .gdn-file::file-selector-button {
+          font-family: inherit;
+          font-size: 13.5px;
+          font-weight: 600;
+          color: var(--gold-light);
+          background: var(--gold-dim);
+          border: 1px solid var(--gold-border);
+          border-radius: 9px;
+          padding: 8px 14px;
+          margin-right: 12px;
+          cursor: pointer;
+        }
         .gdn-honey {
           position: absolute;
           left: -9999px;
