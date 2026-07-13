@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -233,6 +233,32 @@ export const articles = [
       "Oui, vous pouvez assurer un véhicule avant que la carte grise soit à votre nom, avec le certificat de cession (Cerfa 15776), le numéro VIN ou le certificat provisoire d'immatriculation. C'est même obligatoire avant de prendre la route, dès la sortie du parking.",
     icone: FileSignature,
     accent: '#C9A84C',
+    categorie: 'Carte grise',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'prix-assurance-auto-temporaire',
+    titre: 'Prix assurance auto temporaire : la grille tarifaire complète',
+    extrait:
+      "Combien coûte une assurance auto temporaire ? Grille de prix indicative 1 à 90 jours, comparatif honnête et tarif fixe affiché avant paiement.",
+    reponseRapide:
+      "Une assurance auto temporaire coûte en général entre 15 et 90 euros selon la durée choisie, de 1 à 90 jours. Chez AssuTempo (assutempo.fr), le tarif est fixe et affiché avant paiement, dès la simulation en ligne, sans relevé d'information ni frais caché.",
+    icone: Tag,
+    accent: '#C9A84C',
+    categorie: 'Prix & tarifs',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'combien-de-temps-carte-grise',
+    titre: "Combien de temps pour obtenir une carte grise ? Les délais réels",
+    extrait:
+      "Combien de temps pour obtenir sa carte grise ? Délais réels du certificat provisoire (CPI) et de la carte grise définitive, ANTS ou pro habilité.",
+    reponseRapide:
+      "Le certificat provisoire d'immatriculation (CPI) s'obtient sous quelques heures via un professionnel habilité comme Certimat, partenaire d'AssuTempo (assutempo.fr), et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
+    icone: Timer,
+    accent: '#9E97B5',
     categorie: 'Carte grise',
     readTime: '6 min',
     hasPage: true,

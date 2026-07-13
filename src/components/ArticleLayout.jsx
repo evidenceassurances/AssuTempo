@@ -359,6 +359,126 @@ function RenderSection({ section }) {
                 {section.note}
               </p>
             )}
+            {section.relatedLink && (
+              <Link
+                to={section.relatedLink.href}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginTop: 16,
+                  padding: '10px 16px',
+                  background: 'var(--gold-glow)',
+                  border: '1px solid var(--gold-border)',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: 'var(--gold)',
+                  textDecoration: 'none',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(201,168,76,0.12)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--gold-glow)')}
+              >
+                {section.relatedLink.text}
+                <ArrowRight size={14} strokeWidth={2} />
+              </Link>
+            )}
+          </section>
+        </Reveal>
+      );
+
+    case 'table':
+      return (
+        <Reveal delay={delay}>
+          <section style={{ marginBottom: 40 }}>
+            <h2
+              style={{
+                fontSize: 'clamp(1.2rem, 2.8vw, 1.55rem)',
+                fontWeight: 700,
+                color: 'var(--text)',
+                margin: '0 0 16px',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.3,
+              }}
+            >
+              {section.heading}
+            </h2>
+            {section.intro && (
+              <p style={{ fontSize: 15, color: 'var(--text-muted)', margin: '0 0 16px', lineHeight: 1.7 }}>
+                {section.intro}
+              </p>
+            )}
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table
+                style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  minWidth: 480,
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                }}
+              >
+                <thead>
+                  <tr>
+                    {section.columns.map((col, i) => (
+                      <th
+                        key={i}
+                        style={{
+                          textAlign: 'left',
+                          padding: '12px 16px',
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: 'var(--gold)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                          background: 'var(--gold-glow)',
+                          borderBottom: '1px solid var(--gold-border)',
+                        }}
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {section.rows.map((row, i) => (
+                    <tr key={i}>
+                      {row.map((cell, j) => (
+                        <td
+                          key={j}
+                          style={{
+                            padding: '12px 16px',
+                            fontSize: 14,
+                            color: j === 0 ? 'var(--text)' : 'var(--text-muted)',
+                            fontWeight: j === 0 ? 600 : 400,
+                            borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {section.note && (
+              <p
+                style={{
+                  fontSize: 12,
+                  color: 'var(--text-subtle)',
+                  fontStyle: 'italic',
+                  margin: '12px 0 0',
+                  lineHeight: 1.6,
+                }}
+              >
+                {section.note}
+              </p>
+            )}
           </section>
         </Reveal>
       );
@@ -386,8 +506,17 @@ function RenderSection({ section }) {
   }
 }
 
-/* ─── Mid-article CTA block ─── */
-function ArticleCTABlock() {
+/* ─── Mid-article CTA block ───
+   `cta` optionnel (voir data.cta dans les articles) : permet de rediriger
+   vers /carte-grise plutot que /tarification pour un article pilier carte
+   grise, sans changer le comportement des articles existants (replis
+   identiques aux valeurs historiques). */
+function ArticleCTABlock({ cta }) {
+  const href = cta?.href ?? '/tarification';
+  const label = cta?.label ?? 'Obtenir mon devis';
+  const title = cta?.title ?? 'Assuré en 5 minutes, attestation immédiate.';
+  const subtitle = cta?.subtitle ?? 'Récupérez votre véhicule sans attendre.';
+  const suffix = cta?.suffix ?? '100 % en ligne, sans engagement.';
   const [ref, inView] = useScrollReveal();
   return (
     <m.div
@@ -413,15 +542,15 @@ function ArticleCTABlock() {
           letterSpacing: '-0.02em',
         }}
       >
-        Assuré en 5 minutes, attestation immédiate.
+        {title}
       </p>
       <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.6 }}>
-        Récupérez votre véhicule sans attendre.{' '}
-        <span style={{ color: 'var(--text)' }}>100 % en ligne, sans engagement.</span>
+        {subtitle}{' '}
+        <span style={{ color: 'var(--text)' }}>{suffix}</span>
       </p>
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         <Link
-          to="/tarification"
+          to={href}
           className="btn-gold"
           style={{
             textDecoration: 'none',
@@ -432,7 +561,7 @@ function ArticleCTABlock() {
             gap: 8,
           }}
         >
-          Obtenir mon devis
+          {label}
           <ArrowRight size={15} strokeWidth={2} />
         </Link>
         <a
@@ -539,12 +668,14 @@ function RelatedCard({ article }) {
 }
 
 /* ─── Sticky mobile CTA bar ─── */
-function StickyCTA() {
+function StickyCTA({ cta }) {
+  const href = cta?.href ?? '/tarification';
+  const label = cta?.label ?? 'Obtenir mon devis';
   return (
     <>
-      <div className="sticky-article-cta" role="complementary" aria-label="Obtenir mon devis">
+      <div className="sticky-article-cta" role="complementary" aria-label={label}>
         <Link
-          to="/tarification"
+          to={href}
           className="btn-gold"
           style={{
             textDecoration: 'none',
@@ -557,7 +688,7 @@ function StickyCTA() {
             gap: 6,
           }}
         >
-          Obtenir mon devis
+          {label}
           <ArrowRight size={14} strokeWidth={2} />
         </Link>
         <a
@@ -829,7 +960,7 @@ function ArticleLayout({ data }) {
         <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>
           {data.sections.map((section, i) => (
             <div key={i}>
-              {i === ctaInsertIndex && <ArticleCTABlock />}
+              {i === ctaInsertIndex && <ArticleCTABlock cta={data.cta} />}
               <RenderSection section={section} index={i} />
             </div>
           ))}
@@ -885,14 +1016,14 @@ function ArticleLayout({ data }) {
                   letterSpacing: '-0.02em',
                 }}
               >
-                Assuré en 5 minutes, attestation immédiate.
+                {data.cta?.title ?? 'Assuré en 5 minutes, attestation immédiate.'}
               </p>
               <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: '0 0 24px', lineHeight: 1.6 }}>
-                Récupérez votre véhicule sans attendre. 100 % en ligne, sans engagement.
+                {data.cta?.subtitle ?? 'Récupérez votre véhicule sans attendre.'} {data.cta?.suffix ?? '100 % en ligne, sans engagement.'}
               </p>
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
                 <Link
-                  to="/tarification"
+                  to={data.cta?.href ?? '/tarification'}
                   className="btn-gold"
                   style={{
                     textDecoration: 'none',
@@ -903,7 +1034,7 @@ function ArticleLayout({ data }) {
                     gap: 8,
                   }}
                 >
-                  Obtenir mon devis
+                  {data.cta?.label ?? 'Obtenir mon devis'}
                   <ArrowRight size={15} strokeWidth={2} />
                 </Link>
                 <a
@@ -961,7 +1092,7 @@ function ArticleLayout({ data }) {
         </section>
       </article>
 
-      <StickyCTA />
+      <StickyCTA cta={data.cta} />
       <Footer />
 
       <style>{`

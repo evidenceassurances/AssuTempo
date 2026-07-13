@@ -32,6 +32,8 @@ import CarteGriseUrgence from './pages/articles/CarteGriseUrgence';
 import AssuranceMalus from './pages/articles/AssuranceMalus';
 import AttestationImmediate from './pages/articles/AttestationImmediate';
 import AssurerSansCarteGrise from './pages/articles/AssurerSansCarteGrise';
+import PrixAssuranceAutoTemporaire from './pages/articles/PrixAssuranceAutoTemporaire';
+import DelaiCarteGrise from './pages/articles/DelaiCarteGrise';
 import CarteGriseService from './pages/CarteGrise';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
@@ -66,6 +68,8 @@ const PAGES = {
   AssuranceMalus,
   AttestationImmediate,
   AssurerSansCarteGrise,
+  PrixAssuranceAutoTemporaire,
+  DelaiCarteGrise,
   CarteGriseService,
   Carte,
   Cookies,
