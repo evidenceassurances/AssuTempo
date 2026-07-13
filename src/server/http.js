@@ -42,6 +42,39 @@ function originAutorisee(req) {
   return Boolean(hote) && origine.host === hote;
 }
 
+/**
+ * Controle d'origine STRICT : l'origine doit etre presente ET autorisee.
+ * A utiliser des qu'une requete est authentifiee par COOKIE : le navigateur
+ * joint le cookie tout seul, donc une page tierce pourrait declencher l'appel a
+ * l'insu d'Ayoub (CSRF). Le SameSite=Strict du cookie l'empeche deja ; ceci est
+ * la seconde serrure. Un appel authentifie par jeton Bearer, lui, n'a pas ce
+ * probleme : le jeton ne part jamais tout seul.
+ */
+function origineStricte(req) {
+  const brut = req.headers.origin || '';
+  if (!brut) return false;
+  try {
+    const origine = new URL(brut);
+    if (ALLOWED_ORIGINS.includes(origine.origin)) return true;
+    const hote = req.headers.host || '';
+    return Boolean(hote) && origine.host === hote;
+  } catch {
+    return false;
+  }
+}
+
+function lireCookie(req, nom) {
+  const brut = req.headers.cookie || '';
+  for (const morceau of brut.split(';')) {
+    const i = morceau.indexOf('=');
+    if (i === -1) continue;
+    if (morceau.slice(0, i).trim() === nom) {
+      return decodeURIComponent(morceau.slice(i + 1).trim());
+    }
+  }
+  return '';
+}
+
 function json(res, code, corps) {
   res.setHeader('content-type', 'application/json; charset=utf-8');
   /* Une session est propre a un client et evolue seconde par seconde : jamais
@@ -65,4 +98,12 @@ function erreurServeur(res, err) {
   return json(res, 503, { error: 'storage_unavailable' });
 }
 
-module.exports = { ALLOWED_ORIGINS, originAutorisee, json, erreurServeur };
+module.exports = {
+  ALLOWED_ORIGINS,
+  COOKIE_ADMIN: 'gn_admin',
+  originAutorisee,
+  origineStricte,
+  lireCookie,
+  json,
+  erreurServeur,
+};

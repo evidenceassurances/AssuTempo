@@ -33,9 +33,11 @@
 
 const crypto = require('node:crypto');
 const {
-  getSession, getSessionByReference, finalizeSession, DUREE_VEILLE_MS,
+  getSession, getSessionByReference, finalizeSession, sessionAdminValide, DUREE_VEILLE_MS,
 } = require('../../src/server/guichet-store.js');
-const { json, erreurServeur } = require('../../src/server/http.js');
+const {
+  json, erreurServeur, origineStricte, lireCookie, COOKIE_ADMIN,
+} = require('../../src/server/http.js');
 
 const SESSION_ID_RE = /^[a-f0-9]{32}$/;
 const REFERENCE_RE = /^GN-\d{8}-\d{4}-[A-Z0-9]{4}$/;
@@ -65,9 +67,40 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  /* Deux voies d'authentification, et deux seulement.
+
+     1. Jeton Bearer : pour un appel depuis un terminal ou un serveur (le skill
+        du depot, sur la machine d'Ayoub).
+     2. Cookie de session d'administration : pour un appel depuis le navigateur
+        Chrome, ou tourne la souscription automatisee. Le bac a sable qui la
+        pilote ne peut ni lire une variable d'environnement, ni joindre
+        assutempo.fr : l'appel doit donc partir de la page. Le cookie evite d'y
+        deposer le jeton, qui serait alors volable par une injection de script.
+
+     Quand l'authentification vient du cookie, l'origine est verifiee
+     STRICTEMENT : le navigateur joint le cookie tout seul, donc une page tierce
+     pourrait sinon declencher une cloture a l'insu d'Ayoub. Le SameSite=Strict
+     du cookie l'empeche deja ; ceci est la seconde serrure. */
   const entete = req.headers.authorization || '';
-  const fourni = entete.startsWith('Bearer ') ? entete.slice(7) : '';
-  if (!fourni || !jetonValide(fourni, attendu)) {
+  const bearer = entete.startsWith('Bearer ') ? entete.slice(7) : '';
+
+  let autorise = false;
+  try {
+    if (bearer) {
+      autorise = jetonValide(bearer, attendu);
+    } else {
+      const cookie = lireCookie(req, COOKIE_ADMIN);
+      /* La validation du cookie interroge Redis : une panne de la base doit
+         rendre une erreur propre, jamais une exception nue. */
+      autorise = Boolean(cookie)
+        && origineStricte(req)
+        && await sessionAdminValide(cookie);
+    }
+  } catch (err) {
+    return erreurServeur(res, err);
+  }
+
+  if (!autorise) {
     return json(res, 401, { error: 'unauthorized' });
   }
 
