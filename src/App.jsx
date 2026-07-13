@@ -33,6 +33,8 @@ const IMPORTERS = {
   Cookies:                    () => import('./pages/Cookies'),
   CGV:                        () => import('./pages/CGV'),
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),
+  GuichetDeNuit:              () => import('./pages/GuichetDeNuit'),
+  Urgence:                    () => import('./pages/Urgence'),
   NotFound:                   () => import('./pages/NotFound'),
 };
 
