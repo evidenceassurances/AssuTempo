@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://assutempo.fr/</loc><lastmod>2026-07-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://assutempo.fr/faq</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://assutempo.fr/faq</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://assutempo.fr/tarification</loc><lastmod>2026-07-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://assutempo.fr/qui-sommes-nous</loc><lastmod>2026-07-03</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://assutempo.fr/articles</loc><lastmod>2026-07-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://assutempo.fr/articles/voiture-immobilisee-defaut-assurance</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://assutempo.fr/articles/controle-sans-assurance-risques-amende</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://assutempo.fr/articles/controle-sans-assurance-risques-amende</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-vehicule-etranger-france</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-pret-de-vehicule</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-convoyage-professionnel</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -17,7 +17,7 @@
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-resilie-par-assureur</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-utilitaire-demenagement</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-vehicule-proche-decede</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://assutempo.fr/articles/assurance-trajet-retour-achat-voiture</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://assutempo.fr/articles/assurance-trajet-retour-achat-voiture</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-auto-temporaire-immediate-en-ligne</loc><lastmod>2026-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/carte-grise-urgence-cpi-immediat</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://assutempo.fr/articles/assurance-temporaire-malus</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -62,4 +62,5 @@
   <url><loc>https://assutempo.fr/cookies</loc><lastmod>2026-07-07</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://assutempo.fr/conditions-generales</loc><lastmod>2026-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://assutempo.fr/assurance-internationale</loc><lastmod>2026-07-03</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://assutempo.fr/guichet-de-nuit</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

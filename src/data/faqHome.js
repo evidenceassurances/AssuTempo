@@ -32,4 +32,8 @@ export const faqHomeItems = [
     q: 'Puis-je prêter mon véhicule pendant le contrat ?',
     a: 'Non, vous êtes conducteur exclusif pendant toute la durée du contrat.',
   },
+  {
+    q: 'Peut-on souscrire la nuit, le dimanche ou un jour férié ?',
+    a: "Oui, par le Guichet de Nuit AssuTempo. La souscription en ligne classique est ouverte du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h. En dehors de ces heures, le Guichet de Nuit prend le relais : vous déposez votre demande avec vos photos, un conseiller prépare votre contrat, et le devis part dans les 30 minutes. Le dimanche, la permanence est assurée toute la journée.",
+  },
 ];

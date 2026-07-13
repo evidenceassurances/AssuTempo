@@ -57,7 +57,13 @@ const ROUTES = [
   '/cookies',
   '/conditions-generales',
   '/assurance-internationale',
+  '/guichet-de-nuit',
+  '/urgence',
 ];
+
+// Routes prerendues mais volontairement absentes du sitemap : /urgence est
+// une simple redirection client-side vers /guichet-de-nuit (noindex).
+const SITEMAP_EXCLUDE = new Set(['/urgence']);
 
 // ── Métadonnées sitemap ──────────────────────────────────────────────────────
 // Le sitemap est généré à partir de ROUTES (source unique) : impossible qu'il
@@ -255,6 +261,8 @@ const ROUTE_MODULES = {
   '/cookies':                 'src/pages/Cookies.jsx',
   '/conditions-generales':    'src/pages/CGV.jsx',
   '/assurance-internationale': 'src/pages/AssuranceInternationale.jsx',
+  '/guichet-de-nuit':         'src/pages/GuichetDeNuit.jsx',
+  '/urgence':                 'src/pages/Urgence.jsx',
   '/404':                     'src/pages/NotFound.jsx',
 };
 
@@ -405,7 +413,8 @@ writeFileSync(path.join(root, 'dist/404.html'), buildPageHtml('/404'));
 console.log('  ✓  /404 (dist/404.html)');
 
 // ── 4. Génération du sitemap (depuis ROUTES, source unique) ───────────────────
-const sitemapBody = ROUTES.map((route) => {
+const SITEMAP_ROUTES = ROUTES.filter((route) => !SITEMAP_EXCLUDE.has(route));
+const sitemapBody = SITEMAP_ROUTES.map((route) => {
   const loc = route === '/' ? `${SITE}/` : `${SITE}${route}`;
   const { changefreq, priority } = sitemapMeta(route);
   return `  <url><loc>${loc}</loc><lastmod>${lastmodFor(route)}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
@@ -416,7 +425,7 @@ const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http:
 // dist/ = artefact déployé ; public/ = source committée (servie en dev, lisible).
 writeFileSync(path.join(root, 'dist/sitemap.xml'), sitemapXml);
 writeFileSync(path.join(root, 'public/sitemap.xml'), sitemapXml);
-console.log(`\n🗺️  sitemap.xml généré (${ROUTES.length} URLs).`);
+console.log(`\n🗺️  sitemap.xml généré (${SITEMAP_ROUTES.length} URLs).`);
 
 // ── 5. Nettoyage ─────────────────────────────────────────────────────────────
 rmSync(distSsr, { recursive: true, force: true });

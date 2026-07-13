@@ -185,7 +185,12 @@ export const articleData = {
       heading: 'En résumé',
       paragraphs: [
         "Rouler sans assurance coûte cher et expose à de lourdes peines, mais se régularise en quelques minutes. Le bon réflexe : souscrire immédiatement une assurance temporaire pour obtenir une attestation valable, présentable sur-le-champ. Plus vite vous agissez, moins ça coûte.",
+        "Si le contrôle a lieu la nuit ou un dimanche, vous n'êtes pas obligé d'attendre la réouverture des guichets pour vous mettre en règle : le Guichet de Nuit AssuTempo prépare les contrats de 21h à 9h et toute la journée du dimanche.",
       ],
+      relatedLink: {
+        text: 'Régulariser la nuit ou le dimanche : le Guichet de Nuit',
+        href: '/guichet-de-nuit',
+      },
     },
   ],
   faqItems: [

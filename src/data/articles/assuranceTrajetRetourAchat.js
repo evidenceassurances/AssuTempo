@@ -116,7 +116,12 @@ export const articleData = {
         "J'ai signé le certificat de cession un samedi matin, sur le capot de la voiture, pendant que le vendeur vérifiait sur son téléphone que le virement était bien arrivé. Une fois l'argent parti, il m'a tendu les clés et je me suis retrouvé seul devant le véhicule, avec une question toute bête : est-ce que j'ai le droit de rentrer chez moi avec, là, maintenant ?",
         "La réponse tient en une phrase : oui, il faut être assuré avant de démarrer, et non, il n'existe aucun délai de grâce. L'article L211-1 du Code des assurances impose une couverture en responsabilité civile dès la prise de possession du véhicule, que le trajet fasse cinq kilomètres ou deux cents. Le jour de l'achat compte comme n'importe quel autre.",
         "Ce que j'ignorais, c'est que l'assurance du vendeur ne me protégeait à aucun moment. Son contrat continue de courir à son nom jusqu'à ce qu'il le résilie, mais il ne couvre plus un véhicule qui ne lui appartient plus. Sur la route, j'étais donc seul face au risque, avec ou sans le savoir.",
+        "Reste le cas qui piège le plus d'acheteurs : les ventes entre particuliers se concluent le soir et le week-end, quand la souscription en ligne classique est fermée. Le Guichet de Nuit AssuTempo couvre ces heures, de 21h à 9h et le dimanche toute la journée : vous déposez votre demande depuis le trottoir, et vous repartez avec une attestation plutôt qu'avec un risque.",
       ],
+      relatedLink: {
+        text: 'Achat le soir ou le dimanche : le Guichet de Nuit',
+        href: '/guichet-de-nuit',
+      },
     },
     {
       type: 'alert',

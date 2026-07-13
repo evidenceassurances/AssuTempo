@@ -37,6 +37,8 @@ import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
 import AssuranceInternationale from './pages/AssuranceInternationale';
+import GuichetDeNuit from './pages/GuichetDeNuit';
+import Urgence from './pages/Urgence';
 import NotFound from './pages/NotFound';
 
 const PAGES = {
@@ -69,6 +71,8 @@ const PAGES = {
   Cookies,
   CGV,
   AssuranceInternationale,
+  GuichetDeNuit,
+  Urgence,
   NotFound,
 };
 

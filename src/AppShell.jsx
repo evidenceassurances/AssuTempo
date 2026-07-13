@@ -87,6 +87,9 @@ const ROUTE_TABLE = [
   ['/cookies', 'Cookies'],
   ['/conditions-generales', 'CGV'],
   ['/assurance-internationale', 'AssuranceInternationale'],
+  ['/guichet-de-nuit', 'GuichetDeNuit'],
+  /* Redirection client-side vers /guichet-de-nuit (noindex, hors sitemap). */
+  ['/urgence', 'Urgence'],
   /* Catch-all : toute URL inconnue rend la page 404 (prerendue en
      dist/404.html et servie par Vercel avec le statut 404). */
   ['*', 'NotFound'],

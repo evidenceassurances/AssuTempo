@@ -62,10 +62,18 @@ const faqs = [
     q: 'Dans quels pays puis-je circuler ?',
     a: "Dans les 34 pays couverts par votre carte internationale d'assurance automobile : Autriche, Belgique, Bulgarie, Chypre, République tchèque, Allemagne, Danemark, Espagne, Estonie, France, Finlande, Grèce, Hongrie, Croatie, Italie, Irlande, Islande, Luxembourg, Lituanie, Lettonie, Malte, Norvège, Pays-Bas, Portugal, Pologne, Roumanie, Suède, Slovaquie, Slovénie, Suisse, Andorre, Bosnie-Herzégovine, Monténégro, Royaume-Uni.",
   },
+  {
+    q: 'Peut-on souscrire la nuit, le dimanche ou un jour férié ?',
+    a: "Oui, par le Guichet de Nuit AssuTempo. La souscription en ligne classique est ouverte du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h. En dehors de ces heures, le Guichet de Nuit prend le relais : vous déposez votre demande avec vos photos, un conseiller prépare votre contrat, et le devis part dans les 30 minutes. Le dimanche, la permanence est assurée toute la journée, et les jours fériés suivent le même régime.",
+  },
+  {
+    q: "Sortie de fourrière tôt le matin : comment obtenir l'attestation avant l'ouverture ?",
+    a: "En passant par le Guichet de Nuit, qui reçoit les demandes de 21h à 9h. Vous déposez votre dossier pendant la nuit, avec la photo de votre permis recto verso et de la carte grise, et l'attestation arrive par mail dès le paiement. Vous vous présentez à la fourrière dès l'ouverture, document en main, sans payer une journée de gardiennage supplémentaire.",
+  },
 ];
 
 
-/* FAQPage : reprend mot pour mot les 14 questions/reponses du tableau `faqs`
+/* FAQPage : reprend mot pour mot les questions/reponses du tableau `faqs`
    ci-dessus, celui-la meme qui alimente l'accordeon affiche. Source unique :
    jamais de contenu invisible dans ce schema. */
 const JSONLD_FAQ = {

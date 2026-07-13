@@ -230,6 +230,17 @@ export const articleData = {
     },
     {
       type: 'text',
+      heading: "La fourrière ouvre avant les assureurs : comment être couvert à l'aube ?",
+      paragraphs: [
+        "C'est le décalage qui coûte le plus cher : beaucoup de fourrières ouvrent tôt le matin, quand la souscription en ligne classique, elle, ne rouvre qu'à 9h. Une journée de gardiennage de plus, pour une heure d'attente. Le Guichet de Nuit AssuTempo existe pour ce trou-là : il reçoit les demandes de 21h à 9h du lundi au samedi et toute la journée du dimanche, prépare le contrat pendant la nuit, et l'attestation arrive par mail dès le paiement. Vous vous présentez à l'ouverture avec le document en main.",
+      ],
+      relatedLink: {
+        text: 'Le Guichet de Nuit : votre contrat préparé entre 21h et 9h',
+        href: '/guichet-de-nuit',
+      },
+    },
+    {
+      type: 'text',
       heading: 'En résumé',
       paragraphs: [
         "Le nombre de jours dépend de votre fiche d'immobilisation, pas d'une règle fixe. Confirmez le minimum auprès de l'autorité indiquée, souscrivez une assurance temporaire pour obtenir une attestation immédiate, présentez vos documents, et récupérez votre véhicule. Plus vite vous agissez, moins les frais de fourrière s'accumulent.",
