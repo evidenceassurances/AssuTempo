@@ -489,15 +489,26 @@ function formatMMSS(ms) {
   return `${mm}:${ss}`;
 }
 
+/* Le dossier n'est "pret" que lorsque le lien de signature est REELLEMENT parti
+   chez le client. Le tarif, lui, est tranche plus tot (au moment ou le guichet
+   fixe les honoraires) : entre les deux, le dossier est finalise cote serveur
+   mais le client n'a encore rien recu. Confondre les deux ferait afficher "le
+   lien vient de partir par mail" avant qu'il ne soit parti. */
+const STATUTS_PRETS = ['signature_sent', 'paid'];
+
+function phaseDe(etat) {
+  if (!etat) return 'veille';
+  if (STATUTS_PRETS.includes(etat.status)) return 'pret';
+  if (etat.finalized || etat.remaining <= 0) return 'finalisation';
+  return 'veille';
+}
+
 function CompteurDeVeille({ reference, session }) {
   /* 'veille'      : le compteur tourne
-     'finalisation': les 30 minutes sont ecoulees sans signal, le compteur se fige
-     'pret'        : le guichet a clos le dossier, le lien de signature est parti */
-  const [phase, setPhase] = useState(() => {
-    if (session && session.finalized) return 'pret';
-    if (session && session.remaining <= 0) return 'finalisation';
-    return 'veille';
-  });
+     'finalisation': plus rien a decompter (30 minutes ecoulees, ou tarif deja
+                     tranche mais lien pas encore parti) : le compteur se fige
+     'pret'        : le lien de signature est parti chez le client */
+  const [phase, setPhase] = useState(() => phaseDe(session));
   const [restant, setRestant] = useState(() => (
     session ? Math.max(0, session.remaining) : VEILLE_MS
   ));
@@ -573,34 +584,32 @@ function CompteurDeVeille({ reference, session }) {
     };
     if (etat.sessionId) sessionIdRef.current = etat.sessionId;
 
-    if (etat.finalized) {
-      if (phaseRef.current !== 'pret') {
-        phaseRef.current = 'pret';
-        setPhase('pret');
+    setSignatureUrl(typeof etat.signatureUrl === 'string' ? etat.signatureUrl : '');
+    setTarifOffert(Boolean(etat.tarifPreferentiel));
+
+    /* Le serveur fait foi dans les deux sens : il peut aussi bien faire avancer
+       le dossier que ramener le compteur en veille si l'horloge locale avait
+       derive en avance. */
+    const suivante = phaseDe(etat);
+    if (suivante !== phaseRef.current) {
+      phaseRef.current = suivante;
+      setPhase(suivante);
+      if (suivante === 'pret') {
         trackEvent('guichet_signature_ready', {
           statut: etat.status,
           tarif_offert: Boolean(etat.tarifPreferentiel),
         });
       }
-      setSignatureUrl(typeof etat.signatureUrl === 'string' ? etat.signatureUrl : '');
-      setTarifOffert(Boolean(etat.tarifPreferentiel));
-      setRestant(Math.max(0, etat.remaining));
-      return;
     }
 
-    /* Le serveur fait foi dans les deux sens : s'il reste du temps, on repart en
-       veille meme si l'horloge locale avait deja fait basculer l'affichage. */
-    if (etat.remaining > 0 && phaseRef.current === 'finalisation') {
-      phaseRef.current = 'veille';
-      setPhase('veille');
-    }
-    tick();
+    if (suivante === 'veille') tick();
+    else setRestant(Math.max(0, etat.remaining));
   }, [tick]);
 
   /* Le recalage sur le serveur. Une panne reseau ne change rien a l'affichage :
      on retentera. Une session que le serveur ne connait plus (au-dela de son
-     TTL de 2 h) fige proprement le compteur au lieu de le laisser tourner dans
-     le vide ou de faire planter la page. */
+     TTL) fige proprement le compteur au lieu de le laisser tourner dans le vide
+     ou de faire planter la page. */
   const resync = useCallback(async () => {
     const id = sessionIdRef.current;
     if (!id) return;
@@ -742,15 +751,6 @@ function CompteurDeVeille({ reference, session }) {
           <p className="gdn-final-text">
             Le lien de signature vient de partir par mail et par SMS.
           </p>
-          {/* Le serveur a tranche : au-dela de 30 minutes, la majoration de nuit
-              saute. On l'annonce seulement quand la decision est prise, jamais
-              par anticipation. */}
-          {tarifOffert ? (
-            <p className="gdn-final-text" style={{ color: 'var(--gold-light)' }}>
-              Le guichet a mis plus de 30 minutes : la majoration de nuit vous est
-              offerte, déjà déduite de votre devis.
-            </p>
-          ) : null}
           {signatureUrl ? (
             <a
               href={signatureUrl}
@@ -764,6 +764,17 @@ function CompteurDeVeille({ reference, session }) {
             </a>
           ) : null}
         </div>
+
+        {/* La majoration offerte s'annonce des que le SERVEUR l'a tranchee, sans
+            attendre que le lien de signature parte : c'est la bonne nouvelle du
+            client, elle n'a pas a patienter. Jamais par anticipation en revanche,
+            uniquement sur decision du serveur. */}
+        {tarifOffert && !enVeille ? (
+          <p className="gdn-final-text" style={{ color: 'var(--gold-light)' }}>
+            Le guichet a mis plus de 30 minutes : la majoration de nuit vous est
+            offerte, déjà déduite de votre devis.
+          </p>
+        ) : null}
 
         {reference ? (
           <p className="gdn-final-ref">

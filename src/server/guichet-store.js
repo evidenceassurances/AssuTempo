@@ -232,7 +232,25 @@ async function startSession(reference) {
  * cloture ne rejoue pas la decision, elle renvoie celle qui a ete prise.
  */
 async function finalizeSession(session, { status, signatureUrl } = {}) {
-  if (session.finalized) return { session, rejoue: true };
+  /* Deja tranche : la decision tarifaire est GELEE, on ne la rejoue jamais.
+     En revanche l'avancement du dossier, lui, peut encore progresser.
+     C'est ce qui permet a la souscription automatisee de travailler en deux
+     temps : elle clot une premiere fois au moment ou elle fixe les honoraires
+     (c'est LA que le tarif doit etre connu, sinon la promesse est decidee mais
+     jamais appliquee), puis rappelle avec `signature_sent` quand le lien part
+     vraiment chez le client. Le prix facture et la decision enregistree ne
+     peuvent donc plus diverger. */
+  if (session.finalized) {
+    const avance = {
+      ...session,
+      status: status || session.status,
+      signatureUrl: signatureUrl || session.signatureUrl || '',
+    };
+    const bouge = avance.status !== session.status
+      || avance.signatureUrl !== session.signatureUrl;
+    if (bouge) await saveSession(avance, TTL_DECISION_S);
+    return { session: avance, rejoue: true };
+  }
 
   const finalizedAt = Date.now();
   const elapsed = Math.max(0, finalizedAt - session.startTime);
