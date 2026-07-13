@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
   Phone, MessageCircle, ShieldCheck, Clock, Lock, Globe,
-  FileText, CreditCard, Mail, ArrowRight,
+  FileText, CreditCard, Mail, ArrowRight, Moon,
 } from 'lucide-react';
 import { fadeUp } from '../animations';
 
@@ -370,8 +370,21 @@ function Pricing() {
               </p>
             </div>
 
-            <p style={{ fontSize: 12, color: 'var(--text-subtle)', lineHeight: 1.5, margin: 0, textAlign: 'center' }}>
-              Module de souscription sécurisé, opéré via notre partenaire assureur.
+            {/* Mention partenaire : nommee et verifiable (le tunnel de souscription
+                est bien opere par JL Assure), suivie de l'immatriculation ORIAS du
+                courtier. Lien reciproque vers le partenaire, sobre et en contexte. */}
+            <p style={{ fontSize: 12, color: 'var(--text-subtle)', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
+              Souscription opérée via notre partenaire assureur{' '}
+              <a
+                href="https://www.jlassure.com"
+                target="_blank"
+                rel="noopener"
+                style={{ color: 'var(--gold-light)', textDecoration: 'none', fontWeight: 600 }}
+              >
+                JL Assure
+              </a>
+              . AssuTempo est une marque d&apos;Evidence Assurances, courtier immatriculé à l&apos;ORIAS
+              sous le n° 20005719.
             </p>
           </m.aside>
         </div>
@@ -453,6 +466,56 @@ function Pricing() {
             ))}
           </div>
         </m.section>
+
+        {/* ---------- GUICHET DE NUIT (lien contextuel) ----------
+             Bloc 100 % statique (aucun etat initial invisible) : le texte et le
+             lien sont lus tels quels dans le HTML prerendu, sans JavaScript. */}
+        <section
+          style={{
+            maxWidth: 820,
+            margin: '64px auto 0',
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 16,
+            background: 'rgba(201,168,76,0.05)',
+            border: '1px solid var(--gold-border)',
+            borderRadius: 16,
+            padding: '24px 24px',
+          }}
+        >
+          <span
+            aria-hidden
+            style={{
+              flexShrink: 0,
+              width: 40, height: 40, borderRadius: 11,
+              background: 'var(--gold-dim)', border: '1px solid var(--gold-border)',
+              color: 'var(--gold-light)', display: 'grid', placeItems: 'center',
+            }}
+          >
+            <Moon size={19} strokeWidth={1.75} />
+          </span>
+          <div>
+            <h2 style={{ fontSize: 17, fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>
+              Une urgence la nuit ?
+            </h2>
+            <p style={{ fontSize: 14.5, color: 'var(--text-muted)', lineHeight: 1.7, margin: '0 0 12px' }}>
+              Après 21h et le dimanche, le Guichet de Nuit prépare votre contrat pendant que tout
+              est fermé.
+            </p>
+            <Link
+              to="/guichet-de-nuit"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 7,
+                fontSize: 14, fontWeight: 600, color: 'var(--gold)', textDecoration: 'none',
+              }}
+            >
+              Découvrir le Guichet de Nuit
+              <ArrowRight size={15} strokeWidth={2} aria-hidden />
+            </Link>
+          </div>
+        </section>
 
         {/* ---------- MAILLAGE INTERNE ---------- */}
         <m.section
