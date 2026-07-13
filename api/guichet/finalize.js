@@ -99,12 +99,13 @@ module.exports = async function handler(req, res) {
     }
 
     if (!session) {
-      /* Passe 2 h sans cloture, la session s'efface. Le dossier existe toujours
-         (le mail est dans la boite du guichet), mais le serveur n'a plus de
-         point de depart : il ne peut donc pas trancher. Ne jamais deviner. */
+      /* Passe 7 jours sans cloture, la session s'efface. Le dossier existe
+         toujours (le mail est dans la boite du guichet), mais le serveur n'a
+         plus de point de depart : il ne peut donc pas trancher. Ne jamais
+         deviner. */
       return json(res, 404, {
         error: 'session_introuvable',
-        message: "Aucune veille ouverte pour ce dossier (jamais ouverte, ou expiree au-dela de 2 h). Le tarif doit etre tranche a la main.",
+        message: "Aucune veille ouverte pour ce dossier (jamais ouverte, ou expiree au-dela de 7 jours). Le tarif doit etre tranche a la main.",
       });
     }
 

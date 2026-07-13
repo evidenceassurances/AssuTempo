@@ -180,9 +180,13 @@ Le jeton n'est pas posé. Voir la section 3.
 Mauvais jeton, ou en-tête `Authorization` absent.
 
 **`/finalize` répond 404 `session_introuvable`**
-La veille a expiré (au-delà de 2 h sans clôture, le serveur oublie la session).
-Le dossier existe toujours dans ta boîte mail, mais le serveur n'a plus de point
-de départ : il refuse de deviner. Tranche le tarif à la main.
+La veille a expiré (au-delà de 7 jours sans clôture, le serveur oublie la
+session). Le dossier existe toujours dans ta boîte mail, mais le serveur n'a plus
+de point de départ : il refuse de deviner. Tranche le tarif à la main.
+
+Ce délai est volontairement long : un dossier déposé à 2 h du matin doit pouvoir
+être clos à ton réveil, ou plusieurs jours plus tard si l'automatisation a
+planté. Un filet de sécurité qui expire pendant que tu dors ne sert à rien.
 
 **N'importe quel endpoint répond 503 `redis_not_configured`**
 Les variables Upstash ne sont pas sur cet environnement. Vérifie dans Vercel,
