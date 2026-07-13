@@ -80,8 +80,11 @@ Exclusions : les deux-roues (motos, scooters) ne sont PAS assurables ; les véhi
 - Pas de droit de rétractation une fois le contrat activé (les contrats RC véhicule ne sont pas éligibles au droit de rétractation prévu par le Code des assurances). Primes non remboursables.
 
 ## Carte grise (service distinct)
-- Démarche d'immatriculation 100 % en ligne, habilitée par le Ministère de l'Intérieur, via un partenaire agréé (France Titres / Certimat).
-- Certificat provisoire immédiat, carte grise livrée à domicile, CERFA préremplis et signature électronique, paiement des taxes possible en plusieurs fois.
+- Démarche d'immatriculation 100 % en ligne via la plateforme Certimat, opérée par EM Prestige Automobiles (SIRET 832 468 755 00018, RCS Versailles), partenaire France Titres (ANTS).
+- IMPORTANT, ne jamais se tromper là-dessus : Certimat est un intermédiaire technologique, PAS un professionnel habilité. Ne JAMAIS dire « Certimat est habilité par le Ministère de l'Intérieur », ni annoncer un numéro d'habilitation. Formulation exacte : Certimat met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres).
+- Certificat provisoire d'immatriculation (CPI) délivré le jour même une fois le dossier complet et les taxes réglées : il autorise à rouler en France pendant 1 mois. Carte grise définitive livrée à domicile ensuite.
+- CERFA préremplis et signature électronique, paiement des taxes possible en plusieurs fois.
+- Le CPI ne dispense pas d'assurance : la responsabilité civile reste obligatoire dès le premier trajet.
 
 ## Process de souscription
 1) Choisir la durée. 2) Renseigner le véhicule. 3) Renseigner le conducteur et les coordonnées. 4) Vérification du dossier par l'équipe. 5) Lien de paiement. 6) Signature, puis attestation immédiate.

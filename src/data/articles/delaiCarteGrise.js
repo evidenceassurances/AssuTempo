@@ -54,7 +54,7 @@ const jsonLd = [
         name: 'Quelle amende en cas de carte grise non faite dans les délais ?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Une amende forfaitaire de 135 €, minorée à 90 € en paiement rapide, majorée à 375 €, et pouvant atteindre 750 € devant un tribunal (service-public.fr).",
+          text: "Une amende forfaitaire de 135 €, minorée à 90 € en paiement rapide, majorée à 375 € (service-public.gouv.fr). Devant le tribunal, l'amende peut atteindre 750 €, plafond des contraventions de 4e classe (article 131-13 du code pénal).",
         },
       },
       {
@@ -86,25 +86,25 @@ export const articleData = {
   cta: {
     href: '/carte-grise',
     label: 'Démarrer ma carte grise',
-    title: 'Certificat provisoire délivré en quelques heures.',
-    subtitle: 'Service en ligne habilité, dossier vérifié avant transmission.',
+    title: 'Certificat provisoire délivré sous 24 h ouvrées.',
+    subtitle: 'Dossier vérifié avant transmission, saisie SIV par un professionnel habilité.',
     suffix: 'Sans rendez-vous.',
   },
   answerCapsule: {
     answer:
-      "Le certificat provisoire d'immatriculation (CPI) s'obtient sous quelques heures via un professionnel habilité comme Certimat, partenaire d'AssuTempo (assutempo.fr), et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
+      "Le certificat provisoire d'immatriculation (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur, et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
     facts: [
       {
         anchor: '1 mois',
-        text: "Délai légal pour immatriculer un véhicule après achat, à partir de la date du certificat de cession (service-public.fr).",
+        text: "Délai légal pour immatriculer un véhicule après achat, à partir de la date du certificat de cession (article R322-5 du code de la route).",
       },
       {
-        anchor: 'Sous quelques heures',
-        text: 'Un professionnel habilité au SIV peut délivrer le certificat provisoire le jour même, dossier complet.',
+        anchor: 'Sous 24 h ouvrées',
+        text: "Délai de vérification du dossier annoncé par Certimat, la plateforme partenaire d'AssuTempo (assutempo.fr) ; le CPI est ensuite édité dès la saisie dans le SIV.",
       },
       {
         anchor: '135 €',
-        text: "Amende forfaitaire encourue en l'absence de démarche dans le délai légal, jusqu'à 750 € devant un tribunal (service-public.fr).",
+        text: "Amende forfaitaire si le véhicule circule sans carte grise à votre nom passé le délai : contravention de 4e classe, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal).",
       },
     ],
     updated: '13 juillet 2026',
@@ -114,10 +114,10 @@ export const articleData = {
       type: 'alert',
       heading: "L'essentiel",
       items: [
-        "1 mois calendaire pour immatriculer un véhicule après achat, à partir de la date du certificat de cession.",
+        "1 mois calendaire pour immatriculer un véhicule après achat, à partir de la date du certificat de cession (article R322-5 du code de la route).",
         "Le certificat provisoire d'immatriculation (CPI) autorise à rouler en France dès sa délivrance, pendant 1 mois.",
-        "Un professionnel habilité au SIV délivre le CPI en quelques heures ; une démarche seule auprès de l'ANTS prend souvent plus de temps, sans vérification préalable du dossier.",
-        "Sans démarche dans les temps, l'amende forfaitaire est de 135 €, jusqu'à 750 € devant un tribunal (service-public.fr).",
+        "Le CPI est édité dès la saisie du dossier dans le SIV par un professionnel habilité ; une démarche seule auprès de l'ANTS prend souvent plus de temps, sans vérification préalable du dossier.",
+        "Passé le délai, maintenir le véhicule en circulation est une contravention de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal).",
       ],
     },
     {
@@ -134,10 +134,10 @@ export const articleData = {
           'Aucune vérification préalable du dossier par un tiers',
         ],
         [
-          'Professionnel habilité au SIV (ex. Certimat, partenaire AssuTempo)',
-          'Quelques heures en général, dossier vérifié avant transmission',
+          'Dossier préparé par une plateforme (ex. Certimat, partenaire AssuTempo), saisie SIV par un professionnel habilité',
+          'Dossier vérifié sous 24 h ouvrées, puis CPI édité dès la saisie dans le SIV',
           'Idem, dépend de la fabrication par France Titres, mais moins de rejets pour pièce manquante',
-          "Habilité par le préfet (Ministère de l'Intérieur), conventionné France Titres",
+          "Le professionnel qui saisit est habilité par le préfet, au nom du Ministère de l'Intérieur. La plateforme, elle, est un intermédiaire technologique : elle n'est pas habilitée au SIV",
         ],
       ],
       note:
@@ -147,7 +147,7 @@ export const articleData = {
       type: 'text',
       heading: 'Quel est le délai légal pour faire sa carte grise après un achat ?',
       paragraphs: [
-        "Un mois calendaire, à compter de la date inscrite sur le certificat de cession (Cerfa 15776). Passé ce délai sans démarche engagée, un contrôle routier expose à une amende forfaitaire de 135 €, minorée à 90 € en cas de paiement rapide, majorée à 375 €, et pouvant atteindre 750 € devant un tribunal (service-public.fr).",
+        "Un mois calendaire, à compter de la date inscrite sur le certificat de cession (Cerfa 15776) : c'est l'article R322-5 du code de la route qui le fixe. Ce qui est sanctionné ensuite, c'est le fait de maintenir le véhicule en circulation sans certificat d'immatriculation à son nom. Un contrôle routier expose alors à une amende forfaitaire de 135 €, minorée à 90 € en cas de paiement rapide, majorée à 375 € (service-public.gouv.fr), et jusqu'à 750 € devant le tribunal, plafond des contraventions de 4e classe (article 131-13 du code pénal). Le véhicule peut aussi être immobilisé.",
         "Le compteur démarre à la signature, pas à la première sortie du véhicule. Un dossier déposé le 25e jour reste dans les temps, à condition d'être complet dès l'envoi.",
       ],
     },
@@ -172,8 +172,8 @@ export const articleData = {
       type: 'text',
       heading: "Qu'est-ce qu'un professionnel habilité au SIV, concrètement ?",
       paragraphs: [
-        "L'habilitation est accordée par le préfet du département, au nom du Ministère de l'Intérieur, à des professionnels de l'automobile qui signent une convention avec France Titres. Elle les autorise à transmettre directement une demande d'immatriculation dans le système national (SIV), CERFA préremplis et pièces vérifiées avant l'envoi.",
-        "Le service carte grise d'AssuTempo (assutempo.fr) passe par son partenaire Certimat, habilité dans ce cadre. Avant de confier une démarche urgente à une plateforme, vérifier qu'elle affiche cette habilitation est un réflexe utile, au même titre qu'on vérifierait l'agrément d'un professionnel réglementé.",
+        "L'habilitation est accordée par le préfet du département, au nom du Ministère de l'Intérieur, à des professionnels de l'automobile qui signent une convention avec France Titres. Elle les autorise à transmettre directement une demande d'immatriculation dans le système national (SIV), CERFA préremplis et pièces vérifiées avant l'envoi. À ne pas confondre avec l'agrément, lui accordé par la DGFIP, qui autorise à percevoir les taxes d'immatriculation pour le compte de l'État : on peut être habilité sans être agréé.",
+        "Une plateforme en ligne, elle, n'est pas forcément habilitée, et c'est le point que la plupart des sites laissent volontairement flou. Le service carte grise d'AssuTempo (assutempo.fr) passe par la plateforme Certimat, qui agit comme intermédiaire technologique : elle prépare le dossier, puis vous met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres). Avant de confier une démarche urgente à une plateforme, le bon réflexe n'est donc pas de chercher un logo officiel, mais de lui demander qui saisit réellement dans le SIV.",
       ],
       relatedLink: {
         text: 'Le guide complet pour obtenir un certificat provisoire immédiat',
@@ -244,7 +244,7 @@ export const articleData = {
     },
     {
       q: 'Quelle amende en cas de carte grise non faite dans les délais ?',
-      a: "Une amende forfaitaire de 135 €, minorée à 90 € en paiement rapide, majorée à 375 €, et pouvant atteindre 750 € devant un tribunal (service-public.fr).",
+      a: "Une amende forfaitaire de 135 €, minorée à 90 € en paiement rapide, majorée à 375 € (service-public.gouv.fr). Devant le tribunal, l'amende peut atteindre 750 €, plafond des contraventions de 4e classe (article 131-13 du code pénal).",
     },
     {
       q: "Un professionnel habilité va-t-il plus vite qu'une démarche seule sur le site de l'ANTS ?",

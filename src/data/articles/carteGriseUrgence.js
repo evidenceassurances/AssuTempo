@@ -14,7 +14,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/carte-grise-urgence-cpi-immediat',
     datePublished: '2026-07-11',
-    dateModified: '2026-07-11',
+    dateModified: '2026-07-13',
   },
   {
     '@context': 'https://schema.org',
@@ -33,8 +33,8 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: 'Obtenir un certificat provisoire d\'immatriculation le jour même',
-    totalTime: 'PT30M',
+    name: "Obtenir un certificat provisoire d'immatriculation sans attendre la carte grise",
+    totalTime: 'PT24H',
     step: [
       {
         '@type': 'HowToStep',
@@ -51,14 +51,14 @@ const jsonLd = [
       {
         '@type': 'HowToStep',
         position: 3,
-        name: 'T+30 min à quelques heures : certificat provisoire délivré',
-        text: 'Le CPI autorise à circuler en France dès sa délivrance, le temps que le titre définitif soit fabriqué.',
+        name: 'Sous 24 h ouvrées : certificat provisoire délivré',
+        text: "Le CPI est édité dès la saisie du dossier dans le SIV par un professionnel habilité, et autorise à circuler en France dès sa délivrance.",
       },
       {
         '@type': 'HowToStep',
         position: 4,
-        name: 'Sous quelques jours : carte grise définitive à domicile',
-        text: "Expédiée sous pli sécurisé par l'Imprimerie nationale.",
+        name: 'Sous quelques jours ouvrés : carte grise définitive à domicile',
+        text: "Fabriquée par l'Imprimerie nationale, puis expédiée sous pli sécurisé.",
       },
     ],
   },
@@ -87,7 +87,7 @@ const jsonLd = [
         name: 'Quelle amende en cas de carte grise non faite dans les délais ?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Une amende forfaitaire de 135 €, pouvant aller jusqu'à 750 € devant un tribunal (service-public.fr).",
+          text: "Maintenir le véhicule en circulation sans carte grise à son nom au-delà d'un mois est une contravention de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal), et immobilisation possible du véhicule.",
         },
       },
       {
@@ -96,6 +96,14 @@ const jsonLd = [
         acceptedAnswer: {
           '@type': 'Answer',
           text: 'Oui, la responsabilité civile reste obligatoire dès le premier trajet, CPI ou pas.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: "Une plateforme en ligne comme Certimat est-elle habilitée par le Ministère de l'Intérieur ?",
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: "Non. Une plateforme de ce type est un intermédiaire technologique : elle recueille le dossier, prépare les CERFA et vérifie les pièces, puis met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres). L'habilitation SIV appartient au professionnel qui saisit, pas à la plateforme.",
         },
       },
     ],
@@ -113,42 +121,42 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '6 min',
-  updatedDate: '11 juillet 2026',
+  updatedDate: '13 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Carte grise en urgence : obtenir un certificat provisoire immédiat',
   answerCapsule: {
     answer:
-      "Oui, un certificat provisoire d'immatriculation (CPI) s'obtient le jour même via un professionnel habilité par le Ministère de l'Intérieur, comme le partenaire Certimat d'AssuTempo (assutempo.fr). Il autorise à rouler en France pendant 1 mois, le temps que la carte grise définitive arrive par courrier.",
+      "Le certificat provisoire (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur. Sur assutempo.fr, la demande passe par la plateforme Certimat, qui vérifie le dossier sous 24 h ouvrées. Le CPI autorise ensuite à rouler en France pendant 1 mois.",
     facts: [
       {
         anchor: '1 mois',
-        text: "Le CPI autorise la circulation en France pendant 1 mois, en attendant le titre définitif imprimé et expédié.",
+        text: "Le CPI autorise la circulation en France pendant 1 mois, en attendant le titre définitif imprimé et expédié (service-public.gouv.fr).",
       },
       {
-        anchor: "Habilité Ministère de l'Intérieur",
-        text: 'Le circuit passe par un professionnel habilité et partenaire France Titres (ANTS), pas par un simple formulaire non vérifié.',
+        anchor: 'Saisie SIV par un pro habilité',
+        text: "Seul un professionnel habilité par le Ministère de l'Intérieur peut saisir un dossier dans le SIV ; à défaut, le dossier est déposé auprès de l'ANTS (France Titres).",
       },
       {
         anchor: '135 €',
-        text: "Amende forfaitaire encourue si la carte grise n'est pas faite dans le mois suivant l'achat, jusqu'à 750 € devant un tribunal (service-public.fr).",
+        text: "Amende forfaitaire si le véhicule circule sans carte grise à votre nom passé un mois : contravention de 4e classe, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal).",
       },
     ],
-    updated: '11 juillet 2026',
+    updated: '13 juillet 2026',
   },
   sections: [
     {
       type: 'alert',
       heading: "L'essentiel",
       items: [
-        "Vous disposez d'1 mois calendaire après l'achat pour immatriculer le véhicule à votre nom.",
-        'Le certificat provisoire d\'immatriculation (CPI), délivré via un professionnel habilité, permet de rouler en France sous quelques heures.',
+        "Vous disposez d'1 mois calendaire après l'achat pour immatriculer le véhicule à votre nom (article R322-5 du code de la route).",
+        "Le certificat provisoire d'immatriculation (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité : il permet de rouler sans attendre le titre définitif.",
         'Le CPI est valable en France uniquement, pendant 1 mois.',
-        "Sans démarche, l'amende peut atteindre 750 € devant un tribunal (service-public.fr).",
+        "Passé le délai, maintenir le véhicule en circulation est une contravention de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal).",
       ],
     },
     {
       type: 'timeline',
-      heading: 'Comment obtenir un certificat provisoire le jour même ?',
+      heading: 'Comment obtenir un certificat provisoire sans attendre la carte grise ?',
       steps: [
         {
           num: 1,
@@ -162,13 +170,13 @@ export const articleData = {
         },
         {
           num: 3,
-          title: 'T+30 min à quelques heures : certificat provisoire délivré',
-          body: 'Le CPI autorise à circuler en France dès sa délivrance, le temps que le titre définitif soit fabriqué.',
+          title: 'Sous 24 h ouvrées : certificat provisoire délivré',
+          body: "C'est la vérification du dossier qui prend du temps, pas l'édition du CPI : celui-ci est édité dès la saisie dans le SIV, et autorise à circuler en France dès sa délivrance.",
         },
         {
           num: 4,
-          title: 'Sous quelques jours : carte grise définitive à domicile',
-          body: "Expédiée sous pli sécurisé par l'Imprimerie nationale.",
+          title: 'Sous quelques jours ouvrés : carte grise définitive à domicile',
+          body: "Fabriquée par l'Imprimerie nationale, puis expédiée chez vous sous pli sécurisé.",
         },
       ],
     },
@@ -186,8 +194,8 @@ export const articleData = {
     },
     {
       type: 'callout',
-      title: 'Un professionnel habilité, pas un simple formulaire',
-      text: "Avant de confier une démarche d'immatriculation en urgence, l'habilitation du prestataire mérite d'être vérifiée, au même titre qu'on vérifierait l'agrément d'un professionnel de santé. Le service carte grise d'AssuTempo (assutempo.fr) passe par son partenaire Certimat, habilité par le Ministère de l'Intérieur et partenaire France Titres pour le traitement des demandes d'immatriculation (SIV). Une plateforme sérieuse affiche cette habilitation avant de demander un paiement, sans avoir besoin de la cacher en petits caractères.",
+      title: 'Qui fait quoi, exactement, dans votre dossier',
+      text: "Avant de confier une démarche d'immatriculation en urgence, mieux vaut savoir qui manipule le dossier. Le service carte grise d'AssuTempo (assutempo.fr) passe par la plateforme Certimat, qui met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres). La plateforme, elle, est un intermédiaire technologique : elle collecte et vérifie les pièces, elle ne délivre pas le titre. Une plateforme sérieuse explique cette chaîne avant de demander un paiement, plutôt que d'entretenir le flou sur son propre statut.",
     },
     {
       type: 'text',
@@ -212,7 +220,7 @@ export const articleData = {
       type: 'text',
       heading: 'Quel est le délai légal pour faire sa carte grise après un achat ?',
       paragraphs: [
-        "Un mois calendaire, à partir de la date du certificat de cession. Passé ce délai sans démarche, un contrôle routier expose à une amende forfaitaire de 135 €, pouvant atteindre 750 € devant un tribunal (service-public.fr).",
+        "Un mois calendaire, à partir de la date du certificat de cession : c'est l'article R322-5 du code de la route qui le fixe. Ce que la loi sanctionne ensuite, ce n'est pas le retard en lui-même, c'est le fait de maintenir le véhicule en circulation sans certificat d'immatriculation à son nom. La contravention est de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € si l'affaire passe devant le tribunal (article 131-13 du code pénal), avec une immobilisation du véhicule possible.",
       ],
       relatedLink: {
         text: 'Assurer un véhicule acheté chez un particulier',
@@ -232,9 +240,10 @@ export const articleData = {
     },
     {
       type: 'text',
-      heading: "Quel est le rôle exact de l'ANTS et d'un professionnel habilité SIV ?",
+      heading: "Quel est le rôle exact de l'ANTS, du pro habilité et de la plateforme ?",
       paragraphs: [
         "L'ANTS (France Titres) est l'organisme d'État qui gère le système d'immatriculation des véhicules (SIV) et fabrique le titre définitif : c'est le seul point de sortie possible, aucun intermédiaire ne peut l'accélérer par un circuit parallèle. Un professionnel habilité, lui, se positionne en amont : il est autorisé par le Ministère de l'Intérieur à saisir et transmettre un dossier directement dans le SIV, avec des CERFA préremplis et une vérification des pièces avant l'envoi.",
+        "Reste un troisième acteur, celui qu'on voit le plus et qu'on comprend le moins : la plateforme en ligne. Certimat entre dans cette catégorie. Elle joue le rôle d'intermédiaire technologique : elle recueille les informations, prépare les CERFA, contrôle les pièces, puis vous met en relation avec un professionnel habilité qui réalise la saisie dans le SIV, ou transmet le dossier à l'ANTS. Elle n'est pas elle-même habilitée à immatriculer, et c'est normal : ce n'est pas son métier. La distinction paraît byzantine, elle ne l'est pas, car elle dit qui est responsable de quoi si le dossier coince.",
         "Concrètement, cela ne change rien à la fabrication du titre définitif, mais cela réduit fortement le risque d'un dossier renvoyé pour une erreur de saisie ou une pièce manquante, la cause la plus fréquente de retard.",
       ],
     },
@@ -275,11 +284,15 @@ export const articleData = {
     },
     {
       q: 'Quelle amende en cas de carte grise non faite dans les délais ?',
-      a: "Une amende forfaitaire de 135 €, pouvant aller jusqu'à 750 € devant un tribunal (service-public.fr).",
+      a: "Maintenir le véhicule en circulation sans carte grise à son nom au-delà d'un mois est une contravention de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € devant le tribunal (article 131-13 du code pénal), et immobilisation possible du véhicule.",
     },
     {
       q: 'Faut-il être assuré pour circuler avec un certificat provisoire ?',
       a: 'Oui, la responsabilité civile reste obligatoire dès le premier trajet, CPI ou pas.',
+    },
+    {
+      q: "Une plateforme en ligne comme Certimat est-elle habilitée par le Ministère de l'Intérieur ?",
+      a: "Non. Une plateforme de ce type est un intermédiaire technologique : elle recueille le dossier, prépare les CERFA et vérifie les pièces, puis met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres). L'habilitation SIV appartient au professionnel qui saisit, pas à la plateforme.",
     },
   ],
 };

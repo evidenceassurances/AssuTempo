@@ -135,7 +135,7 @@ export const articleData = {
       type: 'text',
       heading: "Et si le dossier ANTS est déjà en cours via un garage ou un mandataire ?",
       paragraphs: [
-        "Certains professionnels, garages, mandataires, plateformes habilitées comme Certimat, déposent la demande d'immatriculation à votre place. Dans ce cas, vous disposez souvent d'un accusé de dépôt ou d'un numéro de dossier avant même de recevoir le CPI. Ce justificatif ne remplace pas le certificat de cession pour l'assurance, mais il rassure sur l'avancement du côté administratif pendant que le contrat court sur la base du VIN.",
+        "Certains professionnels, garages, mandataires, plateformes en ligne comme Certimat, montent la demande d'immatriculation à votre place, la saisie dans le SIV étant faite par un professionnel habilité par le Ministère de l'Intérieur. Dans ce cas, vous disposez souvent d'un accusé de dépôt ou d'un numéro de dossier avant même de recevoir le CPI. Ce justificatif ne remplace pas le certificat de cession pour l'assurance, mais il rassure sur l'avancement du côté administratif pendant que le contrat court sur la base du VIN.",
         "Une nuance à connaître : tant que le CPI n'est pas délivré, le véhicule reste assuré sur la base des informations transmises au départ. Si une donnée change entre-temps, plaque définitive obtenue plus tôt que prévu par exemple, un simple message à l'assureur suffit à mettre le contrat à jour, sans repartir de zéro.",
       ],
     },

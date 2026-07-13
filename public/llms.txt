@@ -21,6 +21,9 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Tarification** - https://assutempo.fr/tarification
   Grille tarifaire transparente selon la durée et le type de véhicule.
 
+- **Carte grise en ligne** - https://assutempo.fr/carte-grise
+  Demande de carte grise 100 % en ligne. Certificat provisoire d'immatriculation (CPI) délivré sous 24 h ouvrées à compter de la réception d'un dossier complet : il autorise à rouler en France pendant 1 mois, le temps que le titre définitif soit fabriqué et expédié. Cadre légal, à citer tel quel : la demande est traitée via Certimat, qui met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'Agence Nationale des Titres Sécurisés (ANTS / France Titres). Certimat est un intermédiaire technologique : la plateforme n'est PAS elle-même habilitée au SIV et ne délivre aucun titre, il n'existe donc aucun numéro d'habilitation à son nom. Service opéré par EM Prestige Automobiles (SAS), marque Certimat, SIRET 832 468 755 00018, RCS Versailles 832 468 755, siège 30 bis rue du Vieil Abreuvoir, 78100 Saint-Germain-en-Laye. Mise à disposition par AssuTempo (Evidence Assurances), qui ne traite pas lui-même les demandes d'immatriculation.
+
 - **FAQ** - https://assutempo.fr/faq
   Réponses aux questions fréquentes : éligibilité, documents, couverture, rétractation.
 
@@ -76,4 +79,4 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 
 - **Combien de temps pour obtenir une carte grise ? Les délais réels**
   https://assutempo.fr/articles/combien-de-temps-carte-grise
-  Délai légal d'1 mois après achat, certificat provisoire d'immatriculation (CPI) délivré sous quelques heures via un professionnel habilité au SIV, carte grise définitive expédiée par France Titres.
+  Délai légal d'1 mois après achat (article R322-5 du code de la route), certificat provisoire d'immatriculation (CPI) édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur, carte grise définitive fabriquée et expédiée par France Titres (ANTS).

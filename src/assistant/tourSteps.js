@@ -63,7 +63,7 @@ export const TOUR_FLOWS = {
     sub: 'Immatriculation en ligne',
     icon: 'file',
     mobile: {
-      message: `Votre demande passe par notre partenaire agréé Certimat. Renseignez votre véhicule dans le module sécurisé pour obtenir votre carte grise. Je vous y emmène.`,
+      message: `Votre demande passe par notre partenaire Certimat. Renseignez votre véhicule dans le module sécurisé pour obtenir votre carte grise. Je vous y emmène.`,
       ctaLabel: 'Accéder à la carte grise',
       path: '/carte-grise',
       scrollTarget: '[data-assistant-target="carte-grise-iframe"]',
@@ -73,7 +73,7 @@ export const TOUR_FLOWS = {
         path: '/carte-grise',
         target: '[data-assistant-target="carte-grise-iframe"]',
         title: 'Votre demande de carte grise',
-        text: `Voici le module sécurisé, propulsé par notre partenaire agréé Certimat. Renseignez-y votre véhicule pour obtenir votre carte grise.`,
+        text: `Voici le module sécurisé, propulsé par notre partenaire Certimat. Renseignez-y votre véhicule pour obtenir votre carte grise.`,
         placement: 'top',
         frame: true,
       },

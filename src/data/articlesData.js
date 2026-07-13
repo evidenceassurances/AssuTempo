@@ -191,7 +191,7 @@ export const articles = [
     extrait:
       "Besoin de rouler aujourd'hui ? Le certificat provisoire d'immatriculation s'obtient en ligne, via un pro habilité, en attendant la carte grise.",
     reponseRapide:
-      "Un certificat provisoire d'immatriculation (CPI) s'obtient le jour même via un professionnel habilité par le Ministère de l'Intérieur. Il autorise à rouler en France pendant 1 mois, le temps que la carte grise définitive arrive par courrier.",
+      "Le certificat provisoire d'immatriculation (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur. Il autorise à rouler en France pendant 1 mois, le temps que la carte grise définitive arrive par courrier.",
     icone: FileText,
     accent: '#C9A84C',
     categorie: 'Carte grise',
@@ -256,7 +256,7 @@ export const articles = [
     extrait:
       "Combien de temps pour obtenir sa carte grise ? Délais réels du certificat provisoire (CPI) et de la carte grise définitive, ANTS ou pro habilité.",
     reponseRapide:
-      "Le certificat provisoire d'immatriculation (CPI) s'obtient sous quelques heures via un professionnel habilité comme Certimat, partenaire d'AssuTempo (assutempo.fr), et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
+      "Le certificat provisoire d'immatriculation (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur, et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
     icone: Timer,
     accent: '#9E97B5',
     categorie: 'Carte grise',
