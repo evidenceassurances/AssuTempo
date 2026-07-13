@@ -2,8 +2,12 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail } from 'lucide-react';
 import CrescentMoon from './ui/CrescentMoon';
 
+/* Le footer porte TOUTES les destinations, y compris celles retirees du header
+   (FAQ, Qui sommes-nous) : elles restent accessibles aux visiteurs comme aux
+   moteurs, sans encombrer la navigation principale. */
 const navLinks = [
   { label: 'Tarification', href: '/tarification' },
+  { label: 'Articles', href: '/articles' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Carte', href: '/carte' },
   { label: 'Assurance internationale', href: '/assurance-internationale' },

@@ -10,14 +10,16 @@ import CrescentMoon from './ui/CrescentMoon';
    en pastille (classe .gn-pill, index.css), avec son croissant de lune. */
 const GUICHET = { label: 'Le Guichet de Nuit', href: '/guichet-de-nuit' };
 
+/* Header : uniquement les destinations qui rapportent (tarification, carte
+   grise, international, carte) plus les articles, qui alimentent le SEO. FAQ
+   et Qui sommes-nous vivent dans le footer : ils informent, ils ne convertissent
+   pas, et ils encombraient une nav qui doit rester lisible. */
 const links = [
   { label: 'Tarification', href: '/tarification' },
-  { label: 'FAQ', href: '/faq' },
   { label: 'Articles', href: '/articles' },
   { label: 'Carte', href: '/carte' },
   { label: 'Carte grise', href: '/carte-grise' },
   { label: 'International', href: '/assurance-internationale' },
-  { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
 
 const mobileMenuVariants = {
@@ -238,12 +240,7 @@ function Navbar() {
       </AnimatePresence>
 
       <style>{`
-        /* Bascule vers le menu mobile a 1000px (et non 768px) : avec la
-           pastille du Guichet de Nuit, la nav compte 8 entrees et ne tient
-           plus sous ~900px. Mesure : 879px de contenu pour 792px de
-           conteneur a 800px de large, les liens passaient sous le CTA sans
-           que rien ne le signale (le body est en overflow-x: hidden). */
-        @media (max-width: 1000px) {
+        @media (max-width: 768px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
         }

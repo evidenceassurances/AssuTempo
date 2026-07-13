@@ -576,10 +576,15 @@ h1, h2 {
   padding: 13px 20px;
 }
 
-/* Le header porte 8 entrees : on resserre la nav avant la bascule mobile,
-   sinon la pastille chasse le CTA hors du conteneur. */
+/* La nav porte 6 entrees dont la pastille : on la resserre par paliers avant
+   la bascule mobile (768px), sinon la pastille chasse le CTA hors du
+   conteneur. Le body etant en overflow-x: hidden, un tel debordement ne
+   produit AUCUNE barre de scroll : il passe inapercu. Mesure a chaque palier. */
 @media (max-width: 1200px) {
   .nav-list { gap: 20px !important; }
   .nav-list .nav-link { font-size: 13px; }
   .nav-list .gn-pill { font-size: 12.5px; padding: 6px 11px 6px 8px; gap: 6px; }
+}
+@media (max-width: 900px) {
+  .nav-list { gap: 14px !important; }
 }
