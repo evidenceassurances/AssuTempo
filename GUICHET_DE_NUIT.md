@@ -80,6 +80,41 @@ redéploie : l'ancien cesse aussitôt de fonctionner.
 
 ---
 
+## 3 bis. Autoriser ton navigateur (une fois par mois)
+
+L'automatisation qui prépare les contrats la nuit pilote **Chrome sur ta
+machine**. Le bac à sable qui l'exécute ne peut ni lire ton jeton, ni joindre
+assutempo.fr : l'appel de clôture doit donc partir de la **page**.
+
+Poser le jeton dans le JavaScript ou dans le `localStorage` du site reviendrait à
+déposer, sur les pages que visitent tes clients, la clé qui décide de tes tarifs.
+Une seule faille suffirait à la voler.
+
+À la place, tu autorises ton navigateur **une fois**. Ouvre un onglet sur
+`https://assutempo.fr`, puis la console (Cmd + Option + J), et colle :
+
+```js
+await fetch('/api/guichet/admin-login', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ token: 'TON_JETON' }),
+}).then((r) => r.json());
+```
+
+Le serveur pose alors un cookie valable 30 jours. Ce cookie :
+
+- **n'est pas ton jeton** : c'est un identifiant aléatoire, révocable, sans
+  aucune valeur ailleurs ;
+- est **HttpOnly** : le JavaScript de la page ne peut pas le lire, donc aucune
+  injection de script ne peut le voler ;
+- est **SameSite=Strict** : aucun site tiers ne peut s'en servir à ton insu ;
+- ne part que vers `/api/guichet`, jamais vers le reste du site.
+
+À partir de là, l'automatisation clôture les dossiers depuis Chrome **sans aucun
+secret nulle part**. À refaire une fois par mois, ou si tu changes de navigateur.
+
+---
+
 ## 4. Clore un dossier (le geste quotidien)
 
 Quand tu envoies le contrat au client, clos le dossier. Tu as la référence
