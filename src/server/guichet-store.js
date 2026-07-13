@@ -37,10 +37,16 @@ const crypto = require('node:crypto');
    serveur : c'est elle qui fait foi pour la decision tarifaire. */
 const DUREE_VEILLE_MS = 30 * 60 * 1000;
 
-/* Filet de securite demande : une session non finalisee disparait au bout de
-   2 h. Une session finalisee, elle, porte une decision financiere : on la garde
+/* Duree de vie d'une session non finalisee.
+   Elle etait de 2 h. C'etait trop court, et c'etait dangereux : un dossier
+   depose a 2 h du matin, une automatisation qui plante, et la session avait
+   disparu avant qu'un humain ne se reveille. Impossible alors de savoir depuis
+   quand le client attendait, donc impossible de trancher le tarif autrement
+   qu'a la main. Un filet de securite doit survivre a une nuit, pas expirer en
+   plein milieu.
+   Une session finalisee, elle, porte une decision financiere : on la garde
    90 jours pour pouvoir la justifier a un client qui conteste. */
-const TTL_SESSION_S = 2 * 60 * 60;
+const TTL_SESSION_S = 7 * 24 * 60 * 60;
 const TTL_DECISION_S = 90 * 24 * 60 * 60;
 
 /* Journal des decisions, plafonne : de quoi relire les derniers dossiers sans
