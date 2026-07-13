@@ -21,17 +21,90 @@ const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 const WEB3FORMS_ACCESS_KEY = '1dbb89c0-8b09-4abe-888d-f89f001d0627';
 const GUICHET_EMAIL = 'guichetassutempo@gmail.com';
 
-/* ── Signal d'arret du compteur de veille ────────────────────────────────────
-   Endpoint de statut du dossier. Vide tant qu'il n'existe pas : le compteur
-   decompte alors les 30 minutes en pure reassurance, puis se fige. Des que
-   cette constante est renseignee, la scene finale sonde
-   `${GUICHET_STATUS_ENDPOINT}?ref=<reference>` toutes les 20 secondes et
-   attend un JSON { ref, status, ts, signature_url } dont le statut vaut
-   "pending", "quote_created", "signature_sent" ou "paid". */
-const GUICHET_STATUS_ENDPOINT = '';
+/* ── La veille de 30 minutes : le serveur fait foi ────────────────────────────
+   La promesse "devis en 30 minutes, sinon la majoration de nuit est offerte"
+   engage de l'argent. Elle ne peut donc pas reposer sur l'horloge du navigateur,
+   pour deux raisons :
+     - elle se falsifie (reculer l'horloge du telephone suffirait) ;
+     - elle ment (Safari iOS gele les timers d'un onglet passe en arriere-plan,
+       et le compteur repartait faux au retour).
+   Le serveur enregistre l'heure de depot et tranche seul (voir api/guichet/*).
+   Ce qui suit n'est QUE de l'habillage : un compteur cosmetique, recale sur le
+   serveur a chaque retour au premier plan. Il ne decide de rien.
+
+   Degradation : si la session serveur ne s'ouvre pas (Redis indisponible, hors
+   ligne), le compteur retombe sur un decompte local. C'est un affichage de
+   patience, pas une promesse chiffree, et la decision reste au serveur. Le
+   formulaire, lui, n'a jamais besoin de Redis : une panne de la base ne doit
+   jamais empecher une demande de partir au guichet. */
+const API_START = '/api/guichet/start';
+const API_STATUS = '/api/guichet/status';
 const POLL_INTERVAL_MS = 20000;
 const VEILLE_MS = 30 * 60 * 1000;
 const VEILLE_MINUTES = 30;
+
+/* Le sessionId rendu par le serveur, garde en local pour retrouver son dossier
+   apres un rechargement ou un onglet ferme par megarde. */
+const SESSION_STORAGE_KEY = 'guichet_session';
+
+function readStoredSession() {
+  try {
+    return window.localStorage.getItem(SESSION_STORAGE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+function writeStoredSession(value) {
+  try {
+    if (value) window.localStorage.setItem(SESSION_STORAGE_KEY, value);
+    else window.localStorage.removeItem(SESSION_STORAGE_KEY);
+  } catch {
+    /* navigation privee : la session vit alors le temps de l'onglet */
+  }
+}
+
+/* Ouvre la veille cote serveur. Ne leve jamais : un echec rend null et le
+   compteur retombe sur son decompte local. */
+async function ouvrirSession(reference) {
+  try {
+    const res = await fetch(API_START, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ reference }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && data.sessionId ? data : null;
+  } catch {
+    return null;
+  }
+}
+
+/* Relit l'etat d'une session aupres du serveur. Renvoie :
+     l'etat        si la session existe ;
+     'introuvable' si le serveur ne la connait plus (expiree) : le front doit
+                   alors nettoyer son localStorage, jamais planter ;
+     null          si la requete a echoue (hors ligne) : on retente plus tard,
+                   sans rien changer a l'affichage. */
+async function lireSession(sessionId) {
+  try {
+    const res = await fetch(`${API_STATUS}?sessionId=${encodeURIComponent(sessionId)}`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (res.status === 404) return 'introuvable';
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && data.found ? data : 'introuvable';
+  } catch {
+    return null;
+  }
+}
+
+/* Au-dela de ce delai apres la cloture, on ne rouvre plus le dossier tout seul
+   au chargement : le client qui revient une semaine plus tard veut faire une
+   NOUVELLE demande, pas relire l'ancienne. */
+const REPRISE_MAX_APRES_CLOTURE_MS = 6 * 60 * 60 * 1000;
 
 /* Web3Forms plafonne la taille totale d'une soumission : au-dela, la requete
    est rejetee cote serveur. On controle avant l'envoi pour rendre la main a
@@ -416,74 +489,186 @@ function formatMMSS(ms) {
   return `${mm}:${ss}`;
 }
 
-function CompteurDeVeille({ reference }) {
+function CompteurDeVeille({ reference, session }) {
   /* 'veille'      : le compteur tourne
-     'finalisation': 00:00 atteint sans signal, le compteur se fige
-     'pret'        : signal reel recu, le lien de signature est parti */
-  const [phase, setPhase] = useState('veille');
-  const [restant, setRestant] = useState(VEILLE_MS);
-  const [signatureUrl, setSignatureUrl] = useState('');
-  const phaseRef = useRef('veille');
+     'finalisation': les 30 minutes sont ecoulees sans signal, le compteur se fige
+     'pret'        : le guichet a clos le dossier, le lien de signature est parti */
+  const [phase, setPhase] = useState(() => {
+    if (session && session.finalized) return 'pret';
+    if (session && session.remaining <= 0) return 'finalisation';
+    return 'veille';
+  });
+  const [restant, setRestant] = useState(() => (
+    session ? Math.max(0, session.remaining) : VEILLE_MS
+  ));
+  const [signatureUrl, setSignatureUrl] = useState(() => (
+    (session && session.signatureUrl) || ''
+  ));
+  const [tarifOffert, setTarifOffert] = useState(() => (
+    Boolean(session && session.tarifPreferentiel)
+  ));
+  /* La ref DOIT partir de la phase initiale, pas de 'veille' en dur : sur une
+     reprise de dossier deja clos, le premier tick voyait phaseRef a 'veille',
+     calculait un temps ecoule negatif et retombait en 'finalisation'. Le client
+     qui rechargeait sa page apres reception du contrat lisait alors "votre
+     conseiller met la derniere main" au lieu de son lien de signature. */
+  const phaseRef = useRef(phase);
   const rootRef = useRef(null);
 
-  /* Le decompte : une echeance absolue plutot qu'une soustraction cumulee.
-     Un onglet endormi, un ecran verrouille, et le compteur reste juste. */
-  useEffect(() => {
-    trackEvent('guichet_countdown_start');
-    const deadline = Date.now() + VEILLE_MS;
-    let id = 0;
-    const tick = () => {
-      if (phaseRef.current === 'pret') return;
-      const reste = deadline - Date.now();
-      if (reste <= 0) {
-        setRestant(0);
+  /* L'ancre de temps.
+     `offset` est l'ecart mesure entre l'horloge du serveur et celle de cet
+     appareil : un telephone regle a l'heure de Tokyo, ou volontairement recule,
+     affiche malgre tout le bon compteur, parce qu'on ne lit jamais son heure
+     brute mais toujours Date.now() + offset.
+     Sans session serveur (Redis indisponible, hors ligne au moment du depot),
+     on retombe sur une ancre locale : le compteur reste un geste de patience, il
+     ne promet aucun chiffre que le serveur ne pourrait tenir. */
+  const ancreRef = useRef(null);
+  const sessionIdRef = useRef((session && session.sessionId) || '');
+
+  /* L'ancre se pose au premier tick, jamais pendant le rendu : lire l'horloge
+     en plein render est impur, et c'est precisement ce qui casse l'hydratation
+     (le serveur et le client ne verraient pas la meme heure). */
+  const ancre = useCallback(() => {
+    if (ancreRef.current === null) {
+      ancreRef.current = session
+        ? {
+          startTime: session.startTime,
+          duree: session.durationMs,
+          offset: session.serverNow - Date.now(),
+        }
+        : { startTime: Date.now(), duree: VEILLE_MS, offset: 0 };
+    }
+    return ancreRef.current;
+  }, [session]);
+
+  /* Le decompte, derive de l'heure SERVEUR reconstituee. Rien n'est cumule :
+     un onglet gele pendant 20 minutes repart juste au reveil. */
+  const tick = useCallback(() => {
+    /* Le decompte ne tourne QUE pendant la veille. Une fois fige (30 minutes
+       ecoulees, session oubliee par le serveur, ou dossier clos), il ne doit
+       plus rien reecrire : sinon le cadran repartait a 20:00 sous un titre qui
+       annoncait la finalisation. */
+    if (phaseRef.current !== 'veille') return;
+    const { startTime, duree, offset } = ancre();
+    const reste = duree - (Date.now() + offset - startTime);
+    if (reste <= 0) {
+      setRestant(0);
+      if (phaseRef.current !== 'finalisation') {
         phaseRef.current = 'finalisation';
         setPhase('finalisation');
-        clearInterval(id);
+      }
+      return;
+    }
+    setRestant(reste);
+  }, [ancre]);
+
+  const appliquerEtat = useCallback((etat) => {
+    /* On rearme l'ancre a chaque reponse : l'offset se recalcule, donc la derive
+       de l'horloge du telephone ne s'accumule jamais. */
+    ancreRef.current = {
+      startTime: etat.startTime,
+      duree: etat.durationMs,
+      offset: etat.serverNow - Date.now(),
+    };
+    if (etat.sessionId) sessionIdRef.current = etat.sessionId;
+
+    if (etat.finalized) {
+      if (phaseRef.current !== 'pret') {
+        phaseRef.current = 'pret';
+        setPhase('pret');
+        trackEvent('guichet_signature_ready', {
+          statut: etat.status,
+          tarif_offert: Boolean(etat.tarifPreferentiel),
+        });
+      }
+      setSignatureUrl(typeof etat.signatureUrl === 'string' ? etat.signatureUrl : '');
+      setTarifOffert(Boolean(etat.tarifPreferentiel));
+      setRestant(Math.max(0, etat.remaining));
+      return;
+    }
+
+    /* Le serveur fait foi dans les deux sens : s'il reste du temps, on repart en
+       veille meme si l'horloge locale avait deja fait basculer l'affichage. */
+    if (etat.remaining > 0 && phaseRef.current === 'finalisation') {
+      phaseRef.current = 'veille';
+      setPhase('veille');
+    }
+    tick();
+  }, [tick]);
+
+  /* Le recalage sur le serveur. Une panne reseau ne change rien a l'affichage :
+     on retentera. Une session que le serveur ne connait plus (au-dela de son
+     TTL de 2 h) fige proprement le compteur au lieu de le laisser tourner dans
+     le vide ou de faire planter la page. */
+  const resync = useCallback(async () => {
+    const id = sessionIdRef.current;
+    if (!id) return;
+    const etat = await lireSession(id);
+    if (etat === null) return;
+    if (etat === 'introuvable') {
+      writeStoredSession('');
+      if (phaseRef.current !== 'pret') {
+        phaseRef.current = 'finalisation';
+        setPhase('finalisation');
+        setRestant(0);
+      }
+      return;
+    }
+    appliquerEtat(etat);
+  }, [appliquerEtat]);
+
+  useEffect(() => {
+    trackEvent('guichet_countdown_start', { source: sessionIdRef.current ? 'serveur' : 'local' });
+
+    let tickId = 0;
+    let pollId = 0;
+
+    const arreter = () => {
+      if (tickId) clearInterval(tickId);
+      if (pollId) clearInterval(pollId);
+      tickId = 0;
+      pollId = 0;
+    };
+
+    /* Les timers ne tournent que page visible : un onglet en arriere-plan ne
+       consomme rien, et de toute facon Safari iOS les gelerait. */
+    const demarrer = () => {
+      arreter();
+      tick();
+      tickId = setInterval(tick, 1000);
+      pollId = setInterval(resync, POLL_INTERVAL_MS);
+    };
+
+    const surVisibilite = () => {
+      if (document.visibilityState !== 'visible') {
+        arreter();
         return;
       }
-      setRestant(reste);
-    };
-    tick();
-    id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  /* Le vrai signal. Sans endpoint, aucune requete n'est emise : le compteur
-     reste une promesse de patience, jamais une fausse information. Avec
-     endpoint, une erreur reseau est avalee en silence et retentee au tick
-     suivant : le client ne doit jamais voir une panne de sondage. */
-  useEffect(() => {
-    if (!GUICHET_STATUS_ENDPOINT || !reference) return undefined;
-    let alive = true;
-    let id = 0;
-
-    const sonde = async () => {
-      try {
-        const url = `${GUICHET_STATUS_ENDPOINT}?ref=${encodeURIComponent(reference)}`;
-        const res = await fetch(url, { headers: { Accept: 'application/json' } });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!alive || !data) return;
-        if (data.status === 'signature_sent' || data.status === 'paid') {
-          clearInterval(id);
-          phaseRef.current = 'pret';
-          setSignatureUrl(typeof data.signature_url === 'string' ? data.signature_url : '');
-          setPhase('pret');
-          trackEvent('guichet_signature_ready', { statut: data.status });
-        }
-      } catch {
-        /* hors ligne, endpoint muet, JSON casse : on retente dans 20 s */
-      }
+      /* Le moment critique : Safari iOS a pu geler cet onglet vingt minutes.
+         L'horloge locale seule afficherait n'importe quoi. On redemande donc
+         l'heure au serveur AVANT de relancer le decompte. */
+      resync();
+      demarrer();
     };
 
-    sonde();
-    id = setInterval(sonde, POLL_INTERVAL_MS);
+    /* Safari restaure parfois une page depuis son cache arriere (bfcache) sans
+       repasser par visibilitychange : pageshow rattrape ce cas. On ne reagit
+       qu'a `persisted`, la vraie restauration de cache. Sans ce filtre, pageshow
+       se declenchait aussi au chargement normal et lancait une seconde requete
+       de statut, redondante avec celle de la reprise, aussitot annulee. */
+    const surPageshow = (e) => { if (e.persisted) surVisibilite(); };
+
+    if (document.visibilityState === 'visible') demarrer();
+    document.addEventListener('visibilitychange', surVisibilite);
+    window.addEventListener('pageshow', surPageshow);
+
     return () => {
-      alive = false;
-      clearInterval(id);
+      arreter();
+      document.removeEventListener('visibilitychange', surVisibilite);
+      window.removeEventListener('pageshow', surPageshow);
     };
-  }, [reference]);
+  }, [tick, resync]);
 
   /* La scene finale remplace l'experience : on remonte en haut de page pour
      que le client la trouve sous ses yeux, sans defilement anime (le
@@ -557,6 +742,15 @@ function CompteurDeVeille({ reference }) {
           <p className="gdn-final-text">
             Le lien de signature vient de partir par mail et par SMS.
           </p>
+          {/* Le serveur a tranche : au-dela de 30 minutes, la majoration de nuit
+              saute. On l'annonce seulement quand la decision est prise, jamais
+              par anticipation. */}
+          {tarifOffert ? (
+            <p className="gdn-final-text" style={{ color: 'var(--gold-light)' }}>
+              Le guichet a mis plus de 30 minutes : la majoration de nuit vous est
+              offerte, déjà déduite de votre devis.
+            </p>
+          ) : null}
           {signatureUrl ? (
             <a
               href={signatureUrl}
@@ -736,6 +930,66 @@ function GuichetDeNuit() {
   /* ── Formulaire ───────────────────────────────────────────────────────── */
   const [formStatus, setFormStatus] = useState('idle');
   const formStartedRef = useRef(false);
+
+  /* La veille ouverte cote serveur. null tant qu'aucune demande n'est deposee,
+     ou si l'ouverture a echoue (le compteur retombe alors sur un decompte
+     local, purement cosmetique). */
+  const [session, setSession] = useState(null);
+
+  /* Reprise de dossier. Un rechargement de page, un onglet ferme par megarde,
+     et le client retrouve sa veille en cours plutot qu'un formulaire vide. La
+     lecture se fait apres le montage : le HTML prerendu reste identique cote
+     serveur et cote client, l'hydratation n'est pas cassee. */
+  useEffect(() => {
+    const id = readStoredSession();
+    if (!id) return undefined;
+    let vivant = true;
+
+    (async () => {
+      const etatSession = await lireSession(id);
+      if (!vivant || etatSession === null) return;
+
+      if (etatSession === 'introuvable') {
+        writeStoredSession('');
+        return;
+      }
+
+      /* Dossier clos depuis longtemps : le client qui revient veut faire une
+         NOUVELLE demande, pas relire l'ancienne. */
+      const cloture = etatSession.finalized && etatSession.finalizedAt;
+      if (cloture && etatSession.serverNow - etatSession.finalizedAt > REPRISE_MAX_APRES_CLOTURE_MS) {
+        writeStoredSession('');
+        return;
+      }
+
+      setSession(etatSession);
+      setFormStatus('success');
+      trackEvent('guichet_session_reprise');
+    })();
+
+    return () => { vivant = false; };
+  }, []);
+
+  /* Garde-fous d'erreur, portee page. Une promesse rejetee sans capture (une
+     sonde reseau coupee en plein vol, par exemple) remontait jusqu'a Safari, qui
+     finissait par afficher son ecran "un probleme recurrent est survenu" et
+     rechargeait en boucle. On absorbe, on mesure, on continue : une panne de
+     sondage ne doit jamais coucher la page. */
+  useEffect(() => {
+    const surRejet = (e) => {
+      e.preventDefault();
+      trackEvent('guichet_js_error', { type: 'rejet', message: String(e.reason || '').slice(0, 120) });
+    };
+    const surErreur = (e) => {
+      trackEvent('guichet_js_error', { type: 'erreur', message: String(e.message || '').slice(0, 120) });
+    };
+    window.addEventListener('unhandledrejection', surRejet);
+    window.addEventListener('error', surErreur);
+    return () => {
+      window.removeEventListener('unhandledrejection', surRejet);
+      window.removeEventListener('error', surErreur);
+    };
+  }, []);
   const [fileNames, setFileNames] = useState({ permis_recto: '', permis_verso: '', carte_grise: '' });
   const [filesTooBig, setFilesTooBig] = useState(false);
   const filesEventRef = useRef(false);
@@ -975,6 +1229,19 @@ function GuichetDeNuit() {
       /* Demande partie : la reference a joue son role de brouillon, la
          prochaine visite repartira sur un dossier neuf. */
       writeStoredRef('');
+
+      /* La demande est chez le guichet : la veille de 30 minutes s'ouvre, et
+         c'est l'horloge du SERVEUR qui l'enregistre. Cet appel vient APRES
+         l'envoi, jamais avant : le compteur ne peut donc pas demarrer sur une
+         demande qui n'est pas reellement partie.
+         Si l'ouverture echoue (Redis indisponible), on ne bloque rien : la
+         demande est bel et bien au guichet, seul le compteur se degrade. */
+      const ouverte = await ouvrirSession(referenceRef.current);
+      if (ouverte) {
+        writeStoredSession(ouverte.sessionId);
+        setSession(ouverte);
+      }
+
       setFormStatus('success');
     } catch {
       setFormStatus('error');
@@ -1049,7 +1316,12 @@ function GuichetDeNuit() {
 
       <div className="gdn-page">
 
-        {succes ? <CompteurDeVeille reference={reference} /> : null}
+        {succes ? (
+          <CompteurDeVeille
+            reference={(session && session.reference) || reference}
+            session={session}
+          />
+        ) : null}
 
         {/* ══ L'experience : une seule piste, sept scenes, trois mises en page.
                Le contenu est identique dans les trois modes : les scenes sont

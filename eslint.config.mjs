@@ -31,7 +31,7 @@ export default [
   // Fichiers CommonJS (fonctions Vercel, module hybride de l'assistant) :
   // globals Node pour module/require/process
   {
-    files: ['api/**/*.js', 'src/assistant/knowledge.js'],
+    files: ['api/**/*.js', 'src/assistant/knowledge.js', 'src/server/**/*.js'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
 ]
