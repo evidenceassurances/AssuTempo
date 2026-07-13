@@ -244,6 +244,10 @@ export const articleData = {
         "La cible principale, ce sont les conducteurs déjà titulaires d'un permis depuis un moment : le produit vise en priorité les profils de plus de 20 ans, avec un permis obtenu depuis au moins 2 ans. Un jeune conducteur ou un profil avec des antécédents lourds (résiliation pour sinistre, suspension récente) peut ne pas être éligible au tarif affiché en ligne.",
         "Autre point utile : la plupart des véhicules courants entrent dans le parcours, voiture, utilitaire léger, camping-car ou moto selon les formules. Le formulaire de devis indique l'éligibilité avant tout paiement, ce qui évite une mauvaise surprise après coup.",
       ],
+      relatedLink: {
+        text: "Voir la grille de prix complète, de 1 à 90 jours",
+        href: '/articles/prix-assurance-auto-temporaire',
+      },
     },
     {
       type: 'text',

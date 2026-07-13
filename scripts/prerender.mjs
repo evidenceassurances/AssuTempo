@@ -51,6 +51,8 @@ const ROUTES = [
   '/articles/assurance-temporaire-malus',
   '/articles/assurance-temporaire-attestation-immediate',
   '/articles/assurer-voiture-sans-carte-grise',
+  '/articles/prix-assurance-auto-temporaire',
+  '/articles/combien-de-temps-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -97,6 +99,8 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-temporaire-malus':                    'src/data/articles/assuranceMalus.js',
   '/articles/assurance-temporaire-attestation-immediate':    'src/data/articles/attestationImmediate.js',
   '/articles/assurer-voiture-sans-carte-grise':               'src/data/articles/assurerSansCarteGrise.js',
+  '/articles/prix-assurance-auto-temporaire':                 'src/data/articles/prixAssuranceAutoTemporaire.js',
+  '/articles/combien-de-temps-carte-grise':                   'src/data/articles/delaiCarteGrise.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -256,6 +260,8 @@ const ROUTE_MODULES = {
   '/articles/assurance-temporaire-malus':                    'src/pages/articles/AssuranceMalus.jsx',
   '/articles/assurance-temporaire-attestation-immediate':    'src/pages/articles/AttestationImmediate.jsx',
   '/articles/assurer-voiture-sans-carte-grise':               'src/pages/articles/AssurerSansCarteGrise.jsx',
+  '/articles/prix-assurance-auto-temporaire':                 'src/pages/articles/PrixAssuranceAutoTemporaire.jsx',
+  '/articles/combien-de-temps-carte-grise':                   'src/pages/articles/DelaiCarteGrise.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/cookies':                 'src/pages/Cookies.jsx',
