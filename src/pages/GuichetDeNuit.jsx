@@ -224,7 +224,7 @@ const STEPS = [
 /* ── Reassurance de l'equipe de nuit ─────────────────────────────────────── */
 const REASSURANCE = [
   { Icon: ShieldCheck, label: 'Intermédiaire immatriculé à l\'ORIAS sous le n° 20005719' },
-  { Icon: Landmark, label: 'Le risque est porté par un assureur agréé, via notre partenaire de souscription' },
+  { Icon: Landmark, label: 'Assureur porteur du risque via notre partenaire de souscription JL Assure' },
   { Icon: MailCheck, label: 'Attestation officielle envoyée par mail dès le paiement' },
 ];
 
