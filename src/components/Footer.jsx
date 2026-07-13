@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail } from 'lucide-react';
+import CrescentMoon from './ui/CrescentMoon';
 
 const navLinks = [
   { label: 'Tarification', href: '/tarification' },
@@ -159,9 +160,17 @@ function Footer() {
           </p>
         </div>
 
-        {/* Col 2 - Navigation */}
+        {/* Col 2 - Navigation. Le Guichet de Nuit ouvre la colonne, en pastille :
+            c'est la seule offre du site disponible en dehors des horaires. */}
         <div>
           <span style={colLabel}>Navigation</span>
+          <Link to="/guichet-de-nuit" className="gn-pill gn-pill-footer">
+            <CrescentMoon uid="footer" size={15} />
+            Le Guichet de Nuit
+          </Link>
+          <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: '8px 0 18px', lineHeight: 1.5 }}>
+            21h - 9h du lundi au samedi,<br />dimanche toute la journée.
+          </p>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {navLinks.map((link) => (
               <FooterLink key={link.href} to={link.href}>{link.label}</FooterLink>

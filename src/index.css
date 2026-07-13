@@ -520,3 +520,66 @@ h1, h2 {
     padding-bottom: 40px;
   }
 }
+
+/* ── Le Guichet de Nuit : pastille de nuit (header + footer) ─────────────
+   Traitee comme une signature, pas comme un lien de nav de plus : fond de
+   nuit, liseré doré, croissant de lune. Animations en opacity et transform
+   uniquement. Ces regles vivent ici (index.css) car le CSS critique est
+   inline dans chaque page prerendue : la pastille est stylee des le premier
+   paint, sans attendre le JS. */
+.gn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--gold-border);
+  background: linear-gradient(135deg, rgba(5,6,15,0.95) 0%, rgba(16,18,38,0.78) 100%);
+  color: var(--gold-light);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.25s var(--ease-out),
+              transform 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
+}
+.gn-pill:hover {
+  border-color: var(--gold-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(232,201,122,0.08);
+}
+.gn-pill.active { border-color: var(--gold); color: #fff; }
+.gn-pill:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+
+/* Le halo du croissant respire : opacity seule, jamais de filter */
+@keyframes gn-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+.gn-halo { animation: gn-glow 4.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-halo { animation: none; opacity: 0.6; }
+  .gn-pill:hover { transform: none; }
+}
+
+/* Variante footer : legerement plus compacte */
+.gn-pill-footer { font-size: 13px; padding: 6px 13px 6px 9px; }
+
+/* Variante menu mobile : pleine largeur, en tete de menu */
+.gn-pill-mobile {
+  width: 100%;
+  justify-content: center;
+  font-size: 16px;
+  padding: 13px 20px;
+}
+
+/* Le header porte 8 entrees : on resserre la nav avant la bascule mobile,
+   sinon la pastille chasse le CTA hors du conteneur. */
+@media (max-width: 1200px) {
+  .nav-list { gap: 20px !important; }
+  .nav-list .nav-link { font-size: 13px; }
+  .nav-list .gn-pill { font-size: 12.5px; padding: 6px 11px 6px 8px; gap: 6px; }
+}

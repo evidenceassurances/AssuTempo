@@ -3,6 +3,12 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
+import CrescentMoon from './ui/CrescentMoon';
+
+/* Le Guichet de Nuit n'est pas un lien de nav comme les autres : il porte une
+   offre que personne d'autre ne propose. Il sort donc de la liste et se rend
+   en pastille (classe .gn-pill, index.css), avec son croissant de lune. */
+const GUICHET = { label: 'Le Guichet de Nuit', href: '/guichet-de-nuit' };
 
 const links = [
   { label: 'Tarification', href: '/tarification' },
@@ -103,7 +109,7 @@ function Navbar() {
         </Link>
 
         {/* Nav desktop */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="nav-desktop">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="nav-desktop nav-list">
           {links.map((link) => (
             <NavLink
               key={link.href}
@@ -114,6 +120,13 @@ function Navbar() {
               {link.label}
             </NavLink>
           ))}
+          <NavLink
+            to={GUICHET.href}
+            className={({ isActive }) => `gn-pill${isActive ? ' active' : ''}`}
+          >
+            <CrescentMoon uid="nav" size={16} />
+            {GUICHET.label}
+          </NavLink>
         </nav>
 
         {/* CTA desktop */}
@@ -164,7 +177,11 @@ function Navbar() {
               top: 68,
               left: 0,
               right: 0,
-              background: 'rgba(8,7,6,0.97)',
+              /* Fond PLEIN : a 0.97 d'alpha, le hero transparaissait derriere
+                 les liens du menu (meme cause que le header scrolle mobile,
+                 corrige en juillet). Aucun backdrop-filter ici : interdit sur
+                 mobile (gel Safari). */
+              background: '#0A0A0A',
               borderTop: '1px solid var(--gold-border)',
               padding: '32px 32px 40px',
               display: 'flex',
@@ -173,6 +190,17 @@ function Navbar() {
               zIndex: 99,
             }}
           >
+            {/* En tete du menu mobile : c'est l'entree qu'on doit voir en premier */}
+            <m.div variants={mobileLinkVariants}>
+              <NavLink
+                to={GUICHET.href}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) => `gn-pill gn-pill-mobile${isActive ? ' active' : ''}`}
+              >
+                <CrescentMoon uid="navmob" size={18} />
+                {GUICHET.label}
+              </NavLink>
+            </m.div>
             {links.map((link) => (
               <m.div key={link.href} variants={mobileLinkVariants}>
                 <NavLink
@@ -210,7 +238,12 @@ function Navbar() {
       </AnimatePresence>
 
       <style>{`
-        @media (max-width: 768px) {
+        /* Bascule vers le menu mobile a 1000px (et non 768px) : avec la
+           pastille du Guichet de Nuit, la nav compte 8 entrees et ne tient
+           plus sous ~900px. Mesure : 879px de contenu pour 792px de
+           conteneur a 800px de large, les liens passaient sous le CTA sans
+           que rien ne le signale (le body est en overflow-x: hidden). */
+        @media (max-width: 1000px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
         }
