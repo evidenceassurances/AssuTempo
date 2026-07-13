@@ -47,7 +47,7 @@ function Urgence() {
           </h1>
           <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 28 }}>
             Les demandes en urgence, la nuit et le dimanche, passent désormais par
-            le Guichet de Nuit. Vous y êtes conduit automatiquement.
+            le Guichet de Nuit. Vous y êtes conduit dans un instant.
           </p>
           <Link to="/guichet-de-nuit" className="btn-gold">
             Accéder au Guichet de Nuit
