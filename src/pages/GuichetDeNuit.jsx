@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { jsonLd } from '../lib/seo';
 import { trackEvent } from '../lib/analytics';
+import AnswerCapsule from '../components/articles/AnswerCapsule';
 import Footer from '../components/Footer';
 
 /* Endpoint Web3Forms du Guichet de Nuit. L'envoi est multipart (FormData, pas
@@ -99,6 +100,33 @@ function heureParis() {
   }
 }
 
+const DATE_MAJ = '13 juillet 2026';
+const DATE_MAJ_ISO = '2026-07-13';
+
+/* ── Reponse en bref (AEO) ────────────────────────────────────────────────
+   Bloc "La reponse en bref" du site : reponse directe de 50 mots max, faits
+   ancres, date de mise a jour. C'est ce bloc que les moteurs de reponse
+   (ChatGPT, Perplexity, AI Overviews) citent le plus volontiers, et il est
+   100 % statique dans le HTML prerendu. */
+const CAPSULE = {
+  answer: "Oui. Le Guichet de Nuit AssuTempo prépare votre assurance auto temporaire de 21h à 9h du lundi au samedi, et le dimanche toute la journée. Vous déposez votre demande avec 3 photos, le devis part dans les 30 minutes, et l'attestation arrive par mail dès le paiement.",
+  facts: [
+    {
+      anchor: '21h à 9h',
+      text: "La souscription en ligne classique ferme à 21h en semaine et à 20h le samedi. Le Guichet de Nuit prend le relais sur ces heures, et le dimanche sans interruption.",
+    },
+    {
+      anchor: '30 minutes',
+      text: 'Le devis part dans les 30 minutes suivant le dépôt de la demande complète, photos comprises. Au-delà, la majoration de nuit est offerte.',
+    },
+    {
+      anchor: 'ORIAS 20005719',
+      text: "Evidence Assurances, intermédiaire immatriculé à l'ORIAS. Le risque est porté par un assureur agréé, via notre partenaire de souscription.",
+    },
+  ],
+  updated: DATE_MAJ,
+};
+
 /* ── Comment ca marche : 3 etapes ────────────────────────────────────────── */
 const STEPS = [
   {
@@ -179,6 +207,18 @@ const FAQ = [
     q: 'Que se passe-t-il si je ne signe pas le devis ?',
     a: "Rien. Le devis est sans engagement : si vous ne signez pas, aucun contrat n'est émis et rien ne vous est facturé.",
   },
+  {
+    q: 'Le Guichet de Nuit fonctionne-t-il le dimanche et les jours fériés ?',
+    a: "Oui. Le dimanche, le guichet assure la permanence toute la journée, et les jours fériés suivent le même régime. Ce sont justement les journées où la souscription en ligne classique est fermée.",
+  },
+  {
+    q: "J'achète une voiture un samedi soir : puis-je être assuré avant le trajet retour ?",
+    a: "Oui, c'est l'un des cas les plus fréquents au guichet. Déposez votre demande dès que le vendeur vous remet les clés : l'assurance doit couvrir le véhicule dès le premier mètre parcouru, y compris pour rentrer chez vous.",
+  },
+  {
+    q: "Faut-il un relevé d'information pour passer par le guichet ?",
+    a: "Non, aucun relevé d'information n'est exigé pour souscrire une assurance temporaire. Le formulaire vous demande simplement si vous avez été résilié ou si vous avez eu un retrait de permis : cette information sert à établir un devis juste, et la réponse du guichet vous parvient avant tout paiement.",
+  },
 ];
 
 /* ── Donnees structurees (SEO / GEO) ─────────────────────────────────────── */
@@ -229,6 +269,43 @@ const JSONLD_FAQ = {
     name: f.q,
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
+};
+
+/* HowTo : les 3 etapes affichees, decrites pour les moteurs de reponse. Le
+   schema reprend EXACTEMENT le tableau STEPS rendu a l'ecran. */
+const JSONLD_HOWTO = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: "Souscrire une assurance auto temporaire la nuit",
+  description: "Obtenir une assurance auto temporaire entre 21h et 9h, ou le dimanche, avec le Guichet de Nuit AssuTempo.",
+  totalTime: 'PT30M',
+  step: STEPS.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.title,
+    text: s.body,
+    url: `https://assutempo.fr/guichet-de-nuit#etape-${i + 1}`,
+  })),
+};
+
+/* WebPage : rattache la page a l'entite et au site, et porte la date de
+   derniere mise a jour (signal de fraicheur lu par les moteurs de reponse).
+   speakable designe les blocs a lire a voix haute : le titre et la reponse
+   en bref, tous deux statiques dans le HTML prerendu. */
+const JSONLD_WEBPAGE = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://assutempo.fr/guichet-de-nuit#webpage',
+  url: 'https://assutempo.fr/guichet-de-nuit',
+  name: 'Assurance temporaire la nuit : Le Guichet de Nuit AssuTempo',
+  inLanguage: 'fr-FR',
+  isPartOf: { '@id': 'https://assutempo.fr/#website' },
+  about: { '@id': 'https://assutempo.fr/#organization' },
+  dateModified: DATE_MAJ_ISO,
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', '[aria-label="La réponse en bref"]'],
+  },
 };
 
 const DUREES = ['1', '2', '3', '5', '7', '10', '15', '20', '30', '60', '90'];
@@ -358,8 +435,10 @@ function GuichetDeNuit() {
         <meta property="og:url" content="https://assutempo.fr/guichet-de-nuit" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
+        <script type="application/ld+json">{jsonLd(JSONLD_WEBPAGE)}</script>
         <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB)}</script>
         <script type="application/ld+json">{jsonLd(JSONLD_SERVICE)}</script>
+        <script type="application/ld+json">{jsonLd(JSONLD_HOWTO)}</script>
         <script type="application/ld+json">{jsonLd(JSONLD_FAQ)}</script>
       </Helmet>
 
@@ -522,6 +601,80 @@ function GuichetDeNuit() {
           </div>
         </section>
 
+        {/* ── A bis. La reponse en bref (AEO) : le bloc que les moteurs de
+               reponse citent. Statique, juste sous le hero. ──────────────── */}
+        <section style={{ padding: '0 24px 72px' }}>
+          <div style={{ maxWidth: 860, margin: '0 auto' }}>
+            <AnswerCapsule capsule={CAPSULE} />
+          </div>
+        </section>
+
+        {/* ── A ter. Reponses directes aux questions de nuit. Les H2 sont de
+               vraies questions, chaque reponse commence par la reponse. ──── */}
+        <section style={{ padding: '0 24px 88px' }}>
+          <div style={{ maxWidth: 760, margin: '0 auto' }}>
+            <m.div {...reveal()}>
+              <h2 style={{ ...h2Style, fontSize: 'clamp(1.4rem, 2.8vw, 1.9rem)' }}>
+                Peut-on souscrire une assurance temporaire la nuit ?
+              </h2>
+              <p style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 36px' }}>
+                Oui. Le Guichet de Nuit reçoit les demandes de 21h à 9h du lundi au samedi,
+                et sans interruption le dimanche. Vous remplissez le formulaire, vous joignez
+                vos trois photos, un conseiller prépare le contrat et vous renvoie un devis
+                dans les 30 minutes. La signature se fait en ligne, l&apos;attestation arrive
+                par mail dès le paiement : rien à imprimer, personne à rappeler le lendemain
+                matin.
+              </p>
+            </m.div>
+
+            <m.div {...reveal()}>
+              <h2 style={{ ...h2Style, fontSize: 'clamp(1.4rem, 2.8vw, 1.9rem)' }}>
+                Et le dimanche, ou un jour férié ?
+              </h2>
+              <p style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 36px' }}>
+                Le guichet assure la permanence toute la journée du dimanche, et les jours
+                fériés suivent le même régime. Ce sont précisément les journées où la
+                souscription en ligne classique est fermée, et où une sortie de fourrière
+                ou une vente entre particuliers vous laisse devant un véhicule que vous
+                n&apos;avez pas le droit de conduire.
+              </p>
+            </m.div>
+
+            <m.div {...reveal()}>
+              <h2 style={{ ...h2Style, fontSize: 'clamp(1.4rem, 2.8vw, 1.9rem)' }}>
+                Que faire en attendant votre attestation ?
+              </h2>
+              <p style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 16px' }}>
+                Ne prenez pas le volant. L&apos;assurance de responsabilité civile est
+                obligatoire dès le premier mètre parcouru, même pour un trajet de cinq
+                minutes, et rouler sans assurance expose à une amende et à
+                l&apos;immobilisation du véhicule. Tant que votre attestation n&apos;est
+                pas arrivée, laissez le véhicule où il est : c&apos;est le conseil le moins
+                cher que nous puissions vous donner.
+              </p>
+              <Link
+                to="/articles/controle-sans-assurance-risques-amende"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '10px 16px',
+                  background: 'var(--gold-glow)',
+                  border: '1px solid var(--gold-border)',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: 'var(--gold)',
+                  textDecoration: 'none',
+                }}
+              >
+                Ce que risque un conducteur non assuré
+                <ArrowRight size={14} strokeWidth={2} aria-hidden="true" />
+              </Link>
+            </m.div>
+          </div>
+        </section>
+
         {/* ── B. Comment ca marche ────────────────────────────────────────── */}
         <section style={{ padding: '88px 24px' }}>
           <div style={{ maxWidth: 1060, margin: '0 auto' }}>
@@ -534,7 +687,7 @@ function GuichetDeNuit() {
 
             <div className="gdn-steps">
               {STEPS.map((step, i) => (
-                <m.div key={step.num} {...reveal(i * 0.12)} style={{ ...cardBase, textAlign: 'center' }}>
+                <m.div key={step.num} id={`etape-${i + 1}`} {...reveal(i * 0.12)} style={{ ...cardBase, textAlign: 'center' }}>
                   <div style={{
                     width: 54,
                     height: 54,
@@ -1018,7 +1171,7 @@ function GuichetDeNuit() {
             </div>
 
             <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-subtle)', margin: '40px 0 0' }}>
-              Page mise à jour le 13 juillet 2026.
+              Page mise à jour le {DATE_MAJ}.
             </p>
           </div>
         </section>

@@ -8,14 +8,23 @@
       "_icons-DGV_OSp1.js"
     ]
   },
-  "_ArticleLayout-DA3wmw19.js": {
-    "file": "assets/ArticleLayout-DA3wmw19.js",
+  "_AnswerCapsule-B33hnFOa.js": {
+    "file": "assets/AnswerCapsule-B33hnFOa.js",
+    "name": "AnswerCapsule",
+    "imports": [
+      "_rolldown-runtime-Cyuzqnbw.js",
+      "_framer-DPWtvxwd.js"
+    ]
+  },
+  "_ArticleLayout-D7z53Ike.js": {
+    "file": "assets/ArticleLayout-D7z53Ike.js",
     "name": "ArticleLayout",
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
       "index.html",
       "_react-vendor-B45kknb5.js",
       "_Footer-meEk6Pjx.js",
+      "_AnswerCapsule-B33hnFOa.js",
       "_ScrollProgress-DxL2lDnN.js",
       "_AccordionItem-DdIgHRR-.js",
       "_useScrollReveal-DUwktGqn.js",
@@ -93,7 +102,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-6otejiyR.js",
+    "file": "assets/index-mjaXviiS.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -142,7 +151,7 @@
     ]
   },
   "src/assistant/AssistantAssutempo.jsx": {
-    "file": "assets/AssistantAssutempo-GjlLITQE.js",
+    "file": "assets/AssistantAssutempo-l9nFo_SF.js",
     "name": "AssistantAssutempo",
     "src": "src/assistant/AssistantAssutempo.jsx",
     "isDynamicEntry": true,
@@ -167,7 +176,7 @@
     ]
   },
   "src/pages/About.jsx": {
-    "file": "assets/About-CdlFl493.js",
+    "file": "assets/About-B8yHhdKO.js",
     "name": "About",
     "src": "src/pages/About.jsx",
     "isDynamicEntry": true,
@@ -181,7 +190,7 @@
     ]
   },
   "src/pages/Articles.jsx": {
-    "file": "assets/Articles-BVG8IiDD.js",
+    "file": "assets/Articles-BvX2gXhw.js",
     "name": "Articles",
     "src": "src/pages/Articles.jsx",
     "isDynamicEntry": true,
@@ -196,7 +205,7 @@
     ]
   },
   "src/pages/AssuranceInternationale.jsx": {
-    "file": "assets/AssuranceInternationale-Bl9HssAK.js",
+    "file": "assets/AssuranceInternationale-BxaFWw-7.js",
     "name": "AssuranceInternationale",
     "src": "src/pages/AssuranceInternationale.jsx",
     "isDynamicEntry": true,
@@ -212,7 +221,7 @@
     ]
   },
   "src/pages/CGV.jsx": {
-    "file": "assets/CGV-B9CFinAM.js",
+    "file": "assets/CGV-BXHXbX9O.js",
     "name": "CGV",
     "src": "src/pages/CGV.jsx",
     "isDynamicEntry": true,
@@ -226,7 +235,7 @@
     ]
   },
   "src/pages/Carte.jsx": {
-    "file": "assets/Carte-DbQmhaja.js",
+    "file": "assets/Carte-CmVJXXLg.js",
     "name": "Carte",
     "src": "src/pages/Carte.jsx",
     "isDynamicEntry": true,
@@ -243,7 +252,7 @@
     ]
   },
   "src/pages/CarteGrise.jsx": {
-    "file": "assets/CarteGrise-Brpe1xc1.js",
+    "file": "assets/CarteGrise-DAXv97DM.js",
     "name": "CarteGrise",
     "src": "src/pages/CarteGrise.jsx",
     "isDynamicEntry": true,
@@ -260,7 +269,7 @@
     ]
   },
   "src/pages/Cookies.jsx": {
-    "file": "assets/Cookies-BCKIwFwe.js",
+    "file": "assets/Cookies-rEeRIp3s.js",
     "name": "Cookies",
     "src": "src/pages/Cookies.jsx",
     "isDynamicEntry": true,
@@ -275,7 +284,7 @@
     ]
   },
   "src/pages/Faq.jsx": {
-    "file": "assets/Faq-DGEa4oD0.js",
+    "file": "assets/Faq-CFCtddJa.js",
     "name": "Faq",
     "src": "src/pages/Faq.jsx",
     "isDynamicEntry": true,
@@ -288,7 +297,7 @@
     ]
   },
   "src/pages/GuichetDeNuit.jsx": {
-    "file": "assets/GuichetDeNuit-D-588wsQ.js",
+    "file": "assets/GuichetDeNuit-pYqYvgF5.js",
     "name": "GuichetDeNuit",
     "src": "src/pages/GuichetDeNuit.jsx",
     "isDynamicEntry": true,
@@ -297,12 +306,13 @@
       "index.html",
       "_react-vendor-B45kknb5.js",
       "_Footer-meEk6Pjx.js",
+      "_AnswerCapsule-B33hnFOa.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/HomeSections.jsx": {
-    "file": "assets/HomeSections-D2MNPxQh.js",
+    "file": "assets/HomeSections-D40DpqO_.js",
     "name": "HomeSections",
     "src": "src/pages/HomeSections.jsx",
     "isDynamicEntry": true,
@@ -318,7 +328,7 @@
     ]
   },
   "src/pages/NotFound.jsx": {
-    "file": "assets/NotFound-BojiXUfP.js",
+    "file": "assets/NotFound-BfiXS3iO.js",
     "name": "NotFound",
     "src": "src/pages/NotFound.jsx",
     "isDynamicEntry": true,
@@ -333,7 +343,7 @@
     ]
   },
   "src/pages/Pricing.jsx": {
-    "file": "assets/Pricing-CKoFjhis.js",
+    "file": "assets/Pricing-CRc2Uxsg.js",
     "name": "Pricing",
     "src": "src/pages/Pricing.jsx",
     "isDynamicEntry": true,
@@ -347,7 +357,7 @@
     ]
   },
   "src/pages/Urgence.jsx": {
-    "file": "assets/Urgence-B74ZyUlc.js",
+    "file": "assets/Urgence-CPsk3kyU.js",
     "name": "Urgence",
     "src": "src/pages/Urgence.jsx",
     "isDynamicEntry": true,
@@ -360,212 +370,212 @@
     ]
   },
   "src/pages/articles/AcheterVehiculeParticulier.jsx": {
-    "file": "assets/AcheterVehiculeParticulier-B7yQ3CwK.js",
+    "file": "assets/AcheterVehiculeParticulier-CFWQkFM9.js",
     "name": "AcheterVehiculeParticulier",
     "src": "src/pages/articles/AcheterVehiculeParticulier.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/AssuranceImmediateEnLigne.jsx": {
-    "file": "assets/AssuranceImmediateEnLigne-GtCWUp9T.js",
+    "file": "assets/AssuranceImmediateEnLigne-CDthUFtI.js",
     "name": "AssuranceImmediateEnLigne",
     "src": "src/pages/articles/AssuranceImmediateEnLigne.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   },
   "src/pages/articles/AssuranceMalus.jsx": {
-    "file": "assets/AssuranceMalus-Dsjr_O0N.js",
+    "file": "assets/AssuranceMalus-HIjLlo4z.js",
     "name": "AssuranceMalus",
     "src": "src/pages/articles/AssuranceMalus.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/AssuranceTrajetRetourAchat.jsx": {
-    "file": "assets/AssuranceTrajetRetourAchat-DUMSUWUX.js",
+    "file": "assets/AssuranceTrajetRetourAchat-B57ybT6e.js",
     "name": "AssuranceTrajetRetourAchat",
     "src": "src/pages/articles/AssuranceTrajetRetourAchat.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/AssuranceVehiculeEtranger.jsx": {
-    "file": "assets/AssuranceVehiculeEtranger-BqD47cMa.js",
+    "file": "assets/AssuranceVehiculeEtranger-BHm-SrXa.js",
     "name": "AssuranceVehiculeEtranger",
     "src": "src/pages/articles/AssuranceVehiculeEtranger.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/AssurerSansCarteGrise.jsx": {
-    "file": "assets/AssurerSansCarteGrise-CMVOMzwR.js",
+    "file": "assets/AssurerSansCarteGrise-DUYbTzGq.js",
     "name": "AssurerSansCarteGrise",
     "src": "src/pages/articles/AssurerSansCarteGrise.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   },
   "src/pages/articles/AttestationImmediate.jsx": {
-    "file": "assets/AttestationImmediate-C40Lw6_U.js",
+    "file": "assets/AttestationImmediate-B-GYBTlW.js",
     "name": "AttestationImmediate",
     "src": "src/pages/articles/AttestationImmediate.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   },
   "src/pages/articles/CarteGrise.jsx": {
-    "file": "assets/CarteGrise-C3TC6YhD.js",
+    "file": "assets/CarteGrise-h4EBby6z.js",
     "name": "CarteGrise",
     "src": "src/pages/articles/CarteGrise.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/CarteGriseUrgence.jsx": {
-    "file": "assets/CarteGriseUrgence-C5dqG6O6.js",
+    "file": "assets/CarteGriseUrgence-DsDbJJTg.js",
     "name": "CarteGriseUrgence",
     "src": "src/pages/articles/CarteGriseUrgence.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   },
   "src/pages/articles/CombienDeJoursAssurance.jsx": {
-    "file": "assets/CombienDeJoursAssurance-BvMcS9L7.js",
+    "file": "assets/CombienDeJoursAssurance-CuzWFxq-.js",
     "name": "CombienDeJoursAssurance",
     "src": "src/pages/articles/CombienDeJoursAssurance.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/ControleSansAssurance.jsx": {
-    "file": "assets/ControleSansAssurance-CihfFF_r.js",
+    "file": "assets/ControleSansAssurance-B5oTA2tW.js",
     "name": "ControleSansAssurance",
     "src": "src/pages/articles/ControleSansAssurance.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   },
   "src/pages/articles/ConvoyageProfessionnel.jsx": {
-    "file": "assets/ConvoyageProfessionnel-tRnbfXOb.js",
+    "file": "assets/ConvoyageProfessionnel-05mkVPhJ.js",
     "name": "ConvoyageProfessionnel",
     "src": "src/pages/articles/ConvoyageProfessionnel.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/EssaiVehicule.jsx": {
-    "file": "assets/EssaiVehicule-q7_DPPD2.js",
+    "file": "assets/EssaiVehicule-Cs6HKqeK.js",
     "name": "EssaiVehicule",
     "src": "src/pages/articles/EssaiVehicule.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/PretVehicule.jsx": {
-    "file": "assets/PretVehicule-DPDZUmBc.js",
+    "file": "assets/PretVehicule-BIZCs2yI.js",
     "name": "PretVehicule",
     "src": "src/pages/articles/PretVehicule.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/ResilieAssureur.jsx": {
-    "file": "assets/ResilieAssureur-DmDfDXuV.js",
+    "file": "assets/ResilieAssureur-CVFz0lwQ.js",
     "name": "ResilieAssureur",
     "src": "src/pages/articles/ResilieAssureur.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/UtilitaireDemenagement.jsx": {
-    "file": "assets/UtilitaireDemenagement-CfRm0Iat.js",
+    "file": "assets/UtilitaireDemenagement-B-h28TPh.js",
     "name": "UtilitaireDemenagement",
     "src": "src/pages/articles/UtilitaireDemenagement.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/VehiculeProcheDecede.jsx": {
-    "file": "assets/VehiculeProcheDecede-BAFAGUfT.js",
+    "file": "assets/VehiculeProcheDecede-B7t8brwX.js",
     "name": "VehiculeProcheDecede",
     "src": "src/pages/articles/VehiculeProcheDecede.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js",
       "_icons-DGV_OSp1.js"
     ]
   },
   "src/pages/articles/VoitureImmobilisee.jsx": {
-    "file": "assets/VoitureImmobilisee-CXfTJ19E.js",
+    "file": "assets/VoitureImmobilisee-Ck5X33-W.js",
     "name": "VoitureImmobilisee",
     "src": "src/pages/articles/VoitureImmobilisee.jsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-Cyuzqnbw.js",
-      "_ArticleLayout-DA3wmw19.js",
+      "_ArticleLayout-D7z53Ike.js",
       "_framer-DPWtvxwd.js"
     ]
   }
