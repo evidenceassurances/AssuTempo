@@ -57,18 +57,6 @@ const JOURNAL_MAX = 500;
 const keySession = (id) => `gn:session:${id}`;
 const keyReference = (ref) => `gn:ref:${ref}`;
 
-/* Sessions d'administration du guichet (voir api/guichet/admin-login.js).
-   Elles existent parce que la souscription automatisee tourne dans le navigateur
-   Chrome d'Ayoub, et non dans un serveur : le bac a sable qui la pilote ne peut
-   ni lire une variable d'environnement, ni joindre assutempo.fr. L'appel doit
-   donc partir de la page. Or poser le jeton d'administration dans du JavaScript
-   ou dans le localStorage du site public reviendrait a exposer, sur les pages
-   que visitent les clients, la cle qui decide des tarifs.
-   D'ou ce detour : Ayoub s'authentifie UNE fois, le serveur pose un cookie
-   HttpOnly (illisible par le JavaScript, donc involable par une injection de
-   script), et l'automatisation n'a plus jamais besoin d'aucun secret. */
-const keyAdmin = (id) => `gn:admin:${id}`;
-const TTL_ADMIN_S = 30 * 24 * 60 * 60;
 
 /**
  * Lit la configuration Redis. Leve une erreur explicite (et non un TypeError
@@ -298,27 +286,10 @@ async function finalizeSession(session, { status, signatureUrl } = {}) {
   return { session: finalisee, rejoue: false };
 }
 
-/**
- * Ouvre une session d'administration et renvoie son identifiant, destine a
- * partir dans un cookie HttpOnly. La valeur du cookie n'est PAS le jeton : c'est
- * un identifiant aleatoire, revocable, sans valeur en dehors de cette base.
- * Meme intercepte, il ne revele pas GUICHET_ADMIN_TOKEN.
- */
-async function ouvrirSessionAdmin() {
-  const id = crypto.randomBytes(32).toString('hex');
-  await command('SET', keyAdmin(id), '1', 'EX', TTL_ADMIN_S);
-  return { id, ttlS: TTL_ADMIN_S };
-}
-
-async function sessionAdminValide(id) {
-  if (!id || !/^[a-f0-9]{64}$/.test(id)) return false;
-  return (await command('GET', keyAdmin(id))) === '1';
-}
 
 module.exports = {
   DUREE_VEILLE_MS,
   TTL_SESSION_S,
-  TTL_ADMIN_S,
   command,
   rateLimited,
   etat,
@@ -326,6 +297,4 @@ module.exports = {
   getSessionByReference,
   startSession,
   finalizeSession,
-  ouvrirSessionAdmin,
-  sessionAdminValide,
 };

@@ -63,18 +63,6 @@ function origineStricte(req) {
   }
 }
 
-function lireCookie(req, nom) {
-  const brut = req.headers.cookie || '';
-  for (const morceau of brut.split(';')) {
-    const i = morceau.indexOf('=');
-    if (i === -1) continue;
-    if (morceau.slice(0, i).trim() === nom) {
-      return decodeURIComponent(morceau.slice(i + 1).trim());
-    }
-  }
-  return '';
-}
-
 function json(res, code, corps) {
   res.setHeader('content-type', 'application/json; charset=utf-8');
   /* Une session est propre a un client et evolue seconde par seconde : jamais
@@ -98,12 +86,13 @@ function erreurServeur(res, err) {
   return json(res, 503, { error: 'storage_unavailable' });
 }
 
+/* Le cookie d'administration et sa signature vivent dans
+   src/server/admin-cookie.js : c'est un sujet a part entiere (HMAC, expiration,
+   glissement), il n'a pas sa place au milieu des aides HTTP generiques. */
 module.exports = {
   ALLOWED_ORIGINS,
-  COOKIE_ADMIN: 'gn_admin',
   originAutorisee,
   origineStricte,
-  lireCookie,
   json,
   erreurServeur,
 };

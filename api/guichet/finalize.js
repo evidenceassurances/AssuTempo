@@ -31,78 +31,65 @@
  * elle renvoie celle qui a deja ete prise (rejoue: true).
  */
 
-const crypto = require('node:crypto');
 const {
-  getSession, getSessionByReference, finalizeSession, sessionAdminValide, DUREE_VEILLE_MS,
+  getSession, getSessionByReference, finalizeSession, DUREE_VEILLE_MS,
 } = require('../../src/server/guichet-store.js');
+const { json, erreurServeur, origineStricte } = require('../../src/server/http.js');
 const {
-  json, erreurServeur, origineStricte, lireCookie, COOKIE_ADMIN,
-} = require('../../src/server/http.js');
+  secrets, jetonValide, valeurValide, poserCookie, lireCookie,
+} = require('../../src/server/admin-cookie.js');
 
 const SESSION_ID_RE = /^[a-f0-9]{32}$/;
 const REFERENCE_RE = /^GN-\d{8}-\d{4}-[A-Z0-9]{4}$/;
 const STATUTS = ['pending', 'quote_created', 'signature_sent', 'paid'];
-
-/* Comparaison a duree constante : une comparaison naive (===) fuit le jeton
-   caractere par caractere, mesure apres mesure. */
-function jetonValide(fourni, attendu) {
-  const a = Buffer.from(String(fourni));
-  const b = Buffer.from(String(attendu));
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
-}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return json(res, 405, { error: 'method_not_allowed' });
   }
 
-  const attendu = process.env.GUICHET_ADMIN_TOKEN;
-  if (!attendu) {
-    console.error('[guichet] GUICHET_ADMIN_TOKEN absent : /finalize reste ferme.');
-    return json(res, 503, {
-      error: 'admin_token_missing',
-      message: "GUICHET_ADMIN_TOKEN n'est pas configure : la cloture est desactivee. "
-        + 'Le poser dans Vercel > Settings > Environment Variables, puis redeployer.',
-    });
+  let jeton;
+  let cle;
+  try {
+    ({ jeton, cle } = secrets());
+  } catch (err) {
+    /* Fail-closed : sans secrets, la porte reste fermee. Le message nomme la
+       variable absente, jamais sa valeur. */
+    console.error('[guichet]', err.message);
+    return json(res, 503, { error: 'admin_config_missing', message: err.message });
   }
 
   /* Deux voies d'authentification, et deux seulement.
 
      1. Jeton Bearer : pour un appel depuis un terminal ou un serveur (le skill
         du depot, sur la machine d'Ayoub).
-     2. Cookie de session d'administration : pour un appel depuis le navigateur
-        Chrome, ou tourne la souscription automatisee. Le bac a sable qui la
-        pilote ne peut ni lire une variable d'environnement, ni joindre
-        assutempo.fr : l'appel doit donc partir de la page. Le cookie evite d'y
-        deposer le jeton, qui serait alors volable par une injection de script.
+     2. Cookie signe : pour un appel depuis le navigateur Chrome, ou tourne la
+        souscription automatisee. Son bac a sable ne peut ni lire une variable
+        d'environnement, ni joindre assutempo.fr : l'appel doit donc partir de la
+        page. Le cookie evite d'y deposer le jeton, qui serait alors volable par
+        une injection de script.
 
-     Quand l'authentification vient du cookie, l'origine est verifiee
-     STRICTEMENT : le navigateur joint le cookie tout seul, donc une page tierce
-     pourrait sinon declencher une cloture a l'insu d'Ayoub. Le SameSite=Strict
-     du cookie l'empeche deja ; ceci est la seconde serrure. */
+     Sur la voie cookie, l'origine est verifiee STRICTEMENT : le navigateur joint
+     le cookie tout seul, donc une page tierce pourrait sinon declencher une
+     cloture a l'insu d'Ayoub. Le SameSite=Lax l'empeche deja sur un POST venu
+     d'ailleurs ; ceci est la seconde serrure. */
   const entete = req.headers.authorization || '';
   const bearer = entete.startsWith('Bearer ') ? entete.slice(7) : '';
 
-  let autorise = false;
-  try {
-    if (bearer) {
-      autorise = jetonValide(bearer, attendu);
-    } else {
-      const cookie = lireCookie(req, COOKIE_ADMIN);
-      /* La validation du cookie interroge Redis : une panne de la base doit
-         rendre une erreur propre, jamais une exception nue. */
-      autorise = Boolean(cookie)
-        && origineStricte(req)
-        && await sessionAdminValide(cookie);
-    }
-  } catch (err) {
-    return erreurServeur(res, err);
-  }
+  const autorise = bearer
+    ? jetonValide(bearer, jeton)
+    : (origineStricte(req) && valeurValide(lireCookie(req), cle));
 
   if (!autorise) {
     return json(res, 401, { error: 'unauthorized' });
   }
+
+  /* Le cookie GLISSE : chaque cloture reussie le repose pour 30 jours. Tant que
+     le guichet travaille au moins une fois par mois, il ne meurt jamais et Ayoub
+     n'a plus a se reconnecter. Pose des maintenant : la reponse peut sortir par
+     plusieurs chemins plus bas, et un renouvellement oublie ferait expirer le
+     cookie en silence, une nuit, sans que personne ne comprenne pourquoi. */
+  poserCookie(res, cle);
 
   const corps = req.body || {};
   const sessionId = typeof corps.sessionId === 'string' ? corps.sessionId.trim() : '';
