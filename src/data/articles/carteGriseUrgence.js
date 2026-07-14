@@ -223,8 +223,8 @@ export const articleData = {
         "Un mois calendaire, à partir de la date du certificat de cession : c'est l'article R322-5 du code de la route qui le fixe. Ce que la loi sanctionne ensuite, ce n'est pas le retard en lui-même, c'est le fait de maintenir le véhicule en circulation sans certificat d'immatriculation à son nom. La contravention est de 4e classe : 135 € d'amende forfaitaire, jusqu'à 750 € si l'affaire passe devant le tribunal (article 131-13 du code pénal), avec une immobilisation du véhicule possible.",
       ],
       relatedLink: {
-        text: 'Assurer un véhicule acheté chez un particulier',
-        href: '/articles/assurer-vehicule-achete-chez-particulier',
+        text: 'Rouler sans carte grise à son nom : les risques réels',
+        href: '/articles/rouler-sans-carte-grise-a-son-nom',
       },
     },
     {

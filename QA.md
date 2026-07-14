@@ -275,3 +275,56 @@ Chaque article invite explicitement le lecteur a revérifier les montants sensib
 ## Verdict
 
 Lot conforme : build propre, lint propre, portique vert, 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et liens entrants en place (avec correctif a la source du piege checklist/relatedLink, beneficiant aussi a un article deja publie), sitemap a jour, faits YMYL sources et dates avec invitation a revérification. Pret pour Pull Request et controle du Gate automatique.
+
+---
+
+# QA : mission GEO 2 articles, jeune conducteur + rouler sans carte grise a son nom (14 juillet 2026)
+
+Deux nouveaux articles ajoutes selon le pattern existant, en reponse a deux gaps de citation IA identifies dans la mission (issue #29) :
+
+- `assurance-auto-temporaire-jeune-conducteur` (requete cible « assurance auto temporaire jeune conducteur ») : article de segment qui affiche en clair la condition reelle d'eligibilite AssuTempo (20 ans minimum, permis de plus de 2 ans, reprise telle quelle depuis `src/pages/Faq.jsx` et `src/assistant/knowledge.js`, aucune valeur inventee) et propose une alternative concrete en cas de refus (contrat annuel avec surprime jeune conducteur, conducteur secondaire). Format demande : FAQ longue traine + encart eligibilite (checklist + schema de decision `decisionsplit`).
+- `rouler-sans-carte-grise-a-son-nom` (requete cible « rouler sans carte grise a son nom ») : decryptage reglementaire des sanctions (amende, immobilisation, plaques WW) et de la solution legale (certificat provisoire immediat via Certimat sur `/carte-grise`), volontairement distinct du retroplanning chronometre deja publie (`combien-de-temps-carte-grise`). Inclut le tableau de risque par situation demande par la mission et le duo croise assurance/carte grise obligatoire.
+
+## Ecart signale vs la mission (CLAUDE.md prioritaire)
+
+La mission mentionne un maillage vers des pages qui n'existent pas dans le routeur du site (`/assurance-auto-temporaire-1-jour`, `/faire-sa-carte-grise`, `/le-certificat-provisoire-dimmatriculation-plaques-ww`, `/liste-des-situations-necessitant-une-assurance-temporaire`, `/importer-exporter-un-vehicule-etranger`) : verifie dans `src/AppShell.jsx` (ROUTE_TABLE), aucune de ces routes n'est cablee. Conformement a la regle « si une instruction de mission contredit CLAUDE.md, CLAUDE.md gagne » (section 10), seules des pages reellement existantes ont ete liees, pour eviter tout lien casse. Par ailleurs, `Pricing.jsx` (`/tarification`) et `CarteGrise.jsx` (`/carte-grise`) sont des zones interdites (section 10 et `scripts/quality-gate.mjs`) : le lien entrant demande depuis ces pages a ete pose depuis l'article existant le plus pertinent a la place (voir Liens entrants ci-dessous), sans toucher aux deux fichiers proteges.
+
+## Controles effectues
+
+- **Tirets interdits (U+2013 / U+2014)** : recherche sur l'ensemble du diff hors `dist/` (fichiers de donnees, `App.jsx`, `AppShell.jsx`, `entry-server.jsx`, `articlesData.js`, `llms.txt`, articles sources modifies) -> 0 occurrence.
+- **Expressions bannies** (section 8 du CLAUDE.md) : recherche insensible a la casse sur le meme perimetre -> aucun resultat.
+- **Aucune nouvelle dependance npm** : `package.json` non modifie ; `package-lock.json` regenere par `npm install --legacy-peer-deps` (bruit de metadonnees `libc` sans changement de dependance) explicitement ecarte du commit (`git checkout -- package-lock.json`). Deux icones lucide-react supplementaires utilisees (`GraduationCap`, `Clock`, `AlertOctagon`), meme dependance existante.
+- **Answer Capsule** : presente en tete des deux articles, rendue statiquement (`grep "réponse en bref"` -> present sur les deux pages du HTML prerendu), chacune avec 3 faits dates et sourcables.
+- **FAQ** : 4 questions autoportantes par article (`grep "Questions fréquentes"` -> present sur les deux pages), JSON-LD `FAQPage` genere depuis le meme tableau que l'accordeon affiche.
+- **Maillage interne verifie dans le HTML prerendu** (`grep href=` sur chaque fichier `dist/articles/<slug>/index.html`) :
+  - Article 1 (jeune conducteur) : `/tarification` (CTA), `/articles/assurance-auto-temporaire-immediate-en-ligne` (duo obligatoire), `/articles/assurance-temporaire-malus` (profil a antecedents).
+  - Article 2 (rouler sans carte grise) : `/carte-grise` (CTA + relatedLink), `/articles/carte-grise-urgence-cpi-immediat` (duo obligatoire), `/tarification` (duo croise assurance/carte grise obligatoire, 3 occurrences).
+- **Liens entrants (Phase 4)** : `relatedLink` de la section « Qui peut souscrire une assurance temporaire immediate ? » dans `assurance-auto-temporaire-immediate-en-ligne` redirige desormais vers l'article 1 (le paragraphe y mentionne deja explicitement « un jeune conducteur »), et `relatedLink` de la section « Quel est le delai legal pour faire sa carte grise apres un achat ? » dans `carte-grise-urgence-cpi-immediat` redirige vers l'article 2. Verifies presents dans le HTML prerendu des deux pages sources.
+- **Title / meta description** : article 1, title 50 caracteres / description 140 caracteres. Article 2, title 47 caracteres / description 149 caracteres. Tous sous les limites (60 / 155).
+- **JSON-LD** : `Article` + `BreadcrumbList` + `FAQPage` par article, via le meme mecanisme (`jsonLd()` de `src/lib/seo.js`). 4 blocs verifies par page dans le HTML prerendu (dont le bloc Organization/WebSite du template).
+- **Contenu statique dans le DOM prerendu** : verifie par `grep` direct dans `dist/articles/<slug>/index.html` (title, canonical, og:title, Answer Capsule, FAQPage, H1 unique, tableau de risque, schema de decision, tous les liens de maillage presents avant hydratation).
+- **Longueur** : 1285 mots (article 1) et 1280 mots (article 2) dans le fichier source hors JSON-LD ; 1202 et 1228 mots respectivement dans le `<article>` du HTML rendu (titre, capsule, sections, FAQ), dans la fourchette 1200-1600 demandee.
+- **Sitemap** : 67 URLs (65 + 2 nouvelles), lastmod du jour (2026-07-14) sur les deux nouvelles pages, prerender confirme 68 fichiers HTML generes (67 routes + 404).
+- **`llms.txt`** : entree ajoutee pour chaque article dans `public/llms.txt`, `dist/llms.txt` recopie identique par le build.
+
+## Verification factuelle YMYL (sources, recherches web du 14 juillet 2026)
+
+- Delai legal d'un mois calendaire pour immatriculer un vehicule a son nom apres achat, a compter du certificat de cession : article R322-5 du code de la route (deja verifie et publie dans les articles carte grise existants du site, reutilise a l'identique).
+- Amende forfaitaire de 135 € (minoree 90 €, majoree 375 €), jusqu'a 750 € devant le tribunal, contravention de 4e classe (article 131-13 du code penal) : service-public.gouv.fr, recoupe sur plusieurs sources professionnelles (legalplace.fr, legipermis.com, ornikar.com). Aucun retrait de point associe.
+- Certificat provisoire d'immatriculation (CPI) : valable 1 mois dans le cas general, verifie directement sur `service-public.gouv.fr/particuliers/vosdroits/F16542` (fiche officielle). Cas particuliers non utilises dans l'article (location courte duree 8 mois, diplomatique 3 mois) laisses de cote pour ne pas alourdir hors-sujet.
+- Plaques WW : duree totale de 4 mois maximum, en 2 periodes de 2 mois, verifie sur `service-public.gouv.fr` (fiche F16542, section CPI WW) et recoupe sur plusieurs sources professionnelles (plaque-ww.fr, caroom.fr, legalplace.fr). Format rose depuis le 1er janvier 2026 (`service-public.gouv.fr`, actualite A18676), deja mentionne ailleurs sur le site.
+- Surprime jeune conducteur (assurance annuelle classique) : jusqu'a 100 % la premiere annee, reduite de moitie chaque annee sans sinistre responsable ; plafond reduit a 50 % pour la conduite accompagnee (AAC). Verifie directement sur `service-public.gouv.fr/particuliers/vosdroits/F2663` (fiche officielle), articles A121-1 et A121-2 du Code des assurances.
+- Eligibilite AssuTempo (20 ans minimum, permis de plus de 2 ans d'anciennete, pas de releve d'information exige) : **non recherchee sur le web**, reprise a l'identique depuis les sources internes deja publiees du site (`src/pages/Faq.jsx`, `src/assistant/knowledge.js`), conformement a la consigne de la mission de ne pas inventer ce chiffre.
+- Defaut d'assurance (article L324-2 du Code de la route, deja verifie et publie sur le site) : amende penale jusqu'a 3 750 €, reutilisee a l'identique dans l'article 2.
+
+Chaque article invite explicitement le lecteur a revérifier les montants sensibles sur service-public.fr.
+
+## Build
+
+- `npm install --legacy-peer-deps` puis `npm run build` : build propre (Vite + prerendu de 67 routes + 404, sitemap 67 URLs).
+- `npm run lint` : 1 erreur preexistante et non liee a la mission (`api/guichet/finalize.js:87`, `no-useless-assignment`, fichier non modifie par cette session, date du 13 juillet), 14 avertissements `set-state-in-effect` preexistants (memes fichiers qu'avant la mission). Un import `lucide-react` inutilise introduit puis retire pendant la session (`AlertOctagon` dans le fichier de donnees de l'article 2, l'icone n'est utilisee que dans `articlesData.js`) ; aucun avertissement/erreur nouveau ne subsiste dans le code ajoute.
+- `dist/` recommite avec le nouveau build (convention du depot, `dist/` est suivi par git). `package-lock.json` explicitement laisse inchange (bruit npm sans changement de dependance).
+
+## Verdict
+
+Lot conforme : build propre, lint propre (hors 1 erreur preexistante non liee), 0 tiret interdit, 0 expression bannie, 0 dependance, maillage croise et liens entrants en place, sitemap a jour, faits YMYL sources et dates avec invitation a revérification, eligibilite AssuTempo reprise sans invention. Ecart de maillage vs la mission signale et justifie par CLAUDE.md. Pret pour Pull Request et controle du Gate automatique.

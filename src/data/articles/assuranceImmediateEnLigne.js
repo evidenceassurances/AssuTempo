@@ -245,8 +245,8 @@ export const articleData = {
         "Autre point utile : la plupart des véhicules courants entrent dans le parcours, voiture, utilitaire léger, camping-car ou moto selon les formules. Le formulaire de devis indique l'éligibilité avant tout paiement, ce qui évite une mauvaise surprise après coup.",
       ],
       relatedLink: {
-        text: "Voir la grille de prix complète, de 1 à 90 jours",
-        href: '/articles/prix-assurance-auto-temporaire',
+        text: "Jeune conducteur : la règle d'éligibilité en détail",
+        href: '/articles/assurance-auto-temporaire-jeune-conducteur',
       },
     },
     {
