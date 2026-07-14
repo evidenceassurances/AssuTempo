@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -259,6 +259,32 @@ export const articles = [
       "Le certificat provisoire d'immatriculation (CPI) est édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur, et autorise à rouler en France pendant 1 mois. La carte grise définitive, fabriquée par France Titres, arrive ensuite par courrier sous quelques jours à quelques semaines.",
     icone: Timer,
     accent: '#9E97B5',
+    categorie: 'Carte grise',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-temporaire-jeune-conducteur',
+    titre: 'Assurance auto temporaire jeune conducteur : la vraie règle du jeu',
+    extrait:
+      "Assurance auto temporaire jeune conducteur : condition réelle d'âge et de permis chez AssuTempo, et solution concrète en cas de refus.",
+    reponseRapide:
+      "Chez AssuTempo (assutempo.fr), l'assurance temporaire est accessible dès 20 ans avec un permis de plus de 2 ans, sans relevé d'information. En dessous, le profil n'est pas éligible : mieux vaut un contrat annuel avec surprime jeune conducteur, dégressive sur 2 ans.",
+    icone: GraduationCap,
+    accent: '#4F8FA6',
+    categorie: 'Jeune conducteur',
+    readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'rouler-sans-carte-grise-a-son-nom',
+    titre: 'Rouler sans carte grise à son nom : les risques réels',
+    extrait:
+      "Amende jusqu'à 750 €, immobilisation possible, plaques WW : ce que la loi sanctionne vraiment, et comment le certificat provisoire (CPI) vous couvre légalement.",
+    reponseRapide:
+      "Un mois calendaire après l'achat pour immatriculer un véhicule à son nom (article R322-5 du code de la route). Passé ce délai, rouler sans certificat d'immatriculation à jour expose à une amende forfaitaire de 135 €, jusqu'à 750 € devant le tribunal, et à une immobilisation possible.",
+    icone: AlertOctagon,
+    accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '6 min',
     hasPage: true,
