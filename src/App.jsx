@@ -34,6 +34,7 @@ const IMPORTERS = {
   RouleSansCarteGriseNom:     () => import('./pages/articles/RouleSansCarteGriseNom'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
+  RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),
   Cookies:                    () => import('./pages/Cookies'),
   CGV:                        () => import('./pages/CGV'),
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),

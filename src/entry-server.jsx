@@ -37,6 +37,7 @@ import DelaiCarteGrise from './pages/articles/DelaiCarteGrise';
 import AssuranceJeuneConducteur from './pages/articles/AssuranceJeuneConducteur';
 import RouleSansCarteGriseNom from './pages/articles/RouleSansCarteGriseNom';
 import CarteGriseService from './pages/CarteGrise';
+import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
@@ -75,6 +76,7 @@ const PAGES = {
   AssuranceJeuneConducteur,
   RouleSansCarteGriseNom,
   CarteGriseService,
+  RoulezLegalApresAchat,
   Carte,
   Cookies,
   CGV,
