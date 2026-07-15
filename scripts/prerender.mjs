@@ -55,6 +55,8 @@ const ROUTES = [
   '/articles/combien-de-temps-carte-grise',
   '/articles/assurance-auto-temporaire-jeune-conducteur',
   '/articles/rouler-sans-carte-grise-a-son-nom',
+  '/articles/assurance-auto-temporaire-1-mois',
+  '/articles/changement-titulaire-carte-grise',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -106,6 +108,8 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/combien-de-temps-carte-grise':                   'src/data/articles/delaiCarteGrise.js',
   '/articles/assurance-auto-temporaire-jeune-conducteur':      'src/data/articles/assuranceJeuneConducteur.js',
   '/articles/rouler-sans-carte-grise-a-son-nom':               'src/data/articles/rouleSansCarteGriseNom.js',
+  '/articles/assurance-auto-temporaire-1-mois':                 'src/data/articles/assuranceTemporaire1Mois.js',
+  '/articles/changement-titulaire-carte-grise':                 'src/data/articles/changementTitulaireCarteGrise.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -269,6 +273,8 @@ const ROUTE_MODULES = {
   '/articles/combien-de-temps-carte-grise':                   'src/pages/articles/DelaiCarteGrise.jsx',
   '/articles/assurance-auto-temporaire-jeune-conducteur':      'src/pages/articles/AssuranceJeuneConducteur.jsx',
   '/articles/rouler-sans-carte-grise-a-son-nom':               'src/pages/articles/RouleSansCarteGriseNom.jsx',
+  '/articles/assurance-auto-temporaire-1-mois':                 'src/pages/articles/AssuranceTemporaire1Mois.jsx',
+  '/articles/changement-titulaire-carte-grise':                 'src/pages/articles/ChangementTitulaireCarteGrise.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',

@@ -219,6 +219,7 @@ export const articleData = {
         "Le principe s'applique à tout véhicule soumis au système d'immatriculation des véhicules (SIV) : voiture particulière, utilitaire léger, camping-car ou moto, acheté neuf ou d'occasion, en France comme importé d'un autre pays européen. Les délais de traitement décrits plus haut restent globalement les mêmes d'une catégorie à l'autre.",
         "Un véhicule importé demande en général une pièce supplémentaire, le certificat de conformité européen ou le quitus fiscal selon les cas, ce qui peut allonger le délai de constitution du dossier sans changer le principe : certificat provisoire d'abord, titre définitif ensuite. Un dossier d'importation mal préparé est justement le type de dossier où un professionnel habilité fait gagner le plus de temps, en anticipant la pièce manquante avant l'envoi plutôt qu'en la découvrant au rejet.",
       ],
+      relatedLink: { text: 'Le guide complet du changement de titulaire, étape par étape', href: '/articles/changement-titulaire-carte-grise' },
     },
     {
       type: 'text',

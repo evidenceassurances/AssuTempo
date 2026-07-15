@@ -36,6 +36,8 @@ import PrixAssuranceAutoTemporaire from './pages/articles/PrixAssuranceAutoTempo
 import DelaiCarteGrise from './pages/articles/DelaiCarteGrise';
 import AssuranceJeuneConducteur from './pages/articles/AssuranceJeuneConducteur';
 import RouleSansCarteGriseNom from './pages/articles/RouleSansCarteGriseNom';
+import AssuranceTemporaire1Mois from './pages/articles/AssuranceTemporaire1Mois';
+import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireCarteGrise';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import Carte from './pages/Carte';
@@ -75,6 +77,8 @@ const PAGES = {
   DelaiCarteGrise,
   AssuranceJeuneConducteur,
   RouleSansCarteGriseNom,
+  AssuranceTemporaire1Mois,
+  ChangementTitulaireCarteGrise,
   CarteGriseService,
   RoulezLegalApresAchat,
   Carte,
