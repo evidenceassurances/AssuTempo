@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -287,6 +287,32 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '6 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-temporaire-1-mois',
+    titre: 'Assurance temporaire 1 semaine ou 1 mois : laquelle choisir ?',
+    extrait:
+      "Assurance auto temporaire 7 jours ou 30 jours : profils types, prix indicatif et comparatif honnête avec l'assurance au kilomètre.",
+    reponseRapide:
+      "La formule 7 jours convient à un déplacement ponctuel ou un prêt de véhicule court ; la formule 30 jours couvre un mois complet, utile après un achat ou pendant une résiliation. Aucune ne remplace un contrat annuel au kilomètre sur un usage régulier et durable.",
+    icone: Calendar,
+    accent: '#C9A84C',
+    categorie: 'Prix & tarifs',
+    readTime: '7 min',
+    hasPage: true,
+  },
+  {
+    slug: 'changement-titulaire-carte-grise',
+    titre: 'Changement de titulaire de la carte grise : le guide étape par étape',
+    extrait:
+      "Mettre la carte grise à son nom après un achat : code de cession, délai d'1 mois, certificat provisoire pour rouler pendant la démarche.",
+    reponseRapide:
+      "Le nouveau propriétaire dispose d'un mois pour mettre la carte grise à son nom, avec le code de cession remis par le vendeur. Le certificat provisoire d'immatriculation (CPI) permet de rouler immédiatement pendant le traitement du dossier.",
+    icone: UserCheck,
+    accent: '#9E97B5',
+    categorie: 'Carte grise',
+    readTime: '7 min',
     hasPage: true,
   },
 ];

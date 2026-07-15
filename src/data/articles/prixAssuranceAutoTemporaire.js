@@ -188,6 +188,7 @@ export const articleData = {
         "La grille de cet article reste indicative, volontairement prudente. Le seul moyen d'avoir un chiffre exact est de renseigner le véhicule, la durée souhaitée et quelques informations sur le conducteur dans le formulaire de simulation : le prix s'affiche alors immédiatement, avant toute demande de paiement.",
         "Aucune étape ne demande de créer un compte ni de laisser un numéro de téléphone pour voir le tarif. C'est cette transparence, prix affiché avant engagement, qui distingue une simulation sérieuse d'un simple formulaire de contact déguisé en devis.",
       ],
+      relatedLink: { text: '7 jours ou 30 jours : lequel correspond à votre besoin', href: '/articles/assurance-auto-temporaire-1-mois' },
     },
     {
       type: 'text',

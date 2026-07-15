@@ -85,6 +85,8 @@ const ROUTE_TABLE = [
   ['/articles/combien-de-temps-carte-grise', 'DelaiCarteGrise'],
   ['/articles/assurance-auto-temporaire-jeune-conducteur', 'AssuranceJeuneConducteur'],
   ['/articles/rouler-sans-carte-grise-a-son-nom', 'RouleSansCarteGriseNom'],
+  ['/articles/assurance-auto-temporaire-1-mois', 'AssuranceTemporaire1Mois'],
+  ['/articles/changement-titulaire-carte-grise', 'ChangementTitulaireCarteGrise'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
