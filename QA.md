@@ -67,7 +67,7 @@ Les deux articles renvoient explicitement vers le cadre légal (articles de réf
 
 ## Style et conformité CLAUDE.md
 
-- Aucun tiret cadratin (—, U+2014) ni demi-cadratin (–, U+2013) dans les fichiers ajoutés/modifiés (`grep -P '[\x{2013}\x{2014}]'` sur les fichiers source, 0 occurrence).
+- Aucun tiret cadratin (U+2014) ni demi-cadratin (U+2013) dans les fichiers ajoutés/modifiés (`grep -P '[\x{2013}\x{2014}]'` sur les fichiers source, 0 occurrence).
 - Aucune des 6 expressions bannies détectée dans le contenu ajouté.
 - Certimat jamais qualifié d'habilité ni d'agréé : formulation verrouillée reprise telle quelle (intermédiaire technologique, professionnels habilités par le Ministère de l'Intérieur pour la saisie SIV, ou transmission à l'ANTS/France Titres).
 - Style anti-détection IA appliqué : longueurs de phrases variées, nuances honnêtes assumées (ex. « un mois calendaire ne correspond pas toujours à 30 jours pile », « une assurance au kilomètre reste un contrat annuel, elle ne remplace pas une solution d'un mois »), aucun empilement mécanique de puces (tableaux et frise chronologique utilisés à la place).
