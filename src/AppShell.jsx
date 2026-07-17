@@ -91,6 +91,7 @@ const ROUTE_TABLE = [
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
   ['/roulez-legal-apres-achat', 'RoulezLegalApresAchat'],
+  ['/barometre-immatriculations', 'BarometreImmatriculations'],
   ['/cookies', 'Cookies'],
   ['/conditions-generales', 'CGV'],
   ['/assurance-internationale', 'AssuranceInternationale'],

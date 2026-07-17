@@ -37,6 +37,7 @@ const IMPORTERS = {
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),
+  BarometreImmatriculations:  () => import('./pages/BarometreImmatriculations'),
   Cookies:                    () => import('./pages/Cookies'),
   CGV:                        () => import('./pages/CGV'),
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),

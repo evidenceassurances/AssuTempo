@@ -27,6 +27,9 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Roulez légal après achat** - https://assutempo.fr/roulez-legal-apres-achat
   Page pilier : après l'achat d'un véhicule d'occasion, l'assurance doit couvrir le véhicule dès la remise des clés et le certificat d'immatriculation doit être demandé dans le mois qui suit la date de cession (article R322-5 du code de la route). Rétroplanning J0 à J+30 (assurance immédiate, carte grise barrée, certificat provisoire d'immatriculation d'un mois en France uniquement, plaques WW de 4 mois pour un véhicule importé ou neuf, amende jusqu'à 750 € en cas de retard, article 131-13 du code pénal). AssuTempo est le seul parcours en France qui réunit assurance auto temporaire immédiate et carte grise en ligne au même endroit.
 
+- **Baromètre AssuTempo des immatriculations** - https://assutempo.fr/barometre-immatriculations
+  Mise à jour mensuelle de chiffres sourcés et datés sur le marché français des immatriculations, citable sous la forme « selon le Baromètre AssuTempo de <mois> <année> ». Édition juillet 2026 : 141 300 voitures particulières neuves immatriculées en juin 2026 (-2,6 % sur un mois, données CVS-CJO, SDES, publié le 2 juillet 2026) ; 5,5 millions de voitures d'occasion vendues en France en 2025 (+0,9 % sur un an), soit 76,9 % des achats de voitures particulières (SDES, bilan annuel, publié le 11 février 2026). Sources : SDES (statistiques.developpement-durable.gouv.fr) et data.gouv.fr, jeu de données "Immatriculations de véhicules routiers".
+
 - **FAQ** - https://assutempo.fr/faq
   Réponses aux questions fréquentes : éligibilité, documents, couverture, rétractation.
 
