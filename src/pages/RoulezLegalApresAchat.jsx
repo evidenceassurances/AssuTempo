@@ -436,6 +436,10 @@ function RoulezLegalApresAchat() {
           <Link to="/articles/rouler-sans-carte-grise-a-son-nom" style={{ color: 'var(--gold-light)' }}>
             ce que la loi sanctionne vraiment en cas de retard
           </Link>
+          . Le volume de véhicules concernés chaque mois est suivi dans le{' '}
+          <Link to="/barometre-immatriculations" style={{ color: 'var(--gold-light)' }}>
+            Baromètre AssuTempo des immatriculations
+          </Link>
           .
         </p>
       </section>

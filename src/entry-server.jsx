@@ -40,6 +40,7 @@ import AssuranceTemporaire1Mois from './pages/articles/AssuranceTemporaire1Mois'
 import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireCarteGrise';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
+import BarometreImmatriculations from './pages/BarometreImmatriculations';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
@@ -81,6 +82,7 @@ const PAGES = {
   ChangementTitulaireCarteGrise,
   CarteGriseService,
   RoulezLegalApresAchat,
+  BarometreImmatriculations,
   Carte,
   Cookies,
   CGV,

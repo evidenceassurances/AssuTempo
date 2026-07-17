@@ -1,92 +1,81 @@
-# QA : mission GEO 2 articles (15 juillet 2026)
+# QA : Baromètre AssuTempo v1 (17 juillet 2026)
 
-Articles « Assurance temporaire 1 semaine ou 1 mois » et « Changement de titulaire carte grise », issue #33, branche `draft/articles-2026-07-15`.
+Page `/barometre-immatriculations`, issue #35, branche `draft/chantier-2026-07-17`.
 
-## Phase 0 : relevé du pattern existant
+## Slug créé
 
-- **Routes** : table unique `ROUTE_TABLE` dans `src/AppShell.jsx`, partagée entre le client (`src/App.jsx`, imports `lazy()`) et le SSR (`src/entry-server.jsx`, imports eager). `scripts/prerender.mjs` porte sa propre liste `ROUTES` (source du sitemap), sa carte `ARTICLE_DATA_SOURCES` (route -> fichier de contenu, sert au calcul du `lastmod` git) et sa carte `ROUTE_MODULES` (route -> fichier page, sert au `modulepreload`).
-- **Pattern article** : `src/components/ArticleLayout.jsx` (habillage générique) + données dans `src/data/articles/<slug>.js` (export `articleData` : `seo`, `category`, `headline`, `cta`, `answerCapsule`, `sections[]`, `faqItems[]`) + page fine dans `src/pages/articles/<Nom>.jsx` qui ne fait qu'importer les données et rendre `<ArticleLayout data={articleData} />`. `AnswerCapsule` et le tableau `FAQ` alimentent à la fois l'affichage et le JSON-LD FAQPage (jamais deux sources).
-- **Hub `/articles`** : `src/data/articlesData.js`, catégories dérivées dynamiquement (`catKey`) dans `src/pages/Articles.jsx` : aucune modification de la page nécessaire pour ajouter une entrée.
-- **Zones interdites identifiées** (`FORBIDDEN_PATHS` de `scripts/quality-gate.mjs`) : `src/pages/Pricing.jsx` (`/tarification`) et `src/pages/CarteGrise.jsx` (`/carte-grise`) ne doivent jamais être modifiées par une PR automatique, meta comprises. Aucun des deux fichiers n'a été touché.
+- `/barometre-immatriculations` (requêtes cibles : « baromètre immatriculations », « chiffres immatriculations juillet 2026 », « immatriculations occasion France »)
+
+## Phase 1 : relevé du pattern existant
+
+- **Routes** : entrée ajoutée dans `ROUTE_TABLE` de `src/AppShell.jsx` (partagée client/SSR), import `lazy()` dans `src/App.jsx` (`IMPORTERS.BarometreImmatriculations`), import eager dans `src/entry-server.jsx`, entrée dans `ROUTES` et `ROUTE_MODULES` de `scripts/prerender.mjs` (sitemap + modulepreload de page). Aucune de ces quatre listes n'a divergé (build vert).
+- **JSON-LD** : injection via le helper existant `jsonLd()` de `src/lib/seo.js`, dans des `<script type="application/ld+json">` sous `<Helmet>`, comme sur `/roulez-legal-apres-achat` et `/carte-grise`.
+- **Answer Capsule** : composant réutilisé tel quel (`src/components/articles/AnswerCapsule.jsx`), aucune modification.
+- **Gabarit** : page autonome sur le modèle de `src/pages/RoulezLegalApresAchat.jsx` (sections `<section>` alternant `var(--bg)` / `var(--bg-2)`, cartes `var(--bg-card)` + `var(--gold-border)`, breadcrumb aligné sur le JSON-LD BreadcrumbList, double CTA `/tarification` + `/carte-grise`).
+- **Aucun nouveau composant global créé.**
 
 ## Livrables et chemins
 
 | Livrable | Chemin |
 |---|---|
-| Données article 1 | `src/data/articles/assuranceTemporaire1Mois.js` |
-| Page article 1 | `src/pages/articles/AssuranceTemporaire1Mois.jsx` |
-| Données article 2 | `src/data/articles/changementTitulaireCarteGrise.js` |
-| Page article 2 | `src/pages/articles/ChangementTitulaireCarteGrise.jsx` |
-| Routes ajoutées (table partagée client/SSR) | `src/AppShell.jsx` (`ROUTE_TABLE`) |
+| Page | `src/pages/BarometreImmatriculations.jsx` |
+| Route (table partagée client/SSR) | `src/AppShell.jsx` (`ROUTE_TABLE`) |
 | Import lazy client | `src/App.jsx` (`IMPORTERS`) |
 | Import eager SSR | `src/entry-server.jsx` |
-| Prérendu + sitemap | `scripts/prerender.mjs` (`ROUTES`, `ARTICLE_DATA_SOURCES`, `ROUTE_MODULES`) |
-| Hub `/articles` | `src/data/articlesData.js` |
-| Entrées GEO | `public/llms.txt` |
-| Liens entrants obligatoires | `src/data/articles/prixAssuranceAutoTemporaire.js`, `src/data/articles/delaiCarteGrise.js` |
+| Prérendu + sitemap | `scripts/prerender.mjs` (`ROUTES`, `ROUTE_MODULES`) |
+| Entrée GEO | `public/llms.txt` |
+| Lien croisé entrant | `src/pages/RoulezLegalApresAchat.jsx` (section maillage) |
 
-## Slugs créés
+## Chiffres publiés : source et date
 
-- `/articles/assurance-auto-temporaire-1-mois` (requête cible : « assurance auto temporaire 1 mois »)
-- `/articles/changement-titulaire-carte-grise` (requête cible : « changement de titulaire carte grise »)
+| Chiffre | Valeur | Source | Date de publication | Vérifié le |
+|---|---|---|---|---|
+| Immatriculations neuves juin 2026 (CVS-CJO) | 141 300 | SDES, [immatriculations de voitures particulières neuves en juin 2026](https://www.statistiques.developpement-durable.gouv.fr/immatriculations-de-voitures-particulieres-neuves-en-juin-2026) | 02/07/2026 | 17/07/2026 |
+| Évolution mensuelle du neuf | -2,6 % (vs 145 100 en mai 2026) | idem | 02/07/2026 | 17/07/2026 |
+| Voitures d'occasion vendues en 2025 | 5,5 millions (+0,9 % vs 2024) | SDES, [bilan annuel des immatriculations 2025](https://www.statistiques.developpement-durable.gouv.fr/immatriculations-de-voitures-en-2025-le-marche-du-neuf-baisse-celui-de-loccasion-resiste) | 11/02/2026 | 17/07/2026 |
+| Part de l'occasion dans les achats 2025 | 76,9 % | idem | 11/02/2026 | 17/07/2026 |
+| Ratio occasion / neuf | ≈ 3,3 pour 1 | Calcul AssuTempo (76,9 / 23,1) à partir du bilan SDES 2025 ci-dessus | 11/02/2026 | 17/07/2026 |
 
-## Contenu
+Jeu de données de référence cité dans le JSON-LD Dataset : [Immatriculations de véhicules routiers](https://www.data.gouv.fr/datasets/immatriculations-de-vehicules-routiers) (SDES, data.gouv.fr), dernière mise à jour au 17/07/2026 (vérifié via l'API `data.gouv.fr/api/1/datasets/...`).
 
-| Contrôle | Article 1 | Article 2 |
+**Limite documentée dans la page (section Méthodologie)** : le jeu de données communal « occasion » (changements de titulaire) de data.gouv.fr n'a pas de granularité mensuelle publiée pour 2026 au moment de la rédaction (dernier export figé sur l'année 2025). Aucun chiffre mensuel occasion n'a donc été inventé ; les chiffres occasion de cette édition restent ceux du dernier bilan annuel disponible.
+
+## Rappels réglementaires : source et date
+
+| Rappel | Source | Consulté le |
 |---|---|---|
-| Nombre de mots (corps hors JSON-LD, calcul programmatique) | ≈ 1280 | ≈ 1300 |
-| Un seul H1 | Oui | Oui |
-| H2/H3 en questions | Oui | Oui |
-| Réponse dans les 2 premières phrases | Oui (Answer Capsule) | Oui (Answer Capsule) |
-| Answer Capsule (réponse ≤ 50 mots + 3 faits datés) | Oui, mise à jour 15 juillet 2026 | Oui, mise à jour 15 juillet 2026 |
-| FAQ autoportante | 4 questions | 4 questions |
-| Title (< 60 car.) | 53 caractères | 51 caractères |
-| Meta description (< 155 car.) | 153 caractères | 150 caractères |
-| Format imposé | Comparatif avec tableau (7 j vs 30 j, puis temporaire vs au kilomètre) | Guide pas à pas, 6 étapes numérotées (section `timeline`, pas d'empilement de puces) |
-| CTA final | `/tarification` | `/carte-grise` |
+| Délai d'1 mois calendaire à compter de la date de cession (article R322-5 du code de la route) | Légifrance | 17/07/2026 |
+| Amende forfaitaire 135 € (90 € minorée, 375 € majorée), jusqu'à 750 € devant le tribunal (article 131-13 du code pénal), contravention de 4e classe | Service-public.gouv.fr | 17/07/2026 |
+| Certificat provisoire d'immatriculation classique : 1 mois, France uniquement | Ants.gouv.fr / France Titres | 17/07/2026 |
+| Plaques WW : 4 mois, non reconductibles depuis la réforme 2026 | Service public + (démarche officielle de prolongation d'un CPI WW) | 17/07/2026 |
 
-## Maillage interne
+## Contrôles techniques
 
-- **Duo croisé assurance/carte grise obligatoire** : article 1 lie `/carte-grise` (section « Pourquoi choisir un mois ») et `/articles/combien-de-temps-carte-grise` (comparatif carte grise) ; article 2 lie `/tarification` explicitement (« assurer le véhicule dès la sortie du parking »).
-- Article 1 lie aussi `/articles/prix-assurance-auto-temporaire` (ancre « grille de prix ») et `/articles/combien-de-jours-assurance-sortir-fourriere`.
-- Article 2 lie aussi `/articles/carte-grise-urgence-cpi-immediat`, `/articles/assurance-temporaire-vehicule-etranger-france` et `/roulez-legal-apres-achat`.
-- **Note sur les URL de la mission** : la mission cite plusieurs pages (`/assurance-auto-temporaire-1-jour`, `/liste-des-situations-necessitant-une-assurance-temporaire`, `/faire-sa-carte-grise`, `/importer-exporter-un-vehicule-etranger`) qui n'existent pas dans le routage actuel du site (`ROUTE_TABLE`, `src/AppShell.jsx`). Elles ont été remplacées par les pages réelles les plus proches sémantiquement (voir ci-dessus) plutôt que de créer des liens morts.
-- **Lien entrant obligatoire** : la mission demande un lien depuis `/tarification` ou `/articles/prix-assurance-auto-temporaire` vers l'article 1, et depuis `/carte-grise` ou `/articles/combien-de-temps-carte-grise` vers l'article 2. `Pricing.jsx` et `CarteGrise.jsx` étant des zones interdites du portique, les liens entrants ont été ajoutés depuis les deux articles satellites autorisés par la mission : `src/data/articles/prixAssuranceAutoTemporaire.js` (nouveau `relatedLink` vers l'article 1) et `src/data/articles/delaiCarteGrise.js` (nouveau `relatedLink` vers l'article 2).
+| Contrôle | Résultat |
+|---|---|
+| `npm run build` (vite build + prérendu) | Vert, 72 routes prérendues dont `/barometre-immatriculations` |
+| `node scripts/quality-gate.mjs` | Vert après commit (voir note ci-dessous) |
+| Chaque chiffre publié présent en clair dans le HTML statique (`dist/barometre-immatriculations/index.html`, hors JS) | Vérifié programmatiquement : `141 300`, `2,6`, `5,5 millions`, `76,9`, `3,3 pour 1` tous trouvés dans le HTML prérendu |
+| JSON-LD Dataset valide (`json.loads`) | Oui, `@type: Dataset`, `isBasedOn` (3 sources), `creator`/`publisher` liés à `#organization` |
+| JSON-LD BreadcrumbList valide | Oui, 2 niveaux (Accueil > Baromètre immatriculations) |
+| `<title>` et `<meta name="description">` non vides dans le HTML prérendu | Oui (bug détecté et corrigé en cours de mission : un `<title>` avec enfants JSX multiples `{EDITION}` se sérialisait vide côté `react-helmet-async` ; corrigé en interpolation par template literal unique) |
+| Longueur title / meta description | Title 51 caractères, meta description 152 caractères (limites 60 / 155 respectées) |
+| Absence de U+2014 (tiret cadratin) et U+2013 (tiret demi-cadratin) | 0 occurrence sur les fichiers créés/modifiés (`rg` ciblé) |
+| Accents français / encodage UTF-8 | Contrôle programmatique (recherche de séquences mojibake `Ã©`, `Ã¨`, `â€`, etc.) : aucune occurrence dans le HTML prérendu |
+| Sitemap | `/barometre-immatriculations` présent dans `dist/sitemap.xml` et `public/sitemap.xml` (71 URLs) |
+| `public/llms.txt` | Entrée ajoutée avec chiffres clés et sources |
+| Contenu 100 % statique dans le DOM | Oui : aucun état initial invisible, aucun compteur, tous les chiffres et rappels sont des constantes rendues directement (pas de `useState`/`useEffect` porteur de contenu) |
 
-## Faits YMYL vérifiés (recherche web du 15 juillet 2026)
+## Liens internes ajoutés
 
-| Fait | Source | Article(s) |
-|---|---|---|
-| Délai d'1 mois calendaire pour immatriculer un véhicule d'occasion au nom du nouveau propriétaire, à compter de la date de cession | service-public.gouv.fr (fiche F1050), Légifrance (article R322-5 du code de la route) | 1 et 2 |
-| Délai de 15 jours pour le vendeur pour déclarer la cession en ligne ; code de cession valable 15 jours | service-public.gouv.fr (fiche F1707), article R322-4 du code de la route | 2 |
-| Amende forfaitaire 135 € (90 € minorée, 375 € majorée), jusqu'à 750 € devant le tribunal, contravention de 4e classe | service-public.gouv.fr, article 131-13 du code pénal | 1 et 2 |
-| Certificat provisoire d'immatriculation (CPI) valable 1 mois dans le cas général d'un achat d'occasion | service-public.gouv.fr (fiche F16542) | 2 |
-| Conditions d'éligibilité AssuTempo (20 ans minimum, permis de plus de 2 ans) | Contenu interne déjà publié et sourcé sur `/articles/assurance-auto-temporaire-jeune-conducteur` | 1 |
+- `/barometre-immatriculations` → `/roulez-legal-apres-achat` (maillage, section D)
+- `/barometre-immatriculations` → `/tarification` et `/carte-grise` (double CTA final, sans dupliquer le tunnel JL Assure ni l'iframe Certimat)
+- `/roulez-legal-apres-achat` → `/barometre-immatriculations` (lien croisé réciproque ajouté dans la section maillage existante)
 
-Les deux articles renvoient explicitement vers le cadre légal (articles de référence cités en toutes lettres) et n'affichent aucun chiffre non vérifié. Aucun prix ferme n'est inventé : l'article 1 réutilise exactement les fourchettes déjà publiées et vérifiées dans `prix-assurance-auto-temporaire`.
+## Zones interdites
 
-## Style et conformité CLAUDE.md
+Aucune des zones interdites n'a été touchée : Header/Footer globaux, `/tarification` (au-delà des meta, non modifié), iframe Certimat de `/carte-grise`, formulaires B2B/international, `.github/`, `scripts/quality-gate.mjs`, `scripts/indexnow.mjs`, `vercel.json`. Aucune nouvelle dépendance npm.
 
-- Aucun tiret cadratin (U+2014) ni demi-cadratin (U+2013) dans les fichiers ajoutés/modifiés (`grep -P '[\x{2013}\x{2014}]'` sur les fichiers source, 0 occurrence).
-- Aucune des 6 expressions bannies détectée dans le contenu ajouté.
-- Certimat jamais qualifié d'habilité ni d'agréé : formulation verrouillée reprise telle quelle (intermédiaire technologique, professionnels habilités par le Ministère de l'Intérieur pour la saisie SIV, ou transmission à l'ANTS/France Titres).
-- Style anti-détection IA appliqué : longueurs de phrases variées, nuances honnêtes assumées (ex. « un mois calendaire ne correspond pas toujours à 30 jours pile », « une assurance au kilomètre reste un contrat annuel, elle ne remplace pas une solution d'un mois »), aucun empilement mécanique de puces (tableaux et frise chronologique utilisés à la place).
+## Note sur le portique
 
-## Build et portique qualité
-
-- `npm install --legacy-peer-deps` (environnement de build vierge) puis `npm run build` : bundle client + SSR compilés, 71 routes prérendues dont les 2 nouvelles, sitemap régénéré (70 URLs, `/urgence` volontairement hors sitemap).
-- Contenu statique vérifié dans le DOM prérendu (`dist/articles/.../index.html`, avant hydratation) : Answer Capsule, FAQ, JSON-LD Article/BreadcrumbList/FAQPage, liens de maillage duo, tous présents ; encodage UTF-8 propre (aucun caractère mal encodé), aucun tiret interdit.
-- `npx eslint` sur l'ensemble des fichiers ajoutés/modifiés : 0 erreur (2 avertissements préexistants et non liés à cette PR : `AppShell.jsx` règle react-refresh, `scripts/prerender.mjs` ignoré par la config ESLint).
-- `node scripts/quality-gate.mjs` (après commit, diff réel contre `origin/main`) : vert, 0 zone interdite touchée, `package.json` non modifié, sitemap cohérent avec `dist/`. Le workflow Gate GitHub rejoue ce même contrôle sur la PR.
-
-## Checklist des interdictions (toutes respectées)
-
-- [x] Header et footer globaux non modifiés.
-- [x] Tunnel JL Assure de `/tarification` non touché (`src/pages/Pricing.jsx` intact).
-- [x] Iframe Certimat de `/carte-grise` non touchée (`src/pages/CarteGrise.jsx` intact).
-- [x] Aucun formulaire B2B ou international modifié.
-- [x] Aucune nouvelle dépendance npm : `package.json` non modifié ; `package-lock.json` régénéré localement par `npm install` puis diff annulé avant commit (bruit de métadonnées `libc`, aucune dépendance ajoutée ou retirée).
-
-## Suppression
-
-Rien n'a été supprimé.
+`node scripts/quality-gate.mjs` compare `origin/main...HEAD` : il ne détecte de diff qu'une fois les fichiers commités (constaté 0 fichier modifié avant le premier commit de la branche, comportement attendu). Le portique sera repassé après commit, avant ouverture de la Pull Request.
