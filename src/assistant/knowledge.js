@@ -93,6 +93,6 @@ Exclusions : les deux-roues (motos, scooters) ne sont PAS assurables ; les véhi
 Programme partenaires (agences carte grise, garages, concessionnaires, mandataires, loueurs, import-export, contrôle technique, auto-écoles...) : devis en quelques minutes, attestation immédiate remise au client, commission versée par virement chaque mois.
 
 ## Contact
-Souscription 100 % en ligne, accessible 24h/24 et 7j/7 : le parcours de devis et l'attestation ne dépendent d'aucun horaire. La nuit et le week-end, le Guichet de Nuit prend le relais (21h-9h du lundi au samedi, dimanche toute la journée). Email : contact@assutempo.fr.`;
+Téléphone : 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h). Email : contact@assutempo.fr. Portail accessible 24h/24, 7j/7.`;
 
 module.exports = { KNOWLEDGE };

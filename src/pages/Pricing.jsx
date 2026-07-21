@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useLocation } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
-  MessageCircle, ShieldCheck, Clock, Lock, Globe,
+  Phone, MessageCircle, ShieldCheck, Clock, Lock, Globe,
   FileText, CreditCard, Mail, ArrowRight, Moon,
 } from 'lucide-react';
 import { fadeUp } from '../animations';
@@ -50,7 +50,7 @@ const FAQ = [
   },
   {
     q: `J'ai une question pendant la souscription, que faire ?`,
-    a: `Notre concierge Tempo vous répond en direct dans le chat, en bas à droite de votre écran. La souscription reste 100 % en ligne, à tout moment : et la nuit ou le week-end, le Guichet de Nuit prend le relais.`,
+    a: `Notre concierge Tempo vous répond en direct dans le chat, en bas à droite de votre écran. Vous pouvez aussi nous appeler au 09 74 19 78 20, du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.`,
   },
 ];
 
@@ -186,8 +186,13 @@ function Pricing() {
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 16, margin: '0 auto', lineHeight: 1.75 }}>
             Obtenez votre devis d'assurance auto temporaire instantanément. De 1 à 90 jours, pour
-            particuliers et professionnels. Souscription 100 % en ligne, 24h/24 et 7j/7,
-            attestation immédiate par email.
+            particuliers et professionnels. Souscription 100 % en ligne, attestation immédiate par email.
+            <br /><br />
+            Besoin d'aide ? Appelez-nous au{' '}
+            <a href="tel:0974197820" style={{ color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
+              09 74 19 78 20
+            </a>
+            {' '}du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.
           </p>
         </m.div>
 
@@ -348,16 +353,20 @@ function Pricing() {
               </button>
             </div>
 
-            {/* Carte rassurance : souscription en autonomie, sans appel. */}
+            {/* Carte telephone */}
             <div style={{ ...cardBase, textAlign: 'center' }}>
               <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 6px' }}>
-                À votre rythme
+                Vous préférez la voix ?
               </p>
-              <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--gold)', margin: 0 }}>
-                Souscription 100 % en ligne
-              </p>
+              <a
+                href="tel:0974197820"
+                style={{ fontSize: 20, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+              >
+                <Phone size={18} strokeWidth={1.75} aria-hidden />
+                09 74 19 78 20
+              </a>
               <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '8px 0 0' }}>
-                24h/24, 7j/7 &middot; attestation immédiate
+                Lun-Ven 9h-21h | Sam 9h-20h
               </p>
             </div>
 

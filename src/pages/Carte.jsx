@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import {
-  ArrowRight,
+  ArrowRight, Phone,
   Shield, Globe, MailCheck, Info, FileSearch, Car,
   Gauge, Siren, Leaf, History, ShoppingCart,
   Lightbulb, Shirt, Route, Wind, RotateCw,
@@ -278,6 +278,20 @@ function CountryPanel({ country }) {
             Obtenir mon devis pour {nom}
             <ArrowRight size={14} strokeWidth={2} />
           </Link>
+          <a
+            href="tel:0974197820"
+            className="btn-glass"
+            style={{
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              fontSize: 14,
+            }}
+          >
+            <Phone size={14} strokeWidth={1.5} />
+            09 74 19 78 20
+          </a>
         </m.div>
 
         {/* FAQ pays, uniquement si des questions sont disponibles */}
@@ -1836,9 +1850,17 @@ function Carte() {
                 Obtenir mon devis
                 <ArrowRight size={15} strokeWidth={2} />
               </Link>
+              <a
+                href="tel:0974197820"
+                className="btn-glass"
+                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+              >
+                <Phone size={15} strokeWidth={1.5} />
+                09 74 19 78 20
+              </a>
             </div>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
-              Souscription 100 % en ligne, 24h/24 &middot; attestation immédiate
+              Lun-Ven 9h-21h · Sam 9h-20h
             </p>
           </div>
         </Reveal>

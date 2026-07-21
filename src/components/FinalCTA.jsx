@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { IdCard, ClipboardList, CreditCard } from 'lucide-react';
+import { Phone, IdCard, ClipboardList, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
@@ -100,13 +100,13 @@ function FinalCTA() {
               lineHeight: 1.1,
             }}
           >
-            Prêt à rouler couvert ?
+            Besoin d&apos;assistance ?
           </h2>
           <p style={{ fontSize: 18, color: 'var(--text-muted)', margin: '0 0 44px', lineHeight: 1.6 }}>
-            Souscription 100 % en ligne, 24h/24 et 7j/7. Attestation immédiate par email.
+            Notre équipe vous accompagne, 6 jours sur 7.
           </p>
 
-          {/* CTA principal : la souscription se fait en ligne, sans appel. */}
+          {/* CTAs */}
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
             <button
               className="btn-gold"
@@ -118,21 +118,39 @@ function FinalCTA() {
             >
               Souscrire maintenant
             </button>
+            <a href="tel:0974197820" className="btn-glass" style={{ textDecoration: 'none' }}>
+              <Phone size={16} strokeWidth={1.5} />
+              Nous appeler
+            </a>
           </div>
 
-          {/* Bloc rassurance : autonomie, plus de telephone. */}
+          {/* Bloc contact */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-            <p style={{
-              fontSize: 20,
-              fontWeight: 700,
-              color: 'var(--text)',
-              margin: 0,
-              letterSpacing: '-0.01em',
-            }}>
-              Attestation en 5 minutes
-            </p>
+            <a
+              href="tel:0974197820"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                fontSize: 22,
+                fontWeight: 700,
+                color: 'var(--text)',
+                textDecoration: 'none',
+                letterSpacing: '-0.01em',
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--gold)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text)';
+              }}
+            >
+              <Phone size={20} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
+              09 74 19 78 20
+            </a>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0 }}>
-              De 1 à 90 jours &middot; sans relevé d&apos;information
+              Lun-Ven 9h-21h &middot; Sam 9h-20h
             </p>
 
             {/* Ligne séparatrice dorée dégradée */}

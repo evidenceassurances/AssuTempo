@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
-  ArrowRight, FileText, ChevronRight, Calendar, TrendingDown, TrendingUp,
+  ArrowRight, Phone, FileText, ChevronRight, Calendar, TrendingDown, TrendingUp,
 } from 'lucide-react';
 import Footer from '../components/Footer';
 import AnswerCapsule from '../components/articles/AnswerCapsule';
@@ -716,7 +716,8 @@ function BarometreImmatriculations() {
           </p>
           <DoubleCta />
           <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '20px 0 0', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-            Souscription 100 % en ligne, 24h/24 et 7j/7, attestation immédiate.
+            <Phone size={14} strokeWidth={1.5} />
+            09 74 19 78 20, Lun-Ven 9h-21h, Sam 9h-20h
           </p>
         </m.div>
       </section>

@@ -3,12 +3,6 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
-import CrescentMoon from './ui/CrescentMoon';
-
-/* Le Guichet de Nuit n'est pas un lien de nav comme les autres : il porte une
-   offre que personne d'autre ne propose. Il sort donc de la liste et se rend
-   en pastille (classe .gn-pill, index.css), avec son croissant de lune. */
-const GUICHET = { label: 'Le Guichet de Nuit', href: '/guichet-de-nuit' };
 
 /* Header : uniquement les destinations qui rapportent (tarification, carte
    grise, international, carte) plus les articles, qui alimentent le SEO. FAQ
@@ -122,13 +116,6 @@ function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <NavLink
-            to={GUICHET.href}
-            className={({ isActive }) => `gn-pill${isActive ? ' active' : ''}`}
-          >
-            <CrescentMoon uid="nav" size={16} />
-            {GUICHET.label}
-          </NavLink>
         </nav>
 
         {/* CTA desktop */}
@@ -192,17 +179,6 @@ function Navbar() {
               zIndex: 99,
             }}
           >
-            {/* En tete du menu mobile : c'est l'entree qu'on doit voir en premier */}
-            <m.div variants={mobileLinkVariants}>
-              <NavLink
-                to={GUICHET.href}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) => `gn-pill gn-pill-mobile${isActive ? ' active' : ''}`}
-              >
-                <CrescentMoon uid="navmob" size={18} />
-                {GUICHET.label}
-              </NavLink>
-            </m.div>
             {links.map((link) => (
               <m.div key={link.href} variants={mobileLinkVariants}>
                 <NavLink
