@@ -5,7 +5,7 @@ import { m } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, Phone, ShieldCheck, BadgeCheck, FileCheck, CreditCard,
+  ArrowRight, ShieldCheck, BadgeCheck, FileCheck, CreditCard,
   Car, FileText, Home, Lock, MessageCircle, Check, Clock, Landmark, Building2,
 } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -544,17 +544,13 @@ function CarteGrise() {
 
             <div style={{ ...cardBase, textAlign: 'center' }}>
               <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 6px' }}>
-                Vous préférez la voix ?
+                À votre rythme
               </p>
-              <a
-                href="tel:0974197820"
-                style={{ fontSize: 20, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-              >
-                <Phone size={18} strokeWidth={1.75} aria-hidden />
-                09 74 19 78 20
-              </a>
+              <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--gold)', margin: 0 }}>
+                Démarche 100 % en ligne
+              </p>
               <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '8px 0 0' }}>
-                Lun-Ven 9h-21h | Sam 9h-20h
+                Accessible 24h/24, 7j/7
               </p>
             </div>
 

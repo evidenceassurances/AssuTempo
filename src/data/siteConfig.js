@@ -49,9 +49,8 @@ export const siteConfig = {
     'Export de véhicule',
   ],
   contact: {
-    title: 'Besoin d’assistance ?',
-    phone: '09 74 19 78 20',
-    hours: ['Lundi - Vendredi : 9h00 - 21h00', 'Samedi : 9h00 - 20h00'],
+    title: 'Prêt à rouler couvert ?',
+    tagline: 'Souscription 100 % en ligne, 24h/24 et 7j/7.',
     cta: { label: 'Souscrire maintenant', href: '/tarification' },
     note: 'Portail accessible 24h/24 - 7j/7',
   },

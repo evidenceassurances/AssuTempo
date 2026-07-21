@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
 import {
   Shield, BarChart3, Megaphone, Clock, Scale, Settings,
-  Info, Phone, Mail,
+  Info, Mail,
 } from 'lucide-react';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
@@ -689,10 +689,6 @@ function Cookies() {
                 >
                   Qui sommes-nous&nbsp;?
                 </a>
-              </p>
-              <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Phone size={13} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
-                09 74 19 78 20 · Lun-Ven 9h-21h · Sam 9h-20h
               </p>
               <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Mail size={13} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />

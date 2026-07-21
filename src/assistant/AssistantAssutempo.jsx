@@ -31,7 +31,7 @@ const WELCOME =
   `Bonjour, je suis Tempo, votre concierge Assutempo. Je réponds à vos questions sur l'assurance auto temporaire et la carte grise, et je peux vous guider pas à pas jusqu'à la souscription. Comment puis-je vous aider ?`;
 
 const ERROR_MSG =
-  `Je rencontre un souci technique à l'instant. Je peux toutefois vous accompagner pas à pas jusqu'au formulaire, ou vous pouvez joindre un conseiller au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).`;
+  `Je rencontre un souci technique à l'instant. Je peux toutefois vous accompagner pas à pas jusqu'au formulaire : la souscription se fait 100 % en ligne, 24h/24, et la nuit ou le week-end le Guichet de Nuit prend le relais.`;
 
 const STARTERS = [
   `Qu'est-ce que l'assurance temporaire ?`,
@@ -46,11 +46,11 @@ const MAX_MESSAGES_UTILISATEUR = 12;
 
 // Reponse fixe (sans appel API) quand le visiteur repose une question identique.
 const DOUBLON_MSG =
-  `Vous m'avez déjà posé cette question. Pour un cas précis ou personnalisé, le mieux est d'appeler l'équipe au 09 74 19 78 20 ou d'obtenir un devis en ligne.`;
+  `Vous m'avez déjà posé cette question. Pour un cas précis ou personnalisé, le mieux est d'obtenir votre devis en ligne : le parcours est disponible 24h/24, et l'attestation arrive immédiatement par email.`;
 
 // Message de cloture (plafond atteint ou marqueur [FIN] detecte).
 const CLOTURE_MSG =
-  `Pour aller plus loin sur votre situation, contactez l'équipe au 09 74 19 78 20 (Lun-Ven 9h à 21h, Sam 9h à 20h) ou obtenez votre devis en ligne.`;
+  `Pour aller plus loin sur votre situation, obtenez votre devis en ligne : le parcours est accessible 24h/24, et la nuit ou le week-end le Guichet de Nuit prend le relais.`;
 
 // Normalisation pour l'anti-doublon : minuscules, ponctuation retiree, espaces
 // reduits. \p{L}\p{N} (avec /u) garde lettres accentuees et chiffres.

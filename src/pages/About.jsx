@@ -348,7 +348,7 @@ function PartnerForm() {
             padding: '12px 16px',
             margin: 0,
           }}>
-            Une erreur est survenue. Réessayez ou appelez-nous au 09 74 19 78 20.
+            Une erreur est survenue. Merci de réessayer dans un instant.
           </p>
         )}
       </div>

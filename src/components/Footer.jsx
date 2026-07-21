@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import CrescentMoon from './ui/CrescentMoon';
 
 /* Le footer porte TOUTES les destinations, y compris celles retirees du header
@@ -182,28 +182,18 @@ function Footer() {
           </nav>
         </div>
 
-        {/* Col 3 - Contact */}
+        {/* Col 3 - Contact. Le telephone a ete retire : la souscription se fait
+            100 % en ligne, 24h/24, attestation immediate. La nuit et le week-end,
+            le Guichet de Nuit prend le relais. Seul l'email reste affiche ici. */}
         <div>
           <span style={colLabel}>Contact</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <a
-              href="tel:0974197820"
-              style={{
-                fontSize: 15,
-                fontWeight: 600,
-                color: 'var(--text)',
-                textDecoration: 'none',
-                transition: 'color 0.2s',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-            >
-              <Phone size={14} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
-              09 74 19 78 20
-            </a>
+            <p style={{ fontSize: 14, color: 'var(--text)', margin: 0, fontWeight: 600, lineHeight: 1.6 }}>
+              Souscription 100 % en ligne
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
+              24h/24, 7j/7 &middot; attestation immédiate
+            </p>
             <a
               href="mailto:contact@assutempo.fr"
               style={{
@@ -215,6 +205,7 @@ function Footer() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 8,
+                marginTop: 2,
               }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
@@ -222,9 +213,6 @@ function Footer() {
               <Mail size={14} strokeWidth={1.75} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden />
               contact@assutempo.fr
             </a>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
-              Lun-Ven 9h-21h<br />Sam 9h-20h
-            </p>
             <div style={{ marginTop: 8 }}>
               <FooterLink to="/conditions-generales">Conditions Générales</FooterLink>
             </div>

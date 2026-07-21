@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
-  ArrowRight, Phone, Key, FileText, Clock, Globe2, AlertOctagon,
+  ArrowRight, Key, FileText, Clock, Globe2, AlertOctagon,
   ChevronRight, Calendar,
 } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -510,8 +510,7 @@ function RoulezLegalApresAchat() {
           </p>
           <DoubleCta />
           <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '20px 0 0', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-            <Phone size={14} strokeWidth={1.5} />
-            09 74 19 78 20, Lun-Ven 9h-21h, Sam 9h-20h
+            Souscription 100 % en ligne, 24h/24 et 7j/7, attestation immédiate.
           </p>
         </m.div>
       </section>
