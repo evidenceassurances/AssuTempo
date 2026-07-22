@@ -1,5 +1,5 @@
 import {
-  useState, useRef, useEffect, useCallback, cloneElement, isValidElement,
+  useState, useRef, useEffect, useLayoutEffect, useCallback, cloneElement, isValidElement,
 } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { m, useMotionValue, useReducedMotion, animate } from 'framer-motion';
@@ -13,6 +13,11 @@ import GlobeInternational from '../components/GlobeInternational';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
+
+/* useLayoutEffect cote client (mesure de hauteur avant peinture), useEffect au
+   prerendu pour eviter l'avertissement React "useLayoutEffect does nothing on
+   the server". */
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 const PAYS = [
   { slug: 'albanie',           nom: 'Albanie',            flag: '🇦🇱' },
@@ -398,6 +403,12 @@ function DevisForm({ initialPays }) {
      l'ecrivent, jamais en meme temps. */
   const x = useMotionValue(0);
 
+  /* La hauteur de la carte est aussi une MotionValue (meme chemin fiable que x
+     sous LazyMotion domAnimation ; le prop declaratif animate={{height}} n'est
+     pas applique ici). 'auto' en mode simple, la hauteur de la scene active en
+     mode slider. */
+  const stageHmv = useMotionValue('auto');
+
   /* Largeur d'une scene (la piste fait N fois cette largeur). ResizeObserver
      capte aussi la barre d'URL mobile et les changements d'orientation. */
   useEffect(() => {
@@ -419,6 +430,38 @@ function DevisForm({ initialPays }) {
     if (mode === 'slider') x.set(-sceneRef.current * widthRef.current);
     else x.set(0);
   }, [mode, x]);
+
+  /* ── Hauteur de la carte, calee sur le contenu de la scene affichee ────────
+     La piste est un flex-row : sans intervention, sa hauteur serait celle de la
+     scene la plus haute, et les scenes courtes flotteraient dans le vide. On
+     mesure donc la hauteur reelle de la scene active et on l'anime (Framer,
+     height) vers cette valeur. Chaque scene ne s'etire pas (align-self:
+     flex-start en CSS), son offsetHeight est donc sa hauteur de contenu. Un
+     ResizeObserver suit les variations (apparition d'un message d'erreur). */
+  const [hidingOverflow, setHidingOverflow] = useState(false);
+  const hideTimerRef = useRef(null);
+
+  useIsoLayoutEffect(() => {
+    if (mode !== 'slider') { stageHmv.set('auto'); return undefined; }
+    const el = sceneEls.current[scene];
+    if (!el) return undefined;
+    const measure = () => {
+      const target = el.offsetHeight;
+      /* Premiere pose (hauteur encore 'auto') ou mouvement reduit : instantane.
+         Sinon on anime la hauteur vers celle de la scene active. */
+      if (typeof stageHmv.get() !== 'number' || reduce) stageHmv.set(target);
+      else animate(stageHmv, target, { duration: 0.35, ease: [0.22, 1, 0.36, 1] });
+    };
+    measure();
+    let ro;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(measure);
+      ro.observe(el);
+    }
+    return () => { if (ro) ro.disconnect(); };
+  }, [mode, scene, reduce, stageHmv]);
+
+  useEffect(() => () => { if (hideTimerRef.current) clearTimeout(hideTimerRef.current); }, []);
 
   /* Bornes des champs date, posees apres montage (le prerendu statique ne doit
      pas contenir de valeur dependante de l'horloge : mismatch d'hydratation). */
@@ -559,8 +602,17 @@ function DevisForm({ initialPays }) {
     setScene(i);
     if (modeRef.current === 'slider') {
       const target = -i * widthRef.current;
-      if (reduce) x.set(target);
-      else animate(x, target, { type: 'spring', stiffness: 260, damping: 34, restDelta: 0.5 });
+      if (reduce) {
+        x.set(target);
+      } else {
+        /* Pendant le glissement + l'animation de hauteur, on masque le
+           debordement (une scene plus haute qui entre ne doit pas depasser).
+           Rendu au repos ensuite (onAnimationComplete + filet de securite). */
+        setHidingOverflow(true);
+        if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = setTimeout(() => setHidingOverflow(false), 480);
+        animate(x, target, { type: 'spring', stiffness: 260, damping: 34, restDelta: 0.5 });
+      }
       return;
     }
     sceneEls.current[i]?.scrollIntoView({ behavior: reduce ? 'instant' : 'smooth', block: 'start' });
@@ -765,7 +817,7 @@ function DevisForm({ initialPays }) {
           Étape {scene + 1} sur {N_SCENES} : {SCENES[scene].title}
         </p>
 
-        <form
+        <m.form
           ref={stageRef}
           className="ix-stage"
           onSubmit={handleSubmit}
@@ -774,6 +826,10 @@ function DevisForm({ initialPays }) {
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
           noValidate
+          style={{
+            height: stageHmv,
+            overflowY: (mode === 'slider' && hidingOverflow) ? 'hidden' : undefined,
+          }}
         >
           <input type="hidden" name="access_key" value="7a4b9f4a-f77e-4f9b-8a16-7635bff791ed" />
           <input type="hidden" name="subject" value="Demande de devis international AssuTempo" />
@@ -1119,7 +1175,7 @@ function DevisForm({ initialPays }) {
             </section>
 
           </m.div>
-        </form>
+        </m.form>
       </div>
 
       <style>{IX_CSS}</style>
@@ -1280,23 +1336,22 @@ const IX_CSS = `
     border: 1px solid var(--glass-border); border-radius: 20px;
     background: rgba(255,255,255,0.02);
   }
-  .ix-mode-slider .ix-track { display: flex; width: calc(var(--ix-n) * 100%); }
+  .ix-mode-slider .ix-track { display: flex; align-items: flex-start; width: calc(var(--ix-n) * 100%); }
+  /* Chaque scene epouse la hauteur de SON contenu (align-self: flex-start =
+     jamais etiree sur la scene la plus haute), contenu aligne en haut, pas de
+     hauteur fixe. La hauteur de la carte est ensuite animee vers celle de la
+     scene active (JS). Le padding (32/20) absorbe les focus rings, donc jamais
+     de scroll interne ni de ring coupe. */
   .ix-mode-slider .ix-scene {
     flex: 0 0 calc(100% / var(--ix-n));
-    min-height: clamp(480px, 68vh, 660px);
-    display: flex; align-items: center;
-    padding: 24px 28px;
+    align-self: flex-start;
+    padding: 32px;
   }
-  /* La carte grandit avec son contenu (les scenes s'egalisent sur la plus haute
-     via le flex-row) : jamais de scroll interne. overflow: auto ici faisait
-     apparaitre une barre verticale ET horizontale des qu'un focus ring ou un
-     survol debordait de 1 ou 2 px. Les rings sont absorbes par le padding de la
-     carte (24/28), sans etre supprimes. */
   .ix-mode-slider .ix-scene-inner { width: 100%; }
 
   @media (max-width: 640px) {
     .ix-row, .ix-row-13 { grid-template-columns: 1fr !important; }
-    .ix-mode-slider .ix-scene { min-height: clamp(440px, 66vh, 620px); padding: 20px 18px; }
+    .ix-mode-slider .ix-scene { padding: 20px; }
     .ix-mode-simple .ix-scene { padding: 22px 18px; }
     .ix-next, .ix-submit { flex: 1; justify-content: center; }
   }
