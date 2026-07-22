@@ -118,19 +118,23 @@ export default function GlobeInternational() {
         /* Le globe part SOUS le header : son bord haut est ancre a une distance
            fixe du sommet du hero (jamais centre verticalement, sinon il remonte
            derriere la barre de navigation). translateX seul pour le centrage
-           horizontal. */
+           horizontal. Assez large pour englober le texte et la liste des pays.
+           Le bas se fond dans la section (mask lineaire statique) : pas de coupe
+           nette, pas de filtre anime. */
         .gi-wrap {
           position: absolute;
-          top: 104px;
+          top: 84px;
           left: 50%;
-          width: clamp(300px, 54vw, 560px);
+          width: clamp(360px, 88vw, 900px);
           transform: translateX(-50%);
-          opacity: 0.18;
+          opacity: 0.17;
           pointer-events: none;
           z-index: 1;
+          -webkit-mask-image: linear-gradient(180deg, #000 66%, rgba(0,0,0,0) 100%);
+          mask-image: linear-gradient(180deg, #000 66%, rgba(0,0,0,0) 100%);
         }
         @media (max-width: 640px) {
-          .gi-wrap { top: 88px; width: clamp(280px, 82vw, 360px); }
+          .gi-wrap { top: 72px; width: clamp(340px, 124vw, 560px); }
         }
         .gi-svg { display: block; width: 100%; height: auto; }
 

@@ -1445,15 +1445,18 @@ function AssuranceInternationale() {
             et vous accompagne personnellement jusqu&apos;à la souscription. Vous recevez votre
             proposition en 4h en journée, 8h la nuit, prête à souscrire. Offre réservée aux voitures et aux poids lourds.
           </p>
-        </m.div>
-      </section>
 
-      {/* Pills */}
-      <section style={{ background: 'var(--bg)', paddingBottom: 80 }}>
-        <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 32px' }}>
+          {/* Liste des pays : dans le hero pour que le globe l'englobe aussi. */}
           <div
             ref={pillsRef}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 10,
+              justifyContent: 'center',
+              maxWidth: 640,
+              margin: '36px auto 0',
+            }}
           >
             {PAYS.map((p, i) => (
               <m.span
@@ -1476,31 +1479,31 @@ function AssuranceInternationale() {
               </m.span>
             ))}
           </div>
-        </div>
+        </m.div>
       </section>
 
-      {/* Comment ça marche */}
-      <section style={{ background: 'var(--bg-2)', padding: '80px 0' }}>
+      {/* Comment ça marche : compact, pour atteindre vite la zone de devis. */}
+      <section style={{ background: 'var(--bg-2)', padding: '40px 0' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
           <m.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            style={{ textAlign: 'center', marginBottom: 56 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            style={{ textAlign: 'center', marginBottom: 30 }}
           >
             <h2 style={{
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+              fontSize: 'clamp(1.4rem, 2.8vw, 1.9rem)',
               fontWeight: 700,
               letterSpacing: '-0.025em',
               color: 'var(--text)',
-              margin: '0 0 14px',
+              margin: 0,
             }}>
-              Comment ça marche ?
+              Comment ça marche ?{' '}
+              <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.7em' }}>
+                Simple, rapide, personnalisé.
+              </span>
             </h2>
-            <p style={{ fontSize: 16, color: 'var(--text-muted)', margin: 0 }}>
-              Simple, rapide, personnalisé.
-            </p>
           </m.div>
 
           <div ref={stepsRef} className="intl-steps" style={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -1513,13 +1516,13 @@ function AssuranceInternationale() {
                 transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
                 style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 16px' }}
               >
-                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold)', letterSpacing: '0.15em', marginBottom: 20 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold)', letterSpacing: '0.15em', marginBottom: 8 }}>
                   {step.num}
                 </div>
-                <p style={{ fontSize: 17, fontWeight: 600, color: 'var(--text)', margin: '0 0 8px', lineHeight: 1.4, maxWidth: 260 }}>
+                <p style={{ fontSize: 15.5, fontWeight: 600, color: 'var(--text)', margin: '0 0 5px', lineHeight: 1.35, maxWidth: 260 }}>
                   {step.title}
                 </p>
-                <p style={{ fontSize: 14, color: 'var(--text-muted)', margin: 0, lineHeight: 1.65, maxWidth: 240 }}>
+                <p style={{ fontSize: 13.5, color: 'var(--text-muted)', margin: 0, lineHeight: 1.55, maxWidth: 240 }}>
                   {step.body}
                 </p>
               </m.div>
@@ -1530,7 +1533,7 @@ function AssuranceInternationale() {
         <style>{`
           @media (max-width: 768px) {
             .intl-steps { flex-direction: column !important; align-items: center !important; }
-            .intl-step { width: 100% !important; max-width: 340px !important; margin-bottom: 48px !important; padding: 0 8px !important; }
+            .intl-step { width: 100% !important; max-width: 340px !important; margin-bottom: 22px !important; padding: 0 8px !important; }
             .intl-step:last-child { margin-bottom: 0 !important; }
           }
         `}</style>
