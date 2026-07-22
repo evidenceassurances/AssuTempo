@@ -1403,7 +1403,7 @@ function AssuranceInternationale() {
       {/* Hero */}
       <section style={{
         paddingTop: 160,
-        paddingBottom: 80,
+        paddingBottom: 104,
         textAlign: 'center',
         background: 'var(--bg)',
         position: 'relative',

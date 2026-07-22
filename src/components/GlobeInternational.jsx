@@ -115,15 +115,22 @@ export default function GlobeInternational() {
       </svg>
 
       <style>{`
+        /* Le globe part SOUS le header : son bord haut est ancre a une distance
+           fixe du sommet du hero (jamais centre verticalement, sinon il remonte
+           derriere la barre de navigation). translateX seul pour le centrage
+           horizontal. */
         .gi-wrap {
           position: absolute;
-          top: 46%;
+          top: 104px;
           left: 50%;
-          width: clamp(320px, 66vw, 720px);
-          transform: translate(-50%, -50%);
+          width: clamp(300px, 54vw, 560px);
+          transform: translateX(-50%);
           opacity: 0.18;
           pointer-events: none;
           z-index: 1;
+        }
+        @media (max-width: 640px) {
+          .gi-wrap { top: 88px; width: clamp(280px, 82vw, 360px); }
         }
         .gi-svg { display: block; width: 100%; height: auto; }
 
