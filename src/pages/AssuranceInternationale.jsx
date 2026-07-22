@@ -1283,17 +1283,20 @@ const IX_CSS = `
   .ix-mode-slider .ix-track { display: flex; width: calc(var(--ix-n) * 100%); }
   .ix-mode-slider .ix-scene {
     flex: 0 0 calc(100% / var(--ix-n));
-    height: clamp(480px, 68vh, 660px);
+    min-height: clamp(480px, 68vh, 660px);
     display: flex; align-items: center;
     padding: 24px 28px;
   }
-  .ix-mode-slider .ix-scene-inner { max-height: 100%; overflow-y: auto; padding-right: 4px; }
-  .ix-mode-slider .ix-scene-inner::-webkit-scrollbar { width: 6px; }
-  .ix-mode-slider .ix-scene-inner::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.25); border-radius: 3px; }
+  /* La carte grandit avec son contenu (les scenes s'egalisent sur la plus haute
+     via le flex-row) : jamais de scroll interne. overflow: auto ici faisait
+     apparaitre une barre verticale ET horizontale des qu'un focus ring ou un
+     survol debordait de 1 ou 2 px. Les rings sont absorbes par le padding de la
+     carte (24/28), sans etre supprimes. */
+  .ix-mode-slider .ix-scene-inner { width: 100%; }
 
   @media (max-width: 640px) {
     .ix-row, .ix-row-13 { grid-template-columns: 1fr !important; }
-    .ix-mode-slider .ix-scene { height: clamp(440px, 66vh, 620px); padding: 20px 18px; }
+    .ix-mode-slider .ix-scene { min-height: clamp(440px, 66vh, 620px); padding: 20px 18px; }
     .ix-mode-simple .ix-scene { padding: 22px 18px; }
     .ix-next, .ix-submit { flex: 1; justify-content: center; }
   }
