@@ -9,7 +9,7 @@ import {
   Check, Globe2, Clock,
 } from 'lucide-react';
 import Footer from '../components/Footer';
-import TempoDial from '../components/TempoDial';
+import GlobeInternational from '../components/GlobeInternational';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
@@ -715,16 +715,8 @@ function DevisForm({ initialPays }) {
       className={`ix-exp ix-mode-${mode}`}
       style={{ '--ix-n': N_SCENES }}
     >
-      {/* Fond : le globe, discret, et quelques points. Il ne bouge pas avec la
-          piste : les scenes glissent devant lui. */}
-      <div className="ix-sky" aria-hidden="true">
-        <div className="ix-sky-globe"><Globe orbit /></div>
-        {AMBIENT.map((st, i) => (
-          <span key={i} className="ix-dot" style={{ top: `${st.t}%`, left: `${st.l}%`, width: st.s, height: st.s, opacity: st.o }} />
-        ))}
-        <div className="ix-sky-glow" />
-      </div>
-
+      {/* Fond uni du theme : aucun decor ne passe derriere les champs. Le globe
+          signature vit desormais uniquement dans le hero. */}
       <div className="ix-inner">
         {/* En tete du devis */}
         <header className="ix-head">
@@ -1154,24 +1146,14 @@ const IX_CSS = `
   .ix-exp {
     position: relative;
     overflow: hidden;
-    background:
-      radial-gradient(ellipse 90% 60% at 50% 6%, rgba(201,168,76,0.06) 0%, transparent 58%),
-      linear-gradient(180deg, #06070F 0%, #08080E 46%, #0A0A0A 100%);
+    background: #0A0A0A;
     border-top: 1px solid var(--gold-border);
     border-bottom: 1px solid var(--gold-border);
     padding: 84px 0 96px;
   }
 
-  /* ── Fond : globe + points ─────────────────────────────────────────── */
+  /* ── Fond de l'ecran de remerciement (points d'ambiance uniquement) ── */
   .ix-sky { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .ix-sky-globe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: clamp(420px, 62vw, 760px);
-    transform: translate(-50%, -50%);
-    opacity: 0.42;
-  }
   .ix-globe-svg { width: 100%; height: auto; display: block; }
   .ix-globe-orbit {
     transform-box: fill-box;
@@ -1180,10 +1162,6 @@ const IX_CSS = `
   }
   @keyframes ix-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   .ix-dot { position: absolute; border-radius: 50%; background: #E8C97A; }
-  .ix-sky-glow {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 56% 40% at 50% 100%, rgba(201,168,76,0.06) 0%, transparent 70%);
-  }
 
   .ix-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 0 24px; }
 
@@ -1431,7 +1409,7 @@ function AssuranceInternationale() {
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <TempoDial />
+        <GlobeInternational />
         <div style={{
           position: 'absolute',
           inset: 0,
