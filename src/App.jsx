@@ -34,6 +34,7 @@ const IMPORTERS = {
   RouleSansCarteGriseNom:     () => import('./pages/articles/RouleSansCarteGriseNom'),
   AssuranceTemporaire1Mois:   () => import('./pages/articles/AssuranceTemporaire1Mois'),
   ChangementTitulaireCarteGrise: () => import('./pages/articles/ChangementTitulaireCarteGrise'),
+  CarteGriseAntsBloquee:       () => import('./pages/articles/CarteGriseAntsBloquee'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),

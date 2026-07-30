@@ -57,6 +57,7 @@ const ROUTES = [
   '/articles/rouler-sans-carte-grise-a-son-nom',
   '/articles/assurance-auto-temporaire-1-mois',
   '/articles/changement-titulaire-carte-grise',
+  '/articles/carte-grise-ants-bloquee',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -111,6 +112,7 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/rouler-sans-carte-grise-a-son-nom':               'src/data/articles/rouleSansCarteGriseNom.js',
   '/articles/assurance-auto-temporaire-1-mois':                 'src/data/articles/assuranceTemporaire1Mois.js',
   '/articles/changement-titulaire-carte-grise':                 'src/data/articles/changementTitulaireCarteGrise.js',
+  '/articles/carte-grise-ants-bloquee':                          'src/data/articles/carteGriseAntsBloquee.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -276,6 +278,7 @@ const ROUTE_MODULES = {
   '/articles/rouler-sans-carte-grise-a-son-nom':               'src/pages/articles/RouleSansCarteGriseNom.jsx',
   '/articles/assurance-auto-temporaire-1-mois':                 'src/pages/articles/AssuranceTemporaire1Mois.jsx',
   '/articles/changement-titulaire-carte-grise':                 'src/pages/articles/ChangementTitulaireCarteGrise.jsx',
+  '/articles/carte-grise-ants-bloquee':                          'src/pages/articles/CarteGriseAntsBloquee.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',
