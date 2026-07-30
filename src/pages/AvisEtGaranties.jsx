@@ -159,10 +159,10 @@ function AvisEtGaranties() {
     <>
       <Helmet>
         <title>AssuTempo avis et garanties | Evidence Assurances</title>
-        <meta name="description" content="AssuTempo est édité par Evidence Assurances, courtier ORIAS n° 20005719. Vérifiez notre identité légale et ne confondez pas AssuTempo avec des sites au nom proche." />
+        <meta name="description" content="AssuTempo est édité par Evidence Assurances, courtier ORIAS n° 20005719. Ne confondez pas AssuTempo avec des sites au nom proche avant de souscrire." />
         <link rel="canonical" href="https://assutempo.fr/avis-et-garanties" />
         <meta property="og:title" content="AssuTempo avis et garanties | Evidence Assurances" />
-        <meta property="og:description" content="AssuTempo est édité par Evidence Assurances, courtier ORIAS n° 20005719. Vérifiez notre identité légale et ne confondez pas AssuTempo avec des sites au nom proche." />
+        <meta property="og:description" content="AssuTempo est édité par Evidence Assurances, courtier ORIAS n° 20005719. Ne confondez pas AssuTempo avec des sites au nom proche avant de souscrire." />
         <meta property="og:url" content="https://assutempo.fr/avis-et-garanties" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
