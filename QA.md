@@ -34,8 +34,8 @@ Aucun chiffre non vérifié n'a été utilisé. Les délais de traitement variab
 
 ## Contrôles automatisés
 
-- **Tirets interdits (U+2014, U+2013)** : recherche `[–—]` sur `src/data/articles/carteGriseAntsBloquee.js` → 0 occurrence.
-- **Expressions bannies** ("dans un monde où", "il est important de noter", "de nos jours", "n'hésitez pas", "en résumé", "force est de constater") : recherche insensible à la casse sur le fichier → 0 occurrence.
+- **Tirets interdits (tiret cadratin et demi-cadratin)** : recherche par expression régulière sur `src/data/articles/carteGriseAntsBloquee.js`, 0 occurrence.
+- **Expressions bannies listées dans CLAUDE.md (section 8/10)** : recherche insensible à la casse sur le fichier, 0 occurrence.
 - **Accents / encodage** : fichier UTF-8, relu visuellement, aucun caractère mal encodé.
 - **Aucune dépendance npm ajoutée** : `package.json` non modifié (les icônes `Lock`, `Clock`, `UserCheck` viennent de `lucide-react`, déjà une dépendance existante et déjà utilisées ailleurs dans le repo).
 - **Contenu statique dans le DOM** : vérifié sur `dist/articles/carte-grise-ants-bloquee/index.html` généré par le prérendu, le HTML statique contient bien le H1, l'Answer Capsule, le tableau, la FAQ et les 3 blocs JSON-LD (`Article`, `BreadcrumbList`, `FAQPage`) sans exécution JS, comme les 24 autres articles.
