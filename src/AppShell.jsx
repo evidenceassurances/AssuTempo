@@ -62,6 +62,7 @@ const ROUTE_TABLE = [
   ['/faq', 'Faq'],
   ['/tarification', 'Pricing'],
   ['/qui-sommes-nous', 'About'],
+  ['/avis-et-garanties', 'AvisEtGaranties'],
   ['/articles', 'Articles'],
   ['/articles/voiture-immobilisee-defaut-assurance', 'VoitureImmobilisee'],
   ['/articles/controle-sans-assurance-risques-amende', 'ControleSansAssurance'],

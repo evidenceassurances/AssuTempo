@@ -440,6 +440,10 @@ function RoulezLegalApresAchat() {
           <Link to="/barometre-immatriculations" style={{ color: 'var(--gold-light)' }}>
             Baromètre AssuTempo des immatriculations
           </Link>
+          . Pour vérifier qui édite AssuTempo et notre numéro ORIAS, consultez{' '}
+          <Link to="/avis-et-garanties" style={{ color: 'var(--gold-light)' }}>
+            avis et garanties AssuTempo
+          </Link>
           .
         </p>
       </section>

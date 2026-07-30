@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
@@ -143,6 +144,12 @@ function Faq() {
           </h1>
           <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
             Retrouvez les réponses aux questions les plus fréquentes sur l'assurance temporaire AssuTempo.
+          </p>
+          <p style={{ fontSize: 13.5, color: 'var(--text-subtle)', maxWidth: 520, margin: '16px auto 0', lineHeight: 1.6 }}>
+            Une question sur notre identité légale ou sur les sites au nom proche d'AssuTempo ?{' '}
+            <Link to="/avis-et-garanties" style={{ color: 'var(--gold-light)' }}>
+              Consultez avis et garanties
+            </Link>.
           </p>
         </m.div>
       </section>
