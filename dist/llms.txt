@@ -102,3 +102,7 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Changement de titulaire de la carte grise : le guide étape par étape**
   https://assutempo.fr/articles/changement-titulaire-carte-grise
   Le vendeur déclare la cession sous 15 jours et remet le code de cession (article R322-4 du code de la route). L'acheteur dispose ensuite d'1 mois pour mettre la carte grise à son nom (article R322-5). Le certificat provisoire d'immatriculation (CPI), délivré par un professionnel habilité par le Ministère de l'Intérieur, permet de rouler immédiatement pendant le traitement. Le véhicule doit être assuré dès la remise des clés.
+
+- **Dossier carte grise bloqué sur l'ANTS : pourquoi, et comment le débloquer**
+  https://assutempo.fr/articles/carte-grise-ants-bloquee
+  Causes fréquentes de blocage (pièce refusée, code de cession expiré, incident du portail), délai légal d'1 mois pour immatriculer après achat (article R322-5 du code de la route), recours en cas de refus ou de silence de l'ANTS (recours gracieux, médiateur des cartes grises, service-public.gouv.fr), et accès direct au SIV d'un professionnel habilité par le Ministère de l'Intérieur pour débloquer un dossier.

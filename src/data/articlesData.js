@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -311,6 +311,19 @@ export const articles = [
       "Le nouveau propriétaire dispose d'un mois pour mettre la carte grise à son nom, avec le code de cession remis par le vendeur. Le certificat provisoire d'immatriculation (CPI) permet de rouler immédiatement pendant le traitement du dossier.",
     icone: UserCheck,
     accent: '#9E97B5',
+    categorie: 'Carte grise',
+    readTime: '7 min',
+    hasPage: true,
+  },
+  {
+    slug: 'carte-grise-ants-bloquee',
+    titre: "Dossier carte grise bloqué sur l'ANTS : pourquoi, et comment le débloquer",
+    extrait:
+      "Dossier de carte grise bloqué sur l'ANTS ? Causes fréquentes, délais réels et recours, dont le passage par un professionnel habilité pour débloquer vite.",
+    reponseRapide:
+      "Un dossier de carte grise bloqué sur l'ANTS vient le plus souvent d'une pièce refusée (justificatif, photo, contrôle technique) ou d'un incident technique du portail. Il faut d'abord vérifier les notifications de l'espace personnel, puis relancer l'ANTS ou passer par un professionnel habilité, qui a un accès direct au SIV pour corriger le motif exact.",
+    icone: Lock,
+    accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '7 min',
     hasPage: true,
