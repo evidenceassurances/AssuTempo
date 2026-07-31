@@ -84,6 +84,17 @@ module.exports = async function handler(req, res) {
   const entete = req.headers.authorization || '';
   const bearer = entete.startsWith('Bearer ') ? entete.slice(7) : '';
 
+  /* Le `= false` est deliberement conserve, meme si les deux branches du `if`
+     ci-dessous affectent systematiquement la variable aujourd'hui.
+
+     C'est la position fermee par defaut : cette porte decide de l'argent, donc
+     l'etat initial doit etre "refuse", jamais "indetermine". Si quelqu'un ajoute
+     un jour une troisieme voie d'authentification et oublie d'y affecter
+     `autorise`, l'appel sera rejete en 401 au lieu de passer.
+
+     eslint signale l'affectation comme inutile : c'est vrai a la lettre, et faux
+     sur le fond. On desactive la regle ici plutot que de retirer le garde-fou. */
+  // eslint-disable-next-line no-useless-assignment
   let autorise = false;
   try {
     if (bearer) {
