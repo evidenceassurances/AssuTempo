@@ -41,6 +41,7 @@ import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireC
 import CarteGriseAntsBloquee from './pages/articles/CarteGriseAntsBloquee';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
+import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
 import BarometreImmatriculations from './pages/BarometreImmatriculations';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
@@ -84,6 +85,7 @@ const PAGES = {
   CarteGriseAntsBloquee,
   CarteGriseService,
   RoulezLegalApresAchat,
+  AssuranceTemporaireUtilitaire,
   BarometreImmatriculations,
   Carte,
   Cookies,

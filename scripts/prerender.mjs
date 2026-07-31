@@ -62,6 +62,7 @@ const ROUTES = [
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
   '/roulez-legal-apres-achat',
+  '/assurance-temporaire-utilitaire',
   '/barometre-immatriculations',
   '/cookies',
   '/conditions-generales',
@@ -82,8 +83,24 @@ const SITEMAP_EXCLUDE = new Set(['/urgence']);
 // si le contenu de la page a réellement changé : signal de fraîcheur crédible,
 // jamais de "tout a changé" à chaque build.
 const SITE = 'https://assutempo.fr';
-// Filet de sécurité si l'historique git est indisponible (clone sans .git).
+// Filet de sécurité si aucune date n'est connue, ni par git ni par la carte.
 const SITEMAP_FALLBACK_LASTMOD = '2026-06-23';
+
+/* ── Pourquoi une carte committée plutôt que git seul ────────────────────────
+   Constaté le 1er août 2026 : en local, git donne des dates justes et variées ;
+   sur Vercel, les 72 URLs sortaient toutes avec la date du build. L'état git du
+   conteneur de build n'est pas celui d'un dépôt normal (clone superficiel, et
+   `git status` y voit des fichiers modifiés qui ne le sont pas), donc chaque
+   fichier était compté comme modifié aujourd'hui. Un sitemap où tout change en
+   même temps ne porte aucun signal de fraîcheur, et Google finit par ignorer
+   le lastmod.
+
+   La date de vérité est donc figée dans sitemap-lastmod.json, committé avec le
+   contenu qu'elle décrit. Le build ne fait que le lire. Elle n'est recalculée
+   depuis git QUE là où git est digne de confiance, c'est-à-dire un clone
+   complet (poste de dev), et le fichier est alors réécrit pour être committé
+   avec la modification. Ne jamais revenir à un calcul git direct au build. */
+const LASTMOD_MAP_PATH = path.join(root, 'sitemap-lastmod.json');
 
 // Contenu des articles : la page JSX n'est qu'un habillage, la vraie matière
 // vit dans src/data/articles/*.js. La date la plus récente des deux fait foi.
@@ -120,6 +137,7 @@ const ARTICLE_DATA_SOURCES = {
    les lastmod. On tente de completer l'historique ; en cas d'echec (pas de
    reseau, pas de credentials), les dates restent plausibles et le build
    continue. Local : depot complet, bloc entierement saute. */
+let gitFiable = false;
 try {
   const isShallow = execSync('git rev-parse --is-shallow-repository', {
     cwd: root, stdio: ['ignore', 'pipe', 'ignore'],
@@ -128,11 +146,30 @@ try {
     execSync('git fetch --quiet --unshallow', {
       cwd: root, stdio: ['ignore', 'ignore', 'ignore'], timeout: 30000,
     });
-    console.log('🕰️  Historique git complete (clone shallow detecte) : lastmod exacts');
+    console.log('🕰️  Historique git complete (clone shallow detecte)');
   }
+  /* Verdict apres tentative : un clone reste superficiel -> ses dates sont
+     bornees a la fenetre du clone, donc fausses. On ne s'en sert pas. */
+  gitFiable = execSync('git rev-parse --is-shallow-repository', {
+    cwd: root, stdio: ['ignore', 'pipe', 'ignore'],
+  }).toString().trim() === 'false';
 } catch {
-  console.warn('⚠️  Clone shallow non complete : lastmod bornes a la fenetre du clone');
+  gitFiable = false;
 }
+
+/* Carte des dates committee : seule source utilisee quand git n'est pas fiable
+   (build Vercel). Absente ou illisible -> on retombe sur la constante. */
+let lastmodMap = {};
+try {
+  lastmodMap = JSON.parse(readFileSync(LASTMOD_MAP_PATH, 'utf-8'));
+} catch {
+  lastmodMap = {};
+}
+console.log(
+  gitFiable
+    ? '🗓️  lastmod : recalcules depuis git, sitemap-lastmod.json mis a jour'
+    : '🗓️  lastmod : lus dans sitemap-lastmod.json (git non fiable ici)',
+);
 
 const gitDateCache = new Map();
 function gitLastCommitDate(file) {
@@ -168,8 +205,15 @@ function sitemapSourcesFor(route) {
 }
 
 function lastmodFor(route) {
-  const dates = sitemapSourcesFor(route).map(gitLastCommitDate).filter(Boolean);
-  return dates.length ? dates.sort().at(-1) : SITEMAP_FALLBACK_LASTMOD;
+  if (gitFiable) {
+    const dates = sitemapSourcesFor(route).map(gitLastCommitDate).filter(Boolean);
+    if (dates.length) {
+      const date = dates.sort().at(-1);
+      lastmodMap[route] = date; // sera reecrit sur disque, puis committe
+      return date;
+    }
+  }
+  return lastmodMap[route] || SITEMAP_FALLBACK_LASTMOD;
 }
 
 function sitemapMeta(route) {
@@ -282,6 +326,7 @@ const ROUTE_MODULES = {
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',
+  '/assurance-temporaire-utilitaire': 'src/pages/AssuranceTemporaireUtilitaire.jsx',
   '/barometre-immatriculations': 'src/pages/BarometreImmatriculations.jsx',
   '/cookies':                 'src/pages/Cookies.jsx',
   '/conditions-generales':    'src/pages/CGV.jsx',
@@ -451,6 +496,15 @@ const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http:
 writeFileSync(path.join(root, 'dist/sitemap.xml'), sitemapXml);
 writeFileSync(path.join(root, 'public/sitemap.xml'), sitemapXml);
 console.log(`\n🗺️  sitemap.xml généré (${SITEMAP_ROUTES.length} URLs).`);
+
+/* Carte des dates réécrite seulement là où git fait foi : le build Vercel ne
+   doit jamais l'altérer. Clés triées : diff lisible, pas de bruit. */
+if (gitFiable) {
+  const trie = Object.fromEntries(Object.keys(lastmodMap).sort().map((k) => [k, lastmodMap[k]]));
+  writeFileSync(LASTMOD_MAP_PATH, `${JSON.stringify(trie, null, 2)}\n`);
+  const distinctes = new Set(Object.values(trie)).size;
+  console.log(`🗓️  sitemap-lastmod.json : ${Object.keys(trie).length} routes, ${distinctes} dates distinctes.`);
+}
 
 // ── 5. Nettoyage ─────────────────────────────────────────────────────────────
 rmSync(distSsr, { recursive: true, force: true });
