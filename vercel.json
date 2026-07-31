@@ -1,1 +1,22 @@
-{}
+{
+  "redirects": [
+    { "source": "/quisommesnous", "destination": "/qui-sommes-nous", "statusCode": 301 },
+    {
+      "source": "/le-certificat-provisoire-dimmatriculation-plaques-ww",
+      "destination": "/articles/carte-grise-urgence-cpi-immediat",
+      "statusCode": 301
+    },
+    {
+      "source": "/assurance-temporaire-vehicule-utilitaire",
+      "destination": "/articles/assurance-temporaire-utilitaire-demenagement",
+      "statusCode": 301
+    },
+    { "source": "/blog", "destination": "/articles", "statusCode": 301 },
+    { "source": "/blog/:slug*", "destination": "/articles", "statusCode": 301 },
+    { "source": "/devis", "destination": "/tarification", "statusCode": 301 },
+    { "source": "/assurance-temporaire", "destination": "/", "statusCode": 301 },
+    { "source": "/assurance-auto-temporaire", "destination": "/", "statusCode": 301 },
+    { "source": "/contact", "destination": "/qui-sommes-nous", "statusCode": 301 },
+    { "source": "/mentions-legales", "destination": "/conditions-generales", "statusCode": 301 }
+  ]
+}
