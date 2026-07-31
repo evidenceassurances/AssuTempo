@@ -12,6 +12,15 @@
       "statusCode": 301
     },
     { "source": "/faire-sa-carte-grise", "destination": "/carte-grise", "statusCode": 301 },
+    {
+      "source": "/helpie_faq/dans-quels-pays-puis-je-circuler",
+      "destination": "/carte",
+      "statusCode": 301
+    },
+    { "source": "/helpie_faq/:slug*", "destination": "/faq", "statusCode": 301 },
+    { "source": "/www.assutempo.fr/quisommesnous", "destination": "/qui-sommes-nous", "statusCode": 301 },
+    { "source": "/www.assutempo.fr/faq", "destination": "/faq", "statusCode": 301 },
+    { "source": "/assurance-auto-temporaire-1-jour", "destination": "/tarification", "statusCode": 301 },
     { "source": "/blog", "destination": "/articles", "statusCode": 301 },
     { "source": "/blog/:slug*", "destination": "/articles", "statusCode": 301 },
     { "source": "/devis", "destination": "/tarification", "statusCode": 301 },
