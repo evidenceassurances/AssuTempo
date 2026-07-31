@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { isAnalyticsAllowed } from '../components/CookieConsent';
-import { trackEvent, trackPageView } from '../lib/analytics';
+import { pagePath, trackEvent, trackPageView } from '../lib/analytics';
 
 const GA_ID = import.meta.env.VITE_GA_ID;
 
@@ -56,6 +56,20 @@ function loadGA() {
 // Libelles des CTA de devis a tracker (clic sur un lien menant vers /tarification).
 const DEVIS_CTA_LABELS = /obtenir mon devis|voir les tarifs|souscrire maintenant/i;
 
+/* Libelles exacts qui declenchent `demande_devis`, lien ou bouton. La
+   comparaison se fait sur le libelle normalise (casse et espaces), la valeur
+   remontee a GA4 est TOUJOURS celle de cette liste : la cardinalite du
+   parametre `cta` reste donc fermee, quoi qu'il arrive dans le rendu. */
+const DEVIS_CTA = ['Obtenir mon devis', 'Souscrire maintenant', 'Voir les tarifs'];
+const DEVIS_CTA_BY_KEY = new Map(DEVIS_CTA.map((label) => [label.toLowerCase(), label]));
+
+/* Libelle accessible d'un element cliquable : aria-label s'il existe, sinon le
+   texte visible (les icones SVG n'apportent aucun texte). */
+function labelKey(el) {
+  const raw = el.getAttribute('aria-label') || el.textContent || '';
+  return raw.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 export function useAnalytics() {
   const location = useLocation();
 
@@ -77,23 +91,42 @@ export function useAnalytics() {
     return () => window.removeEventListener('cookie-consent', handler);
   }, []);
 
-  // 2. Suivi des clics d'intention par delegation globale.
-  //    Ne modifie aucune navigation : on observe simplement les clics.
-  //    - liens tel: -> tel_click
+  // 2. Suivi des clics d'intention par delegation globale : UN seul listener
+  //    pour tout le site, pose une seule fois (useAnalytics n'est appele qu'a
+  //    un endroit, AppShell). Aucun composant n'a de handler a porter, donc
+  //    aucun risque de double comptage entre un handler local et la
+  //    delegation. Ne modifie aucune navigation : on observe les clics.
+  //    - liens tel: -> clic_telephone
+  //    - lien OU bouton portant un libelle de CTA de devis -> demande_devis
   //    - liens internes vers /tarification dont le libelle est un CTA de devis
-  //      -> cta_devis_click (exclut les liens de menu "Tarification").
+  //      -> cta_devis_click (evenement historique, conserve tel quel).
+  //    Un clic ne peut declencher qu'une seule branche telephone/devis :
+  //    `closest` ne remonte qu'a UN element et un lien tel: sort aussitot.
   useEffect(() => {
     function onDocumentClick(e) {
-      const target = e.target;
-      const anchor = target && target.closest ? target.closest('a[href]') : null;
-      if (!anchor) return;
+      /* Un clic peut viser un noeud texte (dispatch synthetique) : on repart
+         alors de son element parent, sinon closest n'existe pas. */
+      const target = e.target && e.target.nodeType === 3 ? e.target.parentElement : e.target;
+      const el = target && target.closest ? target.closest('a[href], button') : null;
+      if (!el) return;
 
-      const rawHref = anchor.getAttribute('href') || '';
+      const anchor = el.tagName === 'A' ? el : null;
+      const rawHref = anchor ? anchor.getAttribute('href') || '' : '';
 
       if (rawHref.startsWith('tel:')) {
-        trackEvent('tel_click', { "page_path": window.location.pathname });
+        trackEvent('clic_telephone', { "page": pagePath() });
         return;
       }
+
+      /* Demande de devis : le libelle fait foi, quel que soit l'element
+         (les CTA du site sont tantot des <Link>, tantot des <button> qui
+         naviguent par code). */
+      const cta = DEVIS_CTA_BY_KEY.get(labelKey(el));
+      if (cta) {
+        trackEvent('demande_devis', { "cta": cta, "page": pagePath() });
+      }
+
+      if (!anchor) return;
 
       try {
         const url = new URL(anchor.href, window.location.origin);
@@ -110,8 +143,14 @@ export function useAnalytics() {
       }
     }
 
-    document.addEventListener('click', onDocumentClick);
-    return () => document.removeEventListener('click', onDocumentClick);
+    /* Phase de CAPTURE, et non de bulle : React 18 branche ses handlers sur le
+       conteneur racine, donc son onClick (qui appelle navigate) s'executerait
+       AVANT un listener pose sur document en bulle. `page` porterait alors la
+       page d'ARRIVEE au lieu de celle du clic (constate en navigateur). La
+       capture passe en premier : le chemin lu est bien celui de la page
+       quittee, et aucun stopPropagation en aval ne peut masquer un clic. */
+    document.addEventListener('click', onDocumentClick, true);
+    return () => document.removeEventListener('click', onDocumentClick, true);
   }, []);
 
   // 3. page_view a chaque changement de route + evenements de page dedies.
