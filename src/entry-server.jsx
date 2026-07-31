@@ -43,6 +43,7 @@ import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
 import BarometreImmatriculations from './pages/BarometreImmatriculations';
+import VilleLocale from './pages/VilleLocale';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
@@ -87,6 +88,7 @@ const PAGES = {
   RoulezLegalApresAchat,
   AssuranceTemporaireUtilitaire,
   BarometreImmatriculations,
+  VilleLocale,
   Carte,
   Cookies,
   CGV,

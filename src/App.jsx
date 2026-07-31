@@ -40,6 +40,7 @@ const IMPORTERS = {
   RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),
   AssuranceTemporaireUtilitaire: () => import('./pages/AssuranceTemporaireUtilitaire'),
   BarometreImmatriculations:  () => import('./pages/BarometreImmatriculations'),
+  VilleLocale:                () => import('./pages/VilleLocale'),
   Cookies:                    () => import('./pages/Cookies'),
   CGV:                        () => import('./pages/CGV'),
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),

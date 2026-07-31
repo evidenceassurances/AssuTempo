@@ -64,6 +64,9 @@ const ROUTES = [
   '/roulez-legal-apres-achat',
   '/assurance-temporaire-utilitaire',
   '/barometre-immatriculations',
+  '/assurance-temporaire-carte-grise-paris',
+  '/assurance-temporaire-carte-grise-lyon',
+  '/assurance-temporaire-carte-grise-marseille',
   '/cookies',
   '/conditions-generales',
   '/assurance-internationale',
@@ -74,6 +77,15 @@ const ROUTES = [
 // Routes prerendues mais volontairement absentes du sitemap : /urgence est
 // une simple redirection client-side vers /guichet-de-nuit (noindex).
 const SITEMAP_EXCLUDE = new Set(['/urgence']);
+
+// Les 3 pages locales partagent le meme composant (VilleLocale.jsx) : leur
+// vrai contenu vit dans src/data/villesLocales.js, source a suivre pour le
+// lastmod du sitemap au meme titre que ARTICLE_DATA_SOURCES.
+const VILLE_LOCALE_ROUTES = new Set([
+  '/assurance-temporaire-carte-grise-paris',
+  '/assurance-temporaire-carte-grise-lyon',
+  '/assurance-temporaire-carte-grise-marseille',
+]);
 
 // ── Métadonnées sitemap ──────────────────────────────────────────────────────
 // Le sitemap est généré à partir de ROUTES (source unique) : impossible qu'il
@@ -201,6 +213,7 @@ function sitemapSourcesFor(route) {
   if (route === '/') files.push('src/pages/Home.jsx', 'src/components/HeroScrollytelling.jsx', 'src/components/Faq.jsx');
   if (route.startsWith('/carte/')) files.push('src/data/countries-content.js');
   if (ARTICLE_DATA_SOURCES[route]) files.push(ARTICLE_DATA_SOURCES[route]);
+  if (VILLE_LOCALE_ROUTES.has(route)) files.push('src/data/villesLocales.js');
   return files;
 }
 
@@ -328,6 +341,9 @@ const ROUTE_MODULES = {
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',
   '/assurance-temporaire-utilitaire': 'src/pages/AssuranceTemporaireUtilitaire.jsx',
   '/barometre-immatriculations': 'src/pages/BarometreImmatriculations.jsx',
+  '/assurance-temporaire-carte-grise-paris':      'src/pages/VilleLocale.jsx',
+  '/assurance-temporaire-carte-grise-lyon':       'src/pages/VilleLocale.jsx',
+  '/assurance-temporaire-carte-grise-marseille':  'src/pages/VilleLocale.jsx',
   '/cookies':                 'src/pages/Cookies.jsx',
   '/conditions-generales':    'src/pages/CGV.jsx',
   '/assurance-internationale': 'src/pages/AssuranceInternationale.jsx',

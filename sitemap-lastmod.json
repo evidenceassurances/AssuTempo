@@ -11,7 +11,7 @@
   "/articles/assurance-temporaire-pret-de-vehicule": "2026-07-10",
   "/articles/assurance-temporaire-resilie-par-assureur": "2026-07-11",
   "/articles/assurance-temporaire-rouler-en-attendant-carte-grise": "2026-07-12",
-  "/articles/assurance-temporaire-utilitaire-demenagement": "2026-07-31",
+  "/articles/assurance-temporaire-utilitaire-demenagement": "2026-08-01",
   "/articles/assurance-temporaire-vehicule-etranger-france": "2026-07-10",
   "/articles/assurance-temporaire-vehicule-proche-decede": "2026-07-10",
   "/articles/assurance-trajet-retour-achat-voiture": "2026-07-13",
@@ -27,7 +27,10 @@
   "/articles/rouler-sans-carte-grise-a-son-nom": "2026-07-14",
   "/articles/voiture-immobilisee-defaut-assurance": "2026-07-10",
   "/assurance-internationale": "2026-07-22",
-  "/assurance-temporaire-utilitaire": "2026-07-31",
+  "/assurance-temporaire-carte-grise-lyon": "2026-07-31",
+  "/assurance-temporaire-carte-grise-marseille": "2026-07-31",
+  "/assurance-temporaire-carte-grise-paris": "2026-07-31",
+  "/assurance-temporaire-utilitaire": "2026-08-01",
   "/barometre-immatriculations": "2026-07-21",
   "/carte": "2026-07-21",
   "/carte-grise": "2026-07-21",
@@ -70,6 +73,6 @@
   "/faq": "2026-07-13",
   "/guichet-de-nuit": "2026-07-31",
   "/qui-sommes-nous": "2026-07-21",
-  "/roulez-legal-apres-achat": "2026-07-21",
+  "/roulez-legal-apres-achat": "2026-07-31",
   "/tarification": "2026-07-21"
 }
