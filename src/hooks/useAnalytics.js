@@ -8,6 +8,34 @@ const GA_ID = import.meta.env.VITE_GA_ID;
 let gaLoaded = false;
 let gaScriptAsked = false;
 
+/* DebugView : gtag.js n'expose AUCUN declencheur par URL (ni debug_mode=1 ni
+   gtm_debug, verifie sur la prod le 1er aout : les hits partaient sans _dbg).
+   Seul debug_mode dans la config marque le flux comme debug. On le derive donc
+   nous-memes de ?debug_mode=1, et on le retient pour la session : le parametre
+   disparait des la premiere navigation SPA, alors que la mise au point porte
+   justement sur le parcours. ?debug_mode=0 coupe. Jamais actif sans le
+   parametre : aucun trafic reel ne part en debug. */
+const CLE_DEBUG = 'assutempo_ga_debug';
+
+function debugDemande() {
+  try {
+    const demande = new URLSearchParams(window.location.search).get('debug_mode');
+    if (demande === '1' || demande === 'true') {
+      sessionStorage.setItem(CLE_DEBUG, '1');
+      return true;
+    }
+    if (demande === '0' || demande === 'false') {
+      sessionStorage.removeItem(CLE_DEBUG);
+      return false;
+    }
+    return sessionStorage.getItem(CLE_DEBUG) === '1';
+  } catch {
+    /* sessionStorage indisponible (Safari prive) : la mise au point se limite
+       a la page qui porte le parametre, la mesure normale n'est pas affectee */
+    return false;
+  }
+}
+
 /* Stub synchrone SANS reseau : dataLayer + gtag qui empile. Tous les
    evenements emis avant l'arrivee du script (dont le page_view initial du
    suivi de route) s'accumulent dans la queue et sont traites par gtag.js
@@ -20,7 +48,9 @@ function ensureStub() {
   // send_page_view: false -> le page_view initial est desactive ici. Tous les
   // page_view (y compris celui du premier chargement) sont emis par le suivi de
   // route ci-dessous, ce qui evite un double comptage au demarrage.
-  window.gtag('config', GA_ID, { anonymize_ip: true, send_page_view: false });
+  const config = { anonymize_ip: true, send_page_view: false };
+  if (debugDemande()) config.debug_mode = true;
+  window.gtag('config', GA_ID, config);
 }
 
 /* Injection du script gtag.js APRES load + idle : la pile analytics
@@ -82,6 +112,13 @@ export function useAnalytics() {
   //    - liens tel: -> tel_click
   //    - liens internes vers /tarification dont le libelle est un CTA de devis
   //      -> cta_devis_click (exclut les liens de menu "Tarification").
+  //    ECOUTE EN PHASE DE CAPTURE : React pose son ecouteur sur le conteneur
+  //    racine, donc en bulle il passe AVANT un ecouteur de document. Le Link
+  //    avait deja navigue quand on lisait location.pathname, et le clic etait
+  //    attribue a la page d'arrivee. Mesure en prod le 1er aout : un CTA
+  //    "Obtenir mon devis" clique depuis un article partait en page_path
+  //    "/tarification", ce qui effacait la page d'origine, celle qui a
+  //    justement declenche l'intention.
   useEffect(() => {
     function onDocumentClick(e) {
       const target = e.target;
@@ -110,8 +147,8 @@ export function useAnalytics() {
       }
     }
 
-    document.addEventListener('click', onDocumentClick);
-    return () => document.removeEventListener('click', onDocumentClick);
+    document.addEventListener('click', onDocumentClick, true);
+    return () => document.removeEventListener('click', onDocumentClick, true);
   }, []);
 
   // 3. page_view a chaque changement de route + evenements de page dedies.
