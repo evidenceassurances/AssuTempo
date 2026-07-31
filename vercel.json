@@ -11,6 +11,7 @@
       "destination": "/articles/assurance-temporaire-utilitaire-demenagement",
       "statusCode": 301
     },
+    { "source": "/faire-sa-carte-grise", "destination": "/carte-grise", "statusCode": 301 },
     { "source": "/blog", "destination": "/articles", "statusCode": 301 },
     { "source": "/blog/:slug*", "destination": "/articles", "statusCode": 301 },
     { "source": "/devis", "destination": "/tarification", "statusCode": 301 },
