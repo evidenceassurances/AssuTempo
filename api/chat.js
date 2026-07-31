@@ -117,8 +117,9 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'empty' });
   }
 
+  let r;
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -132,26 +133,84 @@ module.exports = async function handler(req, res) {
         // absent : il consommerait une partie des 1024 tokens (reponse tronquee)
         // et ajouterait de la latence. Pour un chat de 2 a 5 phrases, on le coupe.
         thinking: { type: 'disabled' },
+        // Streaming : le texte part vers le widget au fil de la generation.
+        stream: true,
         system: [
           { type: 'text', text: SYSTEM_TEXT, cache_control: { type: 'ephemeral' } },
         ],
         messages,
       }),
     });
-
-    if (!r.ok) {
-      return res.status(502).json({ error: 'upstream_error' });
-    }
-
-    const data = await r.json();
-    const text = (data.content || [])
-      .map((b) => (b.type === 'text' ? b.text : ''))
-      .join('\n')
-      .trim();
-
-    // On ne logge jamais le contenu des conversations (RGPD / minimisation).
-    return res.status(200).json({ text });
   } catch {
     return res.status(502).json({ error: 'upstream_error' });
   }
+
+  // Tant qu'aucun octet n'est parti, on peut encore repondre par un vrai statut
+  // HTTP. Passe ce point, le statut est fige a 200 : une panne se signale alors
+  // par un evenement {error:true} dans le flux (voir plus bas).
+  if (!r.ok || !r.body) {
+    return res.status(502).json({ error: 'upstream_error' });
+  }
+
+  res.writeHead(200, {
+    'content-type': 'text/event-stream; charset=utf-8',
+    // no-transform + X-Accel-Buffering: sans eux, un proxy peut tamponner la
+    // reponse et la delivrer d'un bloc, ce qui annule tout l'interet du flux.
+    'cache-control': 'no-cache, no-transform',
+    connection: 'keep-alive',
+    'x-accel-buffering': 'no',
+  });
+  if (typeof res.flushHeaders === 'function') res.flushHeaders();
+
+  // On ne relaie PAS le flux d'Anthropic tel quel : on n'en extrait que les
+  // fragments de texte, reemis dans un format minimal a nous ({t: "..."}).
+  // Le client ne depend donc jamais de la forme interne de l'API.
+  const reader = r.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let ecrit = false;
+
+  const envoyer = (obj) => res.write('data: ' + JSON.stringify(obj) + '\n\n');
+
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      // Un evenement SSE se termine par une ligne vide. Le dernier morceau du
+      // tampon peut etre incomplet : on le garde pour le tour suivant.
+      const blocs = buffer.split('\n\n');
+      buffer = blocs.pop() || '';
+
+      for (const bloc of blocs) {
+        const ligne = bloc.split('\n').find((l) => l.startsWith('data:'));
+        if (!ligne) continue;
+        let payload;
+        try {
+          payload = JSON.parse(ligne.slice(5).trim());
+        } catch {
+          continue;
+        }
+        if (payload.type === 'error') {
+          envoyer({ error: true });
+          return res.end();
+        }
+        if (
+          payload.type === 'content_block_delta' &&
+          payload.delta &&
+          payload.delta.type === 'text_delta' &&
+          payload.delta.text
+        ) {
+          ecrit = true;
+          // On ne logge jamais le contenu des conversations (RGPD / minimisation).
+          envoyer({ t: payload.delta.text });
+        }
+      }
+    }
+    if (!ecrit) envoyer({ error: true });
+  } catch {
+    envoyer({ error: true });
+  }
+  return res.end();
 }

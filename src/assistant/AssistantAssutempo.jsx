@@ -276,6 +276,9 @@ export default function AssistantAssutempo() {
   const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME }]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  // Vrai des le premier fragment de reponse recu : la bulle de reponse remplace
+  // alors les trois points d'attente (sinon les deux s'afficheraient ensemble).
+  const [streaming, setStreaming] = useState(false);
   const [showFlows, setShowFlows] = useState(false);
   const [offerGuide, setOfferGuide] = useState(false);
   const [spark, setSpark] = useState(false);
@@ -303,6 +306,9 @@ export default function AssistantAssutempo() {
   const reducedRef = useRef(false);
   const listRef = useRef(null);
   const inputRef = useRef(null);
+  // Vrai quand la bulle de reponse en cours de streaming a deja ete ajoutee au
+  // fil. Un ref, pas un state : la boucle de lecture doit le lire dans l'instant.
+  const bulleRef = useRef(false);
   const tourElRef = useRef(null);
   // Dock du launcher : bouton + etiquette (mesures pour la sonde CTA).
   const launcherRef = useRef(null);
@@ -687,20 +693,70 @@ export default function AssistantAssutempo() {
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ messages: apiMessages }),
         });
-        if (!res.ok) throw new Error('http');
-        const data = await res.json();
-        const reply = data && typeof data.text === 'string' ? data.text.trim() : '';
-        if (!reply) throw new Error('empty');
-        // Nettoyage Markdown + retrait du marqueur [FIN] avant affichage.
-        const fin = contientFin(reply);
-        setMessages((m) => [...m, { role: 'assistant', content: nettoyerReponse(reply) }]);
+        if (!res.ok || !res.body) throw new Error('http');
+
+        // Lecture du flux SSE : chaque evenement porte un fragment {t:"..."}.
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let tampon = '';
+        let brut = '';
+
+        // Le nettoyage Markdown s'applique au texte COMPLET accumule, jamais au
+        // fragment : une paire d'asterisques peut etre coupee en deux par le flux.
+        const afficher = () => {
+          const shown = nettoyerReponse(brut);
+          if (bulleRef.current) {
+            setMessages((m) => {
+              const copie = m.slice();
+              copie[copie.length - 1] = { role: 'assistant', content: shown };
+              return copie;
+            });
+          } else {
+            bulleRef.current = true;
+            setStreaming(true);
+            setMessages((m) => [...m, { role: 'assistant', content: shown }]);
+          }
+        };
+
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          tampon += decoder.decode(value, { stream: true });
+          const blocs = tampon.split('\n\n');
+          tampon = blocs.pop() || '';
+          for (const bloc of blocs) {
+            const ligne = bloc.split('\n').find((l) => l.startsWith('data:'));
+            if (!ligne) continue;
+            let payload;
+            try {
+              payload = JSON.parse(ligne.slice(5).trim());
+            } catch {
+              continue;
+            }
+            if (payload.error) throw new Error('upstream');
+            if (typeof payload.t === 'string' && payload.t) {
+              brut += payload.t;
+              afficher();
+            }
+          }
+        }
+        if (!brut.trim()) throw new Error('empty');
         // Cloture si [FIN] detecte, ou si ce message atteint le plafond.
-        if (fin || userCount + 1 >= MAX_MESSAGES_UTILISATEUR) {
+        if (contientFin(brut) || userCount + 1 >= MAX_MESSAGES_UTILISATEUR) {
           cloreConversation();
         }
       } catch {
-        setMessages((m) => [...m, { role: 'assistant', content: ERROR_MSG }]);
+        // Une reponse coupee en cours de route serait pire qu'une erreur nette
+        // (information tronquee sur un sujet d'assurance) : on retire la bulle
+        // partielle avant d'afficher le message d'erreur.
+        setMessages((m) => {
+          const copie = bulleRef.current ? m.slice(0, -1) : m.slice();
+          copie.push({ role: 'assistant', content: ERROR_MSG });
+          return copie;
+        });
       } finally {
+        bulleRef.current = false;
+        setStreaming(false);
         setSending(false);
         setOfferGuide(true);
       }
@@ -1251,7 +1307,7 @@ export default function AssistantAssutempo() {
                 </div>
               </div>
             ))}
-            {sending && (
+            {sending && !streaming && (
               <div className="atp-row atp-row--bot">
                 <div className="atp-bubble atp-bubble--bot atp-typing" aria-label="Tempo écrit">
                   <span /><span /><span />
