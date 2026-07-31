@@ -16,9 +16,10 @@
  * src/assistant/README.md.
  */
 
-// Modele : Haiku 4.5 pour des reponses rapides (chat client, la latence prime).
-// Pour une qualite plus premium au prix d'une latence superieure : "claude-sonnet-4-6".
-const MODEL = 'claude-haiku-4-5';
+// Modele : Sonnet 5 (qualite de reponse nettement superieure a Haiku 4.5, qui
+// se trompait sur des questions metier). Pour revenir a un cout plus bas au prix
+// de la precision : "claude-haiku-4-5".
+const MODEL = 'claude-sonnet-5';
 
 // Domaines autorises a appeler l'endpoint (facile a editer). Laisser vide []
 // pour desactiver le controle d'origine (non recommande en production).
@@ -127,6 +128,10 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: 1024,
+        // Sur Sonnet 5, le raisonnement est ACTIF par defaut quand le champ est
+        // absent : il consommerait une partie des 1024 tokens (reponse tronquee)
+        // et ajouterait de la latence. Pour un chat de 2 a 5 phrases, on le coupe.
+        thinking: { type: 'disabled' },
         system: [
           { type: 'text', text: SYSTEM_TEXT, cache_control: { type: 'ephemeral' } },
         ],

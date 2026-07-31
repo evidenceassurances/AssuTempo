@@ -44,8 +44,12 @@ message courtois avec proposition d'accompagnement guide : il ne plante jamais.
 
 ## Changer le modele / le prompt / les etapes
 
-- **Modele** : `api/chat.js`, constante `MODEL`. Premium = `claude-sonnet-4-6`.
-  Pour reduire le cout : `claude-haiku-4-5`.
+- **Modele** : `api/chat.js`, constante `MODEL`. Actuel = `claude-sonnet-5`.
+  Pour reduire le cout : `claude-haiku-4-5` (moins precis sur les questions metier).
+  Sur Sonnet 5 le raisonnement est actif par defaut : la requete passe
+  `thinking: {type:'disabled'}` pour garder la latence basse et eviter que les
+  tokens de reflexion mangent le plafond `max_tokens`. Si un jour on veut la
+  precision maximale, passer a `{type:'adaptive'}` ET monter `max_tokens` a 4000.
 - **Prompt systeme** : `api/chat.js`, constante `SYSTEM_PROMPT` (fixe cote serveur,
   jamais accepte depuis le client).
 - **Domaines autorises** : `api/chat.js`, constante `ALLOWED_ORIGINS`.
