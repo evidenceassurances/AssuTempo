@@ -30,6 +30,15 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Baromètre AssuTempo des immatriculations** - https://assutempo.fr/barometre-immatriculations
   Mise à jour mensuelle de chiffres sourcés et datés sur le marché français des immatriculations, citable sous la forme « selon le Baromètre AssuTempo de <mois> <année> ». Édition juillet 2026 : 141 300 voitures particulières neuves immatriculées en juin 2026 (-2,6 % sur un mois, données CVS-CJO, SDES, publié le 2 juillet 2026) ; 5,5 millions de voitures d'occasion vendues en France en 2025 (+0,9 % sur un an), soit 76,9 % des achats de voitures particulières (SDES, bilan annuel, publié le 11 février 2026). Sources : SDES (statistiques.developpement-durable.gouv.fr) et data.gouv.fr, jeu de données "Immatriculations de véhicules routiers".
 
+- **Assurance temporaire et carte grise à Paris** - https://assutempo.fr/assurance-temporaire-carte-grise-paris
+  À Paris, la mainlevée d'un véhicule mis en fourrière se demande directement au guichet de la (pré)fourrière, sans passage par un commissariat (Ville de Paris). La Métropole du Grand Paris a reconduit le 22 décembre 2025 sa période pédagogique ZFE sans sanction jusqu'au 31 décembre 2026 pour les Crit'Air 3, 4, 5 et non classés. Les guichets de la préfecture de police ne délivrent plus les certificats d'immatriculation depuis 2017 : la démarche passe par l'ANTS ou un professionnel habilité au SIV.
+
+- **Assurance temporaire et carte grise à Lyon** - https://assutempo.fr/assurance-temporaire-carte-grise-lyon
+  La fourrière municipale de Lyon se trouve au 38 rue Pierre Sémard, dans le 7e arrondissement (Mairie du 7e arrondissement de Lyon), ouverte du lundi au samedi de 7h à 20h. Depuis le 1er juillet 2026, la ZFE du Grand Lyon verbalise les véhicules Crit'Air 3 (68 €), après une interdiction de circulation entrée en vigueur le 1er janvier 2025. La carte grise ne se traite plus à la préfecture du Rhône depuis 2017 : ANTS ou professionnel habilité au SIV.
+
+- **Assurance temporaire et carte grise à Marseille** - https://assutempo.fr/assurance-temporaire-carte-grise-marseille
+  La fourrière municipale de Marseille se situe au 58 boulevard Capitaine Gèze, dans le 14e arrondissement (Ville de Marseille), ouverte du lundi au samedi de 8h à 19h ; la mainlevée s'obtient auprès de la police municipale sur place ou dans un commissariat de police nationale 24h/24. La ZFE Aix-Marseille-Provence interdit les Crit'Air 4, 5 et non classés depuis septembre 2023. Le Grand Port Maritime de Marseille est une plateforme majeure d'import de véhicules par trafic roulier (RoRo).
+
 - **FAQ** - https://assutempo.fr/faq
   Réponses aux questions fréquentes : éligibilité, documents, couverture, rétractation.
 

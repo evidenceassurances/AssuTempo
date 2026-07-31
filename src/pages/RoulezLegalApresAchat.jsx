@@ -440,6 +440,18 @@ function RoulezLegalApresAchat() {
           <Link to="/barometre-immatriculations" style={{ color: 'var(--gold-light)' }}>
             Baromètre AssuTempo des immatriculations
           </Link>
+          . Des particularités locales à connaître :{' '}
+          <Link to="/assurance-temporaire-carte-grise-paris" style={{ color: 'var(--gold-light)' }}>
+            à Paris
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-lyon" style={{ color: 'var(--gold-light)' }}>
+            à Lyon
+          </Link>
+          {' '}et{' '}
+          <Link to="/assurance-temporaire-carte-grise-marseille" style={{ color: 'var(--gold-light)' }}>
+            à Marseille
+          </Link>
           .
         </p>
       </section>
