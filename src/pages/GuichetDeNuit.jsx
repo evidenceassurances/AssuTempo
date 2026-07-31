@@ -10,7 +10,7 @@ import {
   ShieldCheck, Timer, User,
 } from 'lucide-react';
 import { jsonLd } from '../lib/seo';
-import { trackEvent } from '../lib/analytics';
+import { pagePath, trackEvent } from '../lib/analytics';
 import AnswerCapsule from '../components/articles/AnswerCapsule';
 import Footer from '../components/Footer';
 
@@ -1308,6 +1308,17 @@ function GuichetDeNuit() {
       /* Demande partie : la reference a joue son role de brouillon, la
          prochaine visite repartira sur un dossier neuf. */
       writeStoredRef('');
+
+      /* Conversion du guichet : emise ICI, apres la reponse OK de Web3Forms,
+         jamais au clic (guichet_form_submit couvre deja l'intention) et jamais
+         apres ouvrirSession, dont l'echec ne remet pas la demande en cause.
+         handleSubmit sort d'entree si formStatus vaut 'sending' : un double clic
+         sur Envoyer ne peut pas produire deux evenements. Aucune donnee du
+         formulaire ne part avec (ni reference, ni identite, ni contact). */
+      trackEvent('guichet_demande', {
+        "page": pagePath(),
+        "avec_photos": total > 0 ? 'oui' : 'non',
+      });
 
       /* La demande est chez le guichet : la veille de 30 minutes s'ouvre, et
          c'est l'horloge du SERVEUR qui l'enregistre. Cet appel vient APRES

@@ -12,7 +12,7 @@ import Footer from '../components/Footer';
 import GlobeInternational from '../components/GlobeInternational';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import { trackEvent } from '../lib/analytics';
+import { pagePath, trackEvent } from '../lib/analytics';
 
 /* useLayoutEffect cote client (mesure de hauteur avant peinture), useEffect au
    prerendu pour eviter l'avertissement React "useLayoutEffect does nothing on
@@ -724,6 +724,9 @@ function DevisForm({ initialPays }) {
       if (data.success) {
         setStatus('succes');
         trackEvent('generate_lead', { form_type: 'international' });
+        /* Envoi reussi seulement : data.success vaut true. Aucun champ du
+           formulaire ne part avec l'evenement (ni pays, ni identite). */
+        trackEvent('contact_envoi', { "formulaire": 'international', "page": pagePath() });
       } else setStatus('erreur');
     } catch {
       setStatus('erreur');
