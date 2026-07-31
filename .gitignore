@@ -4,6 +4,10 @@ node_modules
 $(pwd)
 .DS_Store
 
+# Reglages Claude Code propres a une machine (chemins absolus locaux)
+.claude/settings.local.json
+.claude/worktrees/
+
 # Variables d'environnement locales (ne jamais commiter de cle)
 .env
 .env.local
