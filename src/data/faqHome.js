@@ -2,7 +2,9 @@
    Module de donnees pur (aucun import) : partage entre le rendu
    (components/Faq.jsx, chunk HomeSections) et le schema FAQPage
    (pages/Home.jsx, Helmet). Le JSON-LD doit refleter EXACTEMENT
-   ce texte visible : toute modification ici met a jour les deux. */
+   ce texte visible : toute modification ici met a jour les deux.
+   `link` (optionnel) n'entre PAS dans le schema : c'est un lien de
+   maillage interne affiche sous la reponse. */
 export const faqHomeItems = [
   {
     q: 'Qui peut souscrire une assurance temporaire ?',
@@ -23,6 +25,7 @@ export const faqHomeItems = [
   {
     q: 'Quand vais-je recevoir mon attestation et mon Mémo Véhicule Assuré ?',
     a: "Dès la validation de votre paiement. Depuis avril 2024, la carte verte a été supprimée : votre véhicule est enregistré au Fichier des Véhicules Assurés (FVA), que les forces de l'ordre consultent directement via votre plaque d'immatriculation. Votre contrat comprend votre Mémo Véhicule Assuré (à conserver avec les papiers du véhicule) et votre carte internationale d'assurance automobile, valable dans les 34 pays couverts - les deux disponibles immédiatement en téléchargement.",
+    link: { href: '/articles/assurance-temporaire-attestation-immediate', label: "L'attestation immédiate expliquée en détail" },
   },
   {
     q: "Faut-il un relevé d'information ?",
@@ -35,5 +38,6 @@ export const faqHomeItems = [
   {
     q: 'Peut-on souscrire la nuit, le dimanche ou un jour férié ?',
     a: "Oui, par le Guichet de Nuit AssuTempo. La souscription en ligne classique est ouverte du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h. En dehors de ces heures, le Guichet de Nuit prend le relais : vous déposez votre demande avec vos photos, un conseiller prépare votre contrat, et le devis part dans les 30 minutes. Le dimanche, la permanence est assurée toute la journée.",
+    link: { href: '/guichet-de-nuit', label: 'Découvrir le Guichet de Nuit' },
   },
 ];

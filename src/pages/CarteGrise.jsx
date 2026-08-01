@@ -868,29 +868,58 @@ function CarteGrise() {
             </div>
           </div>
 
-          {/* Maillage interne */}
-          <p style={{
-            textAlign: 'center',
-            fontSize: 14,
-            color: 'var(--text-muted)',
-            lineHeight: 1.8,
-            margin: '32px auto 0',
-            maxWidth: 720,
-          }}>
-            Pour aller plus loin :{' '}
-            <Link to="/articles/carte-grise-urgence-cpi-immediat" style={{ color: 'var(--gold-light)' }}>
-              obtenir un certificat provisoire en urgence
-            </Link>
-            ,{' '}
-            <Link to="/articles/assurance-temporaire-rouler-en-attendant-carte-grise" style={{ color: 'var(--gold-light)' }}>
-              rouler en attendant sa carte grise définitive
-            </Link>
-            , ou{' '}
-            <Link to="/tarification" style={{ color: 'var(--gold-light)' }}>
-              assurer le véhicule dès aujourd&apos;hui
-            </Link>
-            .
-          </p>
+          {/* Maillage interne : les 7 guides du cluster carte grise, le
+              Guichet de Nuit et les pages locales. Vrais liens crawlables
+              dans le HTML prerendu. */}
+          <div style={{ margin: '40px auto 0', maxWidth: 880, textAlign: 'center' }}>
+            <p style={{
+              fontSize: 13,
+              color: 'var(--text-subtle)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.16em',
+              margin: '0 0 16px',
+            }}>
+              Pour aller plus loin
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
+              {[
+                { to: '/articles/carte-grise-urgence-cpi-immediat', label: 'Obtenir un certificat provisoire en urgence' },
+                { to: '/articles/assurance-temporaire-rouler-en-attendant-carte-grise', label: 'Rouler en attendant sa carte grise définitive' },
+                { to: '/articles/combien-de-temps-carte-grise', label: 'Les délais réels de la carte grise' },
+                { to: '/articles/carte-grise-ants-bloquee', label: "Débloquer un dossier ANTS" },
+                { to: '/articles/changement-titulaire-carte-grise', label: 'Changer le titulaire étape par étape' },
+                { to: '/articles/rouler-sans-carte-grise-a-son-nom', label: 'Rouler sans carte grise à son nom : les risques' },
+                { to: '/articles/assurer-voiture-sans-carte-grise', label: 'Assurer une voiture sans carte grise' },
+                { to: '/guichet-de-nuit', label: 'Assuré la nuit et le dimanche : le Guichet de Nuit' },
+                { to: '/assurance-temporaire-carte-grise-paris', label: 'Vos démarches à Paris' },
+                { to: '/assurance-temporaire-carte-grise-lyon', label: 'Vos démarches à Lyon' },
+                { to: '/assurance-temporaire-carte-grise-marseille', label: 'Vos démarches à Marseille' },
+              ].map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 7,
+                    fontSize: 13.5,
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    padding: '9px 16px',
+                    borderRadius: 999,
+                    border: '1px solid var(--gold-border)',
+                    background: 'var(--gold-glow)',
+                    color: 'var(--gold-light)',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(201,168,76,0.12)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--gold-glow)')}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

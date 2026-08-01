@@ -23,7 +23,7 @@ const TRUST = [
   { icon: Clock, title: `Attestation immédiate`, text: `Reçue par email juste après le paiement.` },
   { icon: ShieldCheck, title: `Sans reconduction tacite`, text: `Durée fixe : le contrat s'arrête de lui-même.` },
   { icon: Lock, title: `Paiement 100 % sécurisé`, text: `Transaction chiffrée de bout en bout.` },
-  { icon: Globe, title: `34 pays européens`, text: `Couverture avec carte verte incluse.` },
+  { icon: Globe, title: `34 pays européens`, text: `Carte internationale d'assurance incluse.` },
 ];
 
 // FAQ : sert a la fois au rendu et au JSON-LD (FAQPage) pour le SEO / GEO.
@@ -38,7 +38,7 @@ const FAQ = [
   },
   {
     q: `Puis-je rouler à l'étranger avec ce contrat ?`,
-    a: `Oui. La couverture s'étend à 34 pays européens, avec la carte verte correspondante. Pensez à vérifier la durée nécessaire avant votre départ.`,
+    a: `Oui. La couverture s'étend à 34 pays européens, avec la carte internationale d'assurance automobile correspondante. Pensez à vérifier la durée nécessaire avant votre départ.`,
   },
   {
     q: `Le contrat se renouvelle-t-il automatiquement ?`,
@@ -440,7 +440,8 @@ function Pricing() {
           <p style={{ fontSize: 15.5, color: 'var(--text-muted)', lineHeight: 1.8, margin: 0 }}>
             Tout se règle en ligne : vous renseignez votre besoin, vous voyez votre tarif
             immédiatement, vous payez de façon sécurisée et vous recevez votre attestation par email
-            en quelques minutes. La garantie est valable dans 34 pays européens, carte verte incluse.
+            en quelques minutes. La garantie est valable dans 34 pays européens, carte
+            internationale d&apos;assurance incluse.
             Une question pendant le parcours ? Le concierge Tempo répond dans le chat, ou un conseiller
             au téléphone.
           </p>
@@ -534,6 +535,10 @@ function Pricing() {
               { to: '/assurance-internationale', label: 'Assurance pour l’étranger' },
               { to: '/carte', label: 'Pays couverts' },
               { to: '/faq', label: 'Toutes les questions fréquentes' },
+              { to: '/articles/prix-assurance-auto-temporaire', label: 'La grille des prix expliquée' },
+              { to: '/articles/assurance-auto-temporaire-1-mois', label: '1 semaine ou 1 mois : bien choisir' },
+              { to: '/articles/assurance-auto-temporaire-jeune-conducteur', label: 'Jeune conducteur : les conditions' },
+              { to: '/articles/assurance-temporaire-malus', label: 'Souscrire avec un malus' },
             ].map((l) => (
               <Link
                 key={l.to}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { m } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 /* Donnees partagees avec le schema FAQPage de la Home (pages/Home.jsx) :
    source unique, le JSON-LD reflete toujours le texte affiche ici. */
@@ -47,29 +48,46 @@ function FaqItem({ item, isOpen, onToggle }) {
         </m.span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <m.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            style={{ overflow: 'hidden' }}
-          >
-            <p
+      {/* Panneau toujours monte (hauteur 0 + inert quand ferme) : reponses
+          et liens presents dans le HTML prerendu, crawlables sans JS. */}
+      <m.div
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        style={{ overflow: 'hidden' }}
+        inert={!isOpen}
+      >
+        <p
+          style={{
+            margin: 0,
+            padding: item.link ? '0 24px 10px' : '0 24px 20px',
+            fontSize: 15,
+            color: 'var(--text-muted)',
+            lineHeight: 1.65,
+          }}
+        >
+          {item.a}
+        </p>
+        {item.link && (
+          <p style={{ margin: 0, padding: '0 24px 20px' }}>
+            <Link
+              to={item.link.href}
               style={{
-                margin: 0,
-                padding: '0 24px 20px',
-                fontSize: 15,
-                color: 'var(--text-muted)',
-                lineHeight: 1.65,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: 14,
+                fontWeight: 500,
+                color: 'var(--gold)',
+                textDecoration: 'none',
               }}
             >
-              {item.a}
-            </p>
-          </m.div>
+              {item.link.label}
+              <ArrowRight size={13} strokeWidth={2} aria-hidden />
+            </Link>
+          </p>
         )}
-      </AnimatePresence>
+      </m.div>
     </div>
   );
 }
