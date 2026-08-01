@@ -1,23 +1,19 @@
 import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
 
-/* Navigation SPA vers la tarification (et non window.open : un nouvel
-   onglet rechargeait tout le site, temps mort garanti sur mobile). */
-function useOpenDevis() {
-  const navigate = useNavigate();
-  return (label) => {
-    trackEvent('cta_devis_click', { "cta_label": label, "page_path": window.location.pathname });
-    navigate('/tarification');
-  };
-}
+/* CTA en vrai <Link> (navigation SPA identique, mais l'ancre est presente
+   dans le HTML prerendu : crawlable). Le tracking GA4 part au clic, avant
+   que React Router prenne la main. */
+const trackDevis = (label) => {
+  trackEvent('cta_devis_click', { "cta_label": label, "page_path": window.location.pathname });
+};
 
 /* CTA #1 - Après VehicleMarquee : barre centrée sobre */
 export function CtaAfterVehicles() {
   const [ref, inView] = useScrollReveal();
-  const openDevis = useOpenDevis();
 
   return (
     <section
@@ -43,10 +39,12 @@ export function CtaAfterVehicles() {
         >
           Votre véhicule en fait partie ?
         </p>
-        <button
+        <Link
+          to="/tarification"
           className="btn-gold"
-          onClick={() => openDevis('Obtenir mon devis')}
+          onClick={() => trackDevis('Obtenir mon devis')}
           style={{
+            textDecoration: 'none',
             padding: '13px 26px',
             fontSize: 15,
             display: 'inline-flex',
@@ -56,7 +54,7 @@ export function CtaAfterVehicles() {
         >
           Obtenir mon devis
           <ArrowRight size={16} strokeWidth={2} />
-        </button>
+        </Link>
       </m.div>
     </section>
   );
@@ -65,7 +63,6 @@ export function CtaAfterVehicles() {
 /* CTA #2 - Après Process : bandeau pleine largeur glass */
 export function CtaAfterProcess() {
   const [ref, inView] = useScrollReveal();
-  const openDevis = useOpenDevis();
 
   return (
     <section
@@ -114,13 +111,14 @@ export function CtaAfterProcess() {
               Attestation immédiate, sans engagement.
             </p>
           </div>
-          <button
+          <Link
+            to="/tarification"
             className="btn-gold"
-            onClick={() => openDevis('Souscrire maintenant')}
-            style={{ flexShrink: 0, padding: '13px 24px', fontSize: 15 }}
+            onClick={() => trackDevis('Souscrire maintenant')}
+            style={{ textDecoration: 'none', flexShrink: 0, padding: '13px 24px', fontSize: 15 }}
           >
             Souscrire maintenant
-          </button>
+          </Link>
         </div>
       </m.div>
 
@@ -190,7 +188,6 @@ export function CtaInternational() {
 /* CTA #3 - Après Countries : centré, sobre, bouton outline */
 export function CtaAfterCountries() {
   const [ref, inView] = useScrollReveal();
-  const openDevis = useOpenDevis();
 
   return (
     <section
@@ -217,12 +214,14 @@ export function CtaAfterCountries() {
         >
           Roulez assuré partout en Europe.
         </p>
-        <button
+        <Link
+          to="/tarification"
           className="btn-glass"
-          onClick={() => openDevis('Voir les tarifs')}
+          onClick={() => trackDevis('Voir les tarifs')}
+          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
         >
           Voir les tarifs
-        </button>
+        </Link>
       </m.div>
     </section>
   );

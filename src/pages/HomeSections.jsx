@@ -8,6 +8,7 @@ import Faq from '../components/Faq';
 import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
 import { CtaAfterVehicles, CtaAfterProcess, CtaAfterCountries, CtaInternational } from '../components/CtaBanner';
+import { GuidesDemarches, ApresNuit } from '../components/GuidesDemarches';
 
 /* Sections sous le pli de la Home, en chunk separe du bundle critique.
    Cote serveur : import eager (entry-server.jsx) -> le HTML prerendu reste
@@ -29,6 +30,8 @@ function HomeSections() {
       <CtaInternational />
       <CtaAfterCountries />
       <Faq />
+      <GuidesDemarches />
+      <ApresNuit />
       <FinalCTA />
       <Footer />
     </>
