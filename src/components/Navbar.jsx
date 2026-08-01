@@ -4,16 +4,17 @@ import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 
-/* Header : uniquement les destinations qui rapportent (tarification, carte
-   grise, international, carte) plus les articles, qui alimentent le SEO. FAQ
-   et Qui sommes-nous vivent dans le footer : ils informent, ils ne convertissent
-   pas, et ils encombraient une nav qui doit rester lisible. */
+/* Header : les destinations qui rapportent (tarification, carte grise, le
+   Guichet de Nuit qui est LE differenciant du site), les articles qui
+   alimentent le SEO, le hub des 34 pays et la FAQ. Six entrees maximum :
+   International et Qui sommes-nous vivent dans le footer. */
 const links = [
   { label: 'Tarification', href: '/tarification' },
   { label: 'Articles', href: '/articles' },
   { label: 'Carte', href: '/carte' },
   { label: 'Carte grise', href: '/carte-grise' },
-  { label: 'International', href: '/assurance-internationale' },
+  { label: 'Guichet de Nuit', href: '/guichet-de-nuit' },
+  { label: 'FAQ', href: '/faq' },
 ];
 
 const mobileMenuVariants = {
@@ -105,7 +106,7 @@ function Navbar() {
         </Link>
 
         {/* Nav desktop */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="nav-desktop nav-list">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 26 }} className="nav-desktop nav-list">
           {links.map((link) => (
             <NavLink
               key={link.href}
