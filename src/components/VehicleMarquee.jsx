@@ -1,11 +1,14 @@
 import { m } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { VehicleIcon, VehicleIconDefs } from './VehicleIcons';
 
 const row1 = [
   { label: 'Voiture' },
   { label: 'Sportive' },
-  { label: 'Utilitaire' },
+  /* La vignette Utilitaire est un vrai lien vers la page dediee
+     (URL heritee a 952 impressions GSC, remise en service). */
+  { label: 'Utilitaire', to: '/assurance-temporaire-vehicule-utilitaire' },
   { label: 'Minibus' },
   { label: 'Poids lourd' },
   { label: 'Tracteur' },
@@ -22,8 +25,8 @@ const row2 = [
   { label: 'Berline' },
 ];
 
-function VehicleCard({ label }) {
-  return (
+function VehicleCard({ label, to }) {
+  const card = (
     <div
       style={{
         flexShrink: 0,
@@ -33,7 +36,7 @@ function VehicleCard({ label }) {
         border: '1px solid var(--glass-border)',
         borderRadius: 16,
         textAlign: 'center',
-        cursor: 'default',
+        cursor: to ? 'pointer' : 'default',
         transition: 'border-color 0.3s, background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s',
       }}
       onMouseEnter={(e) => {
@@ -65,6 +68,15 @@ function VehicleCard({ label }) {
       </div>
     </div>
   );
+
+  if (to) {
+    return (
+      <Link to={to} style={{ textDecoration: 'none', flexShrink: 0 }} aria-label={`Assurance temporaire ${label.toLowerCase()}`}>
+        {card}
+      </Link>
+    );
+  }
+  return card;
 }
 
 function MarqueeRow({ items, direction }) {

@@ -96,6 +96,7 @@ const ROUTE_TABLE = [
   ['/assurance-temporaire-carte-grise-paris', 'VilleLocale'],
   ['/assurance-temporaire-carte-grise-lyon', 'VilleLocale'],
   ['/assurance-temporaire-carte-grise-marseille', 'VilleLocale'],
+  ['/assurance-temporaire-vehicule-utilitaire', 'AssuranceUtilitaire'],
   ['/cookies', 'Cookies'],
   ['/conditions-generales', 'CGV'],
   ['/assurance-internationale', 'AssuranceInternationale'],

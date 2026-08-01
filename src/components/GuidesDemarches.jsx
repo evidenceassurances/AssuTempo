@@ -2,7 +2,7 @@ import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   ParkingSquare, AlertTriangle, FileText, Lock,
-  Tag, GraduationCap, AlertOctagon, Percent, ArrowRight,
+  Tag, GraduationCap, AlertOctagon, Percent, ArrowRight, Truck,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import CrescentMoon from './ui/CrescentMoon';
@@ -20,6 +20,7 @@ const GUIDES = [
   { Icon: GraduationCap, label: 'Assurance temporaire jeune conducteur', to: '/articles/assurance-auto-temporaire-jeune-conducteur' },
   { Icon: AlertOctagon, label: 'Rouler sans carte grise à son nom', to: '/articles/rouler-sans-carte-grise-a-son-nom' },
   { Icon: Percent, label: 'Assurance temporaire avec malus ou résilié', to: '/articles/assurance-temporaire-malus' },
+  { Icon: Truck, label: 'Assurance temporaire utilitaire et camion', to: '/assurance-temporaire-vehicule-utilitaire' },
 ];
 
 export function GuidesDemarches() {

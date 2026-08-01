@@ -17,6 +17,7 @@ export const faqHomeItems = [
   {
     q: 'Quels véhicules sont assurés ?',
     a: 'Voitures, utilitaires, camping-cars, camions, tracteurs, remorques et plus. Pour tout type de véhicule, contactez-nous.',
+    link: { href: '/assurance-temporaire-vehicule-utilitaire', label: "L'assurance temporaire utilitaire en détail" },
   },
   {
     q: 'Que contient ma couverture ?',

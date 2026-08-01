@@ -15,6 +15,7 @@ const MONEY = {
 };
 
 const PAGES = {
+  utilitaire: { href: '/assurance-temporaire-vehicule-utilitaire', label: 'Assurance temporaire utilitaire : camion, fourgon, remorque' },
   roulezLegal: { href: '/roulez-legal-apres-achat', label: "Rouler légal après l'achat : le rétroplanning J0 à J+30" },
   barometre: { href: '/barometre-immatriculations', label: 'Baromètre AssuTempo des immatriculations' },
   international: { href: '/assurance-internationale', label: "Assurance au-delà de l'Europe, sur demande" },
@@ -118,15 +119,15 @@ export const ARTICLE_CLUSTERS = {
   /* ── Cluster utilitaire / pro ────────────────────────────────────────── */
   'assurance-temporaire-utilitaire-demenagement': {
     related: ['assurance-temporaire-pret-de-vehicule', 'assurance-temporaire-convoyage-professionnel', 'assurance-trajet-retour-achat-voiture'],
-    liens: [MONEY.tarification],
+    liens: [MONEY.tarification, PAGES.utilitaire],
   },
   'assurance-temporaire-pret-de-vehicule': {
     related: ['assurance-temporaire-utilitaire-demenagement', 'assurance-temporaire-convoyage-professionnel', 'assurance-temporaire-essai-vehicule-avant-achat'],
-    liens: [MONEY.tarification],
+    liens: [MONEY.tarification, PAGES.utilitaire],
   },
   'assurance-temporaire-convoyage-professionnel': {
     related: ['assurance-temporaire-pret-de-vehicule', 'assurance-temporaire-utilitaire-demenagement', 'assurance-temporaire-vehicule-etranger-france'],
-    liens: [MONEY.tarification, PAGES.international],
+    liens: [MONEY.tarification, PAGES.utilitaire, PAGES.international],
   },
 
   /* ── Cluster international ───────────────────────────────────────────── */
