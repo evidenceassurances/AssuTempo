@@ -5,12 +5,12 @@ import { Car, FileText, Globe, CircleParking, Route, Package } from 'lucide-reac
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const cases = [
-  { Icon: Car, title: 'Véhicule récemment acquis', body: 'Vous venez d’acquérir un véhicule et souhaitez l’assurer immédiatement.' },
+  { Icon: Car, title: 'Véhicule récemment acquis', body: 'Vous venez d’acquérir un véhicule et souhaitez l’assurer immédiatement.', to: '/articles/assurance-trajet-retour-achat-voiture' },
   { Icon: FileText, title: 'Démarche de carte grise', body: 'En attente d’immatriculation, restez couvert pendant vos démarches.', to: '/carte-grise' },
-  { Icon: Globe, title: 'Véhicule ou permis étranger', body: 'Permis ou véhicule d’origine étrangère, sans complication.' },
-  { Icon: CircleParking, title: 'Véhicule qui circule peu', body: 'Inutile d’assurer à l’année un véhicule utilisé quelques jours par an.' },
-  { Icon: Route, title: 'Véhicule en transit', body: 'Couvert en France ou à l’étranger pour un déplacement ponctuel.' },
-  { Icon: Package, title: 'Export de véhicule', body: 'Assurez votre véhicule pour un export dans les meilleures conditions.' },
+  { Icon: Globe, title: 'Véhicule ou permis étranger', body: 'Permis ou véhicule d’origine étrangère, sans complication.', to: '/articles/assurance-temporaire-vehicule-etranger-france' },
+  { Icon: CircleParking, title: 'Véhicule qui circule peu', body: 'Inutile d’assurer à l’année un véhicule utilisé quelques jours par an.', to: '/tarification' },
+  { Icon: Route, title: 'Véhicule en transit', body: 'Couvert en France ou à l’étranger pour un déplacement ponctuel.', to: '/carte' },
+  { Icon: Package, title: 'Export de véhicule', body: 'Assurez votre véhicule pour un export dans les meilleures conditions.', to: '/assurance-internationale' },
 ];
 
 function UseCases() {
@@ -54,7 +54,7 @@ function UseCases() {
                 padding: '24px 20px',
                 background: 'var(--bg-card)',
                 borderRadius: 16,
-                cursor: 'default',
+                cursor: item.to ? 'pointer' : 'default',
               }}
               whileHover={{
                 y: -4,
