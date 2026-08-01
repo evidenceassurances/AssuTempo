@@ -22,6 +22,7 @@ import Footer from './Footer';
 import StepFlow from './StepFlow';
 import DecisionSplit from './DecisionSplit';
 import { articles } from '../data/articlesData';
+import { getClusterFor } from '../data/articleClusters';
 
 /* ─── Motion wrapper that respects prefers-reduced-motion ─── */
 function Reveal({ children, delay = 0, style }) {
@@ -659,7 +660,7 @@ function RelatedCard({ article }) {
 
   if (article.hasPage) {
     return (
-      <Link to={`/articles/${article.slug}`} style={{ textDecoration: 'none' }}>
+      <Link to={article.to || `/articles/${article.slug}`} style={{ textDecoration: 'none' }}>
         {inner}
       </Link>
     );
@@ -737,9 +738,14 @@ function StickyCTA({ cta }) {
 /* ─── ArticleLayout ─── */
 function ArticleLayout({ data }) {
   const [openFaq, setOpenFaq] = useState(null);
-  const relatedArticles = articles
-    .filter((a) => a.slug !== data.slug)
-    .slice(0, 3);
+  /* Cluster thematique (maillage du 1er aout 2026) : 3-4 liens "A lire aussi"
+     dans le meme cluster que l'article, plus un lien money dedie. Repli sur
+     les 3 premiers autres articles si l'article n'appartient a aucun cluster
+     (garde-fou, ne devrait plus arriver une fois tous les slugs assignes). */
+  const { related, money } = getClusterFor(data.slug, articles);
+  const relatedArticles = related.length > 0
+    ? related
+    : articles.filter((a) => a.slug !== data.slug).slice(0, 3);
 
   const ctaInsertIndex = Math.floor(data.sections.length / 2);
 
@@ -1051,6 +1057,12 @@ function ArticleLayout({ data }) {
               </p>
             </div>
           </Reveal>
+
+          {/* ── Encart auteur (E-E-A-T) ── */}
+          <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', textAlign: 'center', margin: '0 0 8px', lineHeight: 1.6 }}>
+            Rédigé par l&apos;équipe AssuTempo, courtier Evidence Assurances - ORIAS 20005719.
+            {' '}Mis à jour le {data.updatedDate}.
+          </p>
         </div>
 
         {/* ── À lire aussi ── */}
@@ -1074,6 +1086,21 @@ function ArticleLayout({ data }) {
                 À lire aussi
               </h2>
             </Reveal>
+            {money && (
+              <Reveal>
+                <Link
+                  to={money.to}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 7,
+                    fontSize: 13.5, fontWeight: 600, color: 'var(--gold-light)',
+                    textDecoration: 'none', marginBottom: 24,
+                  }}
+                >
+                  {money.label}
+                  <ArrowRight size={14} strokeWidth={2} aria-hidden="true" />
+                </Link>
+              </Reveal>
+            )}
             <div
               style={{
                 display: 'grid',
