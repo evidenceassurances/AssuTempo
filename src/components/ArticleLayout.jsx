@@ -22,6 +22,9 @@ import Footer from './Footer';
 import StepFlow from './StepFlow';
 import DecisionSplit from './DecisionSplit';
 import { articles } from '../data/articlesData';
+import { ARTICLE_CLUSTERS } from '../data/articleClusters';
+
+const ARTICLE_BY_SLUG = new Map(articles.map((a) => [a.slug, a]));
 
 /* ─── Motion wrapper that respects prefers-reduced-motion ─── */
 function Reveal({ children, delay = 0, style }) {
@@ -737,9 +740,15 @@ function StickyCTA({ cta }) {
 /* ─── ArticleLayout ─── */
 function ArticleLayout({ data }) {
   const [openFaq, setOpenFaq] = useState(null);
-  const relatedArticles = articles
-    .filter((a) => a.slug !== data.slug)
-    .slice(0, 3);
+  /* "A lire aussi" par cluster thematique (articleClusters.js) : chaque
+     article renvoie vers 3 articles de sa famille + une rangee de liens
+     "Pour aller plus loin" (page money du cluster en tete). Repli sur les
+     3 premiers articles si le slug n'est pas encore dans un cluster. */
+  const cluster = ARTICLE_CLUSTERS[data.slug];
+  const relatedArticles = cluster
+    ? cluster.related.map((slug) => ARTICLE_BY_SLUG.get(slug)).filter(Boolean)
+    : articles.filter((a) => a.slug !== data.slug).slice(0, 3);
+  const clusterLinks = cluster?.liens ?? [];
 
   const ctaInsertIndex = Math.floor(data.sections.length / 2);
 
@@ -1088,6 +1097,52 @@ function ArticleLayout({ data }) {
                 </Reveal>
               ))}
             </div>
+
+            {/* Liens du cluster : page money d'abord, puis pages piliers */}
+            {clusterLinks.length > 0 && (
+              <Reveal>
+                <div style={{ marginTop: 28 }}>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: 'var(--text-subtle)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.14em',
+                      margin: '0 0 12px',
+                    }}
+                  >
+                    Pour aller plus loin
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                    {clusterLinks.map((l) => (
+                      <Link
+                        key={l.href}
+                        to={l.href}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 7,
+                          fontSize: 13.5,
+                          fontWeight: 500,
+                          textDecoration: 'none',
+                          padding: '9px 16px',
+                          borderRadius: 999,
+                          border: '1px solid var(--gold-border)',
+                          background: 'var(--gold-glow)',
+                          color: 'var(--gold-light)',
+                          transition: 'background 0.2s',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(201,168,76,0.12)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--gold-glow)')}
+                      >
+                        {l.label}
+                        <ArrowRight size={14} strokeWidth={2} aria-hidden />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            )}
           </div>
         </section>
       </article>

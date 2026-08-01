@@ -184,7 +184,7 @@ export const articleData = {
       ],
       relatedLink: {
         text: 'Le certificat provisoire d\'immatriculation et les plaques WW, en détail',
-        href: '/le-certificat-provisoire-dimmatriculation-plaques-ww',
+        href: '/articles/carte-grise-urgence-cpi-immediat',
       },
     },
     {
