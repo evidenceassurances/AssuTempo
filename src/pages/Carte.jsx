@@ -16,7 +16,7 @@ import {
   Anchor, HeartPulse, Zap,
   Wine, Sun, Snowflake, ArrowLeft, ArrowRightLeft,
   Milestone, CircleAlert, TriangleAlert,
-  Receipt, Fuel, ShoppingBag, Building2, Ban, X, MapPin,
+  Receipt, Fuel, ShoppingBag, Building2, Ban, X, MapPin, ChevronRight,
 } from 'lucide-react';
 
 /* Résolution dynamique des icônes par nom (string stocké dans les données) */
@@ -43,6 +43,7 @@ import {
   SLUG_TO_COUNTRY,
   ISO_TO_SLUG,
 } from '../data/countries-content';
+import { PAYS_VOISINS } from '../data/countries-voisins';
 
 /* ── Constantes géo ──────────────────────────────────────────────────────── */
 const GEO_URL = '/countries-110m.json';
@@ -319,7 +320,101 @@ function CountryPanel({ country }) {
             ))}
           </m.div>
         )}
+
+        {/* Pays voisins : maillage entre pages pays (chaque page en recoit
+            3-5 en retour). Donnees dans countries-voisins.js, rendu 100 %
+            statique dans le HTML prerendu. */}
+        <PaysVoisinsBlock slug={slug} nom={nom} />
       </m.div>
+    </m.div>
+  );
+}
+
+/* ── Bloc "Continuer la route" : pays voisins + retours de maillage ──────── */
+function PaysVoisinsBlock({ slug, nom }) {
+  const data = PAYS_VOISINS[slug];
+  if (!data) return null;
+  const voisins = data.voisins
+    .map((s) => SLUG_TO_COUNTRY[s])
+    .filter(Boolean);
+  if (voisins.length === 0) return null;
+
+  const pillStyle = {
+    display: 'inline-block',
+    padding: '8px 14px',
+    background: 'var(--glass)',
+    border: '1px solid var(--glass-border)',
+    borderRadius: 999,
+    fontSize: 13,
+    color: 'var(--text-muted)',
+    textDecoration: 'none',
+    whiteSpace: 'nowrap',
+    transition: 'border-color 0.2s, background 0.2s, color 0.2s',
+  };
+  const textLinkStyle = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    fontSize: 13.5,
+    fontWeight: 500,
+    color: 'var(--gold)',
+    textDecoration: 'none',
+  };
+
+  return (
+    <m.div variants={fadeUp} style={{ marginTop: 36 }}>
+      <p
+        style={{
+          fontSize: 11,
+          fontWeight: 700,
+          color: 'var(--gold)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.14em',
+          margin: '0 0 6px',
+        }}
+      >
+        Continuer la route
+      </p>
+      <p style={{ fontSize: 13.5, color: 'var(--text-muted)', margin: '0 0 14px', lineHeight: 1.6 }}>
+        Pays voisins et destinations proches, couverts par la même attestation.
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
+        {voisins.map((v) => (
+          <Link
+            key={v.slug}
+            to={`/carte/${v.slug}`}
+            style={pillStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--gold-border)';
+              e.currentTarget.style.background = 'var(--gold-glow)';
+              e.currentTarget.style.color = 'var(--text)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--glass-border)';
+              e.currentTarget.style.background = 'var(--glass)';
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }}
+          >
+            {v.flag} Assurance temporaire {v.nom}
+          </Link>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center' }}>
+        <Link to="/carte" style={textLinkStyle}>
+          Voir la carte des 34 pays couverts
+          <ArrowRight size={13} strokeWidth={2} aria-hidden />
+        </Link>
+        <Link to="/tarification" style={textLinkStyle}>
+          Devis assurance temporaire pour {nom}
+          <ArrowRight size={13} strokeWidth={2} aria-hidden />
+        </Link>
+        {data.international && (
+          <Link to="/assurance-internationale" style={textLinkStyle}>
+            Destinations sur demande au-delà de l&apos;Europe
+            <ArrowRight size={13} strokeWidth={2} aria-hidden />
+          </Link>
+        )}
+      </div>
     </m.div>
   );
 }
@@ -1265,6 +1360,25 @@ function Carte() {
     publisher: { '@type': 'Organization', name: 'AssuTempo' },
   };
 
+  /* BreadcrumbList : Accueil > Carte (> Pays). Rendu sur le hub ET chaque
+     page pays, en miroir du fil d'Ariane visible du hero. */
+  const jsonLdBreadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://assutempo.fr/' },
+      { '@type': 'ListItem', position: 2, name: 'Pays couverts', item: 'https://assutempo.fr/carte' },
+      ...(selectedCountry
+        ? [{
+            '@type': 'ListItem',
+            position: 3,
+            name: selectedCountry.nom,
+            item: `https://assutempo.fr/carte/${selectedCountry.slug}`,
+          }]
+        : []),
+    ],
+  };
+
   return (
     <>
       <Helmet>
@@ -1277,6 +1391,7 @@ function Carte() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
         <script type="application/ld+json">{jsonLd(jsonLdBase)}</script>
+        <script type="application/ld+json">{jsonLd(jsonLdBreadcrumb)}</script>
         {!selectedCountry && (
           <script type="application/ld+json">{jsonLd(JSONLD_PAYS_COUVERTS)}</script>
         )}
@@ -1311,6 +1426,56 @@ function Carte() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE }}
           >
+            {/* Fil d'Ariane visible, pages pays uniquement (le hub est un
+                niveau 1). Miroir exact du BreadcrumbList JSON-LD. */}
+            {selectedCountry && (
+              <nav aria-label="Fil d'Ariane" style={{ marginBottom: 20 }}>
+                <ol
+                  style={{
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                    fontSize: 13,
+                    color: 'var(--text-muted)',
+                  }}
+                >
+                  <li>
+                    <Link
+                      to="/"
+                      style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                    >
+                      Accueil
+                    </Link>
+                  </li>
+                  <li aria-hidden="true">
+                    <ChevronRight size={12} style={{ opacity: 0.5 }} />
+                  </li>
+                  <li>
+                    <Link
+                      to="/carte"
+                      style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                    >
+                      Pays couverts
+                    </Link>
+                  </li>
+                  <li aria-hidden="true">
+                    <ChevronRight size={12} style={{ opacity: 0.5 }} />
+                  </li>
+                  <li aria-current="page" style={{ color: 'var(--text-subtle)' }}>
+                    {selectedCountry.nom}
+                  </li>
+                </ol>
+              </nav>
+            )}
             <p
               style={{
                 fontSize: 12,
