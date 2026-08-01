@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-utilitaire-demenagement',
     datePublished: '2026-06-23',
-    dateModified: '2026-06-23',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -109,7 +109,7 @@ export const articleData = {
   },
   category: 'Utilitaire',
   readTime: '5 min',
-  updatedDate: '23 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline:
     "Déménager avec un utilitaire : comment être bien assuré, à la journée",

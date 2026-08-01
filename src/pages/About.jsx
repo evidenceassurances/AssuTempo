@@ -5,6 +5,16 @@ import { Sparkles, ShieldCheck, Users, Clock, FileCheck, Wallet, Check } from 'l
 import { fadeUp, stagger, slideLeft } from '../animations';
 import Footer from '../components/Footer';
 import { trackEvent } from '../lib/analytics';
+import { jsonLd } from '../lib/seo';
+
+const JSONLD_BREADCRUMB = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://assutempo.fr/' },
+    { '@type': 'ListItem', position: 2, name: 'Qui sommes-nous', item: 'https://assutempo.fr/qui-sommes-nous' },
+  ],
+};
 
 const values = [
   { title: 'Efficace', description: 'Processus fluide, prise en charge rapide, réponse sous 24h.', icon: ShieldCheck },
@@ -392,6 +402,7 @@ function About() {
         <meta property="og:url" content="https://assutempo.fr/qui-sommes-nous" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
+        <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB)}</script>
       </Helmet>
       {/* Hero */}
       <section

@@ -14,7 +14,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/carte-grise-urgence-cpi-immediat',
     datePublished: '2026-07-11',
-    dateModified: '2026-07-13',
+    dateModified: '2026-07-14',
   },
   {
     '@context': 'https://schema.org',
@@ -121,7 +121,7 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '6 min',
-  updatedDate: '13 juillet 2026',
+  updatedDate: '14 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Carte grise en urgence : obtenir un certificat provisoire immédiat',
   answerCapsule: {

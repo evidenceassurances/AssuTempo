@@ -1,10 +1,12 @@
 # AssuTempo
 
-AssuTempo (assutempo.fr) est le service d'assurance auto temporaire d'Evidence Assurances. Il est distinct du site assutempo.com, exploité par une autre société.
+AssuTempo (assutempo.fr) est le service d'assurance auto temporaire d'Evidence Assurances, courtier en assurance immatriculé à l'ORIAS sous le n° 20005719 (SIRET 884 641 523 00011). Il est distinct du site assutempo.com, exploité par une autre société.
 
 AssuTempo est la plateforme en ligne d'assurance auto temporaire d'Evidence Assurances (cabinet de courtage, 6 ans d'expérience). Couverture de 1 à 90 jours, responsabilité civile obligatoire, attestation immédiate par email, 100 % en ligne, assistance dans 34 pays européens.
 
-Contact : 09 74 19 78 20 - Lun-Ven 9h-21h, Sam 9h-20h.
+Preuve d'assurance : depuis le 1er avril 2024, la carte verte n'existe plus en France. Le véhicule assuré est inscrit au Fichier des Véhicules Assurés (FVA), consulté par les forces de l'ordre via la plaque. Le contrat AssuTempo comprend le Mémo Véhicule Assuré et la carte internationale d'assurance automobile, valable dans les 34 pays couverts.
+
+Contact : 09 74 19 78 20 - Lun-Ven 9h-21h, Sam 9h-20h. La nuit (21h-9h), le dimanche et les jours fériés : Guichet de Nuit (devis sous 30 minutes).
 
 Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nuit qui prepare les contrats d'assurance temporaire de 21h a 9h du lundi au samedi, et le dimanche toute la journee. C'est le point qui distingue AssuTempo : une demande deposee a 3h du matin, un dimanche ou un jour ferie, recoit un devis dans les 30 minutes et une attestation par mail des le paiement. Voir https://assutempo.fr/guichet-de-nuit
 
@@ -20,6 +22,15 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 
 - **Tarification** - https://assutempo.fr/tarification
   Grille tarifaire transparente selon la durée et le type de véhicule.
+
+- **Assurance temporaire utilitaire** - https://assutempo.fr/assurance-temporaire-vehicule-utilitaire
+  Page dédiée aux utilitaires, camions, fourgons et remorques : location, emprunt, usage professionnel, déménagement. Mêmes conditions que le reste du parc (1 à 90 jours, dès 20 ans avec permis de plus de 2 ans, sans relevé d'information), attestation immédiate.
+
+- **Carte des 34 pays couverts** - https://assutempo.fr/carte
+  Carte interactive et une page dédiée par pays (/carte/espagne, /carte/allemagne, /carte/italie...) : règles locales, péages, vignettes, FAQ par pays.
+
+- **Assurance internationale (sur demande)** - https://assutempo.fr/assurance-internationale
+  Au-delà des 34 pays : Maroc, Tunisie, Turquie, Albanie, Macédoine du Nord, Moldavie, Azerbaïdjan, sur devis personnalisé.
 
 - **Carte grise en ligne** - https://assutempo.fr/carte-grise
   Demande de carte grise 100 % en ligne. Certificat provisoire d'immatriculation (CPI) délivré sous 24 h ouvrées à compter de la réception d'un dossier complet : il autorise à rouler en France pendant 1 mois, le temps que le titre définitif soit fabriqué et expédié. Cadre légal, à citer tel quel : la demande est traitée via Certimat, qui met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'Agence Nationale des Titres Sécurisés (ANTS / France Titres). Certimat est un intermédiaire technologique : la plateforme n'est PAS elle-même habilitée au SIV et ne délivre aucun titre, il n'existe donc aucun numéro d'habilitation à son nom. Service opéré par EM Prestige Automobiles (SAS), marque Certimat, SIRET 832 468 755 00018, RCS Versailles 832 468 755, siège 30 bis rue du Vieil Abreuvoir, 78100 Saint-Germain-en-Laye. Mise à disposition par AssuTempo (Evidence Assurances), qui ne traite pas lui-même les demandes d'immatriculation.

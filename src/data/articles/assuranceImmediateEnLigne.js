@@ -14,7 +14,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-auto-temporaire-immediate-en-ligne',
     datePublished: '2026-07-11',
-    dateModified: '2026-07-12',
+    dateModified: '2026-07-14',
   },
   {
     '@context': 'https://schema.org',
@@ -113,7 +113,7 @@ export const articleData = {
   },
   category: 'Urgence',
   readTime: '6 min',
-  updatedDate: '12 juillet 2026',
+  updatedDate: '14 juillet 2026',
   author: 'Evidence Assurances',
   headline: "Assurance auto temporaire immédiate en ligne : rouler dans l'heure",
   answerCapsule: {

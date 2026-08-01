@@ -12,6 +12,16 @@ import Footer from '../components/Footer';
 import GlobeInternational from '../components/GlobeInternational';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { jsonLd } from '../lib/seo';
+
+const JSONLD_BREADCRUMB_INTL = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://assutempo.fr/' },
+    { '@type': 'ListItem', position: 2, name: 'Assurance internationale', item: 'https://assutempo.fr/assurance-internationale' },
+  ],
+};
 import { trackEvent } from '../lib/analytics';
 
 /* useLayoutEffect cote client (mesure de hauteur avant peinture), useEffect au
@@ -1456,6 +1466,7 @@ function AssuranceInternationale() {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Assurance Temporaire Maroc, Turquie, Tunisie | AssuTempo" />
         <meta name="twitter:description" content="Assurance auto temporaire pour le Maroc, la Turquie, la Tunisie, l'Albanie et plus. Devis personnalisé rapide, accompagnement dédié." />
+        <script type="application/ld+json">{jsonLd(JSONLD_BREADCRUMB_INTL)}</script>
       </Helmet>
 
       {/* Hero */}

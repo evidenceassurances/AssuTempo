@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-convoyage-professionnel',
     datePublished: '2026-06-03',
-    dateModified: '2026-06-03',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -134,7 +134,7 @@ export const articleData = {
   },
   category: 'Pro & convoyage',
   readTime: '4 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Convoyage professionnel : quelle assurance ?',
   immediateAnswer:

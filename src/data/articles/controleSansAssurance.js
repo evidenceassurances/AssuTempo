@@ -15,7 +15,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/controle-sans-assurance-risques-amende',
     datePublished: '2026-06-02',
-    dateModified: '2026-06-02',
+    dateModified: '2026-07-13',
   },
   {
     '@context': 'https://schema.org',
@@ -98,7 +98,7 @@ export const articleData = {
   },
   category: 'Urgence',
   readTime: '4 min',
-  updatedDate: '2 juin 2026',
+  updatedDate: '13 juillet 2026',
   author: 'Evidence Assurances',
   headline:
     "Contrôlé sans assurance : risques, amende et que faire tout de suite",

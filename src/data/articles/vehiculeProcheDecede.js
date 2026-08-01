@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-vehicule-proche-decede',
     datePublished: '2026-06-23',
-    dateModified: '2026-06-23',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -109,7 +109,7 @@ export const articleData = {
   },
   category: 'Succession',
   readTime: '5 min',
-  updatedDate: '23 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline:
     "Assurer la voiture d'un proche décédé : ce que dit la loi, et comment rouler couvert",

@@ -13,7 +13,7 @@ const jsonLd = [
     },
     mainEntityOfPage: 'https://assutempo.fr/articles/prix-assurance-auto-temporaire',
     datePublished: '2026-07-13',
-    dateModified: '2026-07-13',
+    dateModified: '2026-07-15',
   },
   {
     '@context': 'https://schema.org',
@@ -80,7 +80,7 @@ export const articleData = {
   },
   category: 'Prix & tarifs',
   readTime: '6 min',
-  updatedDate: '13 juillet 2026',
+  updatedDate: '15 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Prix assurance auto temporaire : combien ça coûte vraiment ?',
   cta: {

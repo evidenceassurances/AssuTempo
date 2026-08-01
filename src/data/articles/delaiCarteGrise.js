@@ -13,7 +13,7 @@ const jsonLd = [
     },
     mainEntityOfPage: 'https://assutempo.fr/articles/combien-de-temps-carte-grise',
     datePublished: '2026-07-13',
-    dateModified: '2026-07-13',
+    dateModified: '2026-07-30',
   },
   {
     '@context': 'https://schema.org',
@@ -80,7 +80,7 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '6 min',
-  updatedDate: '13 juillet 2026',
+  updatedDate: '30 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Combien de temps pour obtenir une carte grise en 2026 ?',
   cta: {

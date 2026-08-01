@@ -16,7 +16,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-vehicule-etranger-france',
     datePublished: '2026-06-03',
-    dateModified: '2026-06-03',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -131,7 +131,7 @@ export const articleData = {
   },
   category: 'International',
   readTime: '5 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   immediateAnswerLabel: "L'essentiel",
   headline: "Véhicule ou permis étranger : rouler assuré en France",

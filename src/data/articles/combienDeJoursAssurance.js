@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere',
     datePublished: '2026-06-03',
-    dateModified: '2026-06-03',
+    dateModified: '2026-07-13',
   },
   {
     '@context': 'https://schema.org',
@@ -131,7 +131,7 @@ export const articleData = {
   },
   category: 'Urgence',
   readTime: '4 min',
-  updatedDate: '3 juin 2026',
+  updatedDate: '13 juillet 2026',
   author: 'Evidence Assurances',
   immediateAnswerLabel: "L'essentiel",
   headline:

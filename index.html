@@ -30,11 +30,25 @@
           "image": "https://assutempo.fr/logo.png",
           "telephone": "+33974197820",
           "email": "contact@assutempo.fr",
-          "identifier": {
-            "@type": "PropertyValue",
-            "propertyID": "ORIAS",
-            "value": "20005719"
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "68 rue Denis Papin",
+            "postalCode": "60280",
+            "addressLocality": "Margny-lès-Compiègne",
+            "addressCountry": "FR"
           },
+          "identifier": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "ORIAS",
+              "value": "20005719"
+            },
+            {
+              "@type": "PropertyValue",
+              "propertyID": "SIRET",
+              "value": "88464152300011"
+            }
+          ],
           "sameAs": [
             "https://www.societe.com/societe/ea-agency-884641523.html",
             "https://annuaire-entreprises.data.gouv.fr/entreprise/884641523"
@@ -60,6 +74,20 @@
               "dayOfWeek": "Saturday",
               "opens": "09:00",
               "closes": "20:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "name": "Guichet de Nuit (dépôt de demande, devis sous 30 minutes)",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "21:00",
+              "closes": "09:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "name": "Guichet de Nuit (dépôt de demande, devis sous 30 minutes)",
+              "dayOfWeek": "Sunday",
+              "opens": "00:00",
+              "closes": "23:59"
             }
           ]
         },

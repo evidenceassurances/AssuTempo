@@ -159,8 +159,16 @@ function Footer() {
           <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65, margin: '0 0 8px', maxWidth: 280 }}>
             Démarche simple, attestation immédiate.
           </p>
-          <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: 0, maxWidth: 280, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 13, color: 'var(--text-subtle)', margin: '0 0 12px', maxWidth: 280, lineHeight: 1.6 }}>
             Evidence Assurances - cabinet de courtage engagé RSE, 6 ans d&apos;expérience.
+          </p>
+          {/* Identite legale complete (E-E-A-T) : memes references que les
+              mentions legales (/conditions-generales) et le JSON-LD global. */}
+          <p style={{ fontSize: 12, color: 'var(--text-subtle)', margin: 0, maxWidth: 280, lineHeight: 1.7 }}>
+            Courtier en assurance immatriculé à l&apos;ORIAS sous le n&deg; 20005719
+            (orias.fr) · SIRET 884 641 523 00011
+            <br />
+            68 rue Denis Papin, 60280 Margny-lès-Compiègne
           </p>
         </div>
 

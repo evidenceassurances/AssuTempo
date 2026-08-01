@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-resilie-par-assureur',
     datePublished: '2026-06-23',
-    dateModified: '2026-06-23',
+    dateModified: '2026-07-11',
   },
   {
     '@context': 'https://schema.org',
@@ -109,7 +109,7 @@ export const articleData = {
   },
   category: 'Résiliation',
   readTime: '5 min',
-  updatedDate: '23 juin 2026',
+  updatedDate: '11 juillet 2026',
   author: 'Evidence Assurances',
   headline:
     "Résilié par votre assureur : quelles solutions, et quand l'assurance temporaire dépanne",

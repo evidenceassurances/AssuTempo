@@ -14,7 +14,7 @@ const jsonLd = [
     },
     mainEntityOfPage: 'https://assutempo.fr/articles/assurer-voiture-sans-carte-grise',
     datePublished: '2026-07-12',
-    dateModified: '2026-07-12',
+    dateModified: '2026-08-01',
   },
   {
     '@context': 'https://schema.org',
@@ -81,7 +81,7 @@ export const articleData = {
   },
   category: 'Carte grise',
   readTime: '6 min',
-  updatedDate: '12 juillet 2026',
+  updatedDate: '1er août 2026',
   author: 'Evidence Assurances',
   headline: 'Assurer sans carte grise définitive : possible, et obligatoire avant de rouler',
   answerCapsule: {

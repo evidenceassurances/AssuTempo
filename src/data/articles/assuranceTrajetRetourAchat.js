@@ -16,7 +16,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-trajet-retour-achat-voiture',
     datePublished: '2026-07-11',
-    dateModified: '2026-07-11',
+    dateModified: '2026-07-13',
   },
   {
     '@context': 'https://schema.org',
@@ -84,7 +84,7 @@ export const articleData = {
   },
   category: 'Achat véhicule',
   readTime: '6 min',
-  updatedDate: '11 juillet 2026',
+  updatedDate: '13 juillet 2026',
   author: 'Evidence Assurances',
   headline: 'Assurance trajet retour après achat voiture : que dit la loi ?',
   immediateAnswer:

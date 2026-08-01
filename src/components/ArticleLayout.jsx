@@ -1060,6 +1060,49 @@ function ArticleLayout({ data }) {
               </p>
             </div>
           </Reveal>
+
+          {/* Encart auteur (E-E-A-T) : qui ecrit, sous quelle immatriculation,
+              et la date de mise a jour reelle de l'article. */}
+          <Reveal>
+            <aside
+              aria-label="À propos de l'auteur"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 14,
+                background: 'var(--bg-card)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 14,
+                padding: '18px 22px',
+                marginBottom: 56,
+              }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  flexShrink: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 10,
+                  background: 'var(--gold-glow)',
+                  border: '1px solid var(--gold-border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <User size={17} color="var(--gold)" strokeWidth={1.5} />
+              </span>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', margin: '0 0 4px' }}>
+                  Rédigé par l&apos;équipe AssuTempo, courtier Evidence Assurances, ORIAS n&deg; 20005719.
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
+                  Contenu vérifié et mis à jour le {data.updatedDate}.
+                </p>
+              </div>
+            </aside>
+          </Reveal>
         </div>
 
         {/* ── À lire aussi ── */}

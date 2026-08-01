@@ -15,7 +15,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/voiture-immobilisee-defaut-assurance',
     datePublished: '2026-06-02',
-    dateModified: '2026-06-02',
+    dateModified: '2026-07-10',
   },
   {
     '@context': 'https://schema.org',
@@ -112,7 +112,7 @@ export const articleData = {
   },
   category: 'Urgence',
   readTime: '4 min',
-  updatedDate: '2 juin 2026',
+  updatedDate: '10 juillet 2026',
   author: 'Evidence Assurances',
   headline:
     "Voiture immobilisée pour défaut d'assurance : comment la récupérer (vite et légalement)",
