@@ -35,6 +35,7 @@ const IMPORTERS = {
   AssuranceTemporaire1Mois:   () => import('./pages/articles/AssuranceTemporaire1Mois'),
   ChangementTitulaireCarteGrise: () => import('./pages/articles/ChangementTitulaireCarteGrise'),
   CarteGriseAntsBloquee:       () => import('./pages/articles/CarteGriseAntsBloquee'),
+  AssuranceAutoEtrangerFrance: () => import('./pages/articles/AssuranceAutoEtrangerFrance'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),
