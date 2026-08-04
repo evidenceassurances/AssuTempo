@@ -58,6 +58,7 @@ const ROUTES = [
   '/articles/assurance-auto-temporaire-1-mois',
   '/articles/changement-titulaire-carte-grise',
   '/articles/carte-grise-ants-bloquee',
+  '/articles/assurance-auto-etranger-france',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -142,6 +143,7 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-auto-temporaire-1-mois':                 'src/data/articles/assuranceTemporaire1Mois.js',
   '/articles/changement-titulaire-carte-grise':                 'src/data/articles/changementTitulaireCarteGrise.js',
   '/articles/carte-grise-ants-bloquee':                          'src/data/articles/carteGriseAntsBloquee.js',
+  '/articles/assurance-auto-etranger-france':                    'src/data/articles/assuranceAutoEtrangerFrance.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -336,6 +338,7 @@ const ROUTE_MODULES = {
   '/articles/assurance-auto-temporaire-1-mois':                 'src/pages/articles/AssuranceTemporaire1Mois.jsx',
   '/articles/changement-titulaire-carte-grise':                 'src/pages/articles/ChangementTitulaireCarteGrise.jsx',
   '/articles/carte-grise-ants-bloquee':                          'src/pages/articles/CarteGriseAntsBloquee.jsx',
+  '/articles/assurance-auto-etranger-france':                    'src/pages/articles/AssuranceAutoEtrangerFrance.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',

@@ -68,6 +68,7 @@ export const CLUSTERS = {
   international: {
     members: [
       'assurance-temporaire-vehicule-etranger-france',
+      'assurance-auto-etranger-france',
       { to: '/assurance-internationale', titre: 'Assurance pour rouler hors Europe', Icon: Globe },
       { to: '/carte', titre: 'Les 34 pays couverts en Europe', Icon: Globe },
     ],

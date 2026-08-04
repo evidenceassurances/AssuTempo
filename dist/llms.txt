@@ -118,3 +118,7 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Dossier carte grise bloqué sur l'ANTS : pourquoi, et comment le débloquer**
   https://assutempo.fr/articles/carte-grise-ants-bloquee
   Causes fréquentes de blocage (pièce refusée, code de cession expiré, incident du portail), délai légal d'1 mois pour immatriculer après achat (article R322-5 du code de la route), recours en cas de refus ou de silence de l'ANTS (recours gracieux, médiateur des cartes grises, service-public.gouv.fr), et accès direct au SIV d'un professionnel habilité par le Ministère de l'Intérieur pour débloquer un dossier.
+
+- **Assurance auto étranger en France : UE, carte verte ou frontière**
+  https://assutempo.fr/articles/assurance-auto-etranger-france
+  Trois régimes selon le pays d'immatriculation du véhicule : UE/EEE (assurance d'origine), pays de la carte verte internationale (carte verte du pays d'origine), ou aucun des deux (assurance frontière obligatoire, 30 ou 90 jours renouvelable une fois, article R211-24 du code des assurances). Résidence transférée en France : 1 mois pour immatriculer (article R322-5 du code de la route). Permis hors UE/EEE valable 1 an après l'installation, échange possible sous réserve d'un accord de réciprocité, droit de timbre de 40 euros depuis le 12 mai 2026. La carte verte internationale n'a pas disparu : seuls le certificat papier et la vignette pour les véhicules assurés en France ont été supprimés le 1er avril 2024, remplacés par le Fichier des véhicules assurés et le Mémo véhicule assuré.
