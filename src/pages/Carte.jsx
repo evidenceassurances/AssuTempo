@@ -34,7 +34,9 @@ const ICON_MAP = {
   Receipt, Fuel, ShoppingBag, Building2, Ban,
 };
 import AccordionItem from '../components/ui/AccordionItem';
-import Flag from '../components/ui/Flag';
+/* Alias : `Flag` est deja pris par l'icone lucide utilisee dans la carte des
+   points pays. */
+import CountryFlag from '../components/ui/Flag';
 import { PaysCarte, PaysLegende } from '../components/blocks/PaysCarte';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -196,7 +198,7 @@ function CountryPanel({ country }) {
               fontWeight: 600,
             }}
           >
-            <Flag code={code} size={16} />&nbsp; PAYS COUVERT
+            <CountryFlag code={code} size={16} />&nbsp; PAYS COUVERT
           </p>
           <h2
             style={{
@@ -1713,7 +1715,7 @@ function Carte() {
                       e.currentTarget.style.color = 'var(--text-muted)';
                     }}
                   >
-                    <Flag code={c.code} size={16} /> {c.nom}
+                    <CountryFlag code={c.code} size={16} /> {c.nom}
                   </Link>
                 </m.div>
               );
