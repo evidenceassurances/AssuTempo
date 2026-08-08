@@ -28,5 +28,11 @@
     { "source": "/sample-page", "destination": "/api/gone" },
     { "source": "/helpie_faq", "destination": "/api/gone" },
     { "source": "/helpie_faq/:slug*", "destination": "/api/gone" }
+  ],
+  "headers": [
+    {
+      "source": "/flags/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
   ]
 }

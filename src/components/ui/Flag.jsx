@@ -41,7 +41,13 @@ function Flag({ code, size = 20, label, style }) {
       src={`/flags/${iso}.svg`}
       width={size}
       height={height}
+      /* Le drapeau est purement decoratif : il ne doit jamais disputer de la
+         bande passante au contenu. lazy = pas telecharge tant que la section
+         n'approche pas, priorite basse = servi apres tout le reste, async =
+         decode hors du thread principal. Sur connexion faible, le nom du pays
+         reste lisible en texte pendant que le drapeau arrive. */
       loading="lazy"
+      fetchPriority="low"
       decoding="async"
       alt={label ? `Drapeau de ${label}` : ''}
       aria-hidden={label ? undefined : 'true'}
