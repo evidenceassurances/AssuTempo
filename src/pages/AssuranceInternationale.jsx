@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Footer from '../components/Footer';
 import GlobeInternational from '../components/GlobeInternational';
+import Flag from '../components/ui/Flag';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
@@ -19,14 +20,15 @@ import { trackEvent } from '../lib/analytics';
    the server". */
 const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+/* `code` : ISO 3166-1 alpha-2 minuscule, consomme par <Flag /> (public/flags). */
 const PAYS = [
-  { slug: 'albanie',           nom: 'Albanie',            flag: '🇦🇱' },
-  { slug: 'azerbaidjan',       nom: 'Azerbaïdjan',        flag: '🇦🇿' },
-  { slug: 'macedoine-du-nord', nom: 'Macédoine du Nord',  flag: '🇲🇰' },
-  { slug: 'maroc',             nom: 'Maroc',              flag: '🇲🇦' },
-  { slug: 'moldavie',          nom: 'Moldavie',           flag: '🇲🇩' },
-  { slug: 'tunisie',           nom: 'Tunisie',            flag: '🇹🇳' },
-  { slug: 'turquie',           nom: 'Turquie',            flag: '🇹🇷' },
+  { slug: 'albanie',           nom: 'Albanie',            code: 'al' },
+  { slug: 'azerbaidjan',       nom: 'Azerbaïdjan',        code: 'az' },
+  { slug: 'macedoine-du-nord', nom: 'Macédoine du Nord',  code: 'mk' },
+  { slug: 'maroc',             nom: 'Maroc',              code: 'ma' },
+  { slug: 'moldavie',          nom: 'Moldavie',           code: 'md' },
+  { slug: 'tunisie',           nom: 'Tunisie',            code: 'tn' },
+  { slug: 'turquie',           nom: 'Turquie',            code: 'tr' },
 ];
 
 /* Les 3 etapes du bloc "Comment ca marche" (pedagogie, distinct du formulaire). */
@@ -851,7 +853,7 @@ function DevisForm({ initialPays }) {
 
                 <Field label="Pays de destination *" error={errors.pays}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
-                    {PAYS.map(({ nom, flag }) => {
+                    {PAYS.map(({ nom, code }) => {
                       const checked = pays.includes(nom);
                       return (
                         <button
@@ -867,7 +869,7 @@ function DevisForm({ initialPays }) {
                             fontWeight: checked ? 600 : 400,
                           }}
                         >
-                          {flag} {nom}
+                          <Flag code={code} size={16} /> {nom}
                         </button>
                       );
                     })}
@@ -1533,7 +1535,7 @@ function AssuranceInternationale() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                {p.flag} {p.nom}
+                <Flag code={p.code} size={16} /> {p.nom}
               </m.span>
             ))}
           </div>

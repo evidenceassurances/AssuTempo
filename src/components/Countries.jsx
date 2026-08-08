@@ -5,6 +5,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 /* Index leger uniquement : le contenu complet des 34 pays (~80 KB source)
    ne doit JAMAIS entrer dans le bundle critique de la Home */
 import { COUNTRIES_INDEX as COUNTRIES } from '../data/countries-index';
+import Flag from './ui/Flag';
 
 function Countries() {
   const [ref, inView] = useScrollReveal();
@@ -76,7 +77,7 @@ function Countries() {
                   e.currentTarget.style.color = 'var(--text-muted)';
                 }}
               >
-                {c.flag} {c.nom}
+                <Flag code={c.code} size={16} /> {c.nom}
               </Link>
             </m.div>
           ))}

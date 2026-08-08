@@ -34,6 +34,7 @@ const ICON_MAP = {
   Receipt, Fuel, ShoppingBag, Building2, Ban,
 };
 import AccordionItem from '../components/ui/AccordionItem';
+import Flag from '../components/ui/Flag';
 import { PaysCarte, PaysLegende } from '../components/blocks/PaysCarte';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -172,7 +173,7 @@ function Reveal({ children, delay = 0 }) {
 /* ── Panneau pays animé ───────────────────────────────────────────────────── */
 function CountryPanel({ country }) {
   const [openFaq, setOpenFaq] = useState(null);
-  const { h1, intro, points, flag, nom, slug, faq } = country;
+  const { h1, intro, points, code, nom, slug, faq } = country;
 
   return (
     <m.div
@@ -195,7 +196,7 @@ function CountryPanel({ country }) {
               fontWeight: 600,
             }}
           >
-            {flag}&nbsp; PAYS COUVERT
+            <Flag code={code} size={16} />&nbsp; PAYS COUVERT
           </p>
           <h2
             style={{
@@ -1712,7 +1713,7 @@ function Carte() {
                       e.currentTarget.style.color = 'var(--text-muted)';
                     }}
                   >
-                    {c.flag} {c.nom}
+                    <Flag code={c.code} size={16} /> {c.nom}
                   </Link>
                 </m.div>
               );
