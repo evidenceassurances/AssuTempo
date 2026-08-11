@@ -58,10 +58,21 @@ jobs:
             echo "PR #${pr} non ouverte (etat : ${etat}) : rien a controler."
             exit 1
           fi
+          # Le login d'auteur n'a pas une forme unique : `gh pr view --json
+          # author` passe par GraphQL, qui prefixe les applications ("app/
+          # dependabot", "app/github-actions"), la ou l'API REST suffixe
+          # ("dependabot[bot]"). Tester une forme particuliere casse en silence
+          # des que l'autre apparait : c'est ce qui bloquait la PR #36 depuis le
+          # 17 juillet (exemption dependabot jamais activee, donc rejet en zone
+          # interdite sur .github/workflows/). On normalise ici, une fois, et
+          # tout l'aval compare des logins nus.
+          brut=$(echo "$infos" | jq -r '.author.login')
+          auteur=$(echo "$brut" | tr '[:upper:]' '[:lower:]' | sed -e 's|^app/||' -e 's|\[bot\]$||')
+          echo "Auteur de la PR : brut='${brut}' normalise='${auteur}'"
           {
             echo "pr=${pr}"
             echo "branche=$(echo "$infos" | jq -r '.headRefName')"
-            echo "auteur=$(echo "$infos" | jq -r '.author.login')"
+            echo "auteur=${auteur}"
             echo "hold=$(echo "$infos" | jq -r '[.labels[].name] | contains(["hold"])')"
           } >> "$GITHUB_OUTPUT"
 
@@ -93,8 +104,8 @@ jobs:
       needs.contexte.outputs.hold != 'true' &&
       (
         ((startsWith(needs.contexte.outputs.branche, 'draft/') || startsWith(needs.contexte.outputs.branche, 'claude/')) &&
-         contains(fromJSON('["claude[bot]", "claude", "app/claude", "github-actions[bot]", "github-actions", "app/github-actions", "evidenceassurances"]'), needs.contexte.outputs.auteur)) ||
-        ((needs.contexte.outputs.auteur == 'dependabot[bot]' || needs.contexte.outputs.auteur == 'dependabot') &&
+         contains(fromJSON('["claude", "github-actions", "evidenceassurances"]'), needs.contexte.outputs.auteur)) ||
+        (needs.contexte.outputs.auteur == 'dependabot' &&
          startsWith(needs.contexte.outputs.branche, 'dependabot/'))
       )
     runs-on: ubuntu-latest
@@ -109,7 +120,7 @@ jobs:
       issues: write
     steps:
       - name: Verifier le perimetre dependabot (workflows uniquement)
-        if: startsWith(needs.contexte.outputs.auteur, 'dependabot')
+        if: needs.contexte.outputs.auteur == 'dependabot'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
