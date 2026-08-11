@@ -4,6 +4,8 @@ import Advantages from '../components/Advantages';
 import Process from '../components/Process';
 import UseCases from '../components/UseCases';
 import Countries from '../components/Countries';
+import GuidesEtDemarches from '../components/GuidesEtDemarches';
+import CtaGuichetDeNuit from '../components/CtaGuichetDeNuit';
 import Faq from '../components/Faq';
 import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
@@ -28,6 +30,8 @@ function HomeSections() {
       <Countries />
       <CtaInternational />
       <CtaAfterCountries />
+      <GuidesEtDemarches />
+      <CtaGuichetDeNuit />
       <Faq />
       <FinalCTA />
       <Footer />

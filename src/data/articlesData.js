@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -326,6 +326,19 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '7 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-etranger-france',
+    titre: 'Assurance auto étranger en France : UE, carte verte ou frontière',
+    extrait:
+      "Véhicule étranger en France : UE, carte verte ou assurance frontière. Délais réels, permis étranger et sanctions, sources officielles.",
+    reponseRapide:
+      "Un véhicule immatriculé à l'étranger relève de 3 régimes en France : UE/EEE (assurance d'origine), pays de la carte verte internationale (carte verte du pays d'origine), ou aucun des deux (assurance frontière, 30 à 90 jours). Résidence transférée en France : immatriculation sous 1 mois, permis hors UE sous 1 an.",
+    icone: Landmark,
+    accent: '#5E7CA8',
+    categorie: 'International',
+    readTime: '8 min',
     hasPage: true,
   },
 ];
