@@ -133,7 +133,46 @@ jobs:
             exit 1
           fi
 
+      # GitHub REFUSE qu'un jeton d'application merge une PR qui touche un
+      # fichier de .github/workflows/ : c'est le garde-fou qui empeche un
+      # workflow de se reecrire lui-meme. Il n'existe aucune permission
+      # `workflows` attribuable au GITHUB_TOKEN (la liste des permissions de
+      # job ne la contient pas), donc ce blocage ne se contourne pas par
+      # configuration : il faudrait un PAT ou une GitHub App portant le scope
+      # `workflow`. Or dependabot sur l'ecosysteme github_actions ne modifie
+      # QUE des fichiers de workflow : ces PR ne peuvent donc jamais etre
+      # auto-mergees. Sans ce garde-fou, l'automerge echouait sur un message
+      # GraphQL cryptique et la PR restait ouverte sans explication : la PR #36
+      # est restee bloquee ainsi du 17 juillet au 12 aout 2026. On detecte
+      # desormais le cas AVANT le merge, on l'explique sur la PR, et on sort
+      # proprement : c'est une intervention humaine attendue, pas une panne.
+      - name: Detecter les PR non auto-mergeables (fichiers de workflow)
+        id: perimetre
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          touche_workflows=$(gh pr view ${{ needs.contexte.outputs.pr }} \
+            --repo ${{ github.repository }} --json files \
+            --jq '.files[].path | select(startswith(".github/workflows/"))')
+          if [ -n "$touche_workflows" ]; then
+            echo "bloque=true" >> "$GITHUB_OUTPUT"
+            echo "Merge automatique impossible : cette PR modifie des fichiers de workflow."
+            echo "$touche_workflows"
+          else
+            echo "bloque=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Expliquer sur la PR et laisser la main
+        if: steps.perimetre.outputs.bloque == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ needs.contexte.outputs.pr }} --repo ${{ github.repository }} --body \
+          "Gate vert, mais le merge automatique est impossible sur cette PR : elle modifie des fichiers de \`.github/workflows/\`, et GitHub interdit au jeton d'Actions de merger un changement de workflow (aucune permission \`workflows\` n'existe pour ce jeton). Un merge manuel est necessaire. Tous les controles qualite sont passes." \
+          || true
+
       - name: Merge automatique (squash + suppression de branche)
+        if: steps.perimetre.outputs.bloque != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
@@ -142,7 +181,11 @@ jobs:
 
       # Le mot-cle "Closes #N" d'une PR mergee par le token Actions ne ferme
       # pas l'issue de façon fiable : fermeture explicite.
+      # Toutes les etapes qui suivent supposent que le merge a eu lieu : sans
+      # la garde, une PR laissee a l'arbitrage humain fermait quand meme son
+      # issue, puis reconstruisait et signalait a IndexNow un main inchange.
       - name: Fermer l'issue liee
+        if: steps.perimetre.outputs.bloque != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -154,16 +197,20 @@ jobs:
           fi
 
       - name: Checkout de main apres merge
+        if: steps.perimetre.outputs.bloque != 'true'
         uses: actions/checkout@v7
         with:
           ref: main
       - uses: actions/setup-node@v6
+        if: steps.perimetre.outputs.bloque != 'true'
         with:
           node-version: 20
           cache: npm
       - name: Rebuild du sitemap sur main mergee
+        if: steps.perimetre.outputs.bloque != 'true'
         run: |
           npm ci
           npm run build
       - name: Ping IndexNow (Bing prevenu en minutes)
+        if: steps.perimetre.outputs.bloque != 'true'
         run: node scripts/indexnow.mjs
