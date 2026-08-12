@@ -6,7 +6,7 @@ const jsonLd = [
     '@type': 'Article',
     headline: "Véhicule ou permis étranger : rouler assuré en France",
     description:
-      "Véhicule à plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Assurance temporaire, attestation immédiate, 1 à 90 jours.",
+      "Plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Attestation immédiate, 1 à 90 jours.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -124,7 +124,7 @@ export const articleData = {
   seo: {
     title: "Véhicule ou permis étranger : assurance temporaire en France",
     description:
-      "Véhicule à plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Assurance temporaire, attestation immédiate, 1 à 90 jours.",
+      "Plaque étrangère ou retour de l'étranger ? Roulez assuré en France le temps de l'immatriculer. Attestation immédiate, 1 à 90 jours.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-vehicule-etranger-france',
     jsonLd,

@@ -5,9 +5,9 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline:
-      'Prêter ou emprunter un véhicule : roulez assuré sans toucher au contrat du propriétaire',
+      'Prêter ou emprunter un véhicule : rouler assuré sans risque',
     description:
-      'Vous prêtez ou empruntez une voiture ? Une assurance temporaire couvre le conducteur le temps du prêt, sans impacter le bonus-malus du propriétaire. Attestation en 5 minutes.',
+      'Une assurance temporaire couvre le conducteur le temps du prêt, sans toucher au bonus-malus du propriétaire. Attestation en 5 minutes.',
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -125,9 +125,9 @@ export const articleData = {
   slug: 'assurance-temporaire-pret-de-vehicule',
   seo: {
     title:
-      'Prêter ou emprunter un véhicule : roulez assuré sans toucher au contrat du propriétaire',
+      'Prêter ou emprunter un véhicule : rouler assuré sans risque',
     description:
-      'Vous prêtez ou empruntez une voiture ? Une assurance temporaire couvre le conducteur le temps du prêt, sans impacter le bonus-malus du propriétaire. Attestation en 5 minutes.',
+      'Une assurance temporaire couvre le conducteur le temps du prêt, sans toucher au bonus-malus du propriétaire. Attestation en 5 minutes.',
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-pret-de-vehicule',
     jsonLd,

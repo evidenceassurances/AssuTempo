@@ -510,7 +510,7 @@ const h2Style = {
   margin: '0 0 14px',
 };
 
-const TITLE = 'Assurance temporaire la nuit : Le Guichet de Nuit AssuTempo, 21h à 9h et dimanche';
+const TITLE = 'Assurance temporaire la nuit : le Guichet de Nuit AssuTempo';
 const DESCRIPTION = "Oui, on s'assure aussi en pleine nuit : le Guichet de Nuit prépare votre contrat de 21h à 9h et le dimanche. Devis en 30 minutes, attestation par mail.";
 
 /* ═══════════════════════════════════════════════════════════════════════════

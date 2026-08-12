@@ -4,9 +4,9 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Essayer un véhicule avant achat : qui assure l\'essai routier ?',
+    headline: 'Essai d\'un véhicule avant achat : qui assure ?',
     description:
-      'Avant d\'acheter, vous voulez essayer le véhicule sur route ? En concession vous êtes souvent couvert, chez un particulier c\'est plus risqué. Une assurance temporaire d\'un jour sécurise l\'essai. Attestation en 5 minutes.',
+      'En concession vous êtes souvent couvert, chez un particulier beaucoup moins. Une assurance temporaire d\'un jour sécurise l\'essai routier.',
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -123,9 +123,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'assurance-temporaire-essai-vehicule-avant-achat',
   seo: {
-    title: 'Essayer un véhicule avant achat : qui assure l\'essai routier ?',
+    title: 'Essai d\'un véhicule avant achat : qui assure ?',
     description:
-      'Avant d\'acheter, vous voulez essayer le véhicule sur route ? En concession vous êtes souvent couvert, chez un particulier c\'est plus risqué. Une assurance temporaire d\'un jour sécurise l\'essai. Attestation en 5 minutes.',
+      'En concession vous êtes souvent couvert, chez un particulier beaucoup moins. Une assurance temporaire d\'un jour sécurise l\'essai routier.',
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-essai-vehicule-avant-achat',
     jsonLd,

@@ -5,9 +5,9 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline:
-      'Rouler en attendant sa carte grise : comment rester assuré pendant les délais',
+      'Rouler en attendant sa carte grise : rester assuré',
     description:
-      "Carte grise en cours, délais qui s'étirent ? Le certificat provisoire (CPI) vous autorise à rouler 1 mois en France, à condition d'être assuré. L'assurance temporaire vous couvre dès le premier trajet. Attestation en 5 minutes.",
+      "Le certificat provisoire (CPI) autorise à rouler 1 mois en France, à condition d'être assuré. L'assurance temporaire couvre dès le 1er trajet.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -125,9 +125,9 @@ export const articleData = {
   slug: 'assurance-temporaire-rouler-en-attendant-carte-grise',
   seo: {
     title:
-      'Rouler en attendant sa carte grise : comment rester assuré pendant les délais',
+      'Rouler en attendant sa carte grise : rester assuré',
     description:
-      "Carte grise en cours, délais qui s'étirent ? Le certificat provisoire (CPI) vous autorise à rouler 1 mois en France, à condition d'être assuré. L'assurance temporaire vous couvre dès le premier trajet. Attestation en 5 minutes.",
+      "Le certificat provisoire (CPI) autorise à rouler 1 mois en France, à condition d'être assuré. L'assurance temporaire couvre dès le 1er trajet.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-rouler-en-attendant-carte-grise',
     jsonLd,

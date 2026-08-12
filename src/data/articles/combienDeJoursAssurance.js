@@ -7,7 +7,7 @@ const jsonLd = [
     headline:
       "Sortie de fourrière : combien de jours d'assurance faut-il souscrire ?",
     description:
-      "Combien de jours d'assurance pour sortir une voiture de la fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate en ligne, dès 1 jour.",
+      "Combien de jours d'assurance pour sortir de fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate, dès 1 jour.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -125,7 +125,7 @@ export const articleData = {
   seo: {
     title: "Sortie de fourrière : combien de jours d'assurance ?",
     description:
-      "Combien de jours d'assurance pour sortir une voiture de la fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate en ligne, dès 1 jour.",
+      "Combien de jours d'assurance pour sortir de fourrière ? La fiche d'immobilisation fixe le minimum. Attestation immédiate, dès 1 jour.",
     canonical: 'https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere',
     jsonLd,
   },

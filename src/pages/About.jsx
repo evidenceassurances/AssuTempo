@@ -385,10 +385,10 @@ function About() {
     <>
       <Helmet>
         <title>Qui Sommes-Nous ? Evidence Assurances | AssuTempo</title>
-        <meta name="description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage avec 6 ans d'expertise. Découvrez notre histoire et nos engagements." />
+        <meta name="description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage. Notre histoire, nos engagements, notre cadre." />
         <link rel="canonical" href="https://assutempo.fr/qui-sommes-nous" />
         <meta property="og:title" content="Qui Sommes-Nous ? Evidence Assurances | AssuTempo" />
-        <meta property="og:description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage avec 6 ans d'expertise. Découvrez notre histoire et nos engagements." />
+        <meta property="og:description" content="AssuTempo est le service d'assurance temporaire d'Evidence Assurances, cabinet de courtage. Notre histoire, nos engagements, notre cadre." />
         <meta property="og:url" content="https://assutempo.fr/qui-sommes-nous" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

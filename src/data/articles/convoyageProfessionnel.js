@@ -5,9 +5,9 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline:
-      'Convoyage professionnel : quelle assurance pour le véhicule que vous déplacez ?',
+      'Convoyage professionnel : quelle assurance véhicule ?',
     description:
-      "Mandataires, négociants, transporteurs : assurez chaque véhicule convoyé (roulant) avec une assurance temporaire de 1 à 90 jours, sans contrat annuel inutile. Attestation en 5 minutes.",
+      "Mandataires, négociants, transporteurs : assurez chaque véhicule convoyé de 1 à 90 jours, sans contrat annuel. Attestation en 5 minutes.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -125,9 +125,9 @@ export const articleData = {
   slug: 'assurance-temporaire-convoyage-professionnel',
   seo: {
     title:
-      'Convoyage professionnel : quelle assurance pour le véhicule que vous déplacez ?',
+      'Convoyage professionnel : quelle assurance véhicule ?',
     description:
-      "Mandataires, négociants, transporteurs : assurez chaque véhicule convoyé (roulant) avec une assurance temporaire de 1 à 90 jours, sans contrat annuel inutile. Attestation en 5 minutes.",
+      "Mandataires, négociants, transporteurs : assurez chaque véhicule convoyé de 1 à 90 jours, sans contrat annuel. Attestation en 5 minutes.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-convoyage-professionnel',
     jsonLd,

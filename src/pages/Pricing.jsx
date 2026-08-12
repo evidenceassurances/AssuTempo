@@ -131,11 +131,11 @@ function Pricing() {
   return (
     <>
       <Helmet>
-        <title>Tarif Assurance Temporaire : Devis Immédiat en Ligne | AssuTempo</title>
-        <meta name="description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe sans frais cachés. Souscription 100 % en ligne, attestation immédiate." />
+        <title>Tarif Assurance Temporaire : Devis en Ligne | AssuTempo</title>
+        <meta name="description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe. Souscription en ligne, attestation immédiate." />
         <link rel="canonical" href="https://assutempo.fr/tarification" />
-        <meta property="og:title" content="Tarif Assurance Temporaire : Devis Immédiat en Ligne | AssuTempo" />
-        <meta property="og:description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe sans frais cachés. Souscription 100 % en ligne, attestation immédiate." />
+        <meta property="og:title" content="Tarif Assurance Temporaire : Devis en Ligne | AssuTempo" />
+        <meta property="og:description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe. Souscription en ligne, attestation immédiate." />
         <meta property="og:url" content="https://assutempo.fr/tarification" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

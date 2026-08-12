@@ -1356,12 +1356,26 @@ function Carte() {
   }, [navigate, selectedId]);
 
   /* ── SEO ────────────────────────────────────────────────────────────────── */
+
+  /* Le gabarit precedent, "Assurance Temporaire {nom} : Couvert dès le 1er Jour
+     | AssuTempo", faisait 59 caracteres AVANT meme d'inserer le nom du pays :
+     les 34 pages pays depassaient donc toutes la limite de 60, et Google les
+     tronquait toutes. L'accroche n'est desormais ajoutee que si elle tient,
+     ce qui la conserve sur 32 pays et ne la retire que pour les deux noms les
+     plus longs (Bosnie-Herzegovine, Republique tcheque). Le mot-cle reste en
+     tete dans les deux cas, c'est lui qui porte le referencement. */
+  const titrePays = (nom) => {
+    const base = `Assurance Temporaire ${nom}`;
+    const avecAccroche = `${base} : dès 1 jour | AssuTempo`;
+    return avecAccroche.length <= 60 ? avecAccroche : `${base} | AssuTempo`;
+  };
+
   const seoTitle = selectedCountry
-    ? `Assurance Temporaire ${selectedCountry.nom} : Couvert dès le 1er Jour | AssuTempo`
-    : 'Assurance Temporaire en Europe : 34 Pays Couverts | AssuTempo';
+    ? titrePays(selectedCountry.nom)
+    : 'Assurance Temporaire Europe : 34 Pays Couverts | AssuTempo';
   const seoDesc = selectedCountry
     ? `Assurance temporaire valable en ${selectedCountry.nom} dès le 1er jour : responsabilité civile, règles locales, péages. Attestation immédiate en 5 minutes.`
-    : "Assurance temporaire valable dans 34 pays européens dès le premier jour. Carte interactive, règles locales de circulation, péages et vignettes pays par pays.";
+    : "Assurance temporaire valable dans 34 pays européens dès le premier jour. Carte interactive, règles locales, péages et vignettes pays par pays.";
   const canonical = selectedCountry
     ? `https://assutempo.fr/carte/${selectedCountry.slug}`
     : 'https://assutempo.fr/carte';

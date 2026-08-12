@@ -7,7 +7,7 @@ const jsonLd = [
     headline:
       "Assurer la voiture d'un proche décédé : ce que dit la loi, et comment rouler couvert",
     description:
-      "Au décès, le contrat auto ne disparaît pas mais l'héritier n'est pas toujours couvert. Assurance temporaire pour déplacer ou vendre le véhicule, attestation immédiate.",
+      "Le contrat auto ne disparaît pas au décès, mais l'héritier n'est pas toujours couvert. Assurance temporaire pour déplacer ou vendre.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -100,9 +100,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'assurance-temporaire-vehicule-proche-decede',
   seo: {
-    title: "Voiture d'un proche décédé : comment l'assurer et la conduire",
+    title: "Voiture d'un proche décédé : l'assurer et la conduire",
     description:
-      "Au décès, le contrat auto ne disparaît pas mais l'héritier n'est pas toujours couvert. Assurance temporaire pour déplacer ou vendre le véhicule, attestation immédiate.",
+      "Le contrat auto ne disparaît pas au décès, mais l'héritier n'est pas toujours couvert. Assurance temporaire pour déplacer ou vendre.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-vehicule-proche-decede',
     jsonLd,

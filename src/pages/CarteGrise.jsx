@@ -331,10 +331,10 @@ function CarteGrise() {
     <>
       <Helmet>
         <title>Carte grise en ligne : CPI sous 24 h ouvrées | AssuTempo</title>
-        <meta name="description" content="Carte grise 100% en ligne : certificat provisoire d'immatriculation délivré sous 24 h ouvrées, valable 1 mois pour rouler en France. Titre définitif livré chez vous." />
+        <meta name="description" content="Carte grise en ligne : certificat provisoire délivré sous 24 h ouvrées, valable 1 mois pour rouler en France. Titre définitif livré chez vous." />
         <link rel="canonical" href="https://assutempo.fr/carte-grise" />
         <meta property="og:title" content="Carte grise en ligne : CPI sous 24 h ouvrées | AssuTempo" />
-        <meta property="og:description" content="Carte grise 100% en ligne : certificat provisoire d'immatriculation délivré sous 24 h ouvrées, valable 1 mois pour rouler en France. Titre définitif livré chez vous." />
+        <meta property="og:description" content="Carte grise en ligne : certificat provisoire délivré sous 24 h ouvrées, valable 1 mois pour rouler en France. Titre définitif livré chez vous." />
         <meta property="og:url" content="https://assutempo.fr/carte-grise" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

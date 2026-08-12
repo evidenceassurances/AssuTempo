@@ -123,10 +123,10 @@ function Articles() {
     <LazyMotion features={domMax}>
       <Helmet>
         <title>Articles et conseils sur l'assurance temporaire | AssuTempo</title>
-        <meta name="description" content="Le centre de réponses de l'assurance temporaire : fourrière, achat de véhicule, conduite à l'étranger, carte grise. Des réponses claires, situation par situation." />
+        <meta name="description" content="Fourrière, achat de véhicule, conduite à l'étranger, carte grise : des réponses claires sur l'assurance temporaire, situation par situation." />
         <link rel="canonical" href="https://assutempo.fr/articles" />
         <meta property="og:title" content="Articles et conseils sur l'assurance temporaire | AssuTempo" />
-        <meta property="og:description" content="Le centre de réponses de l'assurance temporaire : fourrière, achat de véhicule, conduite à l'étranger, carte grise. Des réponses claires, situation par situation." />
+        <meta property="og:description" content="Fourrière, achat de véhicule, conduite à l'étranger, carte grise : des réponses claires sur l'assurance temporaire, situation par situation." />
         <meta property="og:url" content="https://assutempo.fr/articles" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

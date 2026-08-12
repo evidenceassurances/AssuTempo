@@ -5,9 +5,9 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline:
-      'Assurer un véhicule acheté chez un particulier : roulez dès le premier trajet',
+      'Assurer un véhicule acheté chez un particulier',
     description:
-      'Vous achetez une voiture à un particulier ? Vous devez être assuré avant le premier kilomètre. Assurance temporaire AssuTempo : attestation en 5 minutes, sans attendre la carte grise.',
+      'Vous devez être assuré avant le premier kilomètre. Assurance temporaire : attestation en 5 minutes, sans attendre la carte grise.',
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -117,9 +117,9 @@ export const articleData = {
   slug: 'assurer-vehicule-achete-chez-particulier',
   seo: {
     title:
-      'Assurer un véhicule acheté chez un particulier : roulez dès le premier trajet',
+      'Assurer un véhicule acheté chez un particulier',
     description:
-      'Vous achetez une voiture à un particulier ? Vous devez être assuré avant le premier kilomètre. Assurance temporaire AssuTempo : attestation en 5 minutes, sans attendre la carte grise.',
+      'Vous devez être assuré avant le premier kilomètre. Assurance temporaire : attestation en 5 minutes, sans attendre la carte grise.',
     canonical:
       'https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier',
     jsonLd,

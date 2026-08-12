@@ -7,7 +7,7 @@ const jsonLd = [
     headline:
       "Résilié par votre assureur : quelles solutions, et quand l'assurance temporaire dépanne",
     description:
-      "Résilié par votre assureur ? Selon le motif, une assurance auto temporaire vous remet en règle en 5 minutes, attestation immédiate, le temps de retrouver un contrat annuel.",
+      "Selon le motif, une assurance auto temporaire vous remet en règle en 5 minutes, le temps de retrouver un contrat annuel.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -100,9 +100,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'assurance-temporaire-resilie-par-assureur',
   seo: {
-    title: "Résilié par votre assureur : solutions et assurance temporaire",
+    title: "Résilié par son assureur : l'assurance temporaire",
     description:
-      "Résilié par votre assureur ? Selon le motif, une assurance auto temporaire vous remet en règle en 5 minutes, attestation immédiate, le temps de retrouver un contrat annuel.",
+      "Selon le motif, une assurance auto temporaire vous remet en règle en 5 minutes, le temps de retrouver un contrat annuel.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-resilie-par-assureur',
     jsonLd,

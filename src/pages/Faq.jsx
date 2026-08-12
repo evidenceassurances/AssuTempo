@@ -118,11 +118,11 @@ function Faq() {
   return (
     <>
       <Helmet>
-        <title>Assurance Temporaire : Questions Fréquentes (FAQ) | AssuTempo</title>
-        <meta name="description" content="Toutes les réponses sur l'assurance temporaire : qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information. Guide complet AssuTempo." />
+        <title>Assurance Temporaire : Questions Fréquentes | AssuTempo</title>
+        <meta name="description" content="Qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information : toutes les réponses sur l'assurance temporaire." />
         <link rel="canonical" href="https://assutempo.fr/faq" />
-        <meta property="og:title" content="Assurance Temporaire : Questions Fréquentes (FAQ) | AssuTempo" />
-        <meta property="og:description" content="Toutes les réponses sur l'assurance temporaire : qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information. Guide complet AssuTempo." />
+        <meta property="og:title" content="Assurance Temporaire : Questions Fréquentes | AssuTempo" />
+        <meta property="og:description" content="Qui peut souscrire, véhicules couverts, garanties, attestation, relevé d'information : toutes les réponses sur l'assurance temporaire." />
         <meta property="og:url" content="https://assutempo.fr/faq" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

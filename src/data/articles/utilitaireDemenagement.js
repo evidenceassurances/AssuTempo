@@ -7,7 +7,7 @@ const jsonLd = [
     headline:
       "Déménager avec un utilitaire : comment être bien assuré, à la journée",
     description:
-      "Vous déménagez avec un utilitaire emprunté, loué ou tout juste acheté ? Assurez-le à la journée, attestation immédiate, responsabilité civile incluse. 1 à 90 jours.",
+      "Utilitaire emprunté, loué ou tout juste acheté ? Assurez-le à la journée, attestation immédiate, responsabilité civile incluse.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -100,9 +100,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'assurance-temporaire-utilitaire-demenagement',
   seo: {
-    title: "Assurance temporaire utilitaire : déménager couvert en 5 minutes",
+    title: "Assurance temporaire utilitaire : déménager couvert",
     description:
-      "Vous déménagez avec un utilitaire emprunté, loué ou tout juste acheté ? Assurez-le à la journée, attestation immédiate, responsabilité civile incluse. 1 à 90 jours.",
+      "Utilitaire emprunté, loué ou tout juste acheté ? Assurez-le à la journée, attestation immédiate, responsabilité civile incluse.",
     canonical:
       'https://assutempo.fr/articles/assurance-temporaire-utilitaire-demenagement',
     jsonLd,
