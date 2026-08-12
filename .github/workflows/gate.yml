@@ -171,21 +171,77 @@ jobs:
           "Gate vert, mais le merge automatique est impossible sur cette PR : elle modifie des fichiers de \`.github/workflows/\`, et GitHub interdit au jeton d'Actions de merger un changement de workflow (aucune permission \`workflows\` n'existe pour ce jeton). Un merge manuel est necessaire. Tous les controles qualite sont passes." \
           || true
 
-      - name: Merge automatique (squash + suppression de branche)
+      # Une branche de mission part de main et vit le temps de la mission. Si
+      # main avance pendant ce temps, `gh pr merge` echoue sur "the merge commit
+      # cannot be cleanly created", sans rien ecrire sur la PR : c'est ce qui a
+      # immobilise la PR #41 du 30 juillet au 12 aout 2026, alors que son Gate
+      # etait vert et son contenu bon a publier. On rattrape donc la branche
+      # AVANT d'essayer, ce qui resout le cas courant (branche simplement en
+      # retard, sans conflit reel).
+      #
+      # Pousser avec le GITHUB_TOKEN ne redeclenche aucun workflow (anti-boucle
+      # GitHub) : ce rattrapage ne peut donc pas annuler le run en cours via la
+      # concurrency. En revanche GitHub recalcule la fusionnabilite de maniere
+      # asynchrone et renvoie UNKNOWN pendant ce temps : on attend le verdict.
+      - name: Rattraper la branche sur main
+        id: rattrapage
         if: steps.perimetre.outputs.bloque != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ needs.contexte.outputs.pr }}
+        run: |
+          if gh pr update-branch "$PR" --repo "$REPO"; then
+            echo "Branche rattrapee sur main."
+          else
+            echo "Rattrapage non applique : deja a jour, ou conflit que GitHub ne sait pas resoudre seul."
+          fi
+          etat=UNKNOWN
+          for i in $(seq 1 12); do
+            etat=$(gh pr view "$PR" --repo "$REPO" --json mergeable --jq '.mergeable')
+            echo "  verdict de fusionnabilite (tentative $i) : $etat"
+            [ "$etat" != "UNKNOWN" ] && break
+            sleep 5
+          done
+          echo "mergeable=$etat" >> "$GITHUB_OUTPUT"
+
+      - name: Merge automatique (squash + suppression de branche)
+        id: merge
+        if: steps.perimetre.outputs.bloque != 'true'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
           gh pr merge ${{ needs.contexte.outputs.pr }}
           --repo ${{ github.repository }} --squash --delete-branch
 
+      # Le merge a echoue malgre le rattrapage : conflit reel, arbitrage humain.
+      # Le label hold empeche de reessayer en boucle au prochain declenchement,
+      # et le commentaire laisse enfin une trace lisible sur la PR.
+      - name: Signaler un merge impossible et poser le label hold
+        if: steps.perimetre.outputs.bloque != 'true' && steps.merge.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ needs.contexte.outputs.pr }}
+          ETAT: ${{ steps.rattrapage.outputs.mergeable }}
+        run: |
+          gh pr comment "$PR" --repo "$REPO" --body \
+          "Gate vert, mais le merge automatique a echoue : la branche ne se fusionne pas proprement dans \`main\` (etat GitHub : \`$ETAT\`). Le rattrapage automatique sur \`main\` n'a pas suffi, il reste des conflits a arbitrer a la main. Le label \`hold\` est pose pour eviter de reessayer en boucle : le retirer une fois les conflits resolus, puis relancer le Gate." || true
+          gh pr edit "$PR" --repo "$REPO" --add-label hold || true
+          echo "Merge impossible : arbitrage humain demande sur la PR #$PR."
+          exit 1
+
       # Le mot-cle "Closes #N" d'une PR mergee par le token Actions ne ferme
       # pas l'issue de façon fiable : fermeture explicite.
-      # Toutes les etapes qui suivent supposent que le merge a eu lieu : sans
-      # la garde, une PR laissee a l'arbitrage humain fermait quand meme son
-      # issue, puis reconstruisait et signalait a IndexNow un main inchange.
+      # Toutes les etapes qui suivent supposent que le merge a EFFECTIVEMENT eu
+      # lieu : sans la garde, une PR laissee a l'arbitrage humain fermait quand
+      # meme son issue, puis reconstruisait et signalait a IndexNow un main
+      # inchange. On teste l'issue du merge, pas seulement le perimetre : un
+      # `if:` explicite remplace le controle de succes implicite d'Actions, donc
+      # ces etapes tourneraient malgre l'echec de l'etape precedente.
       - name: Fermer l'issue liee
-        if: steps.perimetre.outputs.bloque != 'true'
+        if: steps.merge.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -197,20 +253,20 @@ jobs:
           fi
 
       - name: Checkout de main apres merge
-        if: steps.perimetre.outputs.bloque != 'true'
+        if: steps.merge.outcome == 'success'
         uses: actions/checkout@v7
         with:
           ref: main
       - uses: actions/setup-node@v7
-        if: steps.perimetre.outputs.bloque != 'true'
+        if: steps.merge.outcome == 'success'
         with:
           node-version: 20
           cache: npm
       - name: Rebuild du sitemap sur main mergee
-        if: steps.perimetre.outputs.bloque != 'true'
+        if: steps.merge.outcome == 'success'
         run: |
           npm ci
           npm run build
       - name: Ping IndexNow (Bing prevenu en minutes)
-        if: steps.perimetre.outputs.bloque != 'true'
+        if: steps.merge.outcome == 'success'
         run: node scripts/indexnow.mjs
