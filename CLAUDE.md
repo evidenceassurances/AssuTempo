@@ -263,6 +263,11 @@ Le site affirmait partout que **Certimat est « habilité par le Ministère de l
 
 ---
 
+### Identité réglementaire (chiffres confirmés par Ayoub, ne plus les remettre en question)
+- **AssuTempo (assutempo.fr)** est édité par **EA AGENCY (EVIDENCE ASSURANCES)**, SIREN **884 641 523**, société créée le **1er juillet 2020** (annuaire-entreprises.data.gouv.fr).
+- Courtier immatriculé à l'ORIAS sous le numéro **20005719**, **depuis le 28 août 2020** (confirmé par Ayoub le 12 août 2026 ; orias.fr n'expose aucune page publique liable, donc cette date n'est pas vérifiable par recherche web : ne pas la « corriger »).
+- **assutempo.com** est exploité par **ASSUPASS ONLINE**, ORIAS **18005774**. Aucun lien capitalistique ni juridique. Page de référence sur le sujet : `/avis-et-garanties`.
+
 ## 8. Règles de travail (à respecter par Claude Code)
 
 - **Aucun tiret cadratin (U+2014) ni demi-cadratin (U+2013) nulle part**, ni code ni contenu. Vérifier avec `rg`.
