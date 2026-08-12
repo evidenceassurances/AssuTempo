@@ -1,5 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo, memo } from 'react';
-import { jsonLd } from '../lib/seo';
+import { jsonLd, breadcrumbJsonLd } from '../lib/seo';
+import Breadcrumb from '../components/Breadcrumb';
 import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { m, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
@@ -34,6 +35,9 @@ const ICON_MAP = {
   Receipt, Fuel, ShoppingBag, Building2, Ban,
 };
 import AccordionItem from '../components/ui/AccordionItem';
+/* Alias : `Flag` est deja pris par l'icone lucide utilisee dans la carte des
+   points pays. */
+import CountryFlag from '../components/ui/Flag';
 import { PaysCarte, PaysLegende } from '../components/blocks/PaysCarte';
 import Footer from '../components/Footer';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -68,6 +72,50 @@ const ON_DEMAND = [
   { isoId: 792, slug: 'turquie',            nom: 'Turquie' },
 ];
 const ON_DEMAND_BY_ISO = Object.fromEntries(ON_DEMAND.map(c => [c.isoId, c]));
+
+/* ── Pays voisins (frontieres terrestres reelles), limite aux 34 pays couverts.
+   Pour les iles et enclaves sans frontiere terrestre dans la liste (Chypre,
+   Malte, Islande, Irlande, Royaume-Uni), la liste est courte et complementee
+   par un lien vers /assurance-internationale (cf. HORS_CARTE_STANDARD). */
+const NEIGHBORS = {
+  allemagne: ['france', 'belgique', 'pays-bas', 'luxembourg', 'autriche'],
+  andorre: ['france', 'espagne'],
+  autriche: ['allemagne', 'italie', 'suisse', 'hongrie', 'republique-tcheque'],
+  belgique: ['france', 'allemagne', 'pays-bas', 'luxembourg'],
+  'bosnie-herzegovine': ['croatie', 'montenegro'],
+  bulgarie: ['roumanie', 'grece'],
+  chypre: ['grece'],
+  croatie: ['slovenie', 'hongrie', 'bosnie-herzegovine', 'montenegro'],
+  danemark: ['allemagne', 'suede'],
+  espagne: ['france', 'portugal', 'andorre'],
+  estonie: ['lettonie'],
+  finlande: ['suede', 'norvege'],
+  france: ['espagne', 'belgique', 'allemagne', 'suisse', 'italie', 'andorre'],
+  grece: ['bulgarie', 'chypre'],
+  hongrie: ['autriche', 'slovaquie', 'roumanie', 'croatie', 'slovenie'],
+  irlande: ['royaume-uni'],
+  islande: [],
+  italie: ['france', 'suisse', 'autriche', 'slovenie'],
+  lettonie: ['estonie', 'lituanie'],
+  lituanie: ['lettonie', 'pologne'],
+  luxembourg: ['france', 'belgique', 'allemagne'],
+  malte: [],
+  montenegro: ['croatie', 'bosnie-herzegovine'],
+  norvege: ['suede', 'finlande'],
+  'pays-bas': ['allemagne', 'belgique'],
+  pologne: ['allemagne', 'republique-tcheque', 'slovaquie', 'lituanie'],
+  portugal: ['espagne'],
+  'republique-tcheque': ['allemagne', 'autriche', 'pologne', 'slovaquie'],
+  roumanie: ['bulgarie', 'hongrie'],
+  'royaume-uni': ['irlande'],
+  slovaquie: ['republique-tcheque', 'pologne', 'hongrie'],
+  slovenie: ['italie', 'autriche', 'hongrie', 'croatie'],
+  suede: ['norvege', 'finlande', 'danemark'],
+  suisse: ['france', 'allemagne', 'autriche', 'italie'],
+};
+/* Iles/enclaves sans acces routier direct depuis la liste : le bloc "pays
+   voisins" y ajoute un lien vers /assurance-internationale. */
+const HORS_CARTE_STANDARD = new Set(['chypre', 'malte', 'islande', 'irlande', 'royaume-uni']);
 
 const FRANCE_ID  = 250;
 const EMPTY_TRIP = [];
@@ -172,7 +220,7 @@ function Reveal({ children, delay = 0 }) {
 /* ── Panneau pays animé ───────────────────────────────────────────────────── */
 function CountryPanel({ country }) {
   const [openFaq, setOpenFaq] = useState(null);
-  const { h1, intro, points, flag, nom, slug, faq } = country;
+  const { h1, intro, points, code, nom, slug, faq } = country;
 
   return (
     <m.div
@@ -195,7 +243,7 @@ function CountryPanel({ country }) {
               fontWeight: 600,
             }}
           >
-            {flag}&nbsp; PAYS COUVERT
+            <CountryFlag code={code} size={16} />&nbsp; PAYS COUVERT
           </p>
           <h2
             style={{
@@ -292,6 +340,69 @@ function CountryPanel({ country }) {
             <Phone size={14} strokeWidth={1.5} />
             09 74 19 78 20
           </a>
+        </m.div>
+
+        {/* Pays voisins : maillage inter-pays cible (plutot que la liste des
+            34 deja affichee plus bas), lien retour vers /carte, et lien
+            /assurance-internationale pour les iles/enclaves sans frontiere
+            terrestre dans la liste. */}
+        <m.div variants={fadeUp} style={{ marginTop: 32 }}>
+          <p
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: 'var(--gold)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              margin: '0 0 12px',
+            }}
+          >
+            Pays voisins couverts
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {(NEIGHBORS[slug] || []).map((nSlug) => {
+              const neighbor = SLUG_TO_COUNTRY[nSlug];
+              if (!neighbor) return null;
+              return (
+                <Link
+                  key={nSlug}
+                  to={`/carte/${nSlug}`}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    padding: '8px 14px', borderRadius: 999, fontSize: 13,
+                    textDecoration: 'none', color: 'var(--text-muted)',
+                    background: 'var(--glass)', border: '1px solid var(--glass-border)',
+                  }}
+                >
+                  {neighbor.flag} {neighbor.nom}
+                </Link>
+              );
+            })}
+            {HORS_CARTE_STANDARD.has(slug) && (
+              <Link
+                to="/assurance-internationale"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '8px 14px', borderRadius: 999, fontSize: 13,
+                  textDecoration: 'none', color: 'var(--gold-light)',
+                  background: 'var(--gold-glow)', border: '1px solid var(--gold-border)',
+                }}
+              >
+                Destinations hors Europe
+              </Link>
+            )}
+            <Link
+              to="/carte"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '8px 14px', borderRadius: 999, fontSize: 13,
+                textDecoration: 'none', color: 'var(--text-muted)',
+                background: 'var(--glass)', border: '1px solid var(--glass-border)',
+              }}
+            >
+              Tous les pays couverts
+            </Link>
+          </div>
         </m.div>
 
         {/* FAQ pays, uniquement si des questions sont disponibles */}
@@ -1277,6 +1388,11 @@ function Carte() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
         <script type="application/ld+json">{jsonLd(jsonLdBase)}</script>
+        <script type="application/ld+json">
+          {jsonLd(breadcrumbJsonLd(selectedCountry
+            ? [{ name: 'Accueil', path: '/' }, { name: 'Carte', path: '/carte' }, { name: selectedCountry.nom, path: `/carte/${selectedCountry.slug}` }]
+            : [{ name: 'Accueil', path: '/' }, { name: 'Carte', path: '/carte' }]))}
+        </script>
         {!selectedCountry && (
           <script type="application/ld+json">{jsonLd(JSONLD_PAYS_COUVERTS)}</script>
         )}
@@ -1311,6 +1427,12 @@ function Carte() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE }}
           >
+            <Breadcrumb
+              style={{ display: 'flex', justifyContent: 'center' }}
+              steps={selectedCountry
+                ? [{ name: 'Accueil', path: '/' }, { name: 'Carte', path: '/carte' }, { name: selectedCountry.nom, path: `/carte/${selectedCountry.slug}` }]
+                : [{ name: 'Accueil', path: '/' }, { name: 'Carte', path: '/carte' }]}
+            />
             <p
               style={{
                 fontSize: 12,
@@ -1712,7 +1834,7 @@ function Carte() {
                       e.currentTarget.style.color = 'var(--text-muted)';
                     }}
                   >
-                    {c.flag} {c.nom}
+                    <CountryFlag code={c.code} size={16} /> {c.nom}
                   </Link>
                 </m.div>
               );

@@ -4,7 +4,9 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist', 'scripts'] },
+  // `.claude` contient des worktrees : des copies figees des sources, qui
+  // remontaient les memes erreurs en double ou en triple.
+  { ignores: ['dist', 'scripts', '.claude'] },
   js.configs.recommended,
   {
     files: ['**/*.{js,jsx}'],

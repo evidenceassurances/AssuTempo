@@ -39,9 +39,13 @@ import AssuranceJeuneConducteur from './pages/articles/AssuranceJeuneConducteur'
 import RouleSansCarteGriseNom from './pages/articles/RouleSansCarteGriseNom';
 import AssuranceTemporaire1Mois from './pages/articles/AssuranceTemporaire1Mois';
 import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireCarteGrise';
+import CarteGriseAntsBloquee from './pages/articles/CarteGriseAntsBloquee';
+import AssuranceAutoEtrangerFrance from './pages/articles/AssuranceAutoEtrangerFrance';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
+import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
 import BarometreImmatriculations from './pages/BarometreImmatriculations';
+import VilleLocale from './pages/VilleLocale';
 import Carte from './pages/Carte';
 import Cookies from './pages/Cookies';
 import CGV from './pages/CGV';
@@ -82,9 +86,13 @@ const PAGES = {
   RouleSansCarteGriseNom,
   AssuranceTemporaire1Mois,
   ChangementTitulaireCarteGrise,
+  CarteGriseAntsBloquee,
+  AssuranceAutoEtrangerFrance,
   CarteGriseService,
   RoulezLegalApresAchat,
+  AssuranceTemporaireUtilitaire,
   BarometreImmatriculations,
+  VilleLocale,
   Carte,
   Cookies,
   CGV,

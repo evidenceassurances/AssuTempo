@@ -82,7 +82,8 @@ Exclusions : les deux-roues (motos, scooters) ne sont PAS assurables ; les véhi
 ## Carte grise (service distinct)
 - Démarche d'immatriculation 100 % en ligne via la plateforme Certimat, opérée par EM Prestige Automobiles (SIRET 832 468 755 00018, RCS Versailles), partenaire France Titres (ANTS).
 - IMPORTANT, ne jamais se tromper là-dessus : Certimat est un intermédiaire technologique, PAS un professionnel habilité. Ne JAMAIS dire « Certimat est habilité par le Ministère de l'Intérieur », ni annoncer un numéro d'habilitation. Formulation exacte : Certimat met en relation avec des professionnels habilités par le Ministère de l'Intérieur pour la saisie dans le SIV, ou transmet le dossier à l'ANTS (France Titres).
-- Certificat provisoire d'immatriculation (CPI) délivré le jour même une fois le dossier complet et les taxes réglées : il autorise à rouler en France pendant 1 mois. Carte grise définitive livrée à domicile ensuite.
+- Certificat provisoire d'immatriculation (CPI) délivré sous 24 h ouvrées à compter de la réception d'un dossier complet (taxes réglées) : il autorise à rouler en France pendant 1 mois. Carte grise définitive livrée à domicile ensuite.
+- Ne JAMAIS promettre un CPI « immédiat » ou « le jour même ». C'est une annonce commerciale de Certimat, absente de tout engagement contractuel : le seul délai tenable est 24 h ouvrées. Même formulation que la page /carte-grise.
 - CERFA préremplis et signature électronique, paiement des taxes possible en plusieurs fois.
 - Le CPI ne dispense pas d'assurance : la responsabilité civile reste obligatoire dès le premier trajet.
 

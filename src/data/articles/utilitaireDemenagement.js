@@ -206,6 +206,17 @@ export const articleData = {
     },
     {
       type: 'text',
+      heading: "Et si l'utilitaire sert à autre chose qu'un déménagement ?",
+      paragraphs: [
+        "Le déménagement est le motif le plus fréquent, pas le seul. Un fourgon se prête entre artisans le temps d'un chantier, se convoie d'un dépôt à l'autre, se rachète d'occasion en attendant de trouver mieux. Les règles de conduite et de couverture sont les mêmes, les questions pratiques changent.",
+      ],
+      relatedLink: {
+        text: 'Assurer un utilitaire : tous les cas de figure',
+        href: '/assurance-temporaire-utilitaire',
+      },
+    },
+    {
+      type: 'text',
       heading: 'En résumé',
       paragraphs: [
         "Un déménagement ne devrait pas se jouer sur un détail d'assurance. En location, l'essentiel est de vérifier la franchise et les conducteurs déclarés. Pour un utilitaire prêté ou fraîchement acheté, une assurance temporaire à votre nom vous couvre pour la durée exacte du trajet, attestation immédiate, sans toucher au contrat de personne. Vous chargez l'esprit tranquille.",

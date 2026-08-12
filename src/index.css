@@ -588,3 +588,16 @@ h1, h2 {
 @media (max-width: 900px) {
   .nav-list { gap: 14px !important; }
 }
+
+/* ─── Drapeaux (composant ui/Flag) ───
+   Contour tres leger : sans lui, les drapeaux qui contiennent du blanc
+   (Pologne, Finlande, Malte, Suisse, Autriche) n'ont plus de limite nette.
+   Le site est integralement sur fond sombre, d'ou le lisere clair. */
+.flag-svg {
+  display: inline-block;
+  vertical-align: -0.15em;
+  border-radius: 2px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.14);
+}

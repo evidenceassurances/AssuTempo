@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 
 const STORAGE_KEY = 'assutempo_consent_v1';
+const GA_ID = import.meta.env.VITE_GA_ID;
 
 // Mesure d'audience ACTIVE par défaut, tant que l'utilisateur n'a pas explicitement refusé.
 export function isAnalyticsAllowed() {
@@ -44,7 +45,11 @@ function clearAnalyticsCookies() {
           });
         }
       });
-    window['ga-disable-G-W8M4ZGXZE1'] = true;
+    /* Source unique de l'ID de mesure : VITE_GA_ID, comme le chargement du tag
+       dans useAnalytics. Un ID en dur ici desactiverait silencieusement la
+       mauvaise propriete le jour ou l'ID change (refus de consentement sans
+       effet). */
+    if (GA_ID) window['ga-disable-' + GA_ID] = true;
   } catch { /* cookies inaccessibles : rien a purger */ }
 }
 

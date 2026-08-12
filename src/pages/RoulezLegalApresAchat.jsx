@@ -440,6 +440,18 @@ function RoulezLegalApresAchat() {
           <Link to="/barometre-immatriculations" style={{ color: 'var(--gold-light)' }}>
             Baromètre AssuTempo des immatriculations
           </Link>
+          . Des particularités locales à connaître :{' '}
+          <Link to="/assurance-temporaire-carte-grise-paris" style={{ color: 'var(--gold-light)' }}>
+            à Paris
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-lyon" style={{ color: 'var(--gold-light)' }}>
+            à Lyon
+          </Link>
+          {' '}et{' '}
+          <Link to="/assurance-temporaire-carte-grise-marseille" style={{ color: 'var(--gold-light)' }}>
+            à Marseille
+          </Link>
           . Pour vérifier qui édite AssuTempo et notre numéro ORIAS, consultez{' '}
           <Link to="/avis-et-garanties" style={{ color: 'var(--gold-light)' }}>
             avis et garanties AssuTempo

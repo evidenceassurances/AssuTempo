@@ -190,7 +190,12 @@ export const articleData = {
       heading: "Et le permis de conduire étranger ?",
       paragraphs: [
         "Vous pouvez souscrire avec un permis valide et reconnu. Les permis de l'Union européenne sont acceptés ; les permis hors UE le sont sous conditions (durée parfois limitée, âge minimum plus élevé). Le plus sûr est de vérifier votre éligibilité directement au devis ou par téléphone.",
+        "La règle exacte dépend aussi du pays d'immatriculation du véhicule que vous conduisez : Union européenne et EEE, pays du système de la carte verte internationale, ou aucun des deux, ce qui impose une assurance frontière. Le détail des trois cas, des délais réels et du permis étranger est traité dans notre guide dédié.",
       ],
+      relatedLink: {
+        text: 'Assurance auto étranger en France : UE, carte verte ou frontière',
+        href: '/articles/assurance-auto-etranger-france',
+      },
     },
     {
       type: 'checklist',

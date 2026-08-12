@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   animate, m, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll,
 } from 'framer-motion';
@@ -20,6 +20,26 @@ import Footer from '../components/Footer';
 const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 const WEB3FORMS_ACCESS_KEY = '1dbb89c0-8b09-4abe-888d-f89f001d0627';
 const GUICHET_EMAIL = 'guichetassutempo@gmail.com';
+
+/* ── Comptage GA4 : une visite, pas un montage ────────────────────────────────
+   Le sous-arbre de page est monte DEUX fois a chaque chargement complet :
+   AppShell rend {routes}, puis bascule vers <AnimatePresence>{routes}</...>
+   une fois le premier montage passe (garde-fou d'hydratation #418 du 2 juillet).
+   L'element change de type a cette position, donc React demonte et remonte
+   toute la page. Les effets de montage repartent, et guichet_page_view comme
+   guichet_scene_view partaient en double dans GA4 (constate en prod, x2).
+
+   On rattache donc le comptage a l'entree d'historique (location.key), stable
+   au remontage mais renouvelee a chaque vraie visite. La fenetre de 5 s couvre
+   le cas du retour arriere du navigateur : meme cle d'historique, mais visite
+   reellement nouvelle, donc a recompter. Le remontage, lui, suit le premier
+   montage de quelques centaines de millisecondes. */
+const FENETRE_REMONTAGE_MS = 5000;
+let visite = { key: null, tPageVue: 0, scenes: new Set() };
+
+function syncVisite(key) {
+  if (visite.key !== key) visite = { key, tPageVue: 0, scenes: new Set() };
+}
 
 /* ── La veille de 30 minutes : le serveur fait foi ────────────────────────────
    La promesse "devis en 30 minutes, sinon la majoration de nuit est offerte"
@@ -919,7 +939,9 @@ function GuichetDeNuit() {
   useEffect(() => { sceneRef.current = scene; }, [scene]);
   const [validees, setValidees] = useState(() => new Set());
   const [erreur, setErreur] = useState(null);
-  const vuesRef = useRef(new Set());
+  /* Identifiant de l'entree d'historique : stable au remontage du sous-arbre,
+     renouvele a chaque navigation. Sert de cle de visite au comptage GA4. */
+  const { key: visiteKey } = useLocation();
 
   const railRef = useRef(null);
   const stageRef = useRef(null);
@@ -976,15 +998,22 @@ function GuichetDeNuit() {
   }, [mode, x]);
 
   useEffect(() => {
+    syncVisite(visiteKey);
+    const now = performance.now();
+    /* Deja compte il y a moins de 5 s : c'est le remontage du sous-arbre, pas
+       une nouvelle visite. */
+    if (visite.tPageVue && now - visite.tPageVue < FENETRE_REMONTAGE_MS) return;
+    visite.tPageVue = now;
     trackEvent('guichet_page_view');
-  }, []);
+  }, [visiteKey]);
 
-  /* Une scene vue est signalee une fois par session. */
+  /* Une scene vue est signalee une fois par visite. */
   useEffect(() => {
-    if (vuesRef.current.has(scene)) return;
-    vuesRef.current.add(scene);
+    syncVisite(visiteKey);
+    if (visite.scenes.has(scene)) return;
+    visite.scenes.add(scene);
     trackEvent('guichet_scene_view', { scene_index: scene, scene: SCENES[scene].key });
-  }, [scene]);
+  }, [scene, visiteKey]);
 
   /* ── Etat du guichet (heure Europe/Paris) ─────────────────────────────── */
   const [etat, setEtat] = useState('a');

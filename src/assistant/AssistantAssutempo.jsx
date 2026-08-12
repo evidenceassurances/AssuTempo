@@ -237,16 +237,33 @@ function waitForTarget(selector, timeout = 3500) {
 const WEB3FORMS_KEY = '7a4b9f4a-f77e-4f9b-8a16-7635bff791ed';
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
 
-function buildTranscript(msgs) {
-  return msgs
-    .map((m) => (m.role === 'user' ? 'Visiteur' : 'Tempo') + ' : ' + m.content)
-    .join('\n\n');
+// Compte rendu lisible : le fil des messages, dans lequel on REINSERE les clics
+// sur les boutons d'action. Sans eux, un compte rendu devient incomprehensible
+// (des reponses de Tempo semblent surgir sans question du visiteur) et on ne
+// peut pas savoir quels boutons convertissent.
+// Chaque action porte le nombre de messages presents au moment du clic : elle se
+// glisse donc juste avant le message de ce rang, ce qui restitue l'ordre reel.
+function buildTranscript(msgs, actions = []) {
+  const parRang = new Map();
+  for (const a of actions) {
+    const rang = Math.min(a.rang, msgs.length);
+    if (!parRang.has(rang)) parRang.set(rang, []);
+    parRang.get(rang).push('[Action] Le visiteur a cliqué sur "' + a.label + '"');
+  }
+  const lignes = [];
+  for (let i = 0; i < msgs.length; i++) {
+    if (parRang.has(i)) lignes.push(...parRang.get(i));
+    lignes.push((msgs[i].role === 'user' ? 'Visiteur' : 'Tempo') + ' : ' + msgs[i].content);
+  }
+  // Clics posterieurs au dernier message (ex. le devis, juste avant de partir).
+  if (parRang.has(msgs.length)) lignes.push(...parRang.get(msgs.length));
+  return lignes.join('\n\n');
 }
 
 // Envoie le fil complet par email. `beacon` = true pour les fermetures de page
 // (sendBeacon survit au dechargement) ; sinon fetch keepalive. Best-effort :
 // ne casse jamais l'interface, quelle que soit l'issue reseau.
-function postTranscript(msgs) {
+function postTranscript(msgs, actions) {
   if (typeof window === 'undefined') return;
   const fd = new FormData();
   fd.append('access_key', WEB3FORMS_KEY);
@@ -254,7 +271,7 @@ function postTranscript(msgs) {
   fd.append('from_name', 'Assistant Tempo');
   fd.append('page', window.location.pathname || '/');
   fd.append('date', new Date().toLocaleString('fr-FR'));
-  fd.append('message', buildTranscript(msgs));
+  fd.append('message', buildTranscript(msgs, actions));
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon(WEB3FORMS_URL, fd);
@@ -276,6 +293,9 @@ export default function AssistantAssutempo() {
   const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME }]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  // Vrai des le premier fragment de reponse recu : la bulle de reponse remplace
+  // alors les trois points d'attente (sinon les deux s'afficheraient ensemble).
+  const [streaming, setStreaming] = useState(false);
   const [showFlows, setShowFlows] = useState(false);
   const [offerGuide, setOfferGuide] = useState(false);
   const [spark, setSpark] = useState(false);
@@ -303,6 +323,9 @@ export default function AssistantAssutempo() {
   const reducedRef = useRef(false);
   const listRef = useRef(null);
   const inputRef = useRef(null);
+  // Vrai quand la bulle de reponse en cours de streaming a deja ete ajoutee au
+  // fil. Un ref, pas un state : la boucle de lecture doit le lire dans l'instant.
+  const bulleRef = useRef(false);
   const tourElRef = useRef(null);
   // Dock du launcher : bouton + etiquette (mesures pour la sonde CTA).
   const launcherRef = useRef(null);
@@ -327,21 +350,34 @@ export default function AssistantAssutempo() {
 
   // Envoi du transcript par email a la fin d'une conversation.
   // messagesRef : fil a jour lisible depuis les listeners (pas d'etat perime).
-  // sentUserCountRef : nb de messages visiteur deja envoyes (anti-doublon).
+  // journalRef : clics sur les boutons d'action, avec le rang du message courant.
+  // sentCountRef : nb d'evenements visiteur deja envoyes (anti-doublon).
   const messagesRef = useRef(messages);
-  const sentUserCountRef = useRef(0);
+  const journalRef = useRef([]);
+  const sentCountRef = useRef(0);
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
 
-  // Envoie le fil complet seulement s'il contient de nouveaux messages du
-  // visiteur depuis le dernier envoi (chaque email contient tout le fil).
+  // Journalise un clic sur un bouton d'action. Un ref, pas un state : rien ne
+  // doit se re-rendre, et la valeur doit etre lisible dans l'instant par un
+  // flushTranscript declenche juste apres (cas du bouton de devis, qui ferme
+  // le panneau dans la foulee).
+  const noterAction = useCallback((label) => {
+    journalRef.current.push({ rang: (messagesRef.current || []).length, label });
+  }, []);
+
+  // Envoie le fil complet s'il s'est passe quelque chose de nouveau depuis le
+  // dernier envoi (chaque email contient tout le fil). Les clics comptent au
+  // meme titre que les messages : sinon une visite faite uniquement de clics
+  // ne produirait aucun compte rendu, et ces boutons resteraient invisibles.
   const flushTranscript = useCallback(() => {
     const msgs = messagesRef.current || [];
-    const userCount = msgs.filter((m) => m.role === 'user').length;
-    if (userCount === 0 || userCount <= sentUserCountRef.current) return;
-    postTranscript(msgs);
-    sentUserCountRef.current = userCount;
+    const actions = journalRef.current || [];
+    const total = msgs.filter((m) => m.role === 'user').length + actions.length;
+    if (total === 0 || total <= sentCountRef.current) return;
+    postTranscript(msgs, actions);
+    sentCountRef.current = total;
   }, []);
 
   // Fin de conversation = depart de page (pagehide) ou onglet masque
@@ -687,20 +723,70 @@ export default function AssistantAssutempo() {
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ messages: apiMessages }),
         });
-        if (!res.ok) throw new Error('http');
-        const data = await res.json();
-        const reply = data && typeof data.text === 'string' ? data.text.trim() : '';
-        if (!reply) throw new Error('empty');
-        // Nettoyage Markdown + retrait du marqueur [FIN] avant affichage.
-        const fin = contientFin(reply);
-        setMessages((m) => [...m, { role: 'assistant', content: nettoyerReponse(reply) }]);
+        if (!res.ok || !res.body) throw new Error('http');
+
+        // Lecture du flux SSE : chaque evenement porte un fragment {t:"..."}.
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let tampon = '';
+        let brut = '';
+
+        // Le nettoyage Markdown s'applique au texte COMPLET accumule, jamais au
+        // fragment : une paire d'asterisques peut etre coupee en deux par le flux.
+        const afficher = () => {
+          const shown = nettoyerReponse(brut);
+          if (bulleRef.current) {
+            setMessages((m) => {
+              const copie = m.slice();
+              copie[copie.length - 1] = { role: 'assistant', content: shown };
+              return copie;
+            });
+          } else {
+            bulleRef.current = true;
+            setStreaming(true);
+            setMessages((m) => [...m, { role: 'assistant', content: shown }]);
+          }
+        };
+
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          tampon += decoder.decode(value, { stream: true });
+          const blocs = tampon.split('\n\n');
+          tampon = blocs.pop() || '';
+          for (const bloc of blocs) {
+            const ligne = bloc.split('\n').find((l) => l.startsWith('data:'));
+            if (!ligne) continue;
+            let payload;
+            try {
+              payload = JSON.parse(ligne.slice(5).trim());
+            } catch {
+              continue;
+            }
+            if (payload.error) throw new Error('upstream');
+            if (typeof payload.t === 'string' && payload.t) {
+              brut += payload.t;
+              afficher();
+            }
+          }
+        }
+        if (!brut.trim()) throw new Error('empty');
         // Cloture si [FIN] detecte, ou si ce message atteint le plafond.
-        if (fin || userCount + 1 >= MAX_MESSAGES_UTILISATEUR) {
+        if (contientFin(brut) || userCount + 1 >= MAX_MESSAGES_UTILISATEUR) {
           cloreConversation();
         }
       } catch {
-        setMessages((m) => [...m, { role: 'assistant', content: ERROR_MSG }]);
+        // Une reponse coupee en cours de route serait pire qu'une erreur nette
+        // (information tronquee sur un sujet d'assurance) : on retire la bulle
+        // partielle avant d'afficher le message d'erreur.
+        setMessages((m) => {
+          const copie = bulleRef.current ? m.slice(0, -1) : m.slice();
+          copie.push({ role: 'assistant', content: ERROR_MSG });
+          return copie;
+        });
       } finally {
+        bulleRef.current = false;
+        setStreaming(false);
         setSending(false);
         setOfferGuide(true);
       }
@@ -1062,6 +1148,7 @@ export default function AssistantAssutempo() {
 
   // Ouvre la page de devis (cloture) et referme le panneau.
   function goToDevis() {
+    noterAction('Obtenir mon devis');
     trackEvent('cta_devis_click', { "cta_label": 'Obtenir mon devis', "page_path": window.location.pathname });
     if (window.location.pathname !== '/tarification') navigate('/tarification');
     closePanel();
@@ -1082,7 +1169,14 @@ export default function AssistantAssutempo() {
     if (mobileCta) {
       return (
         <div className="atp-actions" style={{ flexDirection: 'column' }}>
-          <button type="button" className="atp-cta" onClick={() => runCta(mobileCta)}>
+          <button
+            type="button"
+            className="atp-cta"
+            onClick={() => {
+              noterAction(mobileCta.ctaLabel);
+              runCta(mobileCta);
+            }}
+          >
             {mobileCta.ctaLabel}
           </button>
         </div>
@@ -1095,7 +1189,15 @@ export default function AssistantAssutempo() {
       return (
         <div className="atp-actions" style={{ flexDirection: 'column' }}>
           {Object.entries(TOUR_FLOWS).map(([key, f]) => (
-            <button key={key} type="button" className="atp-flow" onClick={() => onPick(key)}>
+            <button
+              key={key}
+              type="button"
+              className="atp-flow"
+              onClick={() => {
+                noterAction(f.label);
+                onPick(key);
+              }}
+            >
               <span className="atp-flow-icon"><Icon name={f.icon} size={20} /></span>
               <span className="atp-flow-text">
                 <span className="atp-flow-title">{f.label}</span>
@@ -1113,12 +1215,22 @@ export default function AssistantAssutempo() {
         <button
           type="button"
           className="atp-chip atp-chip--primary"
-          onClick={() => setShowFlows(true)}
+          onClick={() => {
+            noterAction("M'aider à souscrire");
+            setShowFlows(true);
+          }}
         >
           M'aider à souscrire
         </button>
         {offerGuide && (
-          <button type="button" className="atp-chip" onClick={() => setShowFlows(true)}>
+          <button
+            type="button"
+            className="atp-chip"
+            onClick={() => {
+              noterAction('Oui, guidez-moi');
+              setShowFlows(true);
+            }}
+          >
             Oui, guidez-moi
           </button>
         )}
@@ -1251,7 +1363,7 @@ export default function AssistantAssutempo() {
                 </div>
               </div>
             ))}
-            {sending && (
+            {sending && !streaming && (
               <div className="atp-row atp-row--bot">
                 <div className="atp-bubble atp-bubble--bot atp-typing" aria-label="Tempo écrit">
                   <span /><span /><span />

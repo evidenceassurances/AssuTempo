@@ -19,8 +19,9 @@
  *     produit toutes les pages).
  *
  * Cas particulier : si GATE_AUTHOR (login de l'auteur de la PR, pose par le
- * workflow) commence par "dependabot", la PR ne doit toucher QUE des fichiers
- * sous .github/workflows/ ; les zones interdites ne s'appliquent pas.
+ * workflow) designe dependabot, la PR ne doit toucher QUE des fichiers sous
+ * .github/workflows/ ; les zones interdites ne s'appliquent pas. Le login est
+ * normalise avant comparaison : voir normaliserAuteur() plus bas.
  *
  * Node natif, zero dependance. Usage : node scripts/quality-gate.mjs
  */
@@ -79,9 +80,22 @@ const matchesPath = (file, entry) => (entry.endsWith('/') ? file.startsWith(entr
 // Fichiers modifies par la PR
 // ---------------------------------------------------------------------------
 const changedFiles = git(`diff --name-only ${BASE}`).split('\n').filter(Boolean);
-const author = process.env.GATE_AUTHOR || '';
 
-if (author.startsWith('dependabot')) {
+/* Le login d'auteur n'a pas UNE forme mais trois, selon l'API interrogee :
+   l'API REST renvoie "dependabot[bot]", GraphQL (donc `gh pr view --json
+   author`, ce qu'utilise gate.yml) renvoie "app/dependabot", et un compte
+   humain renvoie son login nu. Le meme piege avait deja coute un automerge
+   sur la PR #11 avec "app/github-actions". On normalise donc une fois pour
+   toutes, au lieu de tester une forme particuliere. */
+const normaliserAuteur = (brut) => (brut || '')
+  .trim()
+  .toLowerCase()
+  .replace(/^app\//, '')
+  .replace(/\[bot\]$/, '');
+
+const author = normaliserAuteur(process.env.GATE_AUTHOR);
+
+if (author === 'dependabot') {
   // Regle dediee dependabot : mises a jour de versions d'actions uniquement.
   for (const f of changedFiles) {
     if (!f.startsWith('.github/workflows/')) {

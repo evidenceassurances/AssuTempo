@@ -5,9 +5,9 @@
 import { COUNTRIES_RAW as RAW } from './countries-index';
 
 /* Gabarit générique, vrai, applicable à tous les pays couverts */
-function generic(nom, flag, centreGeo) {
+function generic(nom, code, centreGeo) {
   return {
-    flag,
+    code,
     center: centreGeo,
     intro:
       `Votre assurance temporaire AssuTempo couvre la responsabilité civile automobile ` +
@@ -1566,8 +1566,8 @@ const INFO_CLE = {
 };
 
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
-export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
-  const base = generic(nom, flag, center);
+export const COUNTRIES = RAW.map(([slug, isoId, nom, code, center]) => {
+  const base = generic(nom, code, center);
 
   /* Overrides spécifiques */
   const over =
@@ -1609,7 +1609,7 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, flag, center]) => {
     slug,
     isoId,
     nom,
-    flag,
+    code,
     center,
     infoCle: INFO_CLE[slug],
     title:           over.title           ?? `Assurance temporaire en ${nom}, RC dès J1 | AssuTempo`,

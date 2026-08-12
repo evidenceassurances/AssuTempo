@@ -82,6 +82,16 @@ export function useAnalytics() {
   //    - liens tel: -> tel_click
   //    - liens internes vers /tarification dont le libelle est un CTA de devis
   //      -> cta_devis_click (exclut les liens de menu "Tarification").
+  //
+  //    ECOUTE EN PHASE DE CAPTURE (le troisieme argument true) : React attache
+  //    ses gestionnaires au conteneur racine, qui est DANS le document. En
+  //    phase de bulle, le gestionnaire du <Link> passe donc AVANT celui-ci :
+  //    la navigation a deja eu lieu, history.pushState est deja applique, et
+  //    window.location.pathname renvoie la page d'ARRIVEE. Chaque
+  //    cta_devis_click partait ainsi avec page_path "/tarification", ce qui
+  //    effacait la seule information utile de l'evenement : la page qui a
+  //    declenche l'intention. La capture s'execute avant tout gestionnaire en
+  //    bulle, donc avant la navigation.
   useEffect(() => {
     function onDocumentClick(e) {
       const target = e.target;
@@ -110,8 +120,8 @@ export function useAnalytics() {
       }
     }
 
-    document.addEventListener('click', onDocumentClick);
-    return () => document.removeEventListener('click', onDocumentClick);
+    document.addEventListener('click', onDocumentClick, true);
+    return () => document.removeEventListener('click', onDocumentClick, true);
   }, []);
 
   // 3. page_view a chaque changement de route + evenements de page dedies.
