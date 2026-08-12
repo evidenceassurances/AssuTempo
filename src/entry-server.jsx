@@ -13,6 +13,7 @@ import HomeSections from './pages/HomeSections';
 import Faq from './pages/Faq';
 import Pricing from './pages/Pricing';
 import About from './pages/About';
+import AvisEtGaranties from './pages/AvisEtGaranties';
 import Articles from './pages/Articles';
 import VoitureImmobilisee from './pages/articles/VoitureImmobilisee';
 import ControleSansAssurance from './pages/articles/ControleSansAssurance';
@@ -59,6 +60,7 @@ const PAGES = {
   Faq,
   Pricing,
   About,
+  AvisEtGaranties,
   Articles,
   VoitureImmobilisee,
   ControleSansAssurance,

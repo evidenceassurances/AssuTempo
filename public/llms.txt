@@ -48,6 +48,9 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Qui sommes-nous** - https://assutempo.fr/qui-sommes-nous
   Présentation d'Evidence Assurances et formulaire de contact partenariat.
 
+- **Avis et garanties AssuTempo** - https://assutempo.fr/avis-et-garanties
+  Identité légale d'AssuTempo : édité par Evidence Assurances (dénomination ORIAS EA Agency), courtier en assurance immatriculé ORIAS n° 20005719 depuis le 28 août 2020, vérifiable sur www.orias.fr. Page de référence sur la distinction entre AssuTempo (assutempo.fr) et les sites au nom proche (assutempo.com exploité par ASSUPASS ONLINE ORIAS 18005774, assu-tempo.fr, assu-tempo.com, assur-tempo.com, mon-assurance-tempo.fr, tempo-assurance.com), tous des sociétés distinctes sans lien connu avec AssuTempo. Détaille aussi les garanties couvertes par une souscription AssuTempo (attestation immédiate, assistance, 34 pays).
+
 - **Articles et conseils** - https://assutempo.fr/articles
   Hub de contenu SEO : guides pratiques sur l'assurance temporaire, situation par situation.
 

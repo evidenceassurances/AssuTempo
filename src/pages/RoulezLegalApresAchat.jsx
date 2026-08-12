@@ -452,6 +452,10 @@ function RoulezLegalApresAchat() {
           <Link to="/assurance-temporaire-carte-grise-marseille" style={{ color: 'var(--gold-light)' }}>
             à Marseille
           </Link>
+          . Pour vérifier qui édite AssuTempo et notre numéro ORIAS, consultez{' '}
+          <Link to="/avis-et-garanties" style={{ color: 'var(--gold-light)' }}>
+            avis et garanties AssuTempo
+          </Link>
           .
         </p>
       </section>

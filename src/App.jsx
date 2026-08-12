@@ -9,6 +9,7 @@ const IMPORTERS = {
   Faq:                        () => import('./pages/Faq'),
   Pricing:                    () => import('./pages/Pricing'),
   About:                      () => import('./pages/About'),
+  AvisEtGaranties:            () => import('./pages/AvisEtGaranties'),
   Articles:                   () => import('./pages/Articles'),
   VoitureImmobilisee:         () => import('./pages/articles/VoitureImmobilisee'),
   ControleSansAssurance:      () => import('./pages/articles/ControleSansAssurance'),
