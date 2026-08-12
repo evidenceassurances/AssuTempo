@@ -33,10 +33,11 @@
 
 const crypto = require('node:crypto');
 const {
-  getSession, getSessionByReference, finalizeSession, sessionAdminValide, DUREE_VEILLE_MS,
+  getSession, getSessionByReference, finalizeSession, sessionAdminValide,
+  prolongerSessionAdmin, TTL_ADMIN_S, DUREE_VEILLE_MS,
 } = require('../../src/server/guichet-store.js');
 const {
-  json, erreurServeur, origineStricte, lireCookie, COOKIE_ADMIN,
+  json, erreurServeur, origineStricte, lireCookie, poserCookieAdmin, COOKIE_ADMIN,
 } = require('../../src/server/http.js');
 
 const SESSION_ID_RE = /^[a-f0-9]{32}$/;
@@ -96,16 +97,17 @@ module.exports = async function handler(req, res) {
      sur le fond. On desactive la regle ici plutot que de retirer le garde-fou. */
   // eslint-disable-next-line no-useless-assignment
   let autorise = false;
+  let cookieAdmin = '';
   try {
     if (bearer) {
       autorise = jetonValide(bearer, attendu);
     } else {
-      const cookie = lireCookie(req, COOKIE_ADMIN);
+      cookieAdmin = lireCookie(req, COOKIE_ADMIN) || '';
       /* La validation du cookie interroge Redis : une panne de la base doit
          rendre une erreur propre, jamais une exception nue. */
-      autorise = Boolean(cookie)
+      autorise = Boolean(cookieAdmin)
         && origineStricte(req)
-        && await sessionAdminValide(cookie);
+        && await sessionAdminValide(cookieAdmin);
     }
   } catch (err) {
     return erreurServeur(res, err);
@@ -113,6 +115,31 @@ module.exports = async function handler(req, res) {
 
   if (!autorise) {
     return json(res, 401, { error: 'unauthorized' });
+  }
+
+  /* La session GLISSE : chaque cloture reussie la reporte a 30 jours. Sans
+     cela, le TTL n'etait pose qu'a la connexion et jamais renouvele, donc Ayoub
+     se retrouvait deconnecte 30 jours apres son login meme en cloturant un
+     dossier chaque nuit, en pleine urgence et sans comprendre pourquoi.
+
+     Prolonge ici, juste apres l'autorisation : la reponse peut sortir par
+     plusieurs chemins plus bas (rejeu, erreur metier), et un renouvellement
+     place trop loin serait saute une nuit sur deux.
+
+     Une prolongation ratee ne doit jamais faire echouer une cloture : elle
+     n'affecte que le confort de reconnexion, pas la decision tarifaire. */
+  if (cookieAdmin) {
+    try {
+      /* Les deux horloges doivent glisser ensemble : celle de Redis, qui fait
+         foi, et celle du navigateur (Max-Age du cookie). Prolonger la premiere
+         sans reposer la seconde ne servirait a rien, le navigateur cesserait
+         d'envoyer un cookie pourtant encore valide cote serveur. */
+      if (await prolongerSessionAdmin(cookieAdmin)) {
+        poserCookieAdmin(res, cookieAdmin, TTL_ADMIN_S);
+      }
+    } catch (err) {
+      console.error('[guichet] prolongation de session impossible :', err.message);
+    }
   }
 
   const corps = req.body || {};

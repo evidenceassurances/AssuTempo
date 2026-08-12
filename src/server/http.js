@@ -9,6 +9,7 @@
    deploiements de previsualisation Vercel (*.vercel.app) ne sont pas listes :
    ils passent par la regle du meme hote, ci-dessous. */
 const ALLOWED_ORIGINS = ['https://assutempo.fr', 'https://www.assutempo.fr'];
+const COOKIE_ADMIN = 'gn_admin';
 
 /**
  * Controle d'origine.
@@ -75,6 +76,30 @@ function lireCookie(req, nom) {
   return '';
 }
 
+/**
+ * Pose (ou repose) le cookie de session d'administration du Guichet de Nuit.
+ *
+ * Centralise ici parce que deux endpoints l'emettent : admin-login au moment de
+ * la connexion, et finalize a chaque cloture reussie, pour que la session
+ * GLISSE. Dupliquer la liste d'attributs entre les deux, c'etait prendre le
+ * risque qu'un jour l'un des deux perde `Secure` ou `HttpOnly` sans que
+ * personne le voie.
+ *
+ * Path est limite a /api/guichet : le cookie n'est jamais joint aux pages du
+ * site, seulement aux appels du guichet. SameSite=Strict empeche toute page
+ * tierce de le faire partir ; finalize verifie l'origine en plus.
+ */
+function poserCookieAdmin(res, id, dureeS) {
+  res.setHeader('Set-Cookie', [
+    `${COOKIE_ADMIN}=${id}`,
+    'HttpOnly',
+    'Secure',
+    'SameSite=Strict',
+    'Path=/api/guichet',
+    `Max-Age=${dureeS}`,
+  ].join('; '));
+}
+
 function json(res, code, corps) {
   res.setHeader('content-type', 'application/json; charset=utf-8');
   /* Une session est propre a un client et evolue seconde par seconde : jamais
@@ -100,10 +125,11 @@ function erreurServeur(res, err) {
 
 module.exports = {
   ALLOWED_ORIGINS,
-  COOKIE_ADMIN: 'gn_admin',
+  COOKIE_ADMIN,
   originAutorisee,
   origineStricte,
   lireCookie,
+  poserCookieAdmin,
   json,
   erreurServeur,
 };

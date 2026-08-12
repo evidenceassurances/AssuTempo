@@ -38,7 +38,7 @@
 const crypto = require('node:crypto');
 const { ouvrirSessionAdmin, rateLimited, TTL_ADMIN_S } = require('../../src/server/guichet-store.js');
 const {
-  origineStricte, json, erreurServeur, COOKIE_ADMIN,
+  origineStricte, json, erreurServeur, poserCookieAdmin,
 } = require('../../src/server/http.js');
 
 /* Comparaison a duree constante : une comparaison naive (===) fuit le jeton
@@ -83,14 +83,7 @@ module.exports = async function handler(req, res) {
 
     const { id } = await ouvrirSessionAdmin();
 
-    res.setHeader('Set-Cookie', [
-      `${COOKIE_ADMIN}=${id}`,
-      'HttpOnly',
-      'Secure',
-      'SameSite=Strict',
-      'Path=/api/guichet',
-      `Max-Age=${TTL_ADMIN_S}`,
-    ].join('; '));
+    poserCookieAdmin(res, id, TTL_ADMIN_S);
 
     return json(res, 200, {
       ok: true,

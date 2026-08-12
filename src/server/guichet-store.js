@@ -315,6 +315,25 @@ async function sessionAdminValide(id) {
   return (await command('GET', keyAdmin(id))) === '1';
 }
 
+/**
+ * Prolonge une session d'administration valide de TTL_ADMIN_S a compter de
+ * maintenant : la session GLISSE.
+ *
+ * Sans cela, le TTL est pose une seule fois, a la connexion, et jamais
+ * renouvele : Ayoub se retrouve deconnecte 30 jours apres son login meme s'il
+ * a cloture un dossier chaque nuit entre-temps, en pleine urgence et sans
+ * comprendre pourquoi.
+ *
+ * EXPIRE ne recree jamais une cle absente : une session revoquee ou expiree
+ * reste morte, ce qui preserve la revocabilite cote serveur. C'est ce qui
+ * distingue cette approche d'un cookie signe sans etat, qui ne se revoque pas.
+ * L'appel n'est fait qu'APRES une authentification reussie.
+ */
+async function prolongerSessionAdmin(id) {
+  if (!id || !/^[a-f0-9]{64}$/.test(id)) return false;
+  return (await command('EXPIRE', keyAdmin(id), TTL_ADMIN_S)) === 1;
+}
+
 module.exports = {
   DUREE_VEILLE_MS,
   TTL_SESSION_S,
@@ -328,4 +347,5 @@ module.exports = {
   finalizeSession,
   ouvrirSessionAdmin,
   sessionAdminValide,
+  prolongerSessionAdmin,
 };
