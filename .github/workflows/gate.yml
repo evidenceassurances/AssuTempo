@@ -234,6 +234,15 @@ jobs:
 
       # Le mot-cle "Closes #N" d'une PR mergee par le token Actions ne ferme
       # pas l'issue de façon fiable : fermeture explicite.
+      #
+      # Deux sources, dans cet ordre. Le corps de la PR d'abord, mais il ne
+      # porte "Closes #N" que si la PR a ete ouverte par le `gh pr create` de
+      # claude.yml. Quand l'action Claude ouvre la PR elle-meme, le corps est
+      # redige librement et ne contient rien de tel : cette etape ne faisait
+      # alors rien, en silence (constate sur la PR #41, issue #39 restee ouverte
+      # apres un merge reussi). D'ou le repli sur le nom de branche, qui porte
+      # toujours le numero d'issue au format claude/issue-N-<horodatage>.
+      #
       # Toutes les etapes qui suivent supposent que le merge a EFFECTIVEMENT eu
       # lieu : sans la garde, une PR laissee a l'arbitrage humain fermait quand
       # meme son issue, puis reconstruisait et signalait a IndexNow un main
@@ -244,13 +253,28 @@ jobs:
         if: steps.merge.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ needs.contexte.outputs.pr }}
+          BRANCHE: ${{ needs.contexte.outputs.branche }}
         run: |
-          num=$(gh pr view ${{ needs.contexte.outputs.pr }} --repo ${{ github.repository }} \
-            --json body --jq '.body' | grep -oiE 'closes #[0-9]+' | head -1 | grep -oE '[0-9]+') || true
-          if [ -n "$num" ]; then
-            gh issue close "$num" --repo ${{ github.repository }} \
-              --comment "Mission publiee : PR #${{ needs.contexte.outputs.pr }} mergee automatiquement apres controle du Gate." || true
+          num=$(gh pr view "$PR" --repo "$REPO" --json body --jq '.body' \
+            | grep -oiE 'closes #[0-9]+' | head -1 | grep -oE '[0-9]+') || true
+          if [ -z "$num" ]; then
+            num=$(echo "$BRANCHE" | grep -oE '^claude/issue-[0-9]+' | grep -oE '[0-9]+') || true
+            [ -n "$num" ] && echo "Numero d'issue deduit du nom de branche : #$num"
           fi
+          if [ -z "$num" ]; then
+            echo "Aucune issue liee identifiee (ni dans le corps, ni dans le nom de branche)."
+            exit 0
+          fi
+          etat=$(gh issue view "$num" --repo "$REPO" --json state --jq '.state' 2>/dev/null) || etat=""
+          if [ "$etat" != "OPEN" ]; then
+            echo "Issue #$num deja fermee ou introuvable (etat : ${etat:-inconnu})."
+            exit 0
+          fi
+          gh issue close "$num" --repo "$REPO" \
+            --comment "Mission publiee : PR #${PR} mergee automatiquement apres controle du Gate." \
+            && echo "Issue #$num fermee."
 
       - name: Checkout de main apres merge
         if: steps.merge.outcome == 'success'
