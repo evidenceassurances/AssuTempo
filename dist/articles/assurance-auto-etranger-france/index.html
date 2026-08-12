@@ -9,6 +9,35 @@
     <title>Assurance auto étranger en France : les 3 cas</title>
     <meta name="description" content="Véhicule étranger en France : UE, carte verte ou assurance frontière. Délais, permis étranger et sanctions, sources officielles vérifiées le 4 août 2026."
     />
+
+    <!--
+      Visuel de partage, commun a tout le site.
+
+      Pose ICI, dans le gabarit, et non page par page : chaque page definit deja
+      ses og:title, og:description et og:url via Helmet, que prerender.mjs hisse
+      dans ce <head>. Aucune n'a jamais defini d'og:image, si bien que les 80
+      pages partaient sans visuel : un partage sur LinkedIn, WhatsApp ou X
+      n'affichait qu'un rectangle vide. Une valeur par defaut au niveau du
+      gabarit couvre tout le site d'un coup, et reste surchargeable page par
+      page le jour ou une page meritera son propre visuel.
+
+      L'image est produite par `node scripts/og-image.mjs` a partir de
+      scripts/og-image.html, en Chrome sans interface : aucune dependance npm
+      ajoutee, et le visuel se regenere si la marque evolue.
+
+      URL absolue obligatoire : les robots des reseaux sociaux ne resolvent pas
+      les chemins relatifs.
+    -->
+    <meta property="og:image" content="https://assutempo.fr/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="AssuTempo, l'assurance temporaire qui change tout. De 1 à 90 jours, attestation en 5 minutes."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://assutempo.fr/og-image.png" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

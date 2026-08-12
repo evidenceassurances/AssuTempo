@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: #080706;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    color: #F5F2EA;
+    position: relative;
+  }
+
+  /* Halo doré diffus, repris de l'ambiance du site. Statique : c'est une image. */
+  .halo {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(760px 520px at 78% 22%, rgba(201,168,76,0.20), transparent 62%),
+      radial-gradient(560px 420px at 12% 88%, rgba(201,168,76,0.09), transparent 60%);
+  }
+
+  /* Cadran : la signature visuelle d'AssuTempo, en filigrane a droite. */
+  .cadran { position: absolute; right: -110px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+  .contenu {
+    position: relative;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 96px;
+    max-width: 780px;
+  }
+
+  .marque {
+    font-size: 34px; font-weight: 700; letter-spacing: -0.01em;
+    margin-bottom: 40px;
+  }
+  .marque .or { color: #C9A84C; }
+
+  h1 {
+    font-size: 68px; line-height: 1.06; font-weight: 800;
+    letter-spacing: -0.028em;
+  }
+  h1 .or {
+    background: linear-gradient(120deg, #E8C97A, #C9A84C);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .sous { margin-top: 26px; font-size: 26px; line-height: 1.45; color: #A9A29A; font-weight: 400; }
+
+  .puces {
+    margin-top: 42px; display: flex; gap: 14px; align-items: center;
+  }
+  .puce {
+    border: 1px solid rgba(201,168,76,0.42);
+    border-radius: 999px;
+    padding: 11px 21px;
+    font-size: 19px; font-weight: 600; color: #E8C97A;
+    white-space: nowrap;
+  }
+
+  /* Liseré doré en pied : cadre l'image quand elle est rognée en vignette. */
+  .liseré {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+    background: linear-gradient(90deg, #C9A84C, #E8C97A 42%, rgba(201,168,76,0.12));
+  }
+</style>
+</head>
+<body>
+  <div class="halo"></div>
+
+  <svg class="cadran" width="620" height="620" viewBox="0 0 620 620" aria-hidden="true">
+    <circle cx="310" cy="310" r="286" fill="none" stroke="rgba(201,168,76,0.20)" stroke-width="1.5"/>
+    <circle cx="310" cy="310" r="232" fill="none" stroke="rgba(201,168,76,0.11)" stroke-width="1"/>
+    <!-- Arc de remplissage, comme le cadran du site en cours de course -->
+    <circle cx="310" cy="310" r="286" fill="none" stroke="#C9A84C" stroke-width="4"
+            stroke-linecap="round" stroke-dasharray="1796" stroke-dashoffset="640"
+            transform="rotate(-90 310 310)" opacity="0.85"/>
+    <g stroke="rgba(201,168,76,0.55)" stroke-width="2" stroke-linecap="round">
+      <!-- 60 graduations -->
+      <g id="g"></g>
+    </g>
+  </svg>
+
+  <div class="contenu">
+    <div class="marque">Assu<span class="or">Tempo</span></div>
+    <h1>L'assurance temporaire<br>qui change <span class="or">tout.</span></h1>
+    <p class="sous">De 1 à 90 jours, attestation en 5 minutes.</p>
+    <div class="puces">
+      <span class="puce">34 pays européens</span>
+      <span class="puce">100 % en ligne</span>
+      <span class="puce">Sans engagement</span>
+    </div>
+  </div>
+
+  <div class="liseré"></div>
+
+<script>
+  /* Graduations generees plutot qu'ecrites a la main : 60 traits reguliers,
+     les dizaines plus longues, comme sur le cadran de la page d'accueil. */
+  const g = document.getElementById('g');
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+    const dixaine = i % 5 === 0;
+    const r1 = dixaine ? 252 : 262;
+    const r2 = 272;
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 310 + Math.cos(a) * r1);
+    l.setAttribute('y1', 310 + Math.sin(a) * r1);
+    l.setAttribute('x2', 310 + Math.cos(a) * r2);
+    l.setAttribute('y2', 310 + Math.sin(a) * r2);
+    l.setAttribute('opacity', dixaine ? 0.9 : 0.4);
+    g.appendChild(l);
+  }
+</script>
+</body>
+</html>
