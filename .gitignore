@@ -13,3 +13,11 @@ $(pwd)
 .env.local
 .env.*.local
 .env*
+
+# Copies de conflit iCloud. Le depot vit sur le Bureau, qui est synchronise par
+# iCloud Drive : chaque `npm run build` reecrit des milliers de fichiers dans
+# dist/, et iCloud en depose parfois une copie suffixee " 2", " 3"... Ces
+# doublons sont deja partis dans 40 fichiers de l'historique via des `git add -A`.
+# La vraie correction serait de sortir le projet du Bureau ; en attendant, ce
+# filet empeche qu'ils soient committes ou deployes.
+* [0-9].*
