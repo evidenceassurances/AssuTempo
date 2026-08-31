@@ -220,6 +220,14 @@ Le site affirmait partout que **Certimat est « habilité par le Ministère de l
 - **TODO_A_CONFIRMER** (constantes en place, désactivées par défaut) : délai médian réel du CPI, prix de la prestation, n° d'habilitation du **professionnel habilité partenaire** (celui qui saisit, pas Certimat) : à n'activer que fourni par écrit et vérifiable.
 - Piège de mise en page : le hero ne doit pas dépasser 3 micro-puces, sinon l'iframe Certimat repasse sous la ligne de flottaison mobile (annule la réorganisation du 5 juillet).
 
+### Session du 1er septembre 2026 : le pilote paraissait mort, il ne l'était pas
+Constat d'Ayoub : « le token GitHub a expiré, l'usine à articles ne publie plus ». Diagnostic par les faits (mission de test réelle, issue #51) : **le jeton `CLAUDE_CODE_OAUTH_TOKEN` est valide**, la mission a répondu en 37 s. Ce qui donnait l'illusion d'une panne, ce sont deux défauts distincts, corrigés (commit `e8de4ff9`, poussé direct sur `main`).
+
+- **La revue automatique échouait sur CHAQUE PR de mission** depuis toujours (PR des issues 29, 38, 43, 46, 49). Les PR de mission sont ouvertes par l'application Claude : l'acteur du run est le bot `claude`, et `claude-code-action` refuse par défaut tout déclencheur non humain. Correctif : `allowed_bots: "claude"` dans `claude-code-review.yml`. **Ne jamais y mettre le joker `*` : le dépôt est PUBLIC, et `*` laisserait une application tierce déclencher l'action avec un prompt qu'elle contrôle** (avertissement explicite de l'action).
+- **Une mission qui meurt ne disait rien.** Jeton mort, plafond d'usage ou plantage : le job virait au rouge dans l'onglet Actions, mais l'issue restait ouverte et muette, indistinguable d'une mission en cours. Une panne pouvait donc durer des semaines sans être vue, et c'est très exactement ce qui a fait croire à un jeton expiré. `claude.yml` poste désormais un commentaire d'échec sur l'issue (causes probables + lien du journal). **Règle : le corps de ce commentaire ne doit JAMAIS contenir la mention de déclenchement `@` + `claude`**, sinon un jeton mort produirait une pluie de commentaires (le garde-fou GITHUB_TOKEN suffit en théorie, on ne s'y fie pas seul).
+- **Rotation du jeton, procédure** : `claude setup-token` puis `gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo evidenceassurances/AssuTempo`, **dans le terminal d'Ayoub, jamais dans une conversation Claude Code** (un secret collé dans un transcript est un secret à révoquer). Le jeton en place date du 10 juillet 2026.
+- Rappel confirmé au passage : les échecs de Gate du 11 août (PR #36) venaient de la limite `workflows` du GITHUB_TOKEN, déjà traitée le 12 août ; rien à refaire.
+
 ---
 
 ## 6. Plan SEO / backlinks
