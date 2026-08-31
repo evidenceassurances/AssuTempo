@@ -1,0 +1,106 @@
+name: Usine à articles AssuTempo
+
+# Produit un article de référence ou un renforcement, deux fois par semaine,
+# entièrement sur les serveurs GitHub — aucun ordinateur d'Ayoub n'est requis.
+# Chaîne : ce workflow -> branche draft/... -> PR -> workflow Gate (merge auto) -> Vercel -> IndexNow.
+
+on:
+  schedule:
+    # Mardi et jeudi à 06:00 UTC = 08:00 Paris en heure d'été, 07:00 en heure d'hiver.
+    - cron: '0 6 * * 2,4'
+  workflow_dispatch:        # permet de lancer un run à la main depuis l'onglet Actions
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: usine-contenu
+  cancel-in-progress: false
+
+jobs:
+  produire-article:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Écrire l'article avec Claude Code
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: '--max-turns 80 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
+          prompt: |
+            Tu es l'usine à contenu d'AssuTempo (assutempo.fr — courtier Evidence Assurances,
+            ORIAS 20005719, SIREN 884 641 523). Tu tournes seul dans un runner GitHub Actions :
+            personne ne te répond, ne pose aucune question, va au bout et ouvre la pull request.
+
+            RÈGLES PERMANENTES DU PROJET : lis d'abord CLAUDE.md à la racine du dépôt (et
+            GUICHET_DE_NUIT.md s'il existe). Elles priment sur ce prompt en cas de conflit.
+
+            ÉTAT ET ANTI-DUPLICATION
+            1. Lis .claude/usine-journal.md s'il existe (journal des sujets déjà produits et
+               file d'attente). S'il n'existe pas, crée-le au format décrit au point 9.
+            2. Recense les articles DÉJÀ en ligne : explore le dépôt (src/, les données
+               d'articles, les routes) pour lister les slugs existants. Tu ne dois JAMAIS
+               produire un doublon d'un article existant. Renforcer n'est pas réécrire.
+
+            CHOIX DU SUJET (un seul par run)
+            3. Choisis soit [À PRODUIRE] — un article de référence sur un sujet transactionnel
+               non couvert — soit [EXISTE → RENFORCER] — l'ajout de sections à un article
+               existant sous-performant. Alterne raisonnablement entre les deux.
+            4. Univers de sujets prioritaires (clusters du plan SEO) : assurance temporaire
+               utilitaire / déménagement / camion, sortie de fourrière, achat-vente entre
+               particuliers, carte grise et CPI, véhicule ou permis étranger, jeune conducteur,
+               conducteur résilié ou malussé, convoyage professionnel, essai avant achat,
+               guichet de nuit et week-end, prix et durées, assurance internationale.
+            5. Vérifie l'intention réelle par WebSearch (ce que Google renvoie aujourd'hui sur la
+               requête cible, quelles questions People Also Ask reviennent) avant d'écrire.
+
+            EXIGENCES DE CONTENU
+            6. Article en français, 1 200 à 1 800 mots, structure : H1 clair, « L'essentiel en
+               bref » (réponse de 40 à 50 mots citables telle quelle par un moteur génératif),
+               corps en H2/H3 qui répondent aux questions réelles, FAQ de 4 à 6 questions issues
+               des PAA, mention d'auteur et de la qualité de courtier « Evidence Assurances,
+               ORIAS 20005719 », date de mise à jour réelle.
+            7. Faits vérifiés et datés, sourcés sur service-public.fr, legifrance.gouv.fr,
+               ants.gouv.fr — cite-les. LEXIQUE OBLIGATOIRE : la « carte verte » n'existe plus
+               comme document depuis le 01/04/2024, on parle du Mémo Véhicule Assuré et du FVA ;
+               les durées AssuTempo vont de 1 à 90 jours. Angle unique de la marque : le seul
+               courtier avec un Guichet de Nuit 21h-9h et le dimanche.
+            8. Maillage interne : 3 à 5 liens vers des pages existantes du site. INTERDICTION
+               ABSOLUE de lier ces URLs héritées cassées tant qu'elles ne sont pas réparées :
+               /faire-sa-carte-grise, /assurance-auto-temporaire-1-jour,
+               /le-certificat-provisoire-dimmatriculation-plaques-ww,
+               /liste-des-situations-necessitant-une-assurance-temporaire,
+               /importer-exporter-un-vehicule-etranger,
+               /assurance-temporaire-vehicule-utilitaire.
+
+            MISE EN ŒUVRE
+            9. Écris l'article dans le dépôt en respectant EXACTEMENT la structure des articles
+               existants (même format de fichier, mêmes champs de métadonnées, même
+               enregistrement dans l'index et le sitemap que les articles voisins — copie le
+               modèle d'un article récent plutôt que d'inventer un format). Mets à jour
+               .claude/usine-journal.md : une ligne datée « JJ/MM/AAAA — slug — type
+               (production ou renforcement) — requête cible ».
+            10. Vérifie que le projet compile avant d'ouvrir la PR : npm ci puis npm run lint
+                puis npm run build. Si le build échoue à cause de ton article, corrige-le. Si le
+                build échoue pour une raison étrangère à ton travail, ouvre quand même la PR et
+                décris l'échec dans sa description.
+
+            LIVRAISON — OUVRE LA PULL REQUEST TOI-MÊME
+            11. Crée une branche nommée draft/<slug-de-l-article> (le préfixe draft/ est
+                obligatoire : c'est lui que le workflow Gate surveille pour merger
+                automatiquement), commite ton travail, pousse la branche, puis ouvre la pull
+                request vers la branche par défaut avec la commande gh (le token est déjà dans
+                l'environnement, variable GH_TOKEN).
+            12. Titre de la PR : « Article : <titre de l'article> ». Description : requête cible,
+                type (production ou renforcement), sources citées, liens internes ajoutés, et
+                résultat du build. Ne merge jamais toi-même : le Gate décide, et Ayoub garde son
+                veto avec le label hold.
