@@ -14,6 +14,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  actions: write        # necessaire pour reveiller le workflow Gate apres la PR
 
 concurrency:
   group: usine-contenu
@@ -104,3 +105,10 @@ jobs:
                 type (production ou renforcement), sources citées, liens internes ajoutés, et
                 résultat du build. Ne merge jamais toi-même : le Gate décide, et Ayoub garde son
                 veto avec le label hold.
+            13. RÉVEILLE LE GATE. Une pull request ouverte avec le token GITHUB_TOKEN ne
+                déclenche PAS les workflows abonnés à l'événement pull_request : le Gate
+                resterait endormi et l'article ne serait jamais mergé. Juste après avoir créé
+                la PR, récupère son numéro (gh pr create renvoie son URL) et lance :
+                gh workflow run gate.yml -f pr_number=<numéro>
+                Vérifie ensuite avec gh run list --workflow=gate.yml que le Gate a démarré, et
+                dis-le dans ton résumé final.
