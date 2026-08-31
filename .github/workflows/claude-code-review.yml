@@ -34,6 +34,15 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Les PR de mission sont ouvertes par l'application Claude : l'acteur
+          # du run est alors le bot "claude", et l'action refuse par defaut
+          # tout declencheur non humain. Sans cette ligne, la revue echoue sur
+          # CHAQUE PR de mission (erreur "Workflow initiated by non-human
+          # actor: claude"), constatee sur les PR des issues 29, 38, 43, 46, 49.
+          # On nomme le bot explicitement : le depot est PUBLIC, et le joker
+          # '*' y laisserait des applications tierces declencher l'action avec
+          # un prompt qu'elles controlent.
+          allowed_bots: "claude"
           plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
           plugins: 'code-review@claude-code-plugins'
           prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'

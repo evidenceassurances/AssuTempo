@@ -53,6 +53,7 @@ jobs:
       # WebSearch/WebFetch : verification des chiffres legaux en ligne (YMYL).
       # Bash npm/node : npm ci puis npm run build pour livrer un build propre.
       - name: Run Claude Code
+        id: mission
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -61,7 +62,29 @@ jobs:
             --model claude-sonnet-5
             --allowedTools "Bash,Edit,Write,Read,Glob,Grep,WebSearch,WebFetch,Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git checkout:*),Bash(git branch:*),Bash(npm ci:*),Bash(npm install:*),Bash(npm run build:*),Bash(node:*)"
 
-      # Ouvre la PR de la mission (si absente) puis declenche le Gate.
+      # Filet d'alerte. Quand l'etape Claude echoue (jeton expire ou revoque,
+      # plafond d'usage atteint, plantage), l'issue restait MUETTE : elle
+      # semblait simplement en attente, et la panne pouvait durer des semaines
+      # sans que personne la voie. On commente donc l'issue avec le motif et
+      # le lien du run. Double securite anti-boucle : un evenement cree avec le
+      # GITHUB_TOKEN ne declenche aucun workflow, ET le texte ne contient
+      # jamais la mention de declenchement (sinon, jeton mort = pluie de
+      # commentaires). Ne JAMAIS ecrire cette mention dans ce corps de message.
+      - name: Signaler une mission en echec
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$REPO" --body "Mission interrompue : elle s'est arretee en erreur, aucun fichier n'a ete publie.
+
+          Causes frequentes, dans l'ordre : jeton \`CLAUDE_CODE_OAUTH_TOKEN\` expire ou revoque, plafond d'usage atteint, ou depassement des 45 minutes de la mission.
+
+          Journal complet : ${RUN}
+
+          Pour relancer une fois la cause levee : commenter cette issue en mentionnant Claude, comme pour une mission normale."
       # Un evenement cree avec GITHUB_TOKEN ne declenche pas les workflows
       # (anti-boucle GitHub), SAUF workflow_dispatch : c'est l'exception
       # documentee qui permet d'enchainer sur le Gate sans intervention.
