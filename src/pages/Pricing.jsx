@@ -240,118 +240,6 @@ function Pricing() {
           </p>
         </m.div>
 
-        {/* ---------- GRILLE TARIFAIRE (SEO / GEO) ----------
-             Bloc 100 % statique : les chiffres sont dans le HTML prerendu, donc
-             lisibles par Google et citables par les assistants IA. L'iframe de
-             souscription reste inchangee, juste en dessous. */}
-        <section
-          aria-labelledby="grille-tarifaire"
-          style={{ maxWidth: 820, margin: '0 auto 48px', position: 'relative', zIndex: 1 }}
-        >
-          <h2
-            id="grille-tarifaire"
-            style={{ fontSize: 'clamp(20px, 2.6vw, 26px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', margin: '0 0 14px' }}
-          >
-            Combien coûte une assurance auto temporaire
-          </h2>
-          <p style={{ fontSize: 15.5, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 24px' }}>
-            Une assurance auto temporaire coûte entre 15 € pour une journée et 380 € pour 90 jours.
-            Le tarif dépend de trois choses : la durée retenue, le véhicule et le profil du conducteur.
-            Plus la période est longue, moins la journée revient cher, car les frais d'ouverture du
-            contrat se répartissent sur davantage de jours. Le prix affiché à la fin de la simulation
-            est celui qui est prélevé.
-          </p>
-
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-            <table
-              style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                minWidth: 480,
-                background: 'var(--bg-card)',
-                border: '1px solid var(--glass-border)',
-                borderRadius: 12,
-                overflow: 'hidden',
-              }}
-            >
-              <thead>
-                <tr>
-                  {['Durée', 'Tarif AssuTempo', 'Ce que ça couvre'].map((col) => (
-                    <th
-                      key={col}
-                      scope="col"
-                      style={{
-                        textAlign: 'left',
-                        padding: '12px 16px',
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: 'var(--gold)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        background: 'var(--gold-glow)',
-                        borderBottom: '1px solid var(--gold-border)',
-                      }}
-                    >
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {TARIFS.map((t, i) => (
-                  <tr key={t.duree}>
-                    <th
-                      scope="row"
-                      style={{
-                        textAlign: 'left',
-                        padding: '12px 16px',
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: 'var(--text)',
-                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
-                        whiteSpace: 'nowrap',
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {t.duree}
-                    </th>
-                    <td
-                      style={{
-                        padding: '12px 16px',
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: 'var(--gold-light)',
-                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
-                        whiteSpace: 'nowrap',
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {t.prix}
-                    </td>
-                    <td
-                      style={{
-                        padding: '12px 16px',
-                        fontSize: 14,
-                        color: 'var(--text-muted)',
-                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {t.usage}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', lineHeight: 1.6, margin: '12px 0 0' }}>
-            Tarifs indicatifs constatés, variables selon le véhicule, le profil du conducteur et la
-            durée. Votre prix exact s'affiche immédiatement dans le simulateur ci-dessous, sans
-            engagement.
-          </p>
-        </section>
-
         {/* GRILLE 3 colonnes : rail gauche / iframe / rail droit */}
         <div className="tarif-grid" style={{ position: 'relative', zIndex: 1 }}>
 
@@ -544,6 +432,120 @@ function Pricing() {
             </p>
           </m.aside>
         </div>
+
+        {/* ---------- GRILLE TARIFAIRE (SEO / GEO) ----------
+             Bloc 100 % statique : les chiffres sont dans le HTML prerendu, donc
+             lisibles par Google et citables par les assistants IA. Place APRES
+             l'iframe et non avant : le simulateur doit rester la premiere chose
+             que le visiteur voit, le referencement n'a pas besoin du haut de
+             page. L'iframe elle-meme est inchangee. */}
+        <section
+          aria-labelledby="grille-tarifaire"
+          style={{ maxWidth: 820, margin: '56px auto 0', position: 'relative', zIndex: 1 }}
+        >
+          <h2
+            id="grille-tarifaire"
+            style={{ fontSize: 'clamp(20px, 2.6vw, 26px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', margin: '0 0 14px' }}
+          >
+            Combien coûte une assurance auto temporaire
+          </h2>
+          <p style={{ fontSize: 15.5, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 24px' }}>
+            Une assurance auto temporaire coûte entre 15 € pour une journée et 380 € pour 90 jours.
+            Le tarif dépend de trois choses : la durée retenue, le véhicule et le profil du conducteur.
+            Plus la période est longue, moins la journée revient cher, car les frais d'ouverture du
+            contrat se répartissent sur davantage de jours. Le prix affiché à la fin de la simulation
+            est celui qui est prélevé.
+          </p>
+
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table
+              style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                minWidth: 480,
+                background: 'var(--bg-card)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 12,
+                overflow: 'hidden',
+              }}
+            >
+              <thead>
+                <tr>
+                  {['Durée', 'Tarif AssuTempo', 'Ce que ça couvre'].map((col) => (
+                    <th
+                      key={col}
+                      scope="col"
+                      style={{
+                        textAlign: 'left',
+                        padding: '12px 16px',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: 'var(--gold)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        background: 'var(--gold-glow)',
+                        borderBottom: '1px solid var(--gold-border)',
+                      }}
+                    >
+                      {col}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {TARIFS.map((t, i) => (
+                  <tr key={t.duree}>
+                    <th
+                      scope="row"
+                      style={{
+                        textAlign: 'left',
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: 'var(--text)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.duree}
+                    </th>
+                    <td
+                      style={{
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: 'var(--gold-light)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.prix}
+                    </td>
+                    <td
+                      style={{
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        color: 'var(--text-muted)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.usage}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', lineHeight: 1.6, margin: '12px 0 0' }}>
+            Tarifs indicatifs constatés, variables selon le véhicule, le profil du conducteur et la
+            durée. Votre prix exact s'affiche immédiatement dans le simulateur ci-dessus, sans
+            engagement.
+          </p>
+        </section>
 
         {/* ---------- BANDEAU CONFIANCE ---------- */}
         <m.div
