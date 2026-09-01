@@ -15,7 +15,6 @@ permissions:
   pull-requests: write
   issues: write
   id-token: write       # OBLIGATOIRE : l'action echange un jeton OIDC contre son jeton GitHub App
-  actions: write        # necessaire pour reveiller le workflow Gate apres la PR
 
 concurrency:
   group: chantier-structurel
@@ -98,9 +97,3 @@ jobs:
             - Titre : « Chantier <numéro> : <description> ». Description : ce qui a été fait,
               ce qui reste, résultat du build. Ne merge jamais toi-même : le Gate décide, et
               Ayoub garde son veto avec le label hold.
-            - RÉVEILLE LE GATE. Une pull request ouverte avec le token GITHUB_TOKEN ne déclenche
-              PAS les workflows abonnés à l'événement pull_request : le Gate resterait endormi et
-              le chantier ne serait jamais mergé. Juste après avoir créé la PR, récupère son
-              numéro et lance : gh workflow run gate.yml -f pr_number=<numéro>
-              Vérifie avec gh run list --workflow=gate.yml que le Gate a démarré, et dis-le dans
-              ton résumé final.
