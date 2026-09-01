@@ -6,14 +6,16 @@ name: Usine à articles AssuTempo
 
 on:
   schedule:
-    # Mardi et jeudi à 06:00 UTC = 08:00 Paris en heure d'été, 07:00 en heure d'hiver.
-    - cron: '0 6 * * 2,4'
+    # Mardi et jeudi à 06:17 UTC = 08:17 Paris (heure d'été). Minute décalée volontairement :
+    # GitHub retarde ou abandonne les crons planifiés pile à l'heure ronde (forte charge).
+    - cron: '17 6 * * 2,4'
   workflow_dispatch:        # permet de lancer un run à la main depuis l'onglet Actions
 
 permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write       # OBLIGATOIRE : l'action echange un jeton OIDC contre son jeton GitHub App
   actions: write        # necessaire pour reveiller le workflow Gate apres la PR
 
 concurrency:
