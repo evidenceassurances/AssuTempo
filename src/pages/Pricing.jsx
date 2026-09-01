@@ -26,8 +26,42 @@ const TRUST = [
   { icon: Globe, title: `34 pays européens`, text: `Couverture avec carte verte incluse.` },
 ];
 
+// Grille tarifaire : memes fourchettes que l'article /articles/prix-assurance-auto-temporaire
+// (source unique du chiffrage). Rendu 100 % statique, donc present dans le HTML prerendu.
+const TARIFS = [
+  { duree: `1 jour`, prix: `15 à 20 €`, usage: `Essai avant achat, dépannage, trajet isolé.` },
+  { duree: `3 jours`, prix: `30 à 40 €`, usage: `Week-end, prêt de véhicule, aller-retour.` },
+  { duree: `7 jours`, prix: `55 à 70 €`, usage: `Convoyage, séjour court, attente d'un contrat annuel.` },
+  { duree: `30 jours`, prix: `140 à 170 €`, usage: `Véhicule en vente, période sans assurance, déplacement long.` },
+  { duree: `90 jours`, prix: `320 à 380 €`, usage: `Durée maximale, le temps de retrouver une solution annuelle.` },
+];
+
 // FAQ : sert a la fois au rendu et au JSON-LD (FAQPage) pour le SEO / GEO.
 const FAQ = [
+  {
+    q: `Combien coûte une assurance auto temporaire pour 1 jour ?`,
+    a: `Comptez 15 à 20 € pour 24 heures de couverture. Le montant exact dépend du véhicule et du profil du conducteur, et s'affiche avant paiement, à l'issue de la simulation. Sur le marché, les tarifs constatés pour une journée vont de 11 € à 25 € selon les acteurs.`,
+  },
+  {
+    q: `Le prix change-t-il selon le véhicule ?`,
+    a: `Oui. La puissance, la valeur et l'usage du véhicule entrent dans le calcul, comme pour un contrat annuel. Un utilitaire de déménagement ne se tarife pas au même niveau qu'une citadine. Ces éléments sont pris en compte avant que le prix ne s'affiche.`,
+  },
+  {
+    q: `Y a-t-il des frais de dossier ou des frais cachés ?`,
+    a: `Non. Le prix affiché à l'écran, durée et véhicule renseignés, est celui qui est prélevé. Aucune ligne supplémentaire n'apparaît au moment du paiement. Le contrat ne se reconduit pas non plus : rien n'est prélevé après l'échéance.`,
+  },
+  {
+    q: `Une assurance temporaire de 30 jours revient-elle moins cher qu'un contrat annuel résilié ?`,
+    a: `Sur un mois isolé, le plus souvent oui : 140 à 170 € face à une prime annuelle majorée après résiliation. Sur douze mois consécutifs en revanche, enchaîner des contrats temporaires coûte plus cher qu'un contrat annuel, même spécialisé. La formule temporaire répond à un besoin ponctuel, pas à une couverture permanente.`,
+  },
+  {
+    q: `Le tarif est-il plus élevé pour un jeune conducteur ou un conducteur malussé ?`,
+    a: `Le profil du conducteur entre dans le calcul, comme partout en assurance auto : une expérience courte ou un malus récent placent le tarif dans le haut de la fourchette. La souscription reste possible sans relevé d'information, ce qui rend la formule accessible quand un contrat annuel est refusé.`,
+  },
+  {
+    q: `Le prix affiché au devis est-il définitif ?`,
+    a: `Oui, dès lors que les informations saisies sont exactes : le montant présenté à la fin de la simulation est celui qui est prélevé, sans révision après coup. Une erreur sur la date de permis ou sur le véhicule peut en revanche fragiliser le contrat. C'est le point à vérifier avant de valider.`,
+  },
   {
     q: `En combien de temps vais-je recevoir mon attestation ?`,
     a: `Votre attestation d'assurance vous est envoyée par email quelques minutes après la validation de votre paiement. Vous pouvez ensuite prendre la route immédiatement.`,
@@ -85,6 +119,16 @@ const JSONLD_SERVICE = {
      (index.html) : une seule entite etablie sur tout le site. */
   provider: { '@id': 'https://assutempo.fr/#organization' },
   areaServed: ['FR', 'Europe'],
+  /* Fourchette de prix affichee sur la page (grille TARIFS) : rattachee au
+     Service plutot qu'isolee, pour rester un seul graphe coherent. */
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'EUR',
+    lowPrice: 15,
+    highPrice: 380,
+    url: 'https://assutempo.fr/tarification',
+    availability: 'https://schema.org/InStock',
+  },
   audience: { '@type': 'Audience', audienceType: 'Particuliers et professionnels' },
   availableChannel: {
     '@type': 'ServiceChannel',
@@ -131,11 +175,11 @@ function Pricing() {
   return (
     <>
       <Helmet>
-        <title>Tarif Assurance Temporaire : Devis en Ligne | AssuTempo</title>
-        <meta name="description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe. Souscription en ligne, attestation immédiate." />
+        <title>Tarif assurance temporaire : de 15 à 380 € | AssuTempo</title>
+        <meta name="description" content="Prix d'une assurance auto temporaire : 15 à 20 € la journée, 140 à 170 € le mois. Grille complète, sans frais cachés, devis immédiat en ligne." />
         <link rel="canonical" href="https://assutempo.fr/tarification" />
-        <meta property="og:title" content="Tarif Assurance Temporaire : Devis en Ligne | AssuTempo" />
-        <meta property="og:description" content="Calculez le tarif de votre assurance temporaire en 2 minutes. De 1 à 90 jours, prix fixe. Souscription en ligne, attestation immédiate." />
+        <meta property="og:title" content="Tarif assurance temporaire : de 15 à 380 € | AssuTempo" />
+        <meta property="og:description" content="Prix d'une assurance auto temporaire : 15 à 20 € la journée, 140 à 170 € le mois. Grille complète, sans frais cachés, devis immédiat en ligne." />
         <meta property="og:url" content="https://assutempo.fr/tarification" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />
@@ -195,6 +239,118 @@ function Pricing() {
             {' '}du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.
           </p>
         </m.div>
+
+        {/* ---------- GRILLE TARIFAIRE (SEO / GEO) ----------
+             Bloc 100 % statique : les chiffres sont dans le HTML prerendu, donc
+             lisibles par Google et citables par les assistants IA. L'iframe de
+             souscription reste inchangee, juste en dessous. */}
+        <section
+          aria-labelledby="grille-tarifaire"
+          style={{ maxWidth: 820, margin: '0 auto 48px', position: 'relative', zIndex: 1 }}
+        >
+          <h2
+            id="grille-tarifaire"
+            style={{ fontSize: 'clamp(20px, 2.6vw, 26px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', margin: '0 0 14px' }}
+          >
+            Combien coûte une assurance auto temporaire
+          </h2>
+          <p style={{ fontSize: 15.5, color: 'var(--text-muted)', lineHeight: 1.8, margin: '0 0 24px' }}>
+            Une assurance auto temporaire coûte entre 15 € pour une journée et 380 € pour 90 jours.
+            Le tarif dépend de trois choses : la durée retenue, le véhicule et le profil du conducteur.
+            Plus la période est longue, moins la journée revient cher, car les frais d'ouverture du
+            contrat se répartissent sur davantage de jours. Le prix affiché à la fin de la simulation
+            est celui qui est prélevé.
+          </p>
+
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table
+              style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                minWidth: 480,
+                background: 'var(--bg-card)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 12,
+                overflow: 'hidden',
+              }}
+            >
+              <thead>
+                <tr>
+                  {['Durée', 'Tarif AssuTempo', 'Ce que ça couvre'].map((col) => (
+                    <th
+                      key={col}
+                      scope="col"
+                      style={{
+                        textAlign: 'left',
+                        padding: '12px 16px',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: 'var(--gold)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        background: 'var(--gold-glow)',
+                        borderBottom: '1px solid var(--gold-border)',
+                      }}
+                    >
+                      {col}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {TARIFS.map((t, i) => (
+                  <tr key={t.duree}>
+                    <th
+                      scope="row"
+                      style={{
+                        textAlign: 'left',
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: 'var(--text)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.duree}
+                    </th>
+                    <td
+                      style={{
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: 'var(--gold-light)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.prix}
+                    </td>
+                    <td
+                      style={{
+                        padding: '12px 16px',
+                        fontSize: 14,
+                        color: 'var(--text-muted)',
+                        borderTop: i > 0 ? '1px solid var(--glass-border)' : 'none',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {t.usage}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', lineHeight: 1.6, margin: '12px 0 0' }}>
+            Tarifs indicatifs constatés, variables selon le véhicule, le profil du conducteur et la
+            durée. Votre prix exact s'affiche immédiatement dans le simulateur ci-dessous, sans
+            engagement.
+          </p>
+        </section>
 
         {/* GRILLE 3 colonnes : rail gauche / iframe / rail droit */}
         <div className="tarif-grid" style={{ position: 'relative', zIndex: 1 }}>
@@ -455,7 +611,7 @@ function Pricing() {
           style={{ maxWidth: 820, margin: '64px auto 0', position: 'relative', zIndex: 1 }}
         >
           <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 24, textAlign: 'center' }}>
-            Questions fréquentes sur la souscription
+            Questions fréquentes sur le prix et la souscription
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {FAQ.map((f, i) => (
