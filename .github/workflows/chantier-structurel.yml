@@ -5,14 +5,16 @@ name: Chantier structurel AssuTempo
 
 on:
   schedule:
-    # Lundi et vendredi à 16:00 UTC = 18:00 Paris en heure d'été, 17:00 en heure d'hiver.
-    - cron: '0 16 * * 1,5'
+    # Lundi et vendredi à 16:23 UTC = 18:23 Paris (heure d'été). Minute décalée volontairement :
+    # GitHub retarde ou abandonne les crons planifiés pile à l'heure ronde (forte charge).
+    - cron: '23 16 * * 1,5'
   workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write       # OBLIGATOIRE : l'action echange un jeton OIDC contre son jeton GitHub App
   actions: write        # necessaire pour reveiller le workflow Gate apres la PR
 
 concurrency:
