@@ -747,6 +747,13 @@ function ArticleLayout({ data }) {
     ? related
     : articles.filter((a) => a.slug !== data.slug).slice(0, 3);
 
+  /* Date ISO de l'attribut datetime : lue dans le JSON-LD Article de l'article,
+     seule source de la date. Rien n'est duplique, rien n'est fabrique. */
+  const schemaArticle = data.seo.jsonLd.find((n) => n['@type'] === 'Article');
+  const updatedISO = schemaArticle
+    ? schemaArticle.dateModified || schemaArticle.datePublished
+    : undefined;
+
   const ctaInsertIndex = Math.floor(data.sections.length / 2);
 
   return (
@@ -889,10 +896,13 @@ function ArticleLayout({ data }) {
                   <Clock size={13} strokeWidth={1.5} />
                   Lecture {data.readTime}
                 </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, color: 'var(--text-muted)' }}>
+                <time
+                  dateTime={updatedISO}
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, color: 'var(--text-muted)' }}
+                >
                   <Calendar size={13} strokeWidth={1.5} />
                   Mis à jour le {data.updatedDate}
-                </span>
+                </time>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, color: 'var(--text-muted)' }}>
                   <User size={13} strokeWidth={1.5} />
                   {data.author}
@@ -907,13 +917,18 @@ function ArticleLayout({ data }) {
                   fontSize: 'clamp(1.65rem, 4.5vw, 2.6rem)',
                   fontWeight: 800,
                   color: 'var(--text)',
-                  margin: '0 0 32px',
+                  margin: '0 0 14px',
                   letterSpacing: '-0.03em',
                   lineHeight: 1.15,
                 }}
               >
                 {data.headline}
               </h1>
+              {/* Attribution E-E-A-T : la mention ORIAS n'existait qu'en bas de
+                  page. Elle est reprise ici, sous le H1, ou elle est lue. */}
+              <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', lineHeight: 1.6, margin: '0 0 28px' }}>
+                Rédigé par l&apos;équipe AssuTempo, courtier Evidence Assurances - ORIAS 20005719.
+              </p>
             </Reveal>
 
             {/* Capsule de reponse GEO si l'article en a une (statique, sans
@@ -1061,7 +1076,7 @@ function ArticleLayout({ data }) {
           {/* ── Encart auteur (E-E-A-T) ── */}
           <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', textAlign: 'center', margin: '0 0 8px', lineHeight: 1.6 }}>
             Rédigé par l&apos;équipe AssuTempo, courtier Evidence Assurances - ORIAS 20005719.
-            {' '}Mis à jour le {data.updatedDate}.
+            {' '}Mis à jour le <time dateTime={updatedISO}>{data.updatedDate}</time>.
           </p>
         </div>
 

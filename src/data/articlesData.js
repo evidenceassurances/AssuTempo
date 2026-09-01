@@ -6,7 +6,10 @@ import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, Parking
      Si absent, repli automatique sur la 1re phrase de l'extrait.
    - updatedAt (string) : date de mise a jour affichee dans la ligne meta.
      Si absent, la date n'est pas affichee (le temps de lecture et "Verifie" restent).
-     TODO Ayoub : renseigner les vraies dates de mise a jour, ex. updatedAt: '12 juin 2026'.
+     Valeur reprise du champ updatedDate de src/data/articles/<article>.js, qui
+     reste la source unique de la date : on la met a jour la-bas, puis ici.
+   - updatedAtISO (string) : la meme date au format ISO, pour l'attribut datetime
+     de la balise <time>. Doit rester alignee sur dateModified du JSON-LD Article.
    - featured (boolean) : passe l'article en pilier "A la une".
      Si aucun article n'a featured: true, le 1er article du tableau sert de pilier.
      TODO Ayoub : poser featured: true sur l'article pilier souhaite. */
@@ -22,6 +25,8 @@ export const articles = [
     accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
+    updatedAt: '2 juin 2026',
+    updatedAtISO: '2026-06-02',
     hasPage: true,
   },
   {
@@ -35,6 +40,8 @@ export const articles = [
     accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
+    updatedAt: '2 juin 2026',
+    updatedAtISO: '2026-06-02',
     hasPage: true,
     featured: false,
   },
@@ -49,6 +56,8 @@ export const articles = [
     accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '4 min',
+    updatedAt: '3 juin 2026',
+    updatedAtISO: '2026-06-03',
     hasPage: true,
   },
   {
@@ -62,6 +71,8 @@ export const articles = [
     accent: '#C98A3C',
     categorie: 'Achat véhicule',
     readTime: '5 min',
+    updatedAt: '10 juillet 2026',
+    updatedAtISO: '2026-07-10',
     hasPage: true,
   },
   {
@@ -75,6 +86,8 @@ export const articles = [
     accent: '#5E7CA8',
     categorie: 'International',
     readTime: '5 min',
+    updatedAt: '3 juin 2026',
+    updatedAtISO: '2026-06-03',
     hasPage: true,
   },
   {
@@ -88,6 +101,8 @@ export const articles = [
     accent: '#7E9B79',
     categorie: 'Prêt de véhicule',
     hasPage: true,
+    updatedAt: '3 juin 2026',
+    updatedAtISO: '2026-06-03',
   },
   {
     slug: 'assurance-temporaire-convoyage-professionnel',
@@ -98,6 +113,8 @@ export const articles = [
     accent: '#B0703F',
     categorie: 'Pro & convoyage',
     hasPage: true,
+    updatedAt: '3 juin 2026',
+    updatedAtISO: '2026-06-03',
   },
   {
     slug: 'assurance-temporaire-rouler-en-attendant-carte-grise',
@@ -108,6 +125,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '4 min',
+    updatedAt: '12 juillet 2026',
+    updatedAtISO: '2026-07-12',
     hasPage: true,
   },
   {
@@ -119,6 +138,8 @@ export const articles = [
     accent: '#8A6B9E',
     categorie: 'Essai & achat',
     hasPage: true,
+    updatedAt: '10 juillet 2026',
+    updatedAtISO: '2026-07-10',
   },
   {
     slug: 'assurance-temporaire-resilie-par-assureur',
@@ -131,6 +152,8 @@ export const articles = [
     accent: '#C2705A',
     categorie: 'Résiliation',
     readTime: '5 min',
+    updatedAt: '23 juin 2026',
+    updatedAtISO: '2026-06-23',
     hasPage: true,
   },
   {
@@ -144,6 +167,8 @@ export const articles = [
     accent: '#6E92A8',
     categorie: 'Utilitaire',
     readTime: '5 min',
+    updatedAt: '23 juin 2026',
+    updatedAtISO: '2026-06-23',
     hasPage: true,
   },
   {
@@ -157,6 +182,8 @@ export const articles = [
     accent: '#C98A3C',
     categorie: 'Achat véhicule',
     readTime: '6 min',
+    updatedAt: '11 juillet 2026',
+    updatedAtISO: '2026-07-11',
     hasPage: true,
   },
   {
@@ -170,6 +197,8 @@ export const articles = [
     accent: '#8E86A6',
     categorie: 'Succession',
     readTime: '5 min',
+    updatedAt: '23 juin 2026',
+    updatedAtISO: '2026-06-23',
     hasPage: true,
   },
   {
@@ -183,6 +212,8 @@ export const articles = [
     accent: '#B05C3A',
     categorie: 'Urgence',
     readTime: '6 min',
+    updatedAt: '12 juillet 2026',
+    updatedAtISO: '2026-07-12',
     hasPage: true,
   },
   {
@@ -196,6 +227,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '6 min',
+    updatedAt: '13 juillet 2026',
+    updatedAtISO: '2026-07-13',
     hasPage: true,
   },
   {
@@ -209,6 +242,8 @@ export const articles = [
     accent: '#A9643D',
     categorie: 'Malus',
     readTime: '6 min',
+    updatedAt: '11 juillet 2026',
+    updatedAtISO: '2026-07-11',
     hasPage: true,
   },
   {
@@ -222,6 +257,8 @@ export const articles = [
     accent: '#5E7CA8',
     categorie: 'Attestation',
     readTime: '6 min',
+    updatedAt: '12 juillet 2026',
+    updatedAtISO: '2026-07-12',
     hasPage: true,
   },
   {
@@ -235,6 +272,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '6 min',
+    updatedAt: '12 juillet 2026',
+    updatedAtISO: '2026-07-12',
     hasPage: true,
   },
   {
@@ -248,6 +287,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Prix & tarifs',
     readTime: '6 min',
+    updatedAt: '13 juillet 2026',
+    updatedAtISO: '2026-07-13',
     hasPage: true,
   },
   {
@@ -261,6 +302,8 @@ export const articles = [
     accent: '#9E97B5',
     categorie: 'Carte grise',
     readTime: '6 min',
+    updatedAt: '13 juillet 2026',
+    updatedAtISO: '2026-07-13',
     hasPage: true,
   },
   {
@@ -274,6 +317,8 @@ export const articles = [
     accent: '#4F8FA6',
     categorie: 'Jeune conducteur',
     readTime: '6 min',
+    updatedAt: '14 juillet 2026',
+    updatedAtISO: '2026-07-14',
     hasPage: true,
   },
   {
@@ -287,6 +332,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '6 min',
+    updatedAt: '14 juillet 2026',
+    updatedAtISO: '2026-07-14',
     hasPage: true,
   },
   {
@@ -300,6 +347,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Prix & tarifs',
     readTime: '7 min',
+    updatedAt: '15 juillet 2026',
+    updatedAtISO: '2026-07-15',
     hasPage: true,
   },
   {
@@ -313,6 +362,8 @@ export const articles = [
     accent: '#9E97B5',
     categorie: 'Carte grise',
     readTime: '7 min',
+    updatedAt: '15 juillet 2026',
+    updatedAtISO: '2026-07-15',
     hasPage: true,
   },
   {
@@ -326,6 +377,8 @@ export const articles = [
     accent: '#C9A84C',
     categorie: 'Carte grise',
     readTime: '7 min',
+    updatedAt: '30 juillet 2026',
+    updatedAtISO: '2026-07-30',
     hasPage: true,
   },
   {
@@ -339,6 +392,8 @@ export const articles = [
     accent: '#5E7CA8',
     categorie: 'International',
     readTime: '8 min',
+    updatedAt: '4 août 2026',
+    updatedAtISO: '2026-08-04',
     hasPage: true,
   },
 ];

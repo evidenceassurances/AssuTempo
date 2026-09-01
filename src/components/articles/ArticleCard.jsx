@@ -113,7 +113,13 @@ function ArticleCard({ article }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-subtle)' }}>
         <ShieldCheck size={13} color="var(--gold)" strokeWidth={2} style={{ flexShrink: 0 }} />
         <span>
-          {article.updatedAt ? `Mis à jour le ${article.updatedAt} · ` : ''}
+          {article.updatedAt ? (
+            <>
+              Mis à jour le{' '}
+              <time dateTime={article.updatedAtISO}>{article.updatedAt}</time>
+              {' · '}
+            </>
+          ) : null}
           {minutes} min · Vérifié
         </span>
       </div>
