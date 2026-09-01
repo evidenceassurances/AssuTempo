@@ -32,6 +32,7 @@ export const CLUSTERS = {
       'controle-sans-assurance-risques-amende',
       'assurance-temporaire-attestation-immediate',
       'assurance-auto-temporaire-immediate-en-ligne',
+      'assurance-auto-temporaire-nuit-dimanche',
     ],
     money: { to: '/guichet-de-nuit', label: 'Le Guichet de Nuit, 21h à 9h et dimanche' },
   },

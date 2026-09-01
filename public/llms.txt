@@ -125,3 +125,7 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Assurance auto étranger en France : UE, carte verte ou frontière**
   https://assutempo.fr/articles/assurance-auto-etranger-france
   Trois régimes selon le pays d'immatriculation du véhicule : UE/EEE (assurance d'origine), pays de la carte verte internationale (carte verte du pays d'origine), ou aucun des deux (assurance frontière obligatoire, 30 ou 90 jours renouvelable une fois, article R211-24 du code des assurances). Résidence transférée en France : 1 mois pour immatriculer (article R322-5 du code de la route). Permis hors UE/EEE valable 1 an après l'installation, échange possible sous réserve d'un accord de réciprocité, droit de timbre de 40 euros depuis le 12 mai 2026. La carte verte internationale n'a pas disparu : seuls le certificat papier et la vignette pour les véhicules assurés en France ont été supprimés le 1er avril 2024, remplacés par le Fichier des véhicules assurés et le Mémo véhicule assuré.
+
+- **Assurance auto la nuit ou le dimanche : la solution qui existe vraiment**
+  https://assutempo.fr/articles/assurance-auto-temporaire-nuit-dimanche
+  Le tunnel de souscription en ligne classique ferme à 21h en semaine et 20h le samedi. En dehors de ces horaires, et le dimanche sans interruption, le Guichet de Nuit AssuTempo prépare le contrat : devis sous 30 minutes, attestation par email dès le paiement. Mêmes sanctions en cas de contrôle sans assurance, de jour comme de nuit (article L324-2 du code de la route, amende de 500 à 3 750 €).

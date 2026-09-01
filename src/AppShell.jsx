@@ -90,6 +90,7 @@ const ROUTE_TABLE = [
   ['/articles/changement-titulaire-carte-grise', 'ChangementTitulaireCarteGrise'],
   ['/articles/carte-grise-ants-bloquee', 'CarteGriseAntsBloquee'],
   ['/articles/assurance-auto-etranger-france', 'AssuranceAutoEtrangerFrance'],
+  ['/articles/assurance-auto-temporaire-nuit-dimanche', 'AssuranceNuitDimanche'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],

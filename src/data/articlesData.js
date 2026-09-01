@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark, Moon } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -339,6 +339,20 @@ export const articles = [
     accent: '#5E7CA8',
     categorie: 'International',
     readTime: '8 min',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-temporaire-nuit-dimanche',
+    titre: 'Assurance auto la nuit ou le dimanche : la solution qui existe vraiment',
+    extrait:
+      "Besoin d'assurer une voiture la nuit ou un dimanche ? Le tunnel classique ferme à 21h, mais le Guichet de Nuit AssuTempo prend le relais, devis sous 30 minutes.",
+    reponseRapide:
+      "Le tunnel de souscription en ligne classique ferme à 21h en semaine et 20h le samedi. En dehors de ces horaires, et le dimanche sans interruption, le Guichet de Nuit AssuTempo prépare votre contrat : devis sous 30 minutes, attestation par email dès le paiement.",
+    icone: Moon,
+    accent: '#B05C3A',
+    categorie: 'Urgence',
+    readTime: '6 min',
+    updatedAt: '1er septembre 2026',
     hasPage: true,
   },
 ];
