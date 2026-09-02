@@ -73,46 +73,67 @@ const ON_DEMAND = [
 ];
 const ON_DEMAND_BY_ISO = Object.fromEntries(ON_DEMAND.map(c => [c.isoId, c]));
 
-/* ── Pays voisins (frontieres terrestres reelles), limite aux 34 pays couverts.
-   Pour les iles et enclaves sans frontiere terrestre dans la liste (Chypre,
-   Malte, Islande, Irlande, Royaume-Uni), la liste est courte et complementee
-   par un lien vers /assurance-internationale (cf. HORS_CARTE_STANDARD). */
-const NEIGHBORS = {
-  allemagne: ['france', 'belgique', 'pays-bas', 'luxembourg', 'autriche'],
-  andorre: ['france', 'espagne'],
-  autriche: ['allemagne', 'italie', 'suisse', 'hongrie', 'republique-tcheque'],
-  belgique: ['france', 'allemagne', 'pays-bas', 'luxembourg'],
-  'bosnie-herzegovine': ['croatie', 'montenegro'],
-  bulgarie: ['roumanie', 'grece'],
-  chypre: ['grece'],
-  croatie: ['slovenie', 'hongrie', 'bosnie-herzegovine', 'montenegro'],
-  danemark: ['allemagne', 'suede'],
-  espagne: ['france', 'portugal', 'andorre'],
-  estonie: ['lettonie'],
-  finlande: ['suede', 'norvege'],
-  france: ['espagne', 'belgique', 'allemagne', 'suisse', 'italie', 'andorre'],
-  grece: ['bulgarie', 'chypre'],
-  hongrie: ['autriche', 'slovaquie', 'roumanie', 'croatie', 'slovenie'],
-  irlande: ['royaume-uni'],
-  islande: [],
-  italie: ['france', 'suisse', 'autriche', 'slovenie'],
-  lettonie: ['estonie', 'lituanie'],
-  lituanie: ['lettonie', 'pologne'],
-  luxembourg: ['france', 'belgique', 'allemagne'],
-  malte: [],
-  montenegro: ['croatie', 'bosnie-herzegovine'],
-  norvege: ['suede', 'finlande'],
-  'pays-bas': ['allemagne', 'belgique'],
-  pologne: ['allemagne', 'republique-tcheque', 'slovaquie', 'lituanie'],
-  portugal: ['espagne'],
-  'republique-tcheque': ['allemagne', 'autriche', 'pologne', 'slovaquie'],
-  roumanie: ['bulgarie', 'hongrie'],
-  'royaume-uni': ['irlande'],
-  slovaquie: ['republique-tcheque', 'pologne', 'hongrie'],
-  slovenie: ['italie', 'autriche', 'hongrie', 'croatie'],
-  suede: ['norvege', 'finlande', 'danemark'],
-  suisse: ['france', 'allemagne', 'autriche', 'italie'],
+/* Ancre descriptive du bloc voisins : Google lit le texte du lien, pas le
+   contexte autour. "Italie" seul ne dit pas de quoi parle la page d'arrivee,
+   "Assurance temporaire en Italie" si. Les articles definis et les pluriels
+   du francais imposent la table ci-dessous : "en Italie" mais "au Portugal",
+   "aux Pays-Bas", "en Republique tcheque". */
+const ARTICLE_PAYS = {
+  Chypre: 'à', Danemark: 'au', Luxembourg: 'au', Malte: 'à',
+  'Monténégro': 'au', 'Pays-Bas': 'aux', Portugal: 'au', 'Royaume-Uni': 'au',
 };
+const ancreVoisin = (nom) => `Assurance temporaire ${ARTICLE_PAYS[nom] || 'en'} ${nom}`;
+
+/* ── Pays voisins, 6 a 7 par fiche ────────────────────────────────────────
+   Construction en deux temps, verifiable : d'abord les frontieres terrestres
+   reelles limitees aux 34 pays couverts, puis, jusqu'a 6, les pays les plus
+   proches a vol d'oiseau (distance entre les centres deja presents dans
+   countries-index.js). Un dernier passage ajoute une fiche chez ses plus
+   proches voisins tant qu'elle recoit moins de 3 liens entrants, d'ou les
+   listes a 7 : sans lui, 20 fiches sur 34 restaient sous ce seuil et deux
+   iles (Islande, Malte) n'etaient citees nulle part.
+
+   Le graphe resultant est connexe : depuis n'importe quelle fiche, les 33
+   autres sont atteignables de proche en proche. Ne pas editer a la main sans
+   recompter les liens entrants (script de verification : npm run build puis
+   le comptage decrit dans la PR du 2 septembre 2026). */
+const NEIGHBORS = {
+  allemagne:             ['france', 'belgique', 'pays-bas', 'luxembourg', 'autriche', 'republique-tcheque'],
+  andorre:               ['france', 'espagne', 'suisse', 'portugal', 'luxembourg', 'italie'],
+  autriche:              ['allemagne', 'italie', 'suisse', 'hongrie', 'republique-tcheque', 'slovenie'],
+  belgique:              ['france', 'allemagne', 'pays-bas', 'luxembourg', 'suisse', 'royaume-uni'],
+  'bosnie-herzegovine':  ['croatie', 'montenegro', 'slovenie', 'hongrie', 'autriche', 'italie'],
+  bulgarie:              ['roumanie', 'grece', 'montenegro', 'bosnie-herzegovine', 'hongrie', 'croatie', 'chypre'],
+  chypre:                ['grece', 'bulgarie', 'roumanie', 'montenegro', 'bosnie-herzegovine', 'malte'],
+  croatie:               ['slovenie', 'hongrie', 'bosnie-herzegovine', 'montenegro', 'autriche', 'italie'],
+  danemark:              ['allemagne', 'suede', 'pays-bas', 'belgique', 'luxembourg', 'republique-tcheque'],
+  espagne:               ['france', 'portugal', 'andorre', 'suisse', 'belgique', 'luxembourg'],
+  estonie:               ['lettonie', 'lituanie', 'suede', 'finlande', 'pologne', 'danemark'],
+  finlande:              ['suede', 'norvege', 'estonie', 'lettonie', 'lituanie', 'danemark'],
+  france:                ['espagne', 'belgique', 'allemagne', 'suisse', 'italie', 'andorre', 'portugal'],
+  grece:                 ['bulgarie', 'chypre', 'montenegro', 'bosnie-herzegovine', 'malte', 'roumanie'],
+  hongrie:               ['autriche', 'slovaquie', 'roumanie', 'croatie', 'slovenie', 'bosnie-herzegovine'],
+  irlande:               ['royaume-uni', 'pays-bas', 'belgique', 'luxembourg', 'france', 'danemark', 'islande'],
+  islande:               ['norvege', 'irlande', 'royaume-uni', 'suede', 'danemark', 'pays-bas'],
+  italie:                ['france', 'suisse', 'autriche', 'slovenie', 'croatie', 'bosnie-herzegovine', 'malte'],
+  lettonie:              ['estonie', 'lituanie', 'pologne', 'suede', 'finlande', 'danemark'],
+  lituanie:              ['lettonie', 'pologne', 'estonie', 'slovaquie', 'suede', 'republique-tcheque'],
+  luxembourg:            ['france', 'belgique', 'allemagne', 'pays-bas', 'suisse', 'autriche'],
+  malte:                 ['grece', 'italie', 'montenegro', 'bosnie-herzegovine', 'croatie', 'slovenie'],
+  montenegro:            ['croatie', 'bosnie-herzegovine', 'hongrie', 'grece', 'bulgarie', 'slovenie'],
+  norvege:               ['suede', 'finlande', 'danemark', 'estonie', 'lettonie', 'lituanie', 'islande'],
+  'pays-bas':            ['allemagne', 'belgique', 'luxembourg', 'danemark', 'royaume-uni', 'suisse'],
+  pologne:               ['allemagne', 'republique-tcheque', 'slovaquie', 'lituanie', 'hongrie', 'lettonie'],
+  portugal:              ['espagne', 'andorre', 'france', 'suisse', 'irlande', 'belgique'],
+  'republique-tcheque':  ['allemagne', 'autriche', 'pologne', 'slovaquie', 'slovenie', 'hongrie'],
+  roumanie:              ['bulgarie', 'hongrie', 'slovaquie', 'montenegro', 'bosnie-herzegovine', 'croatie', 'chypre'],
+  'royaume-uni':         ['irlande', 'pays-bas', 'belgique', 'luxembourg', 'danemark', 'allemagne', 'islande'],
+  slovaquie:             ['republique-tcheque', 'pologne', 'hongrie', 'autriche', 'croatie', 'slovenie'],
+  slovenie:              ['italie', 'autriche', 'hongrie', 'croatie', 'bosnie-herzegovine', 'republique-tcheque'],
+  suede:                 ['norvege', 'finlande', 'danemark', 'estonie', 'lettonie', 'lituanie'],
+  suisse:                ['france', 'allemagne', 'autriche', 'italie', 'luxembourg', 'belgique'],
+};
+
 /* Iles/enclaves sans acces routier direct depuis la liste : le bloc "pays
    voisins" y ajoute un lien vers /assurance-internationale. */
 const HORS_CARTE_STANDARD = new Set(['chypre', 'malte', 'islande', 'irlande', 'royaume-uni']);
@@ -357,7 +378,7 @@ function CountryPanel({ country }) {
               margin: '0 0 12px',
             }}
           >
-            Pays voisins couverts
+            {HORS_CARTE_STANDARD.has(slug) ? 'Destinations proches couvertes' : 'Pays voisins couverts'}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {(NEIGHBORS[slug] || []).map((nSlug) => {
@@ -374,7 +395,8 @@ function CountryPanel({ country }) {
                     background: 'var(--glass)', border: '1px solid var(--glass-border)',
                   }}
                 >
-                  {neighbor.flag} {neighbor.nom}
+                  <CountryFlag code={neighbor.code} size={16} />
+                  {ancreVoisin(neighbor.nom)}
                 </Link>
               );
             })}
