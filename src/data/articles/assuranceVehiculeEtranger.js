@@ -178,7 +178,24 @@ export const articleData = {
       type: 'text',
       heading: "Le retour d'un véhicule acheté à l'étranger",
       paragraphs: [
-        "Si vous rapatriez un véhicule acheté à l'étranger, vous pouvez être assuré dès l'étranger, le jour de l'achat ou la veille du rapatriement, pour le ramener légalement. Ensuite, vous disposez de 30 jours pour l'immatriculer en France (contrôle technique si le véhicule a plus de 4 ans, quitus fiscal, demande sur l'ANTS). Une plaque provisoire WW peut alors être délivrée pour la transition.",
+        [
+          "Si vous rapatriez un véhicule acheté à l'étranger, vous pouvez être assuré dès l'étranger, le jour de l'achat ou la veille du rapatriement, pour le ramener légalement. Ensuite, vous disposez de 30 jours pour l'immatriculer en France (contrôle technique si le véhicule a plus de 4 ans, quitus fiscal, demande sur l'ANTS). Une plaque provisoire WW peut alors être délivrée pour la transition.",
+        ],
+        [
+          "Les achats se concentrent sur quelques marchés voisins, et le trajet de retour se prépare pays par pays : ",
+          { to: '/carte/allemagne', texte: 'Allemagne' },
+          ', ',
+          { to: '/carte/belgique', texte: 'Belgique' },
+          ', ',
+          { to: '/carte/pays-bas', texte: 'Pays-Bas' },
+          ', ',
+          { to: '/carte/italie', texte: 'Italie' },
+          ', ',
+          { to: '/carte/espagne', texte: 'Espagne' },
+          ', ',
+          { to: '/carte/luxembourg', texte: 'Luxembourg' },
+          '. Chaque fiche indique ce qui est exigé sur place, vignette et péages compris, avant de reprendre la route vers la frontière.',
+        ],
       ],
       relatedLink: {
         text: "Assurer un véhicule acheté chez un particulier",

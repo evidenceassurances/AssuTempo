@@ -237,7 +237,12 @@ function lastmodFor(route) {
 function sitemapMeta(route) {
   if (route === '/' || route === '/tarification') return { changefreq: 'weekly', priority: '1.0' };
   if (route.startsWith('/articles/')) return { changefreq: 'monthly', priority: '0.7' };
-  if (route.startsWith('/carte/')) return { changefreq: 'yearly', priority: '0.6' };
+  /* Fiches pays : elles portaient la priorite la plus basse du site (0.6) et
+     changefreq yearly, sur les pages precisement signalees "Detectee,
+     actuellement non indexee" par la Search Console le 2 septembre 2026. Le
+     sitemap ne force aucun crawl, mais rien ne sert de leur donner le signal
+     le plus faible du site quand l'objectif est de les faire explorer. */
+  if (route.startsWith('/carte/')) return { changefreq: 'monthly', priority: '0.7' };
   if (route === '/cookies' || route === '/conditions-generales') return { changefreq: 'yearly', priority: '0.3' };
   // Pages de contenu et commerciales : /faq, /articles, /qui-sommes-nous,
   // /carte, /carte-grise, /assurance-internationale.

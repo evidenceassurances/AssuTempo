@@ -24,6 +24,29 @@ import DecisionSplit from './DecisionSplit';
 import { articles } from '../data/articlesData';
 import { getClusterFor } from '../data/articleClusters';
 
+/* ─── Paragraphe : texte simple ou suite de fragments ───
+   Un paragraphe est soit une chaine, soit un tableau melangeant des chaines et
+   des objets { to, texte } rendus en <Link> (donc en vrai <a href> dans le HTML
+   prerendu). C'est le seul moyen de poser un lien AU FIL du texte : les liens
+   `relatedLink` existants sont des boutons de fin de section, que Google lit
+   comme de la navigation, pas comme une citation contextuelle. */
+function ParagrapheContenu({ contenu }) {
+  if (!Array.isArray(contenu)) return contenu;
+  return contenu.map((frag, i) =>
+    typeof frag === 'string' ? (
+      frag
+    ) : (
+      <Link
+        key={i}
+        to={frag.to}
+        style={{ color: 'var(--gold)', textDecoration: 'underline', textUnderlineOffset: 3 }}
+      >
+        {frag.texte}
+      </Link>
+    ),
+  );
+}
+
 /* ─── Motion wrapper that respects prefers-reduced-motion ─── */
 function Reveal({ children, delay = 0, style }) {
   const reduce = useReducedMotion();
@@ -140,7 +163,7 @@ function RenderSection({ section }) {
                   lineHeight: 1.8,
                 }}
               >
-                {p}
+                <ParagrapheContenu contenu={p} />
               </p>
             ))}
             {section.relatedLink && (
