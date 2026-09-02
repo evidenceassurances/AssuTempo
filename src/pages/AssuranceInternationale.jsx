@@ -11,6 +11,9 @@ import {
 import Footer from '../components/Footer';
 import GlobeInternational from '../components/GlobeInternational';
 import Flag from '../components/ui/Flag';
+/* Index leger des 34 pays du contrat standard (slug, nom, code drapeau).
+   Le contenu redactionnel complet reste dans le chunk de la page Carte. */
+import { COUNTRIES_INDEX } from '../data/countries-index';
 import { fadeUp } from '../animations';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackEvent } from '../lib/analytics';
@@ -1602,6 +1605,94 @@ function AssuranceInternationale() {
       {/* Formulaire : l'experience de devis (globe + parcours horizontal) */}
       <section ref={formSectionRef} style={{ background: 'var(--bg)' }}>
         <DevisForm initialPays={paysFromUrl?.nom} />
+      </section>
+
+      {/* Les 34 pays du contrat standard. Cette page traite les destinations
+          hors carte verte, qui passent par un devis manuel : beaucoup de
+          visiteurs y arrivent alors que leur destination est deja couverte
+          en souscription directe. La grille leur evite un aller-retour, et
+          c'est le seul endroit du site, hors Home et cluster pays, ou les 34
+          fiches sont toutes liees. */}
+      <section style={{ background: 'var(--bg-2)', padding: '64px 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.4rem, 2.8vw, 1.9rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: 'var(--text)',
+            margin: '0 0 12px',
+            textAlign: 'center',
+          }}>
+            Votre destination est peut-être déjà couverte
+          </h2>
+          <p style={{
+            fontSize: 15.5,
+            color: 'var(--text-muted)',
+            lineHeight: 1.7,
+            margin: '0 auto 28px',
+            maxWidth: 720,
+            textAlign: 'center',
+          }}>
+            Ces 34 pays sont couverts par le contrat temporaire classique, souscrit
+            en ligne avec attestation immédiate, sans passer par le formulaire
+            ci-dessus. Chaque fiche détaille les règles locales : vignette, péages,
+            équipements exigés à bord.
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9, justifyContent: 'center' }}>
+            {COUNTRIES_INDEX.map((c) => (
+              <Link
+                key={c.slug}
+                to={`/carte/${c.slug}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 7,
+                  padding: '8px 14px',
+                  background: 'var(--glass)',
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: 999,
+                  fontSize: 13,
+                  color: 'var(--text-muted)',
+                  textDecoration: 'none',
+                  transition: 'border-color 0.2s, background 0.2s, color 0.2s',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.5)';
+                  e.currentTarget.style.background = 'var(--gold-glow)';
+                  e.currentTarget.style.color = 'var(--text)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--glass-border)';
+                  e.currentTarget.style.background = 'var(--glass)';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                }}
+              >
+                <Flag code={c.code} size={16} />
+                {c.nom}
+              </Link>
+            ))}
+          </div>
+
+          <p style={{ textAlign: 'center', margin: '26px 0 0' }}>
+            <Link
+              to="/carte"
+              className="btn-glass"
+              style={{
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '10px 20px',
+                fontSize: 14,
+              }}
+            >
+              Voir la carte des 34 pays
+              <ArrowRight size={14} strokeWidth={2} />
+            </Link>
+          </p>
+        </div>
       </section>
 
       <Footer />

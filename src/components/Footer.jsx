@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail } from 'lucide-react';
 import CrescentMoon from './ui/CrescentMoon';
+/* Index leger (slug, nom, code drapeau) : ~1 KB, jamais le contenu
+   redactionnel des 34 pays, qui reste dans le chunk de la page Carte. */
+import { COUNTRIES_INDEX } from '../data/countries-index';
 
 /* Le footer porte TOUTES les destinations, y compris celles retirees du header
    (FAQ, Qui sommes-nous) : elles restent accessibles aux visiteurs comme aux
@@ -14,6 +17,18 @@ const navLinks = [
   { label: 'Carte grise', href: '/carte-grise' },
   { label: 'Qui sommes-nous ?', href: '/qui-sommes-nous' },
 ];
+
+/* Colonne Destinations : 8 fiches pays presentes sur TOUTES les pages du site.
+   C'est le seul lien vers /carte/<slug> qui ne depende ni de la Home ni du
+   cluster pays lui-meme : sans lui, ces fiches n'etaient atteignables que
+   depuis 36 pages sur 80. Les 26 autres restent a un clic, via /carte. */
+const DESTINATIONS = [
+  'italie', 'suisse', 'portugal', 'pays-bas',
+  'autriche', 'pologne', 'royaume-uni', 'croatie',
+];
+const paysFooter = DESTINATIONS
+  .map((slug) => COUNTRIES_INDEX.find((c) => c.slug === slug))
+  .filter(Boolean);
 
 const colLabel = {
   fontSize: 11,
@@ -134,8 +149,8 @@ function Footer() {
           margin: '0 auto',
           padding: '0 32px',
           display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr',
-          gap: 48,
+          gridTemplateColumns: '1.6fr 1fr 1fr 1fr',
+          gap: 40,
           position: 'relative',
         }}
         className="footer-grid"
@@ -182,7 +197,21 @@ function Footer() {
           </nav>
         </div>
 
-        {/* Col 3 - Contact */}
+        {/* Col 3 - Destinations. Ancres au nom du pays : dans une colonne
+            intitulee Destinations, "Italie" est deja une ancre descriptive,
+            et huit fois "Assurance temporaire en ..." rendrait la colonne
+            illisible. Le lien final ouvre les 34. */}
+        <div>
+          <span style={colLabel}>Destinations</span>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {paysFooter.map((c) => (
+              <FooterLink key={c.slug} to={`/carte/${c.slug}`}>{c.nom}</FooterLink>
+            ))}
+            <FooterLink to="/carte">Les 34 pays couverts</FooterLink>
+          </nav>
+        </div>
+
+        {/* Col 4 - Contact */}
         <div>
           <span style={colLabel}>Contact</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -269,6 +298,12 @@ function Footer() {
       </div>
 
       <style>{`
+        @media (max-width: 1080px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 36px !important;
+          }
+        }
         @media (max-width: 768px) {
           .footer-grid {
             grid-template-columns: 1fr !important;
