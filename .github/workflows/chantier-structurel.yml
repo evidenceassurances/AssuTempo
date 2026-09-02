@@ -1,0 +1,99 @@
+name: Chantier structurel AssuTempo
+
+# Un chantier d'infrastructure SEO par run, deux fois par semaine, sur les serveurs GitHub.
+# Chaîne : ce workflow -> branche draft/... -> PR -> workflow Gate (merge auto) -> Vercel.
+
+on:
+  schedule:
+    # Lundi et vendredi à 16:23 UTC = 18:23 Paris (heure d'été). Minute décalée volontairement :
+    # GitHub retarde ou abandonne les crons planifiés pile à l'heure ronde (forte charge).
+    - cron: '23 16 * * 1,5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write       # OBLIGATOIRE : l'action echange un jeton OIDC contre son jeton GitHub App
+
+concurrency:
+  group: chantier-structurel
+  cancel-in-progress: false
+
+jobs:
+  chantier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Exécuter le chantier avec Claude Code
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: '--max-turns 80 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
+          prompt: |
+            Tu es le chantier structurel d'AssuTempo (assutempo.fr — Evidence Assurances,
+            ORIAS 20005719). Tu tournes seul dans un runner GitHub Actions : personne ne te
+            répond, ne pose aucune question, va au bout et ouvre la pull request.
+
+            RÈGLES PERMANENTES : lis d'abord CLAUDE.md à la racine du dépôt. Elles priment sur
+            ce prompt en cas de conflit.
+
+            UN SEUL CHANTIER PAR RUN, dans cet ordre. Lis .claude/chantiers-state.md pour savoir
+            où tu en es (crée le fichier s'il n'existe pas, en partant du chantier 1) :
+
+            1. DÉFENSE DE MARQUE (urgent) — 3 pages/renforcements qui verrouillent les requêtes
+               de marque face aux homonymes assu-tempo.fr, assutempo.com, mon-assurance-tempo.fr,
+               assurance-tempo.eu, assur-tempo.com : page « AssuTempo, c'est qui », mentions
+               légales et identité de courtier bien lisibles, page comparant clairement l'offre
+               réelle. Objectif : qu'aucune requête contenant la marque ne renvoie ailleurs.
+            2. RÉPARATION DE L'HÉRITAGE — les 6 URLs héritées cassées doivent répondre
+               correctement (301 vers la page qui les remplace, ou page restaurée) :
+               /faire-sa-carte-grise, /assurance-auto-temporaire-1-jour,
+               /le-certificat-provisoire-dimmatriculation-plaques-ww,
+               /liste-des-situations-necessitant-une-assurance-temporaire,
+               /importer-exporter-un-vehicule-etranger,
+               /assurance-temporaire-vehicule-utilitaire. Vérifie aussi le sitemap, le doublon
+               /quisommesnous vs /qui-sommes-nous, et la page /sample-page à supprimer.
+            3. PAGES LOCALES 94 — pages de proximité crédibles et non dupliquées (Alfortville,
+               Créteil, Maisons-Alfort, Vitry, Ivry, Charenton…), chacune avec un contenu propre :
+               fourrières et garages du secteur, démarches locales, horaires du guichet de nuit.
+               Jamais de gabarit copié-collé avec le nom de ville changé.
+            4. MAILLAGE INTERNE — liens contextuels entre articles et pages de service, hubs de
+               cluster, fil d'Ariane. Jamais vers les URLs héritées cassées tant que le chantier 2
+               n'est pas terminé.
+            5. HUB FAQ — regrouper les questions récurrentes en un hub structuré, avec balisage
+               FAQPage, et renvoyer vers les articles détaillés.
+            Puis reboucle sur 1 en réévaluant ce qui reste faible.
+
+            MÉTHODE
+            - Avant d'agir, vérifie l'état réel : explore le dépôt, et utilise WebFetch sur
+              assutempo.fr pour constater ce qui est déjà en ligne. Ne refais pas un chantier
+              déjà fait — mets alors à jour .claude/chantiers-state.md et passe au suivant.
+            - Faits vérifiés et datés (service-public.fr, legifrance.gouv.fr, ants.gouv.fr).
+              LEXIQUE : la « carte verte » n'existe plus depuis le 01/04/2024 (Mémo Véhicule
+              Assuré / FVA) ; durées de 1 à 90 jours ; angle unique « le seul courtier avec un
+              Guichet de Nuit 21h-9h et le dimanche ».
+            - Respecte EXACTEMENT les conventions du dépôt : copie la structure d'une page
+              existante récente, enregistre la nouvelle page dans le routage, l'index et le
+              sitemap comme le sont ses voisines.
+
+            AVANT LA PR
+            - npm ci, puis npm run lint, puis npm run build. Corrige ce que ton chantier casse.
+            - Mets à jour .claude/chantiers-state.md : chantier traité, ce qui a été fait, ce qui
+              reste dans ce chantier, et le prochain chantier à prendre.
+
+            LIVRAISON — OUVRE LA PULL REQUEST TOI-MÊME
+            - Crée une branche draft/chantier-<numéro>-<courte-description> (le préfixe draft/
+              est obligatoire : c'est lui que le workflow Gate surveille), commite, pousse, puis
+              ouvre la PR vers la branche par défaut avec la commande gh (token déjà présent dans
+              l'environnement, variable GH_TOKEN).
+            - Titre : « Chantier <numéro> : <description> ». Description : ce qui a été fait,
+              ce qui reste, résultat du build. Ne merge jamais toi-même : le Gate décide, et
+              Ayoub garde son veto avec le label hold.
