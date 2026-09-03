@@ -42,6 +42,7 @@ import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireC
 import CarteGriseAntsBloquee from './pages/articles/CarteGriseAntsBloquee';
 import AssuranceAutoEtrangerFrance from './pages/articles/AssuranceAutoEtrangerFrance';
 import AssuranceNuitDimanche from './pages/articles/AssuranceNuitDimanche';
+import AssuranceTemporaire1Jour from './pages/articles/AssuranceTemporaire1Jour';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
@@ -90,6 +91,7 @@ const PAGES = {
   CarteGriseAntsBloquee,
   AssuranceAutoEtrangerFrance,
   AssuranceNuitDimanche,
+  AssuranceTemporaire1Jour,
   CarteGriseService,
   RoulezLegalApresAchat,
   AssuranceTemporaireUtilitaire,

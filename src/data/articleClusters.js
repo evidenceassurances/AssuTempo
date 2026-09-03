@@ -53,6 +53,7 @@ export const CLUSTERS = {
       'assurance-temporaire-malus',
       'assurance-temporaire-resilie-par-assureur',
       'assurance-auto-temporaire-1-mois',
+      'assurance-auto-temporaire-1-jour',
       'prix-assurance-auto-temporaire',
     ],
     money: { to: '/tarification', label: 'Obtenir mon devis' },
