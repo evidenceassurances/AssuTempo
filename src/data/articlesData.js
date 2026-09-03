@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark, Moon } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark, Moon, Clock } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -409,6 +409,21 @@ export const articles = [
     readTime: '6 min',
     updatedAt: '1er septembre 2026',
     updatedAtISO: '2026-09-01',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-temporaire-1-jour',
+    titre: 'Assurance auto temporaire 1 jour : prix, délais et souscription',
+    extrait:
+      "Assurance auto temporaire 1 jour : prix indicatif, documents nécessaires et souscription en ligne en 5 minutes. Attestation immédiate, RC obligatoire dès la sortie.",
+    reponseRapide:
+      "Une assurance auto temporaire 1 jour couvre un véhicule pendant 24 heures pleines, responsabilité civile obligatoire incluse. Chez AssuTempo, comptez environ 15 à 20 euros, tarif fixe affiché avant paiement. L'attestation arrive par email en 5 minutes après la souscription en ligne.",
+    icone: Clock,
+    accent: '#C9A84C',
+    categorie: 'Prix & tarifs',
+    readTime: '6 min',
+    updatedAt: '3 septembre 2026',
+    updatedAtISO: '2026-09-03',
     hasPage: true,
   },
 ];

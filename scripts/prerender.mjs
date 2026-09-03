@@ -61,6 +61,7 @@ const ROUTES = [
   '/articles/carte-grise-ants-bloquee',
   '/articles/assurance-auto-etranger-france',
   '/articles/assurance-auto-temporaire-nuit-dimanche',
+  '/articles/assurance-auto-temporaire-1-jour',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -147,6 +148,7 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/carte-grise-ants-bloquee':                          'src/data/articles/carteGriseAntsBloquee.js',
   '/articles/assurance-auto-etranger-france':                    'src/data/articles/assuranceAutoEtrangerFrance.js',
   '/articles/assurance-auto-temporaire-nuit-dimanche':           'src/data/articles/assuranceNuitDimanche.js',
+  '/articles/assurance-auto-temporaire-1-jour':                   'src/data/articles/assuranceTemporaire1Jour.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -349,6 +351,7 @@ const ROUTE_MODULES = {
   '/articles/carte-grise-ants-bloquee':                          'src/pages/articles/CarteGriseAntsBloquee.jsx',
   '/articles/assurance-auto-etranger-france':                    'src/pages/articles/AssuranceAutoEtrangerFrance.jsx',
   '/articles/assurance-auto-temporaire-nuit-dimanche':           'src/pages/articles/AssuranceNuitDimanche.jsx',
+  '/articles/assurance-auto-temporaire-1-jour':                   'src/pages/articles/AssuranceTemporaire1Jour.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',

@@ -91,6 +91,7 @@ const ROUTE_TABLE = [
   ['/articles/carte-grise-ants-bloquee', 'CarteGriseAntsBloquee'],
   ['/articles/assurance-auto-etranger-france', 'AssuranceAutoEtrangerFrance'],
   ['/articles/assurance-auto-temporaire-nuit-dimanche', 'AssuranceNuitDimanche'],
+  ['/articles/assurance-auto-temporaire-1-jour', 'AssuranceTemporaire1Jour'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
