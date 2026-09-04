@@ -54,6 +54,8 @@ import CGV from './pages/CGV';
 import AssuranceInternationale from './pages/AssuranceInternationale';
 import GuichetDeNuit from './pages/GuichetDeNuit';
 import Urgence from './pages/Urgence';
+import ImporterExporterVehiculeEtranger from './pages/legacy/ImporterExporterVehiculeEtranger';
+import ListeSituationsAssuranceTemporaire from './pages/legacy/ListeSituationsAssuranceTemporaire';
 import NotFound from './pages/NotFound';
 
 const PAGES = {
@@ -103,6 +105,8 @@ const PAGES = {
   AssuranceInternationale,
   GuichetDeNuit,
   Urgence,
+  ImporterExporterVehiculeEtranger,
+  ListeSituationsAssuranceTemporaire,
   NotFound,
 };
 

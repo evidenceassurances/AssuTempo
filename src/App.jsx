@@ -50,6 +50,8 @@ const IMPORTERS = {
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),
   GuichetDeNuit:              () => import('./pages/GuichetDeNuit'),
   Urgence:                    () => import('./pages/Urgence'),
+  ImporterExporterVehiculeEtranger: () => import('./pages/legacy/ImporterExporterVehiculeEtranger'),
+  ListeSituationsAssuranceTemporaire: () => import('./pages/legacy/ListeSituationsAssuranceTemporaire'),
   NotFound:                   () => import('./pages/NotFound'),
 };
 

@@ -76,11 +76,18 @@ const ROUTES = [
   '/assurance-internationale',
   '/guichet-de-nuit',
   '/urgence',
+  '/importer-exporter-un-vehicule-etranger',
+  '/liste-des-situations-necessitant-une-assurance-temporaire',
 ];
 
-// Routes prerendues mais volontairement absentes du sitemap : /urgence est
-// une simple redirection client-side vers /guichet-de-nuit (noindex).
-const SITEMAP_EXCLUDE = new Set(['/urgence']);
+// Routes prerendues mais volontairement absentes du sitemap : /urgence et les
+// deux URL heritees ci-dessous sont de simples redirections client-side
+// (noindex) vers leur equivalent actuel.
+const SITEMAP_EXCLUDE = new Set([
+  '/urgence',
+  '/importer-exporter-un-vehicule-etranger',
+  '/liste-des-situations-necessitant-une-assurance-temporaire',
+]);
 
 // Les 3 pages locales partagent le meme composant (VilleLocale.jsx) : leur
 // vrai contenu vit dans src/data/villesLocales.js, source a suivre pour le
