@@ -3,7 +3,7 @@
 > Tenu par le pilote automatique (missions @claude). Un chantier par run,
 > dans l'ordre du prompt. Mis à jour à chaque run.
 
-## Chantier 1 — Défense de marque : en grande partie déjà fait, incrément posé le 7 septembre 2026
+## Chantier 1: Défense de marque : en grande partie déjà fait, incrément posé le 7 septembre 2026
 
 Constat au démarrage de ce run (vérifié en ligne, pas seulement dans le code) :
 - `/avis-et-garanties` existe déjà en prod depuis le 12 août 2026 (PR #41) : identité légale
@@ -38,7 +38,7 @@ Reste dans ce chantier (pour un prochain passage, ou décision Ayoub) :
   sourcing sur des offres tierces non vérifiables en continu ; le choix a été de comparer
   l'identité légale, vérifiable et stable, plutôt que l'offre commerciale, changeante).
 
-## Chantier 2 — Réparation de l'héritage : déjà fait, vérifié en ligne le 7 septembre 2026
+## Chantier 2: Réparation de l'héritage : déjà fait, vérifié en ligne le 7 septembre 2026
 
 Les 6 URL héritées listées dans le prompt répondent toutes correctement en prod :
 - `/faire-sa-carte-grise` : 301 vers `/carte-grise` (vercel.json)
@@ -52,16 +52,16 @@ Vérifié aussi : `/quisommesnous` vers `/qui-sommes-nous` (301, vercel.json) ; 
 donne 410 Gone via `api/gone.js` (testé en direct : HTTP 410 confirmé) ; sitemap propre (aucune
 de ces URL n'y figure). Rien à faire ici pour l'instant.
 
-## Chantier 3 — Pages locales 94 : PAS COMMENCÉ
+## Chantier 3: Pages locales 94 : PAS COMMENCÉ
 
 Aucune page de proximité (Alfortville, Créteil, Maisons-Alfort, Vitry, Ivry, Charenton…)
 n'existe. Seules 3 pages villes existent (`VilleLocale.jsx` : Paris, Lyon, Marseille, routes
 `/assurance-temporaire-carte-grise-{paris,lyon,marseille}`), aucune n'est dans le 94.
 **Prochain chantier à prendre.**
 
-## Chantier 4 — Maillage interne : pas audité spécifiquement dans ce run
+## Chantier 4: Maillage interne : pas audité spécifiquement dans ce run
 
-## Chantier 5 — Hub FAQ : `/faq` existe déjà (page dédiée + FAQPage), pas audité pour un hub
+## Chantier 5: Hub FAQ : `/faq` existe déjà (page dédiée + FAQPage), pas audité pour un hub
 structuré supplémentaire dans ce run.
 
 ---
