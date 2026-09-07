@@ -5,7 +5,7 @@ import { PagesContext } from '../AppShell';
 import { jsonLd } from '../lib/seo';
 import { faqHomeItems } from '../data/faqHome';
 
-/* FAQPage : reprend mot pour mot les 7 questions/reponses affichees dans la
+/* FAQPage : reprend mot pour mot les questions/reponses affichees dans la
    section FAQ de la Home (components/Faq.jsx, meme module de donnees).
    Jamais de contenu invisible dans ce schema. */
 const JSONLD_FAQ = {

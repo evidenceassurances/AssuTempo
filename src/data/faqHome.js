@@ -36,4 +36,8 @@ export const faqHomeItems = [
     q: 'Peut-on souscrire la nuit, le dimanche ou un jour férié ?',
     a: "Oui, par le Guichet de Nuit AssuTempo. La souscription en ligne classique est ouverte du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h. En dehors de ces heures, le Guichet de Nuit prend le relais : vous déposez votre demande avec vos photos, un conseiller prépare votre contrat, et le devis part dans les 30 minutes. Le dimanche, la permanence est assurée toute la journée.",
   },
+  {
+    q: 'AssuTempo (assutempo.fr) est-il lié à assutempo.com ou à d\'autres sites au nom proche ?',
+    a: "Non. AssuTempo, sur ce site assutempo.fr, est édité par Evidence Assurances, courtier en assurance immatriculé à l'ORIAS sous le numéro 20005719, vérifiable sur orias.fr. D'autres sites au nom similaire (assutempo.com, assu-tempo.fr, assur-tempo.com, entre autres) sont exploités par des sociétés distinctes, sans lien capitalistique ni juridique avec Evidence Assurances. Le détail de chacun figure sur notre page avis et garanties.",
+  },
 ];
