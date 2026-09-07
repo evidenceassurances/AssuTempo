@@ -36,22 +36,22 @@ const EDITEUR = {
 /* ── Reponse en bref (GEO) : composant des articles, reutilise tel quel ──── */
 const CAPSULE = {
   answer:
-    "AssuTempo est édité par Evidence Assurances, courtier en assurance immatriculé à l'ORIAS sous le numéro 20005719, vérifiable directement sur orias.fr. Plusieurs sites au nom proche (assutempo.com, assu-tempo.fr, assu-tempo.com, assur-tempo.com, mon-assurance-tempo.fr, tempo-assurance.com) existent sur ce marché de niche, mais ne sont affiliés ni juridiquement ni capitalistiquement à AssuTempo. Avant toute souscription, quel que soit le site visité, vérifiez toujours le numéro ORIAS et la dénomination sociale exacte de l'intermédiaire.",
+    "AssuTempo est édité par Evidence Assurances, courtier en assurance immatriculé à l'ORIAS sous le numéro 20005719, vérifiable directement sur orias.fr. Plusieurs sites au nom proche (assutempo.com, assu-tempo.fr, assu-tempo.com, assur-tempo.com, mon-assurance-tempo.fr, tempo-assurance.com et assurance-tempo.eu) existent sur ce marché de niche, mais ne sont affiliés ni juridiquement ni capitalistiquement à AssuTempo. Avant toute souscription, quel que soit le site visité, vérifiez toujours le numéro ORIAS et la dénomination sociale exacte de l'intermédiaire.",
   facts: [
     {
       anchor: 'ORIAS 20005719',
       text: "Evidence Assurances (dénomination ORIAS : EA Agency) est immatriculée courtier en assurance depuis le 28 août 2020, vérifiable sur le registre public orias.fr.",
     },
     {
-      anchor: '6 sites homonymes identifiés',
-      text: "assutempo.com, assu-tempo.fr, assu-tempo.com, assur-tempo.com, mon-assurance-tempo.fr et tempo-assurance.com sont des sites actifs, exploités par d'autres sociétés (vérifié le 30 juillet 2026).",
+      anchor: '6 sociétés homonymes identifiées',
+      text: "assutempo.com, assu-tempo.fr, assu-tempo.com, assur-tempo.com, mon-assurance-tempo.fr et MCJ Courtage (tempo-assurance.com et assurance-tempo.eu) sont des sites actifs, exploités par d'autres sociétés (vérifié le 7 septembre 2026).",
     },
     {
       anchor: '34 pays couverts',
       text: "La couverture proposée par AssuTempo (Evidence Assurances) s'étend à 34 pays européens, avec attestation immédiate de 1 à 90 jours.",
     },
   ],
-  updated: '30 juillet 2026',
+  updated: '7 septembre 2026',
 };
 
 /* ── Ce que couvre une souscription AssuTempo (aucun prix, cf. regles) ────── */
@@ -62,10 +62,15 @@ const GARANTIES = [
   { Icon: Clock, title: 'Durée choisie au jour près', body: "De 1 à 90 jours, avec possibilité de renouvellement : la couverture s'arrête exactement à la date choisie, sans reconduction imposée." },
 ];
 
-/* ── Homonymes identifies par recherche web le 30 juillet 2026 ────────────
+/* ── Homonymes identifies par recherche web les 30 juillet et 7 septembre
+   2026 ────────────────────────────────────────────────────────────────────
    Constat factuel de similarite de nom uniquement : aucun lien capitalistique
    ou juridique n'est affirme, conformement a la consigne. Chaque societe est
-   distincte et responsable de son propre contenu et de sa propre immatriculation. */
+   distincte et responsable de son propre contenu et de sa propre immatriculation.
+   tempo-assurance.com et assurance-tempo.eu partagent les memes mentions
+   legales (MCJ Courtage, ORIAS 26008651, Abeilhan) : une seule societe, deux
+   noms de domaine, regroupes dans une seule carte pour ne pas la compter deux
+   fois parmi les societes distinctes. */
 const HOMONYMES = [
   {
     domaine: 'assutempo.com',
@@ -93,9 +98,9 @@ const HOMONYMES = [
     note: "Assurance temporaire et transfrontalière pour véhicules variés.",
   },
   {
-    domaine: 'tempo-assurance.com',
-    editeur: 'MCJ Courtage',
-    note: "Assurance temporaire et provisoire pour véhicules variés.",
+    domaine: 'tempo-assurance.com / assurance-tempo.eu',
+    editeur: 'MCJ Courtage, ORIAS n° 26008651 (Abeilhan)',
+    note: "Deux noms de domaine pour la même société : assurance temporaire et provisoire pour véhicules variés.",
   },
 ];
 
@@ -338,8 +343,9 @@ function AvisEtGaranties() {
             </h2>
             <p style={{ fontSize: 15, color: 'var(--text-muted)', maxWidth: 680, margin: '0 auto', lineHeight: 1.7 }}>
               Plusieurs sites au nom très proche existent sur le marché de l&apos;assurance auto
-              temporaire. Voici ceux identifiés par recherche web le 30 juillet 2026 : chacun est
-              une société distincte, sans lien connu avec AssuTempo (Evidence Assurances).
+              temporaire. Voici ceux identifiés par recherche web les 30 juillet et 7 septembre
+              2026 : chacun est une société distincte, sans lien connu avec AssuTempo (Evidence
+              Assurances).
             </p>
           </div>
 
