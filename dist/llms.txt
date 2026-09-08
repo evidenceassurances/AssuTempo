@@ -133,3 +133,7 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Assurance auto temporaire 1 jour : prix, délais et souscription**
   https://assutempo.fr/articles/assurance-auto-temporaire-1-jour
   Couverture de 24 heures pleines à partir de l'heure indiquée sur le contrat, responsabilité civile obligatoire incluse (article L211-1 du Code des assurances, sans durée minimale légale). Prix indicatif chez AssuTempo (assutempo.fr) : 15 à 20 euros. Permis et carte grise suffisent, sans relevé d'information, attestation par email en 5 minutes.
+
+- **Assurance auto pour un voyage à l'étranger : ce qu'il faut vérifier**
+  https://assutempo.fr/articles/assurance-auto-voyage-etranger
+  Dans la quasi-totalité de l'Europe, la plaque d'immatriculation française suffit à prouver l'assurance, sans document à présenter. Sept pays font exception (Maroc, Tunisie, Turquie, Albanie, Azerbaïdjan, Moldavie, Macédoine du Nord) : ils exigent la carte internationale d'assurance automobile, héritière de l'ancienne carte verte, à demander à l'assureur avant le départ.

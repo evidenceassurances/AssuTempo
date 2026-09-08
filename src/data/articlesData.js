@@ -1,4 +1,4 @@
-import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark, Moon, Clock } from 'lucide-react';
+import { Handshake, Globe, Gauge, FileText, Users, Truck, AlertTriangle, ParkingSquare, ShieldAlert, ScrollText, Car, Percent, MailCheck, FileSignature, Tag, Timer, GraduationCap, AlertOctagon, Calendar, UserCheck, Lock, Landmark, Moon, Clock, Compass } from 'lucide-react';
 
 /* Champs optionnels supportes par la page /articles (Centre de reponses).
    Tous additifs : laisser absent ne casse rien, la page applique des replis.
@@ -424,6 +424,21 @@ export const articles = [
     readTime: '6 min',
     updatedAt: '3 septembre 2026',
     updatedAtISO: '2026-09-03',
+    hasPage: true,
+  },
+  {
+    slug: 'assurance-auto-voyage-etranger',
+    titre: "Assurance auto pour un voyage à l'étranger : ce qu'il faut vérifier",
+    extrait:
+      "Partir en voiture à l'étranger ? Pays couverts sans formalité, pays où la carte internationale d'assurance reste exigée : ce qu'il faut vérifier avant le départ.",
+    reponseRapide:
+      "Dans la quasi-totalité de l'Europe, la plaque d'immatriculation française suffit à prouver l'assurance. Sept pays font exception (Maroc, Tunisie, Turquie, Albanie, Azerbaïdjan, Moldavie, Macédoine du Nord) : ils exigent la carte internationale d'assurance automobile, à demander à l'assureur avant le départ.",
+    icone: Compass,
+    accent: '#5E7CA8',
+    categorie: 'International',
+    readTime: '7 min',
+    updatedAt: '8 septembre 2026',
+    updatedAtISO: '2026-09-08',
     hasPage: true,
   },
 ];
