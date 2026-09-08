@@ -38,12 +38,17 @@ function generic(nom, code, centreGeo) {
           'La souscription prend moins de 5 minutes. Votre attestation est disponible ' +
           'instantanément, valable pour circuler sans attendre.',
       },
+      /* Jamais de texte de chantier ici : les 34 pays ont desormais un
+         override, mais si un 35e pays etait ajoute sans contenu redige,
+         c'est CE texte qui partirait en production. Il doit donc rester
+         vrai et publiable en l'etat. */
       {
-        icon: 'Info',
-        titre: 'Spécificités pratiques',
+        icon: 'FileText',
+        titre: 'Documents à présenter',
         texte:
-          'À compléter, conseils locaux, documents recommandés au voyage, ' +
-          'particularités du contrôle routier en ' + nom + ', etc.',
+          'En cas de contrôle en ' + nom + ', présentez le permis de conduire, ' +
+          'le certificat d\'immatriculation du véhicule et votre carte internationale ' +
+          'd\'assurance automobile AssuTempo.',
       },
     ],
   };
@@ -1529,6 +1534,115 @@ const MONTENEGRO_OVERRIDE = {
   ],
 };
 
+/* ─── Contenu spécifique Autriche ─────────────────────────────────────────
+   Ajouté le 09/09/2026. L'Autriche et la Pologne étaient les 2 seules fiches
+   sans override : elles servaient le gabarit generic(), dont la 4e carte
+   portait le texte de chantier "À compléter, conseils locaux...". Ce
+   placeholder était en production et se retrouvait dans le HTML prérendu,
+   d'où 9 % de contenu unique sur ces 2 fiches contre 26 % en moyenne. */
+const AUTRICHE_OVERRIDE = {
+  title: `Assurance temporaire Autriche | Vignette & Alpes - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Autriche dès le 1er jour : RC auto, carte verte, attestation en 5 min. Vignette autoroutière, cols alpins et équipement hiver expliqués.`,
+  h1: `Assurance temporaire en Autriche : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Autriche dès le 1er jour : séjour au Tyrol, traversée vers l'Italie ou l'Europe centrale, conduite d'un véhicule étranger. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays couverts.`,
+  points: [
+    {
+      icon: 'Sticker',
+      titre: `Vignette autoroutière obligatoire`,
+      texte: `Une vignette est exigée sur autoroutes et voies rapides, en version autocollante ou numérique liée à la plaque. Elle se prend avant d'entrer sur le réseau, pas après.`,
+    },
+    {
+      icon: 'Mountain',
+      titre: `Cols et tunnels alpins payants en plus`,
+      texte: `Le Brenner, les tunnels des Tauern et de l'Arlberg, plusieurs routes de col se paient séparément de la vignette. À intégrer au budget d'un trajet vers l'Italie.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Équipement hiver du 1er novembre au 15 avril`,
+      texte: `Sur cette période, les pneus hiver sont imposés dès que la route est enneigée, verglacée ou couverte de neige fondue. Les chaînes peuvent être exigées sur certains axes de montagne.`,
+    },
+    {
+      icon: 'Wine',
+      titre: `Alcool : 0,1 g/L pour les permis récents`,
+      texte: `Le seuil général est de 0,5 g/L, abaissé à 0,1 g/L pendant les deux premières années de permis et pour les véhicules lourds.`,
+    },
+    {
+      icon: 'Siren',
+      titre: `Corridor de secours obligatoire`,
+      texte: `En cas de ralentissement sur autoroute, les véhicules doivent former un couloir libre entre les files pour laisser passer les secours. L'omission est sanctionnée.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Grand pays de transit`,
+      texte: `L'Autriche relie l'Allemagne à l'Italie, à la Slovénie et à la Hongrie. On la traverse souvent en quelques heures, mais la vignette est exigée dès le premier kilomètre.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il une vignette pour traverser l'Autriche ?`,
+      a: `Oui, dès l'entrée sur une autoroute ou une voie rapide, même pour une simple traversée. Elle existe en version numérique liée à la plaque. C'est un droit de circulation, distinct de l'assurance couverte par votre carte verte AssuTempo.`,
+    },
+    {
+      q: `La carte verte est-elle valable en Autriche ?`,
+      a: `Oui. L'Autriche fait partie des 34 pays couverts par votre carte internationale d'assurance automobile AssuTempo, avec la responsabilité civile active dès le premier jour du contrat.`,
+    },
+  ],
+};
+
+/* ─── Contenu spécifique Pologne ────────────────────────────────────────── */
+const POLOGNE_OVERRIDE = {
+  title: `Assurance temporaire Pologne | Import & convoyage - AssuTempo`,
+  metaDescription:
+    `Roulez couvert en Pologne dès le 1er jour : RC auto, carte verte, attestation en 5 min. Alcool à 0,2 g/L, feux 24h/24 et péages autoroutiers expliqués.`,
+  h1: `Assurance temporaire en Pologne : roulez couvert dès le 1er jour`,
+  intro:
+    `AssuTempo couvre la responsabilité civile automobile obligatoire en Pologne dès le 1er jour : rapatriement d'un véhicule acheté sur place, visite familiale, transit vers les pays baltes. Votre carte internationale d'assurance (carte verte) vaut ici comme dans les 33 autres pays couverts.`,
+  points: [
+    {
+      icon: 'Wine',
+      titre: `Alcool : 0,2 g/L, plus strict qu'en France`,
+      texte: `Le seuil polonais est fixé à 0,2 g/L contre 0,5 g/L en France. La marge est trop faible pour un verre avant de reprendre le volant.`,
+    },
+    {
+      icon: 'Sun',
+      titre: `Feux allumés toute l'année`,
+      texte: `Les feux de croisement sont obligatoires de jour comme de nuit, en toute saison, sur l'ensemble du réseau routier polonais.`,
+    },
+    {
+      icon: 'Ticket',
+      titre: `Péages autoroutiers et e-TOLL`,
+      texte: `Une partie des autoroutes est concédée et se paie à des barrières. Le reste du réseau national relève du système électronique e-TOLL, distinct de l'assurance.`,
+    },
+    {
+      icon: 'ShoppingCart',
+      titre: `Achat et rapatriement de véhicule`,
+      texte: `La Pologne est l'un des grands réservoirs d'occasion d'Europe. Le retour vers la France demande environ deux jours de route, à couvrir dès la remise des clés.`,
+    },
+    {
+      icon: 'Snowflake',
+      titre: `Pas de pneus hiver imposés, mais des hivers rudes`,
+      texte: `Aucune obligation légale de pneus hiver, à la différence de plusieurs pays voisins. Les conditions de janvier et février justifient pourtant un équipement adapté.`,
+    },
+    {
+      icon: 'Route',
+      titre: `Couloir vers les pays baltes`,
+      texte: `La Via Baltica traverse le nord-est du pays vers la Lituanie. C'est le seul accès terrestre aux pays baltes depuis l'Union européenne.`,
+    },
+  ],
+  faq: [
+    {
+      q: `Faut-il rouler feux allumés en Pologne ?`,
+      a: `Oui, les feux de croisement sont obligatoires de jour comme de nuit et toute l'année. C'est l'un des manquements les plus relevés chez les conducteurs étrangers, et il est sanctionné sur le champ.`,
+    },
+    {
+      q: `La carte verte couvre-t-elle la Pologne ?`,
+      a: `Oui. La Pologne fait partie des 34 pays couverts par votre carte internationale d'assurance automobile AssuTempo, avec la responsabilité civile active dès le premier jour du contrat.`,
+    },
+  ],
+};
+
 /* ─── Micro-info tooltip carte (5 mots max) ──────────────────────────────
    Renseignée uniquement quand le contenu de page ci-dessus mentionne déjà
    clairement une vignette ou un péage. Aucune invention : pays absent de
@@ -1563,6 +1677,11 @@ const INFO_CLE = {
   "andorre":            `Aucun péage`,
   "bosnie-herzegovine": `Péage sur l'A1`,
   "montenegro":         `Tunnel de Sozina payant`,
+  "autriche":           `Vignette autoroutière obligatoire`,
+  "pologne":            `Péage sur autoroutes concédées`,
+  "pays-bas":           `Autoroutes gratuites`,
+  "malte":              `Aucun péage`,
+  "islande":            `Tunnel de Vaðlaheiði payant`,
 };
 
 /* ─── Construction de la liste et des indexes ────────────────────────────── */
@@ -1603,6 +1722,8 @@ export const COUNTRIES = RAW.map(([slug, isoId, nom, code, center]) => {
     slug === 'andorre'             ? ANDORRE_OVERRIDE             :
     slug === 'bosnie-herzegovine'  ? BOSNIEHERZEGOVINE_OVERRIDE   :
     slug === 'montenegro'          ? MONTENEGRO_OVERRIDE          :
+    slug === 'autriche'            ? AUTRICHE_OVERRIDE            :
+    slug === 'pologne'             ? POLOGNE_OVERRIDE             :
     {};
 
   return {

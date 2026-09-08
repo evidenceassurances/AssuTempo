@@ -47,3 +47,29 @@ export const COUNTRIES_RAW = [
 export const COUNTRIES_INDEX = COUNTRIES_RAW.map(
   ([slug, isoId, nom, code, center]) => ({ slug, isoId, nom, code, center }),
 );
+
+/* ─── Ancre descriptive d'un lien vers une fiche pays ──────────────────────
+   Google lit le texte du lien, pas le contexte autour : "Italie" seul ne dit
+   pas de quoi parle la page d'arrivee, "Assurance temporaire en Italie" si.
+   Les articles definis et les pluriels du francais imposent la table
+   ci-dessous : "en Italie" mais "au Portugal", "aux Pays-Bas", "a Malte".
+   Vit ici, dans le module leger, pour que toute page du site puisse s'en
+   servir sans tirer le contenu redactionnel des 34 fiches. */
+const ARTICLE_PAYS = {
+  Chypre: 'à', Danemark: 'au', Luxembourg: 'au', Malte: 'à',
+  'Monténégro': 'au', 'Pays-Bas': 'aux', Portugal: 'au', 'Royaume-Uni': 'au',
+};
+
+export const ancrePays = (nom) => `Assurance temporaire ${ARTICLE_PAYS[nom] || 'en'} ${nom}`;
+
+/* ─── "pour {le pays}" ─────────────────────────────────────────────────────
+   Le CTA des fiches affichait "Obtenir mon devis pour Autriche" sur les 34
+   pages : correct pour Chypre et Malte, faux partout ailleurs. Meme table de
+   genres que ci-dessus, elision devant voyelle. */
+export const pourPays = (nom) => {
+  const art = ARTICLE_PAYS[nom];
+  if (art === 'à') return `pour ${nom}`;                    /* Chypre, Malte */
+  if (art === 'au') return `pour le ${nom}`;                /* Portugal, Danemark... */
+  if (art === 'aux') return `pour les ${nom}`;              /* Pays-Bas */
+  return /^[AEIOUY]/.test(nom) ? `pour l'${nom}` : `pour la ${nom}`;
+};
