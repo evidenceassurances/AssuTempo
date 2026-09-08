@@ -84,7 +84,7 @@ export const articleData = {
   seo: {
     title: "Assurance auto voyage à l'étranger : le guide",
     description:
-      "Partir en voiture à l'étranger ? Pays couverts sans formalité, pays où la carte internationale d'assurance reste exigée : ce qu'il faut vérifier avant le départ.",
+      "Partir en voiture à l'étranger ? Pays couverts sans formalité, pays où la carte internationale d'assurance reste exigée avant de rouler.",
     canonical: 'https://assutempo.fr/articles/assurance-auto-voyage-etranger',
     jsonLd,
   },
