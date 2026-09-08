@@ -5,6 +5,7 @@ import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
 import { jsonLd } from '../lib/seo';
+import { COUNTRIES_INDEX, ancrePays } from '../data/countries-index';
 
 const faqs = [
   {
@@ -187,6 +188,55 @@ function Faq() {
             </m.div>
           ))}
         </m.div>
+      </section>
+
+      {/* Les 34 fiches pays, en liens reels et en ancres descriptives.
+          La FAQ etait l'une des 3 pages editoriales du site a n'envoyer AUCUN
+          lien vers /carte/<slug>, alors qu'elle est bien crawlee et qu'elle
+          traite justement de la couverture a l'etranger. Liste statique, dans
+          le HTML des le chargement, sans repli ni accordeon. */}
+      <section style={{ background: 'var(--bg-2)', padding: '72px 24px' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <p style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', margin: '0 0 14px' }}>
+            COUVERTURE PAR PAYS
+          </p>
+          <h2 style={{ fontSize: 'clamp(22px, 3.2vw, 30px)', fontWeight: 800, color: '#fff', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+            Les règles locales, pays par pays
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.75, margin: '0 0 28px', maxWidth: 620 }}>
+            Péage ou vignette, seuil d'alcoolémie, sens de circulation, accès depuis la France :
+            chaque fiche détaille ce qui change une fois la frontière passée.
+          </p>
+          <nav
+            aria-label="Fiches pays"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: '10px 24px',
+            }}
+          >
+            {COUNTRIES_INDEX.map((c) => (
+              <Link
+                key={c.slug}
+                to={`/carte/${c.slug}`}
+                style={{
+                  fontSize: 14,
+                  color: 'var(--text-muted)',
+                  textDecoration: 'none',
+                  padding: '4px 0',
+                  borderBottom: '1px solid transparent',
+                }}
+              >
+                {ancrePays(c.nom)}
+              </Link>
+            ))}
+          </nav>
+          <p style={{ margin: '26px 0 0', fontSize: 14 }}>
+            <Link to="/carte" style={{ color: 'var(--gold-light)', textDecoration: 'none', fontWeight: 600 }}>
+              Voir la carte des 34 pays couverts
+            </Link>
+          </p>
+        </div>
       </section>
     </>
   );

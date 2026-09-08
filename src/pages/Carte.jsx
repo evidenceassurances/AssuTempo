@@ -47,6 +47,8 @@ import {
   SLUG_TO_COUNTRY,
   ISO_TO_SLUG,
 } from '../data/countries-content';
+import { PAYS_PROFIL, PAYS_SEO, lecturesPays } from '../data/countries-profile';
+import { ancrePays, pourPays } from '../data/countries-index';
 
 /* ── Constantes géo ──────────────────────────────────────────────────────── */
 const GEO_URL = '/countries-110m.json';
@@ -73,16 +75,7 @@ const ON_DEMAND = [
 ];
 const ON_DEMAND_BY_ISO = Object.fromEntries(ON_DEMAND.map(c => [c.isoId, c]));
 
-/* Ancre descriptive du bloc voisins : Google lit le texte du lien, pas le
-   contexte autour. "Italie" seul ne dit pas de quoi parle la page d'arrivee,
-   "Assurance temporaire en Italie" si. Les articles definis et les pluriels
-   du francais imposent la table ci-dessous : "en Italie" mais "au Portugal",
-   "aux Pays-Bas", "en Republique tcheque". */
-const ARTICLE_PAYS = {
-  Chypre: 'à', Danemark: 'au', Luxembourg: 'au', Malte: 'à',
-  'Monténégro': 'au', 'Pays-Bas': 'aux', Portugal: 'au', 'Royaume-Uni': 'au',
-};
-const ancreVoisin = (nom) => `Assurance temporaire ${ARTICLE_PAYS[nom] || 'en'} ${nom}`;
+/* Ancre descriptive des liens pays : table partagee, voir countries-index.js */
 
 /* ── Pays voisins, 6 a 7 par fiche ────────────────────────────────────────
    Construction en deux temps, verifiable : d'abord les frontieres terrestres
@@ -238,10 +231,174 @@ function Reveal({ children, delay = 0 }) {
   );
 }
 
+/* ── FAQ d'une fiche pays ─────────────────────────────────────────────────
+   Une seule source pour l'affichage ET le JSON-LD FAQPage (regle CLAUDE.md
+   du 10 juillet : jamais de schema construit sur autre chose que ce qui est
+   reellement affiche). Les 2 questions historiques de countries-content.js
+   sont completees par les 2 questions de profil, soit 4 par fiche. */
+function faqPays(country) {
+  const base = country.faq || [];
+  const plus = (PAYS_PROFIL[country.slug] && PAYS_PROFIL[country.slug].faqPlus) || [];
+  return [...base, ...plus];
+}
+
+/* ── Fiche d'identite routiere ────────────────────────────────────────────
+   Bloc de donnees factuelles, different sur chacune des 34 fiches. C'est le
+   contenu le plus court a lire et le plus facile a citer pour un moteur ou
+   un assistant : 6 lignes, une valeur par ligne, aucune phrase de remplissage.
+   Statique, present des le premier paint, jamais replie. */
+const IDENTITE_LIGNES = [
+  { cle: 'statut',   label: 'Statut',            Icone: Globe },
+  { cle: 'monnaie',  label: 'Monnaie',           Icone: Receipt },
+  { cle: 'conduite', label: 'Sens de circulation', Icone: ArrowRightLeft },
+  { cle: 'alcool',   label: 'Alcool au volant',  Icone: Wine },
+  { cle: 'peage',    label: 'Péage',             Icone: Ticket },
+  { cle: 'urgence',  label: 'Appel d’urgence', Icone: Phone },
+];
+
+function FicheIdentite({ nom, identite }) {
+  if (!identite) return null;
+  return (
+    <div
+      style={{
+        border: '1px solid var(--gold-border)',
+        background: 'var(--gold-glow)',
+        borderRadius: 14,
+        padding: '20px 22px',
+        margin: '0 0 32px',
+        maxWidth: 780,
+      }}
+    >
+      <p
+        style={{
+          fontSize: 11, fontWeight: 700, color: 'var(--gold)',
+          textTransform: 'uppercase', letterSpacing: '0.14em', margin: '0 0 14px',
+        }}
+      >
+        {nom} en bref
+      </p>
+      <dl style={{ margin: 0, display: 'grid', gap: 10 }}>
+        {IDENTITE_LIGNES.map(({ cle, label, Icone }) => (
+          identite[cle] ? (
+            <div
+              key={cle}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 168px) 1fr',
+                gap: 12,
+                alignItems: 'start',
+                fontSize: 13.5,
+                lineHeight: 1.6,
+              }}
+            >
+              <dt style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text-muted)', margin: 0 }}>
+                <Icone size={14} strokeWidth={1.6} style={{ color: 'var(--gold)', flexShrink: 0 }} aria-hidden="true" />
+                {label}
+              </dt>
+              <dd style={{ margin: 0, color: 'var(--text)' }}>{identite[cle]}</dd>
+            </div>
+          ) : null
+        ))}
+      </dl>
+      <p style={{ margin: '14px 0 0', fontSize: 12, color: 'var(--text-subtle)', lineHeight: 1.6 }}>
+        Repères pratiques vérifiés en septembre 2026. La signalisation locale fait toujours foi,
+        et certaines règles varient selon la région ou l’ancienneté du permis.
+      </p>
+    </div>
+  );
+}
+
+/* ── Deux paragraphes propres au pays ─────────────────────────────────────
+   Usages reels de la formule courte, puis acces depuis la France. Volontairement
+   commercial et geographique, jamais juridique : c'est ce qui permet d'ecrire
+   du texte unique sans prendre de risque YMYL. */
+function BlocProse({ profil }) {
+  if (!profil) return null;
+  const sections = [profil.usages, profil.acces].filter(Boolean);
+  if (sections.length === 0) return null;
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: 18,
+        margin: '0 0 36px',
+      }}
+    >
+      {sections.map((sec) => (
+        <section
+          key={sec.titre}
+          style={{
+            border: '1px solid var(--glass-border)',
+            background: 'var(--glass)',
+            borderRadius: 14,
+            padding: '20px 22px',
+          }}
+        >
+          <h3
+            style={{
+              fontSize: 14.5, fontWeight: 700, color: 'var(--text)',
+              margin: '0 0 10px', letterSpacing: '-0.01em',
+            }}
+          >
+            {sec.titre}
+          </h3>
+          <p style={{ margin: 0, fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8 }}>
+            {sec.texte}
+          </p>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+/* ── FAQ pays, statique ───────────────────────────────────────────────────
+   Volontairement PAS d'accordeon ici. AccordionItem ne monte sa reponse que
+   lorsqu'il est ouvert : les reponses des fiches pays n'ont donc jamais
+   existe dans le HTML prerendu, ni pour un robot, ni pour un lecteur d'ecran,
+   ni avant hydratation. 4 questions courtes ne justifient pas de replier
+   quoi que ce soit. Meme principe que l'AnswerCapsule des articles. */
+function FaqPaysStatique({ items }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <div style={{ marginTop: 32 }}>
+      <p
+        style={{
+          fontSize: 11, fontWeight: 700, color: 'var(--gold)',
+          textTransform: 'uppercase', letterSpacing: '0.14em', margin: '0 0 16px',
+        }}
+      >
+        Questions fréquentes
+      </p>
+      <div style={{ display: 'grid', gap: 18, maxWidth: 780 }}>
+        {items.map((item) => (
+          <div
+            key={item.q}
+            style={{ borderTop: '1px solid var(--glass-border)', paddingTop: 16 }}
+          >
+            <h3
+              style={{
+                margin: '0 0 8px', fontSize: 15, fontWeight: 600,
+                color: 'var(--text)', lineHeight: 1.5,
+              }}
+            >
+              {item.q}
+            </h3>
+            <p style={{ margin: 0, fontSize: 14.5, color: 'var(--text-muted)', lineHeight: 1.8 }}>
+              {item.a}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Panneau pays animé ───────────────────────────────────────────────────── */
 function CountryPanel({ country }) {
-  const [openFaq, setOpenFaq] = useState(null);
-  const { h1, intro, points, code, nom, slug, faq } = country;
+  const { h1, intro, points, code, nom, slug } = country;
+  const profil = PAYS_PROFIL[slug];
+  const faqItems = faqPays(country);
 
   return (
     <m.div
@@ -306,6 +463,11 @@ function CountryPanel({ country }) {
           {intro}
         </m.p>
 
+        {/* Fiche d'identite : donnees factuelles propres a ce pays */}
+        <m.div variants={fadeUp}>
+          <FicheIdentite nom={nom} identite={profil && profil.identite} />
+        </m.div>
+
         {/* Légende catégories */}
         <m.div variants={fadeUp}>
           <PaysLegende />
@@ -324,6 +486,11 @@ function CountryPanel({ country }) {
             <PaysCarte key={i} section={point} index={i} IconComp={ICON_MAP[point.icon] || Info} />
           ))}
         </div>
+
+        {/* Usages reels et acces depuis la France, propres a ce pays */}
+        <m.div variants={fadeUp}>
+          <BlocProse profil={profil} />
+        </m.div>
 
         {/* CTA */}
         <m.div
@@ -344,7 +511,7 @@ function CountryPanel({ country }) {
               overflow: 'hidden',
             }}
           >
-            Obtenir mon devis pour {nom}
+            Obtenir mon devis {pourPays(nom)}
             <ArrowRight size={14} strokeWidth={2} />
           </Link>
           <a
@@ -396,7 +563,7 @@ function CountryPanel({ country }) {
                   }}
                 >
                   <CountryFlag code={neighbor.code} size={16} />
-                  {ancreVoisin(neighbor.nom)}
+                  {ancrePays(neighbor.nom)}
                 </Link>
               );
             })}
@@ -427,31 +594,40 @@ function CountryPanel({ country }) {
           </div>
         </m.div>
 
-        {/* FAQ pays, uniquement si des questions sont disponibles */}
-        {faq && faq.length > 0 && (
-          <m.div variants={fadeUp} style={{ marginTop: 32 }}>
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: 'var(--gold)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.14em',
-                margin: '0 0 4px',
-              }}
-            >
-              Questions fréquentes
-            </p>
-            {faq.map((item, i) => (
-              <AccordionItem
-                key={item.q}
-                item={item}
-                isOpen={openFaq === i}
-                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
-              />
+        {/* Pour aller plus loin : les fiches pays rendent enfin du maillage
+            au cluster editorial, avec une cible qui varie selon l'usage
+            dominant du pays (voir lecturesPays). */}
+        <m.div variants={fadeUp} style={{ marginTop: 32 }}>
+          <p
+            style={{
+              fontSize: 11, fontWeight: 700, color: 'var(--gold)',
+              textTransform: 'uppercase', letterSpacing: '0.14em', margin: '0 0 12px',
+            }}
+          >
+            Pour aller plus loin
+          </p>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 10, maxWidth: 780 }}>
+            {lecturesPays(slug).map((lien) => (
+              <li key={lien.to}>
+                <Link
+                  to={lien.to}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    fontSize: 14, color: 'var(--gold-light)', textDecoration: 'none',
+                  }}
+                >
+                  <ArrowRight size={13} strokeWidth={2} aria-hidden="true" />
+                  {lien.label}
+                </Link>
+              </li>
             ))}
-          </m.div>
-        )}
+          </ul>
+        </m.div>
+
+        {/* FAQ pays : contenu present dans le HTML des le chargement */}
+        <m.div variants={fadeUp}>
+          <FaqPaysStatique items={faqItems} />
+        </m.div>
       </m.div>
     </m.div>
   );
@@ -1392,11 +1568,17 @@ function Carte() {
     return avecAccroche.length <= 60 ? avecAccroche : `${base} | AssuTempo`;
   };
 
+  /* Balises propres au pays quand elles existent ET tiennent dans les plafonds
+     du portique (60 / 155). Sinon, retour au gabarit generique : une balise
+     banale vaut mieux qu'une balise coupee par Google. */
+  const seoPays = selectedCountry ? PAYS_SEO[selectedCountry.slug] : null;
   const seoTitle = selectedCountry
-    ? titrePays(selectedCountry.nom)
+    ? (seoPays && seoPays.title.length <= 60 ? seoPays.title : titrePays(selectedCountry.nom))
     : 'Assurance Temporaire Europe : 34 Pays Couverts | AssuTempo';
   const seoDesc = selectedCountry
-    ? `Assurance temporaire valable en ${selectedCountry.nom} dès le 1er jour : responsabilité civile, règles locales, péages. Attestation immédiate en 5 minutes.`
+    ? (seoPays && seoPays.desc.length <= 155
+        ? seoPays.desc
+        : `Assurance temporaire valable en ${selectedCountry.nom} dès le 1er jour : responsabilité civile, règles locales, péages. Attestation immédiate en 5 minutes.`)
     : "Assurance temporaire valable dans 34 pays européens dès le premier jour. Carte interactive, règles locales, péages et vignettes pays par pays.";
   const canonical = selectedCountry
     ? `https://assutempo.fr/carte/${selectedCountry.slug}`
@@ -1434,6 +1616,21 @@ function Carte() {
         )}
         {!selectedCountry && (
           <script type="application/ld+json">{jsonLd(JSONLD_SUR_DEMANDE)}</script>
+        )}
+        {/* FAQPage de la fiche pays, genere depuis le MEME tableau que le bloc
+            affiche (faqPays) : aucun contenu de schema qui ne soit visible. */}
+        {selectedCountry && faqPays(selectedCountry).length > 0 && (
+          <script type="application/ld+json">
+            {jsonLd({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faqPays(selectedCountry).map((item) => ({
+                '@type': 'Question',
+                name: item.q,
+                acceptedAnswer: { '@type': 'Answer', text: item.a },
+              })),
+            })}
+          </script>
         )}
       </Helmet>
 
