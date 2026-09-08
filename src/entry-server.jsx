@@ -42,6 +42,8 @@ import ChangementTitulaireCarteGrise from './pages/articles/ChangementTitulaireC
 import CarteGriseAntsBloquee from './pages/articles/CarteGriseAntsBloquee';
 import AssuranceAutoEtrangerFrance from './pages/articles/AssuranceAutoEtrangerFrance';
 import AssuranceNuitDimanche from './pages/articles/AssuranceNuitDimanche';
+import AssuranceTemporaire1Jour from './pages/articles/AssuranceTemporaire1Jour';
+import AssuranceVoyageEtranger from './pages/articles/AssuranceVoyageEtranger';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
@@ -53,6 +55,8 @@ import CGV from './pages/CGV';
 import AssuranceInternationale from './pages/AssuranceInternationale';
 import GuichetDeNuit from './pages/GuichetDeNuit';
 import Urgence from './pages/Urgence';
+import ImporterExporterVehiculeEtranger from './pages/legacy/ImporterExporterVehiculeEtranger';
+import ListeSituationsAssuranceTemporaire from './pages/legacy/ListeSituationsAssuranceTemporaire';
 import NotFound from './pages/NotFound';
 
 const PAGES = {
@@ -90,6 +94,8 @@ const PAGES = {
   CarteGriseAntsBloquee,
   AssuranceAutoEtrangerFrance,
   AssuranceNuitDimanche,
+  AssuranceTemporaire1Jour,
+  AssuranceVoyageEtranger,
   CarteGriseService,
   RoulezLegalApresAchat,
   AssuranceTemporaireUtilitaire,
@@ -101,6 +107,8 @@ const PAGES = {
   AssuranceInternationale,
   GuichetDeNuit,
   Urgence,
+  ImporterExporterVehiculeEtranger,
+  ListeSituationsAssuranceTemporaire,
   NotFound,
 };
 

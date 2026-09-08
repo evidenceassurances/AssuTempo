@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { m } from 'framer-motion';
 import {
   ParkingSquare, AlertTriangle, FileText, Lock, Tag,
-  GraduationCap, AlertOctagon, Percent, Truck, ArrowRight,
+  GraduationCap, AlertOctagon, Percent, Truck, ArrowRight, BadgeCheck,
 } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -19,6 +19,7 @@ const GUIDES = [
   { Icon: AlertOctagon, title: "Rouler sans carte grise à son nom", to: '/articles/rouler-sans-carte-grise-a-son-nom' },
   { Icon: Percent, title: 'Assurance et malus', to: '/articles/assurance-temporaire-malus' },
   { Icon: Truck, title: 'Assurance temporaire utilitaire', to: '/assurance-temporaire-utilitaire' },
+  { Icon: BadgeCheck, title: "Vérifier l'identité d'AssuTempo", to: '/avis-et-garanties' },
 ];
 
 function GuidesEtDemarches() {

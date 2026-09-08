@@ -38,6 +38,8 @@ const IMPORTERS = {
   CarteGriseAntsBloquee:       () => import('./pages/articles/CarteGriseAntsBloquee'),
   AssuranceAutoEtrangerFrance: () => import('./pages/articles/AssuranceAutoEtrangerFrance'),
   AssuranceNuitDimanche:      () => import('./pages/articles/AssuranceNuitDimanche'),
+  AssuranceTemporaire1Jour:   () => import('./pages/articles/AssuranceTemporaire1Jour'),
+  AssuranceVoyageEtranger:    () => import('./pages/articles/AssuranceVoyageEtranger'),
   Carte:                      () => import('./pages/Carte'),
   CarteGriseService:          () => import('./pages/CarteGrise'),
   RoulezLegalApresAchat:      () => import('./pages/RoulezLegalApresAchat'),
@@ -49,6 +51,8 @@ const IMPORTERS = {
   AssuranceInternationale:    () => import('./pages/AssuranceInternationale'),
   GuichetDeNuit:              () => import('./pages/GuichetDeNuit'),
   Urgence:                    () => import('./pages/Urgence'),
+  ImporterExporterVehiculeEtranger: () => import('./pages/legacy/ImporterExporterVehiculeEtranger'),
+  ListeSituationsAssuranceTemporaire: () => import('./pages/legacy/ListeSituationsAssuranceTemporaire'),
   NotFound:                   () => import('./pages/NotFound'),
 };
 

@@ -91,6 +91,8 @@ const ROUTE_TABLE = [
   ['/articles/carte-grise-ants-bloquee', 'CarteGriseAntsBloquee'],
   ['/articles/assurance-auto-etranger-france', 'AssuranceAutoEtrangerFrance'],
   ['/articles/assurance-auto-temporaire-nuit-dimanche', 'AssuranceNuitDimanche'],
+  ['/articles/assurance-auto-temporaire-1-jour', 'AssuranceTemporaire1Jour'],
+  ['/articles/assurance-auto-voyage-etranger', 'AssuranceVoyageEtranger'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
@@ -106,6 +108,11 @@ const ROUTE_TABLE = [
   ['/guichet-de-nuit', 'GuichetDeNuit'],
   /* Redirection client-side vers /guichet-de-nuit (noindex, hors sitemap). */
   ['/urgence', 'Urgence'],
+  /* URL heritees de l'ancien site, sans equivalent en 301 (vercel.json est
+     une zone interdite aux missions automatiques) : memes redirections
+     client-side noindex que /urgence, hors sitemap. */
+  ['/importer-exporter-un-vehicule-etranger', 'ImporterExporterVehiculeEtranger'],
+  ['/liste-des-situations-necessitant-une-assurance-temporaire', 'ListeSituationsAssuranceTemporaire'],
   /* Catch-all : toute URL inconnue rend la page 404 (prerendue en
      dist/404.html et servie par Vercel avec le statut 404). */
   ['*', 'NotFound'],

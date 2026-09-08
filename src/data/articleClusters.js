@@ -53,6 +53,7 @@ export const CLUSTERS = {
       'assurance-temporaire-malus',
       'assurance-temporaire-resilie-par-assureur',
       'assurance-auto-temporaire-1-mois',
+      'assurance-auto-temporaire-1-jour',
       'prix-assurance-auto-temporaire',
     ],
     money: { to: '/tarification', label: 'Obtenir mon devis' },
@@ -70,6 +71,7 @@ export const CLUSTERS = {
     members: [
       'assurance-temporaire-vehicule-etranger-france',
       'assurance-auto-etranger-france',
+      'assurance-auto-voyage-etranger',
       { to: '/assurance-internationale', titre: 'Assurance pour rouler hors Europe', Icon: Globe },
       { to: '/carte', titre: 'Les 34 pays couverts en Europe', Icon: Globe },
     ],
