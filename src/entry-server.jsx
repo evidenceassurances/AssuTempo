@@ -44,6 +44,7 @@ import AssuranceAutoEtrangerFrance from './pages/articles/AssuranceAutoEtrangerF
 import AssuranceNuitDimanche from './pages/articles/AssuranceNuitDimanche';
 import AssuranceTemporaire1Jour from './pages/articles/AssuranceTemporaire1Jour';
 import AssuranceVoyageEtranger from './pages/articles/AssuranceVoyageEtranger';
+import ResilierAssuranceVenteVoiture from './pages/articles/ResilierAssuranceVenteVoiture';
 import CarteGriseService from './pages/CarteGrise';
 import RoulezLegalApresAchat from './pages/RoulezLegalApresAchat';
 import AssuranceTemporaireUtilitaire from './pages/AssuranceTemporaireUtilitaire';
@@ -96,6 +97,7 @@ const PAGES = {
   AssuranceNuitDimanche,
   AssuranceTemporaire1Jour,
   AssuranceVoyageEtranger,
+  ResilierAssuranceVenteVoiture,
   CarteGriseService,
   RoulezLegalApresAchat,
   AssuranceTemporaireUtilitaire,

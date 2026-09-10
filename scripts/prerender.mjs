@@ -63,6 +63,7 @@ const ROUTES = [
   '/articles/assurance-auto-temporaire-nuit-dimanche',
   '/articles/assurance-auto-temporaire-1-jour',
   '/articles/assurance-auto-voyage-etranger',
+  '/articles/resilier-assurance-apres-vente-voiture',
   '/carte',
   ...COUNTRY_SLUGS.map(s => `/carte/${s}`),
   '/carte-grise',
@@ -158,6 +159,7 @@ const ARTICLE_DATA_SOURCES = {
   '/articles/assurance-auto-temporaire-nuit-dimanche':           'src/data/articles/assuranceNuitDimanche.js',
   '/articles/assurance-auto-temporaire-1-jour':                   'src/data/articles/assuranceTemporaire1Jour.js',
   '/articles/assurance-auto-voyage-etranger':                     'src/data/articles/assuranceVoyageEtranger.js',
+  '/articles/resilier-assurance-apres-vente-voiture':             'src/data/articles/resilierAssuranceVenteVoiture.js',
 };
 
 /* Sur Vercel, le clone est superficiel (shallow) : les fichiers plus vieux
@@ -362,6 +364,7 @@ const ROUTE_MODULES = {
   '/articles/assurance-auto-temporaire-nuit-dimanche':           'src/pages/articles/AssuranceNuitDimanche.jsx',
   '/articles/assurance-auto-temporaire-1-jour':                   'src/pages/articles/AssuranceTemporaire1Jour.jsx',
   '/articles/assurance-auto-voyage-etranger':                     'src/pages/articles/AssuranceVoyageEtranger.jsx',
+  '/articles/resilier-assurance-apres-vente-voiture':             'src/pages/articles/ResilierAssuranceVenteVoiture.jsx',
   '/carte':                   'src/pages/Carte.jsx',
   '/carte-grise':             'src/pages/CarteGrise.jsx',
   '/roulez-legal-apres-achat': 'src/pages/RoulezLegalApresAchat.jsx',

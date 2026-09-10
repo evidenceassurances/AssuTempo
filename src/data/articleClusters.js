@@ -42,6 +42,7 @@ export const CLUSTERS = {
       'assurance-temporaire-vehicule-proche-decede',
       'assurer-vehicule-achete-chez-particulier',
       'assurance-temporaire-essai-vehicule-avant-achat',
+      'resilier-assurance-apres-vente-voiture',
       { to: '/roulez-legal-apres-achat', titre: 'Roulez légal après un achat de voiture', Icon: Car },
       { to: '/barometre-immatriculations', titre: "Baromètre des immatriculations en France", Icon: FileText },
     ],

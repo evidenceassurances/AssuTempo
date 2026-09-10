@@ -93,6 +93,7 @@ const ROUTE_TABLE = [
   ['/articles/assurance-auto-temporaire-nuit-dimanche', 'AssuranceNuitDimanche'],
   ['/articles/assurance-auto-temporaire-1-jour', 'AssuranceTemporaire1Jour'],
   ['/articles/assurance-auto-voyage-etranger', 'AssuranceVoyageEtranger'],
+  ['/articles/resilier-assurance-apres-vente-voiture', 'ResilierAssuranceVenteVoiture'],
   ['/carte', 'Carte'],
   ['/carte/:pays', 'Carte'],
   ['/carte-grise', 'CarteGriseService'],
