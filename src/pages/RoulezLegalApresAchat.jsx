@@ -452,6 +452,30 @@ function RoulezLegalApresAchat() {
           <Link to="/assurance-temporaire-carte-grise-marseille" style={{ color: 'var(--gold-light)' }}>
             à Marseille
           </Link>
+          , mais aussi dans le Val-de-Marne, à{' '}
+          <Link to="/assurance-temporaire-carte-grise-alfortville" style={{ color: 'var(--gold-light)' }}>
+            Alfortville
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-creteil" style={{ color: 'var(--gold-light)' }}>
+            Créteil
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-vitry-sur-seine" style={{ color: 'var(--gold-light)' }}>
+            Vitry-sur-Seine
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-ivry-sur-seine" style={{ color: 'var(--gold-light)' }}>
+            Ivry-sur-Seine
+          </Link>
+          ,{' '}
+          <Link to="/assurance-temporaire-carte-grise-maisons-alfort" style={{ color: 'var(--gold-light)' }}>
+            Maisons-Alfort
+          </Link>
+          {' '}et{' '}
+          <Link to="/assurance-temporaire-carte-grise-charenton-le-pont" style={{ color: 'var(--gold-light)' }}>
+            Charenton-le-Pont
+          </Link>
           . Pour vérifier qui édite AssuTempo et notre numéro ORIAS, consultez{' '}
           <Link to="/avis-et-garanties" style={{ color: 'var(--gold-light)' }}>
             avis et garanties AssuTempo

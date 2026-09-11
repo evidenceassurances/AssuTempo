@@ -336,6 +336,681 @@ export const VILLES_LOCALES = {
       ],
     },
   },
+
+  /* Lot Val-de-Marne (94), chantier structurel "pages locales 94" : contrairement
+     a Paris/Lyon/Marseille, aucune de ces communes de petite couronne ne publie de
+     fourriere municipale propre (verifie par recherche web le 11 septembre 2026,
+     sites officiels des 6 mairies + prefecture du Val-de-Marne) : le gardiennage
+     releve de prestataires prives agrees PAR SECTEUR par la prefecture du
+     Val-de-Marne (liste des fourrieristes par secteur d'activite, publiee le
+     16/10/2023). Aucune adresse ni horaires de fourriere n'est inventee ici :
+     seuls des points de contact officiels (commissariat, police municipale) sont
+     donnes quand une adresse est confirmee par une source officielle. */
+  'alfortville': {
+    slug: 'alfortville',
+    routePath: '/assurance-temporaire-carte-grise-alfortville',
+    nom: 'Alfortville',
+    breadcrumbName: 'Assurance temporaire et carte grise à Alfortville',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Alfortville',
+    intro:
+      "Une presqu'île entre Seine et Marne, une ZFE qui couvre toute la commune et une carte grise qui ne se traite plus à un guichet : ce qu'il faut savoir pour rouler en règle à Alfortville.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance et carte grise à Alfortville | AssuTempo',
+      description:
+        "ZFE intégrale, fourrière via un prestataire agréé par secteur, carte grise après achat : le guide local à jour pour Alfortville (Val-de-Marne).",
+    },
+    capsule: {
+      answer:
+        "Alfortville occupe une presqu'île entre Seine et Marne, intégralement comprise dans la ZFE Métropole du Grand Paris. En cas d'enlèvement, la commune n'a pas de fourrière municipale propre : comme partout en petite couronne, ce sont des prestataires privés agréés par secteur par la préfecture du Val-de-Marne qui gèrent le gardiennage, la mainlevée s'obtenant en contactant d'abord le commissariat du lieu de l'enlèvement. Pour la carte grise, la démarche passe par l'ANTS ou un professionnel habilité.",
+      facts: [
+        {
+          anchor: "Presqu'île",
+          text: "Alfortville est bâtie sur une presqu'île entre Seine et Marne, jusqu'à leur confluence marquée par le Chinagora (ville d'Alfortville).",
+        },
+        {
+          anchor: 'Intégrale',
+          text: "Alfortville est intégralement comprise dans le périmètre de la ZFE Métropole du Grand Paris, période pédagogique sans sanction reconduite jusqu'au 31 décembre 2026 (annonce du 22 décembre 2025).",
+        },
+        {
+          anchor: '6 novembre 2017',
+          text: 'Date de fermeture nationale des guichets carte grise en préfecture (Plan Préfectures Nouvelle Génération) ; démarche désormais en ligne via l\'ANTS.',
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'Prestataire agréé',
+        title: "pas de fourrière municipale, un secteur géré par un prestataire privé",
+        body: "Comme dans toute la petite couronne, aucune fourrière municipale n'existe à Alfortville : le gardiennage est confié à des sociétés agréées par secteur par la préfecture du Val-de-Marne. Le commissariat d'Alfortville, place Salvador-Allende, ouvert 24h/24, oriente vers le bon site en cas d'enlèvement.",
+        ref: 'Préfecture du Val-de-Marne, liste des fourriéristes par secteur',
+      },
+      {
+        figure: 'ZFE intégrale',
+        title: 'toute la commune est en zone à faibles émissions',
+        body: "La totalité du territoire d'Alfortville, à l'intérieur du périmètre A86, est soumise à la ZFE Métropole du Grand Paris. La Métropole a reconduit sa période pédagogique sans sanction pour toute l'année 2026.",
+        ref: 'Ville d\'Alfortville, Métropole du Grand Paris',
+      },
+      {
+        figure: '1 mois',
+        title: 'pour immatriculer un véhicule d\'occasion après achat',
+        body: "Passé ce délai à compter de la cession, la contravention de 4e classe s'applique, jusqu'à 750 € devant le tribunal.",
+        ref: 'Article R322-5 du code de la route',
+      },
+    ],
+    concretement: {
+      title: 'À Alfortville, concrètement',
+      paragraphs: [
+        "Alfortville est l'une des rares communes de la petite couronne bâties sur une presqu'île complète, resserrée entre les cours de la Seine et de la Marne jusqu'à leur confluence, marquée par la silhouette du Chinagora. Cette géographie fluviale limite le nombre d'axes d'entrée et de sortie du territoire, un point à garder en tête en cas d'immobilisation d'un véhicule le temps d'un contrôle ou d'un achat.",
+        "Le stationnement en voirie y est payant du lundi au vendredi de 9h à 19h, gratuit le week-end, les jours fériés et tout le mois d'août, avec un tarif résident géré par la police municipale. Un stationnement gênant ou un défaut de paiement répété reste le motif le plus courant d'enlèvement sur la commune.",
+        "La ZFE couvrant l'intégralité du territoire, un véhicule Crit'Air 3, 4, 5 ou non classé emprunté ou loué le temps d'un déplacement doit néanmoins rester assuré, la période pédagogique ne suspendant que la sanction liée à la vignette, jamais l'obligation d'assurance.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Alfortville',
+      paragraphs: [
+        "Alfortville ne dispose pas de fourrière municipale propre. Comme dans le reste de la petite couronne, le gardiennage des véhicules enlevés est assuré par des sociétés privées agréées par secteur géographique par la préfecture du Val-de-Marne. La première démarche consiste à contacter le commissariat de police, place Salvador-Allende, ouvert 24h/24, qui indique le site de destination du véhicule.",
+        "Au guichet du prestataire désigné, les documents exigés restent les mêmes que partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans ce dernier document, la restitution reste bloquée : une assurance temporaire souscrite en ligne délivre une attestation immédiate, à toute heure.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Alfortville',
+      paragraphs: [
+        "La préfecture du Val-de-Marne, à Créteil, ne délivre plus de certificats d'immatriculation au guichet depuis la fermeture nationale du 6 novembre 2017. La démarche se fait en ligne sur le site de l'ANTS, ou via un professionnel de l'automobile habilité au SIV, qui peut prendre en charge tout le dossier.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Pendant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler dans la commune, à condition que le véhicule reste assuré.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Alfortville ?',
+        a: "Alfortville n'a pas de fourrière municipale propre : le gardiennage est confié à des sociétés privées agréées par secteur par la préfecture du Val-de-Marne. La première démarche consiste à contacter le commissariat de police, place Salvador-Allende, ouvert 24h/24, qui indique le site exact où le véhicule a été conduit.",
+      },
+      {
+        q: "La ZFE du Grand Paris s'applique-t-elle à toute la commune d'Alfortville ?",
+        a: "Oui, la totalité du territoire d'Alfortville se trouve à l'intérieur du périmètre A86 de la ZFE Métropole du Grand Paris. La Métropole a annoncé le 22 décembre 2025 la reconduction de sa période pédagogique sans sanction jusqu'au 31 décembre 2026 pour les Crit'Air 3, 4, 5 et non classés.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour récupérer un véhicule en fourrière ?',
+        a: "Elle fournit l'attestation d'assurance en cours de validité exigée au guichet du prestataire de gardiennage, mais la mainlevée elle-même s'obtient séparément, en général auprès du commissariat à l'origine de l'enlèvement. Les deux démarches se cumulent avant toute restitution.",
+      },
+      {
+        q: 'Peut-on encore faire une carte grise à la préfecture du Val-de-Marne ?',
+        a: "Non, ce guichet a fermé le 6 novembre 2017 comme dans toute la France. La demande de certificat d'immatriculation passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au Système d'Immatriculation des Véhicules.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Alfortville ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Passé ce délai, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour aller plus loin :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: "comment sortir de fourrière pour défaut d'assurance", href: '/articles/voiture-immobilisee-defaut-assurance' },
+        { text: "combien de jours d'assurance souscrire pour sortir de fourrière", href: '/articles/combien-de-jours-assurance-sortir-fourriere' },
+        { text: "les délais réels d'obtention d'une carte grise", href: '/articles/combien-de-temps-carte-grise' },
+      ],
+    },
+  },
+
+  'creteil': {
+    slug: 'creteil',
+    routePath: '/assurance-temporaire-carte-grise-creteil',
+    nom: 'Créteil',
+    breadcrumbName: 'Assurance temporaire et carte grise à Créteil',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Créteil',
+    intro:
+      "Préfecture du Val-de-Marne, lac artificiel et une ZFE qui ne couvre qu'une partie du territoire : ce qu'il faut savoir pour rouler en règle à Créteil.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance temporaire et carte grise à Créteil | AssuTempo',
+      description:
+        "Préfecture du Val-de-Marne, ZFE partielle, fourrière via un prestataire agréé par secteur : le guide local à jour pour Créteil.",
+    },
+    capsule: {
+      answer:
+        "Créteil est la préfecture du Val-de-Marne, mais son guichet ne délivre plus de cartes grises depuis 2017 : la démarche passe par l'ANTS ou un professionnel habilité, avec un point d'accueil numérique sur place pour se faire aider. Seule la partie du territoire communal située à l'intérieur du périmètre A86 est soumise à la ZFE Métropole du Grand Paris. En cas d'enlèvement, comme ailleurs en petite couronne, aucune fourrière municipale propre n'existe : un prestataire agréé par secteur prend en charge le gardiennage.",
+      facts: [
+        {
+          anchor: '21-29 avenue du Général-de-Gaulle',
+          text: 'Adresse de la préfecture du Val-de-Marne à Créteil, accueil du public uniquement sur rendez-vous (préfecture du Val-de-Marne).',
+        },
+        {
+          anchor: 'Partielle',
+          text: "Seule la portion du territoire de Créteil comprise à l'intérieur du périmètre A86 est soumise à la ZFE Métropole du Grand Paris, l'A86 elle-même étant exclue.",
+        },
+        {
+          anchor: '6 novembre 2017',
+          text: "Date de fermeture nationale des guichets carte grise en préfecture ; celle de Créteil maintient toutefois un point d'accueil numérique sur rendez-vous pour les téléprocédures.",
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'Préfecture du 94',
+        title: 'un guichet administratif majeur, mais plus pour la carte grise',
+        body: "La préfecture du Val-de-Marne, 21-29 avenue du Général-de-Gaulle, reçoit sur rendez-vous et propose un point d'accueil numérique pour aider aux démarches ANTS, mais ne délivre plus aucun certificat d'immatriculation au guichet depuis 2017.",
+        ref: 'Préfecture du Val-de-Marne',
+      },
+      {
+        figure: 'Zone partielle',
+        title: 'la ZFE ne couvre qu\'une partie du territoire crétaillois',
+        body: "Seul le secteur de Créteil situé à l'intérieur du périmètre A86 est concerné par les restrictions Crit'Air de la Métropole du Grand Paris, période pédagogique sans sanction reconduite jusqu'au 31 décembre 2026.",
+        ref: 'Métropole du Grand Paris',
+      },
+      {
+        figure: 'Prestataire agréé',
+        title: 'pas de fourrière municipale propre à Créteil',
+        body: "Comme dans le reste de la petite couronne, le gardiennage des véhicules enlevés est confié à des sociétés privées agréées par secteur par la préfecture du Val-de-Marne, contactable via le commissariat du lieu d'enlèvement.",
+        ref: 'Préfecture du Val-de-Marne, liste des fourriéristes par secteur',
+      },
+    ],
+    concretement: {
+      title: 'À Créteil, concrètement',
+      paragraphs: [
+        "Créteil concentre, sur son territoire, la préfecture du Val-de-Marne : un repère administratif pour tout le département, mais qui ne change rien à la règle nationale sur la carte grise, dont le guichet a fermé comme partout ailleurs en 2017. La préfecture maintient toutefois un point d'accueil numérique sur rendez-vous, utile pour se faire aider dans une démarche ANTS bloquée.",
+        "Autre trait local : la ville s'est développée autour d'un lac artificiel d'environ 40 hectares, ancienne carrière transformée en plan d'eau au milieu des années 1970, aujourd'hui un repère du quartier du Mont-Mesly. La ZFE Métropole du Grand Paris ne s'applique qu'à la portion du territoire crétaillois comprise à l'intérieur du périmètre de l'A86, l'autoroute elle-même étant exclue de la zone.",
+        "Un véhicule loué ou emprunté pour un trajet vers le secteur concerné doit donc être vérifié sur son Crit'Air avant d'y circuler, même si aucune sanction n'est encore appliquée pendant la période pédagogique en cours jusqu'à fin 2026.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Créteil',
+      paragraphs: [
+        "Créteil ne dispose pas de fourrière municipale identifiée : comme ailleurs en petite couronne, le gardiennage des véhicules enlevés est assuré par des sociétés privées agréées par secteur géographique par la préfecture du Val-de-Marne. La première démarche consiste à contacter le commissariat de police du lieu où le véhicule stationnait, qui indique le site de destination et les modalités de mainlevée.",
+        "Les documents exigés restent identiques partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans cette dernière, la restitution reste bloquée : une assurance temporaire souscrite en ligne fournit l'attestation en quelques minutes, jour et nuit.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Créteil',
+      paragraphs: [
+        "Bien que Créteil héberge la préfecture du Val-de-Marne, son guichet ne traite plus les certificats d'immatriculation depuis la fermeture nationale du 6 novembre 2017. La demande se fait en ligne sur le site de l'ANTS, ou via un professionnel de l'automobile habilité au SIV. La préfecture propose un point d'accueil numérique sur rendez-vous pour accompagner les usagers dans leurs téléprocédures, sans pouvoir délivrer de titre elle-même.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Durant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Peut-on obtenir de l\'aide pour sa carte grise à la préfecture de Créteil ?',
+        a: "Le guichet carte grise a fermé le 6 novembre 2017 comme partout en France, mais la préfecture du Val-de-Marne propose un point d'accueil numérique sur rendez-vous pour aider les usagers à effectuer leur démarche en ligne sur le site de l'ANTS. Elle ne délivre elle-même aucun certificat d'immatriculation.",
+      },
+      {
+        q: 'Toute la ville de Créteil est-elle soumise à la ZFE ?',
+        a: "Non. Seule la partie du territoire communal comprise à l'intérieur du périmètre de l'A86 est concernée par les restrictions Crit'Air de la Métropole du Grand Paris, l'autoroute elle-même étant exclue de la zone.",
+      },
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Créteil ?',
+        a: "Créteil n'a pas de fourrière municipale identifiée : le gardiennage est confié à des sociétés privées agréées par secteur par la préfecture du Val-de-Marne. Contactez le commissariat du lieu où le véhicule stationnait pour connaître le site de destination et la procédure de mainlevée.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour sortir un véhicule de fourrière à Créteil ?',
+        a: "Elle couvre l'attestation d'assurance en cours de validité exigée au guichet du prestataire de gardiennage, mais la mainlevée reste une démarche distincte, à obtenir séparément auprès du commissariat à l'origine de l'enlèvement.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Créteil ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Passé ce délai, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour approfondir :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: "ce que risque un conducteur contrôlé sans attestation", href: '/articles/controle-sans-assurance-risques-amende' },
+        { text: "que faire si un dossier reste bloqué sur l'ANTS", href: '/articles/carte-grise-ants-bloquee' },
+        { text: 'le changement de titulaire étape par étape', href: '/articles/changement-titulaire-carte-grise' },
+      ],
+    },
+  },
+
+  'vitry-sur-seine': {
+    slug: 'vitry-sur-seine',
+    routePath: '/assurance-temporaire-carte-grise-vitry-sur-seine',
+    nom: 'Vitry-sur-Seine',
+    breadcrumbName: 'Assurance temporaire et carte grise à Vitry-sur-Seine',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Vitry-sur-Seine',
+    intro:
+      "Zone industrielle des Ardoines, ZFE partielle et une carte grise qui ne se traite plus en préfecture : ce qu'il faut savoir pour rouler en règle à Vitry-sur-Seine.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance et carte grise à Vitry-sur-Seine | AssuTempo',
+      description:
+        "Zone des Ardoines, ZFE partielle, fourrière via un prestataire agréé par secteur : le guide local à jour pour Vitry-sur-Seine (Val-de-Marne).",
+    },
+    capsule: {
+      answer:
+        "Vitry-sur-Seine s'est développée autour de la zone industrielle des Ardoines, desservie par l'A86, aujourd'hui en pleine reconversion. Seule la partie du territoire comprise à l'intérieur du périmètre A86 est soumise à la ZFE Métropole du Grand Paris. En cas d'enlèvement, la commune n'a pas de fourrière municipale propre : la démarche passe par le commissariat de police, 22 avenue Youri-Gagarine, qui oriente vers le prestataire agréé compétent. Pour la carte grise, la démarche passe par l'ANTS ou un professionnel habilité.",
+      facts: [
+        {
+          anchor: 'Les Ardoines',
+          text: 'Zone industrielle historique de Vitry-sur-Seine, desservie par l\'A86, aujourd\'hui en reconversion urbaine (ville de Vitry-sur-Seine).',
+        },
+        {
+          anchor: 'Partielle',
+          text: 'Vitry-sur-Seine figure parmi les communes partiellement incluses dans le périmètre de la ZFE Métropole du Grand Paris (liste officielle des communes ZFE-m).',
+        },
+        {
+          anchor: '22 av. Youri-Gagarine',
+          text: 'Adresse du commissariat de police de Vitry-sur-Seine, point de contact en cas d\'enlèvement de véhicule.',
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'Les Ardoines',
+        title: 'une zone industrielle historique en reconversion',
+        body: "Desservie par l'A86 et les anciennes routes nationales 5 et 6, la zone des Ardoines concentre depuis le 19e siècle l'activité industrielle de la commune ; elle fait aujourd'hui l'objet d'un vaste projet de reconversion urbaine.",
+        ref: 'Ville de Vitry-sur-Seine',
+      },
+      {
+        figure: 'Zone partielle',
+        title: 'la ZFE ne couvre qu\'une partie de la commune',
+        body: "Vitry-sur-Seine est classée parmi les communes partiellement incluses dans le périmètre A86 de la ZFE Métropole du Grand Paris, période pédagogique sans sanction reconduite jusqu'au 31 décembre 2026.",
+        ref: 'Métropole du Grand Paris',
+      },
+      {
+        figure: '22 av. Youri-Gagarine',
+        title: "le commissariat, premier point de contact en cas d'enlèvement",
+        body: "Vitry-sur-Seine n'a pas de fourrière municipale propre : c'est le commissariat de police qui oriente vers le prestataire de gardiennage agréé par la préfecture du Val-de-Marne.",
+        ref: 'Ville de Vitry-sur-Seine, police nationale',
+      },
+    ],
+    concretement: {
+      title: 'À Vitry-sur-Seine, concrètement',
+      paragraphs: [
+        "Vitry-sur-Seine porte l'empreinte d'un développement industriel ancien : une manufacture de pâtes alimentaires s'y installe dès 1850, suivie d'une briqueterie capable de produire 12 millions de briques par an à la fin du 19e siècle. Cette histoire a façonné la zone des Ardoines, aujourd'hui desservie par l'A86 et les anciennes routes nationales 5 et 6, en cours de reconversion en quartier mixte.",
+        "Seule une partie du territoire communal, celle comprise à l'intérieur du périmètre A86, est soumise à la ZFE Métropole du Grand Paris. Un véhicule Crit'Air 3, 4, 5 ou non classé peut donc encore circuler sans restriction sur certains secteurs de la ville, tout en restant soumis à l'obligation d'assurance comme n'importe où en France.",
+        "En cas d'enlèvement, le commissariat de police de Vitry-sur-Seine, avenue Youri-Gagarine, reste le point de contact pour connaître la fourrière de destination : la commune ne gère pas de site de gardiennage en propre.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Vitry-sur-Seine',
+      paragraphs: [
+        "Vitry-sur-Seine n'a pas de fourrière municipale : la mise en fourrière relève de la police nationale, via le commissariat situé 22 avenue Youri-Gagarine, qui indique le prestataire agréé par la préfecture du Val-de-Marne où le véhicule a été conduit.",
+        "Les documents à présenter restent les mêmes que partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans cette dernière, la restitution reste bloquée : une assurance temporaire souscrite en ligne délivre l'attestation nécessaire en quelques minutes.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Vitry-sur-Seine',
+      paragraphs: [
+        "Comme partout en France, la préfecture du Val-de-Marne ne délivre plus de certificats d'immatriculation au guichet depuis le 6 novembre 2017. La démarche passe par le site de l'ANTS, ou par un professionnel de l'automobile habilité au SIV, une option utile pour un dossier urgent.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Pendant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler, à condition que le véhicule reste assuré.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Vitry-sur-Seine ?',
+        a: "Vitry-sur-Seine n'a pas de fourrière municipale propre. Contactez le commissariat de police, 22 avenue Youri-Gagarine, qui oriente vers le prestataire de gardiennage agréé par la préfecture du Val-de-Marne où le véhicule a été conduit.",
+      },
+      {
+        q: 'Toute la commune de Vitry-sur-Seine est-elle en ZFE ?',
+        a: "Non. Vitry-sur-Seine figure parmi les communes partiellement incluses dans le périmètre A86 de la ZFE Métropole du Grand Paris. Seule la partie du territoire comprise dans ce périmètre est soumise aux restrictions Crit'Air.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour récupérer un véhicule en fourrière à Vitry-sur-Seine ?',
+        a: "Elle fournit l'attestation d'assurance exigée au guichet du prestataire de gardiennage, mais la mainlevée reste une démarche distincte à obtenir auprès du commissariat à l'origine de l'enlèvement.",
+      },
+      {
+        q: 'Peut-on encore faire une carte grise à la préfecture du Val-de-Marne ?',
+        a: "Non, ce guichet a fermé le 6 novembre 2017 comme dans toute la France. La démarche passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au Système d'Immatriculation des Véhicules.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Vitry-sur-Seine ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Au-delà, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour aller plus loin :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: 'assurer un véhicule acheté chez un particulier', href: '/articles/assurer-vehicule-achete-chez-particulier' },
+        { text: "combien de jours d'assurance souscrire pour sortir de fourrière", href: '/articles/combien-de-jours-assurance-sortir-fourriere' },
+        { text: "les délais réels d'obtention d'une carte grise", href: '/articles/combien-de-temps-carte-grise' },
+      ],
+    },
+  },
+
+  'ivry-sur-seine': {
+    slug: 'ivry-sur-seine',
+    routePath: '/assurance-temporaire-carte-grise-ivry-sur-seine',
+    nom: 'Ivry-sur-Seine',
+    breadcrumbName: 'Assurance temporaire et carte grise à Ivry-sur-Seine',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Ivry-sur-Seine',
+    intro:
+      "Un ancien secteur industriel en pleine reconversion, une ZFE en vigueur depuis 2021 et une carte grise entièrement dématérialisée : ce qu'il faut savoir pour rouler en règle à Ivry-sur-Seine.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance et carte grise à Ivry-sur-Seine | AssuTempo',
+      description:
+        "ZFE en vigueur depuis 2021, projet urbain Ivry Confluences, fourrière via un prestataire agréé : le guide local à jour pour Ivry-sur-Seine.",
+    },
+    capsule: {
+      answer:
+        "Ivry-sur-Seine est intégralement comprise dans la ZFE Métropole du Grand Paris depuis le 1er octobre 2021, avec une interdiction élargie aux Crit'Air 3 depuis le 1er janvier 2025. La commune transforme actuellement 145 hectares d'anciens terrains industriels dans le cadre du projet Ivry Confluences. En cas d'enlèvement, aucune fourrière municipale propre n'existe : la police oriente vers un prestataire agréé par la préfecture du Val-de-Marne. Pour la carte grise, la démarche passe par l'ANTS ou un professionnel habilité.",
+      facts: [
+        {
+          anchor: '1er octobre 2021',
+          text: "Date d'entrée en vigueur de la ZFE sur l'intégralité du territoire d'Ivry-sur-Seine, à l'intérieur du périmètre A86 (ville d'Ivry-sur-Seine).",
+        },
+        {
+          anchor: '145 hectares',
+          text: "Superficie de l'ancien secteur industriel en reconversion dans le cadre du projet urbain Ivry Confluences, plus de 20 % du territoire communal.",
+        },
+        {
+          anchor: '1er janvier 2025',
+          text: "Date d'entrée en vigueur de l'interdiction de circulation des Crit'Air 3 dans la ZFE Métropole du Grand Paris, période sans sanction en cours jusqu'à fin 2026.",
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'Intégrale depuis 2021',
+        title: 'la ZFE couvre Ivry-sur-Seine depuis le 1er octobre 2021',
+        body: "Toute la commune, à l'intérieur du périmètre A86, est soumise aux restrictions Crit'Air, élargies au Crit'Air 3 depuis le 1er janvier 2025, avec une période pédagogique sans sanction reconduite jusqu'au 31 décembre 2026.",
+        ref: 'Ville d\'Ivry-sur-Seine, Métropole du Grand Paris',
+      },
+      {
+        figure: '145 hectares',
+        title: 'un ancien site industriel transformé en quartier',
+        body: "Le projet urbain Ivry Confluences prévoit la reconversion de plus de 20 % du territoire communal d'ici 2035, avec près de 8 000 logements et l'arrivée d'une nouvelle ligne de bus à haut niveau de service.",
+        ref: 'Ville d\'Ivry-sur-Seine',
+      },
+      {
+        figure: 'Prestataire agréé',
+        title: 'pas de fourrière municipale propre à Ivry-sur-Seine',
+        body: "Comme dans le reste de la petite couronne, le gardiennage des véhicules enlevés est assuré par des sociétés privées agréées par secteur par la préfecture du Val-de-Marne, contactables via la police.",
+        ref: 'Préfecture du Val-de-Marne',
+      },
+    ],
+    concretement: {
+      title: 'À Ivry-sur-Seine, concrètement',
+      paragraphs: [
+        "Ivry-sur-Seine transforme actuellement l'un des plus grands secteurs industriels de la petite couronne : 145 hectares d'anciens terrains portuaires et industriels, plus de 20 % du territoire communal, doivent accueillir près de 8 000 logements d'ici 2035 dans le cadre du projet Ivry Confluences, avec la création d'un parc en bord de Seine et l'arrivée d'une ligne de transport en commun dédiée.",
+        "Sur le plan de la circulation, Ivry-sur-Seine applique la ZFE Métropole du Grand Paris sur l'intégralité de son territoire depuis le 1er octobre 2021, avec une interdiction élargie aux Crit'Air 3 depuis le 1er janvier 2025. Aucune sanction automatique n'est toutefois appliquée pendant la période pédagogique en cours jusqu'à fin 2026.",
+        "Un véhicule qui doit circuler dans la commune, loué ou emprunté pour un chantier ou un déménagement lié à ces transformations urbaines, reste soumis à l'obligation d'assurance dès le premier trajet, quel que soit son Crit'Air.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Ivry-sur-Seine',
+      paragraphs: [
+        "Le secteur en pleine transformation d'Ivry Confluences n'a pas fait naître de fourrière municipale : la commune n'en gère aucune en propre. En cas d'enlèvement, la première démarche consiste à contacter le commissariat de police du lieu où le véhicule stationnait, qui indique le prestataire agréé par la préfecture du Val-de-Marne chargé du gardiennage.",
+        "Les documents exigés restent identiques partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans cette dernière, la restitution reste bloquée : une assurance temporaire souscrite en ligne fournit l'attestation en quelques minutes.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Ivry-sur-Seine',
+      paragraphs: [
+        "À Ivry-sur-Seine comme dans le reste du Val-de-Marne, le guichet carte grise de la préfecture a fermé le 6 novembre 2017. Un nouveau propriétaire, y compris pour un véhicule lié à un chantier du secteur Ivry Confluences, doit passer par le site de l'ANTS ou par un professionnel de l'automobile habilité au SIV.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Durant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler, à condition que le véhicule reste assuré.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Depuis quand la ZFE s\'applique-t-elle à Ivry-sur-Seine ?',
+        a: "Depuis le 1er octobre 2021 pour l'ensemble du territoire communal, à l'intérieur du périmètre A86. L'interdiction a été élargie aux véhicules Crit'Air 3 le 1er janvier 2025, mais aucune sanction automatique n'est appliquée pendant la période pédagogique reconduite jusqu'au 31 décembre 2026.",
+      },
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Ivry-sur-Seine ?',
+        a: "Ivry-sur-Seine n'a pas de fourrière municipale propre. Contactez le commissariat de police du lieu où le véhicule stationnait : il indique le prestataire de gardiennage agréé par la préfecture du Val-de-Marne.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour sortir un véhicule de fourrière à Ivry-sur-Seine ?',
+        a: "Elle fournit l'attestation d'assurance exigée au guichet du prestataire de gardiennage, mais la mainlevée reste une démarche distincte à obtenir auprès du commissariat à l'origine de l'enlèvement.",
+      },
+      {
+        q: 'Peut-on encore faire une carte grise à la préfecture du Val-de-Marne ?',
+        a: "Non, ce guichet a fermé le 6 novembre 2017 comme partout en France. La démarche passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au Système d'Immatriculation des Véhicules.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Ivry-sur-Seine ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Au-delà, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour approfondir :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: 'ce que la loi sanctionne vraiment en cas de retard de carte grise', href: '/articles/rouler-sans-carte-grise-a-son-nom' },
+        { text: 'assurer un véhicule à plaque étrangère ou tout juste importé', href: '/articles/assurance-temporaire-vehicule-etranger-france' },
+        { text: "combien de jours d'assurance souscrire pour sortir de fourrière", href: '/articles/combien-de-jours-assurance-sortir-fourriere' },
+      ],
+    },
+  },
+
+  'maisons-alfort': {
+    slug: 'maisons-alfort',
+    routePath: '/assurance-temporaire-carte-grise-maisons-alfort',
+    nom: 'Maisons-Alfort',
+    breadcrumbName: 'Assurance temporaire et carte grise à Maisons-Alfort',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Maisons-Alfort',
+    intro:
+      "École nationale vétérinaire, confluence Seine-Marne et une municipalité opposée à l'extension de la ZFE : ce qu'il faut savoir pour rouler en règle à Maisons-Alfort.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance et carte grise à Maisons-Alfort | AssuTempo',
+      description:
+        "ENVA, confluence Seine-Marne, ZFE partielle contestée localement : le guide local à jour pour Maisons-Alfort (Val-de-Marne).",
+    },
+    capsule: {
+      answer:
+        "Maisons-Alfort héberge l'École nationale vétérinaire d'Alfort et se situe à la confluence de la Seine et de la Marne. La ZFE Métropole du Grand Paris ne couvre qu'une partie de son territoire, et le conseil municipal s'est prononcé défavorablement à son extension en septembre 2024, sans effet sur la réglementation en vigueur. En cas d'enlèvement, la commune ne dispose pas de fourrière municipale propre : la police oriente vers un prestataire agréé par la préfecture du Val-de-Marne. Pour la carte grise, la démarche passe par l'ANTS ou un professionnel habilité.",
+      facts: [
+        {
+          anchor: 'ENVA',
+          text: "L'École nationale vétérinaire d'Alfort, établissement public sous tutelle du ministère de l'Agriculture, est implantée avenue du Général-de-Gaulle (ville de Maisons-Alfort).",
+        },
+        {
+          anchor: '30 septembre 2024',
+          text: 'Date à laquelle le conseil municipal de Maisons-Alfort s\'est prononcé défavorablement à l\'extension de la ZFE, sans changer la réglementation métropolitaine en vigueur.',
+        },
+        {
+          anchor: '1 mois',
+          text: "Délai légal pour immatriculer un véhicule d'occasion à son nom après achat (article R322-5 du code de la route).",
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'ENVA',
+        title: 'une école vétérinaire nationale au cœur de la ville',
+        body: "Implantée avenue du Général-de-Gaulle, l'École nationale vétérinaire d'Alfort accueille plusieurs centaines d'étudiants sous la tutelle du ministère de l'Agriculture.",
+        ref: 'Ville de Maisons-Alfort',
+      },
+      {
+        figure: 'Position contestée',
+        title: 'le conseil municipal opposé à l\'extension de la ZFE',
+        body: "Le 30 septembre 2024, les élus de Maisons-Alfort ont voté contre l'extension du périmètre ZFE, sans que cela modifie la réglementation métropolitaine actuellement en vigueur sur la commune.",
+        ref: 'Ville de Maisons-Alfort',
+      },
+      {
+        figure: 'Prestataire agréé',
+        title: 'pas de fourrière municipale propre à Maisons-Alfort',
+        body: "Comme dans le reste de la petite couronne, un prestataire privé agréé par secteur par la préfecture du Val-de-Marne assure le gardiennage des véhicules enlevés.",
+        ref: 'Préfecture du Val-de-Marne',
+      },
+    ],
+    concretement: {
+      title: 'À Maisons-Alfort, concrètement',
+      paragraphs: [
+        "Maisons-Alfort partage avec Alfortville la confluence de la Seine et de la Marne, mais se distingue par la présence de l'École nationale vétérinaire d'Alfort, un établissement public d'enseignement supérieur qui forme chaque année plusieurs centaines d'étudiants sur son campus avenue du Général-de-Gaulle.",
+        "Sur la ZFE, la commune se distingue aussi par une prise de position locale : le conseil municipal a voté le 30 septembre 2024 contre une extension du dispositif métropolitain. Ce vote n'a toutefois aucun effet juridique sur la réglementation Crit'Air appliquée par la Métropole du Grand Paris, qui continue de s'appliquer à la partie du territoire communal comprise dans le périmètre A86.",
+        "Un véhicule circulant dans ce secteur, quel que soit son Crit'Air, doit rester assuré en permanence : le débat politique local sur la ZFE ne concerne que la vignette, jamais l'obligation d'assurance.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Maisons-Alfort',
+      paragraphs: [
+        "Maisons-Alfort, comme sa voisine Alfortville de l'autre côté de la Marne, ne dispose pas de fourrière municipale identifiée. En cas d'enlèvement, la démarche consiste à contacter le commissariat de police ou la police municipale du lieu où le véhicule stationnait, qui indique le prestataire agréé par la préfecture du Val-de-Marne chargé du gardiennage.",
+        "Les documents exigés restent identiques partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans cette dernière, la restitution reste bloquée : une assurance temporaire souscrite en ligne délivre l'attestation nécessaire en quelques minutes.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Maisons-Alfort',
+      paragraphs: [
+        "Comme dans tout le Val-de-Marne, le guichet carte grise de la préfecture de Créteil a fermé le 6 novembre 2017. La démarche pour immatriculer un véhicule acheté à Maisons-Alfort passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au SIV.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Pendant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler, à condition que le véhicule reste assuré.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Maisons-Alfort est-elle opposée à la ZFE ?',
+        a: "Le conseil municipal s'est prononcé défavorablement à une extension du dispositif le 30 septembre 2024, mais ce vote n'a aucun effet sur la réglementation Crit'Air actuellement appliquée par la Métropole du Grand Paris sur la partie du territoire communal située dans le périmètre A86.",
+      },
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Maisons-Alfort ?',
+        a: "Maisons-Alfort n'a pas de fourrière municipale propre. Contactez le commissariat de police ou la police municipale du lieu où le véhicule stationnait pour connaître le prestataire agréé par la préfecture du Val-de-Marne chargé du gardiennage.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour sortir un véhicule de fourrière à Maisons-Alfort ?',
+        a: "Elle fournit l'attestation d'assurance exigée au guichet du prestataire de gardiennage, mais la mainlevée reste une démarche distincte, à obtenir auprès du commissariat ou de la police municipale à l'origine de l'enlèvement.",
+      },
+      {
+        q: 'Peut-on encore faire une carte grise à la préfecture du Val-de-Marne ?',
+        a: "Non, ce guichet a fermé le 6 novembre 2017 comme partout en France. La démarche passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au Système d'Immatriculation des Véhicules.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Maisons-Alfort ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Au-delà, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour aller plus loin :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: 'assurer un véhicule acheté chez un particulier', href: '/articles/assurer-vehicule-achete-chez-particulier' },
+        { text: 'le changement de titulaire étape par étape', href: '/articles/changement-titulaire-carte-grise' },
+        { text: "les délais réels d'obtention d'une carte grise", href: '/articles/combien-de-temps-carte-grise' },
+      ],
+    },
+  },
+
+  'charenton-le-pont': {
+    slug: 'charenton-le-pont',
+    routePath: '/assurance-temporaire-carte-grise-charenton-le-pont',
+    nom: 'Charenton-le-Pont',
+    breadcrumbName: 'Assurance temporaire et carte grise à Charenton-le-Pont',
+    eyebrow: 'ASSURANCE TEMPORAIRE ET CARTE GRISE',
+    h1: 'Assurance temporaire et carte grise à Charenton-le-Pont',
+    intro:
+      "Aux portes de Paris, un quartier Bercy-Charenton en pleine transformation et une ZFE intégrale depuis 2021 : ce qu'il faut savoir pour rouler en règle à Charenton-le-Pont.",
+    dateMaj: '11 septembre 2026',
+    meta: {
+      title: 'Assurance et carte grise à Charenton-le-Pont | AssuTempo',
+      description:
+        "Quartier Bercy-Charenton en réaménagement, ZFE intégrale, fourrière via un prestataire agréé : le guide local à jour pour Charenton-le-Pont.",
+    },
+    capsule: {
+      answer:
+        "Charenton-le-Pont, juste au nord de la confluence Seine-Marne et aux portes du 12e arrondissement de Paris, est intégralement comprise dans la ZFE Métropole du Grand Paris depuis juin 2021. Le secteur de Charenton-Bercy, environ 10 % du territoire communal, fait l'objet d'un vaste réaménagement urbain. En cas d'enlèvement, la commune ne dispose pas de fourrière municipale propre : la police oriente vers un prestataire agréé par la préfecture du Val-de-Marne. Pour la carte grise, la démarche passe par l'ANTS ou un professionnel habilité.",
+      facts: [
+        {
+          anchor: 'Juin 2021',
+          text: "Date d'entrée en vigueur de la ZFE sur l'intégralité du territoire de Charenton-le-Pont pour les véhicules non classés et Crit'Air 4-5 (Métropole du Grand Paris).",
+        },
+        {
+          anchor: '10 % du territoire',
+          text: 'Part approximative du territoire communal occupée par le secteur Charenton-Bercy, en réaménagement depuis un contrat d\'intérêt national signé en 2016.',
+        },
+        {
+          anchor: '1er janvier 2025',
+          text: "Date d'entrée en vigueur de l'interdiction de circulation des Crit'Air 3 dans la ZFE Métropole du Grand Paris.",
+        },
+      ],
+      updated: '11 septembre 2026',
+    },
+    bandeau: [
+      {
+        figure: 'ZFE depuis 2021',
+        title: 'une commune intégralement en zone à faibles émissions',
+        body: "Charenton-le-Pont applique la ZFE Métropole du Grand Paris sur tout son territoire depuis juin 2021 pour les véhicules non classés et Crit'Air 4-5, élargie au Crit'Air 3 depuis le 1er janvier 2025.",
+        ref: 'Métropole du Grand Paris',
+      },
+      {
+        figure: 'Charenton-Bercy',
+        title: 'un dixième du territoire communal en réaménagement',
+        body: "Enclavé entre la Seine, la voie ferrée, l'A4 et le périphérique, ce secteur fait l'objet d'un contrat d'intérêt national signé en 2016, piloté par Grand Paris Aménagement.",
+        ref: 'Grand Paris Aménagement',
+      },
+      {
+        figure: 'Prestataire agréé',
+        title: 'pas de fourrière municipale propre à Charenton-le-Pont',
+        body: "Comme dans le reste de la petite couronne, le gardiennage des véhicules enlevés est confié à des sociétés privées agréées par secteur par la préfecture du Val-de-Marne.",
+        ref: 'Préfecture du Val-de-Marne',
+      },
+    ],
+    concretement: {
+      title: 'À Charenton-le-Pont, concrètement',
+      paragraphs: [
+        "Charenton-le-Pont se situe juste au nord de la confluence entre la Seine et la Marne, littéralement aux portes de Paris puisque la commune touche directement le 12e arrondissement et le quartier de Bercy. Cette proximité immédiate avec la capitale explique une circulation dense sur les axes qui relient les deux territoires.",
+        "Le secteur Charenton-Bercy, environ un dixième du territoire communal, enclavé entre la Seine, une voie ferrée SNCF, l'autoroute A4 et le boulevard périphérique, fait l'objet d'un contrat d'intérêt national signé en 2016 : un vaste réaménagement urbain, piloté par Grand Paris Aménagement, continue d'y transformer d'anciennes emprises logistiques en quartier mixte.",
+        "La ZFE couvre l'intégralité de la commune depuis juin 2021, avec une interdiction élargie aux Crit'Air 3 depuis le 1er janvier 2025. Un véhicule loué ou emprunté pour circuler dans ce secteur en pleine mutation doit rester assuré à tout moment, ZFE ou non.",
+      ],
+    },
+    fourriere: {
+      title: 'Sortir un véhicule de fourrière à Charenton-le-Pont',
+      paragraphs: [
+        "Aux portes de Paris, Charenton-le-Pont ne dispose pas non plus de fourrière municipale identifiée. En cas d'enlèvement, la démarche consiste à contacter le commissariat de police ou la police municipale du lieu où le véhicule stationnait, qui indique le prestataire agréé par la préfecture du Val-de-Marne chargé du gardiennage.",
+        "Les documents exigés restent identiques partout en France : pièce d'identité, certificat d'immatriculation et attestation d'assurance en cours de validité. Sans cette dernière, la restitution reste bloquée : une assurance temporaire souscrite en ligne délivre l'attestation nécessaire en quelques minutes.",
+      ],
+      cta: { text: "Obtenir une attestation d'assurance maintenant", href: '/tarification' },
+    },
+    carteGrise: {
+      title: 'La carte grise après un achat à Charenton-le-Pont',
+      paragraphs: [
+        "Comme partout dans le Val-de-Marne, la préfecture de Créteil ne délivre plus de certificats d'immatriculation au guichet depuis le 6 novembre 2017. À Charenton-le-Pont, à deux pas de Paris, la démarche se fait en ligne sur le site de l'ANTS, ou via un professionnel de l'automobile habilité au SIV.",
+        "Le nouveau titulaire dispose d'un mois à compter de la date de cession pour immatriculer le véhicule à son nom. Pendant ce délai, la carte grise barrée par le vendeur et le certificat de cession suffisent à circuler, à condition que le véhicule reste assuré.",
+      ],
+      cta: { text: 'Faire ma carte grise en ligne', href: '/carte-grise' },
+    },
+    faq: [
+      {
+        q: 'Depuis quand la ZFE s\'applique-t-elle à Charenton-le-Pont ?',
+        a: "Depuis juin 2021 pour l'ensemble du territoire communal, pour les véhicules non classés et Crit'Air 4 et 5. L'interdiction a été élargie aux Crit'Air 3 le 1er janvier 2025, sans sanction automatique pendant la période pédagogique reconduite jusqu'au 31 décembre 2026.",
+      },
+      {
+        q: 'Où s\'adresser en cas de mise en fourrière à Charenton-le-Pont ?',
+        a: "Charenton-le-Pont n'a pas de fourrière municipale propre. Contactez le commissariat de police ou la police municipale du lieu où le véhicule stationnait pour connaître le prestataire agréé par la préfecture du Val-de-Marne.",
+      },
+      {
+        q: 'Une assurance temporaire suffit-elle pour sortir un véhicule de fourrière à Charenton-le-Pont ?',
+        a: "Elle fournit l'attestation d'assurance exigée au guichet du prestataire de gardiennage, mais la mainlevée reste une démarche distincte, à obtenir auprès du commissariat ou de la police municipale à l'origine de l'enlèvement.",
+      },
+      {
+        q: 'Peut-on encore faire une carte grise à la préfecture du Val-de-Marne ?',
+        a: "Non, ce guichet a fermé le 6 novembre 2017 comme partout en France. La démarche passe désormais par le site de l'ANTS, ou par un professionnel de l'automobile habilité au Système d'Immatriculation des Véhicules.",
+      },
+      {
+        q: 'Combien de temps pour immatriculer une voiture achetée à Charenton-le-Pont ?',
+        a: "Un mois calendaire à compter de la date de cession (article R322-5 du code de la route). Au-delà, l'amende forfaitaire est de 135 €, minorée à 90 €, majorée à 375 €, jusqu'à 750 € devant le tribunal.",
+      },
+    ],
+    maillage: {
+      lead: 'Pour approfondir :',
+      items: [
+        { text: 'le rétroplanning complet après un achat de véhicule', href: '/roulez-legal-apres-achat' },
+        { text: "comment sortir de fourrière pour défaut d'assurance", href: '/articles/voiture-immobilisee-defaut-assurance' },
+        { text: "ce que risque un conducteur contrôlé sans attestation", href: '/articles/controle-sans-assurance-risques-amende' },
+        { text: "les délais réels d'obtention d'une carte grise", href: '/articles/combien-de-temps-carte-grise' },
+      ],
+    },
+  },
 };
 
 export const VILLES_LOCALES_LIST = Object.values(VILLES_LOCALES);
