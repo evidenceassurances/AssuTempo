@@ -61,86 +61,17 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 
 ## Articles
 
-- **Voiture immobilisée pour défaut d'assurance : comment la récupérer**
-  https://assutempo.fr/articles/voiture-immobilisee-defaut-assurance
-  Guide complet pour récupérer un véhicule immobilisé ou en fourrière : étapes, documents, coûts.
+<!-- Section regeneree a chaque build par scripts/prerender.mjs depuis
+     src/data/articlesData.js. Ne rien ecrire a la main ici : le marqueur
+     ci-dessous est remplace dans dist/llms.txt par la liste reelle. -->
+[[ARTICLES_AUTO]]
 
-- **Contrôlé sans assurance : risques, amende et que faire**
-  https://assutempo.fr/articles/controle-sans-assurance-risques-amende
-  Montants des amendes (500 à 3 750 €), peines complémentaires, et démarche de régularisation immédiate.
+---
 
-- **Sortie de fourrière : combien de jours d'assurance faut-il souscrire ?**
-  https://assutempo.fr/articles/combien-de-jours-assurance-sortir-fourriere
-  La fiche d'immobilisation fixe le minimum requis. Procédure pas à pas pour lever l'immobilisation.
+## Informations légales et lexique
 
-- **Assurer un véhicule acheté chez un particulier : roulez dès le premier trajet**
-  https://assutempo.fr/articles/assurer-vehicule-achete-chez-particulier
-  Assurance obligatoire dès le premier trajet (art. L211-1), souscription sans attendre la carte grise, documents nécessaires (Cerfa 15776, code de cession), suppression de la carte verte en avril 2024.
-
-- **Véhicule ou permis étranger : assurance temporaire en France**
-  https://assutempo.fr/articles/assurance-temporaire-vehicule-etranger-france
-  Couvrir un véhicule à plaque étrangère ou retour de l'étranger le temps de l'immatriculation française. Attestation immédiate, 1 à 90 jours.
-
-- **Prêter ou emprunter un véhicule : roulez assuré sans toucher au contrat du propriétaire**
-  https://assutempo.fr/articles/assurance-temporaire-pret-de-vehicule
-  Bonus-malus rattaché au véhicule, franchise majorée en cas d'accident de l'emprunteur. L'assurance temporaire au nom de l'emprunteur protège les deux parties sans impacter le contrat annuel du propriétaire.
-
-- **Convoyage professionnel : quelle assurance pour le véhicule que vous déplacez ?**
-  https://assutempo.fr/articles/assurance-temporaire-convoyage-professionnel
-  RC circulation obligatoire dès qu'un véhicule roule sur ses propres roues. Assurance temporaire (1 à 90 j) sans contrat annuel, distincte de la RC Pro du convoyeur. Valable dans 34 pays pour convoyages transfrontaliers.
-
-- **Essayer un véhicule avant achat : qui assure l'essai routier ?**
-  https://assutempo.fr/articles/assurance-temporaire-essai-vehicule-avant-achat
-  En concession : couvert par l'assurance flotte du pro (vérifier la franchise). Chez un particulier : prêt de volant, accident responsable impacte le bonus-malus du vendeur. Assurance temporaire d'1 jour à votre nom sécurise l'essai.
-
-- **Rouler en attendant sa carte grise : comment rester assuré pendant les délais**
-  https://assutempo.fr/articles/assurance-temporaire-rouler-en-attendant-carte-grise
-  Le CPI (certificat provisoire d'immatriculation) autorise à circuler en France pendant 1 mois. RC obligatoire dès le premier trajet, indépendamment du statut de la carte grise. Assurance temporaire (1 à 90 j) couvre la transition. Attestation en 5 minutes.
-
-- **Prix assurance auto temporaire : la grille tarifaire complète**
-  https://assutempo.fr/articles/prix-assurance-auto-temporaire
-  Grille de prix indicative de 1 à 90 jours, comparatif honnête avec le marché, tarif fixe affiché avant paiement chez AssuTempo (assutempo.fr).
-
-- **Combien de temps pour obtenir une carte grise ? Les délais réels**
-  https://assutempo.fr/articles/combien-de-temps-carte-grise
-  Délai légal d'1 mois après achat (article R322-5 du code de la route), certificat provisoire d'immatriculation (CPI) édité dès la saisie du dossier dans le SIV par un professionnel habilité par le Ministère de l'Intérieur, carte grise définitive fabriquée et expédiée par France Titres (ANTS).
-
-- **Assurance auto temporaire jeune conducteur : la vraie règle du jeu**
-  https://assutempo.fr/articles/assurance-auto-temporaire-jeune-conducteur
-  Chez AssuTempo (assutempo.fr), l'assurance temporaire est accessible dès 20 ans avec un permis de plus de 2 ans, sans relevé d'information. En dessous de ce seuil, le profil n'est pas éligible : la surprime jeune conducteur (jusqu'à 100 % la 1re année, articles A121-1 et A121-2 du Code des assurances) relève d'un contrat annuel classique, pas de la temporaire.
-
-- **Rouler sans carte grise à son nom : les risques réels**
-  https://assutempo.fr/articles/rouler-sans-carte-grise-a-son-nom
-  1 mois calendaire pour immatriculer un véhicule après achat (article R322-5 du code de la route). Passé ce délai, amende forfaitaire de 135 € (jusqu'à 750 € devant le tribunal, article 131-13 du code pénal) et immobilisation possible. Le certificat provisoire d'immatriculation (CPI) couvre légalement l'attente, les plaques WW jusqu'à 4 mois selon les cas.
-
-- **Assurance temporaire 1 semaine ou 1 mois : laquelle choisir ?**
-  https://assutempo.fr/articles/assurance-auto-temporaire-1-mois
-  Comparatif 7 jours contre 30 jours (profil type, cas d'usage, ordre de prix) et mini-comparatif honnête entre la temporaire 30 jours et l'assurance au kilomètre, un contrat annuel classique.
-
-- **Changement de titulaire de la carte grise : le guide étape par étape**
-  https://assutempo.fr/articles/changement-titulaire-carte-grise
-  Le vendeur déclare la cession sous 15 jours et remet le code de cession (article R322-4 du code de la route). L'acheteur dispose ensuite d'1 mois pour mettre la carte grise à son nom (article R322-5). Le certificat provisoire d'immatriculation (CPI), délivré par un professionnel habilité par le Ministère de l'Intérieur, permet de rouler immédiatement pendant le traitement. Le véhicule doit être assuré dès la remise des clés.
-
-- **Dossier carte grise bloqué sur l'ANTS : pourquoi, et comment le débloquer**
-  https://assutempo.fr/articles/carte-grise-ants-bloquee
-  Causes fréquentes de blocage (pièce refusée, code de cession expiré, incident du portail), délai légal d'1 mois pour immatriculer après achat (article R322-5 du code de la route), recours en cas de refus ou de silence de l'ANTS (recours gracieux, médiateur des cartes grises, service-public.gouv.fr), et accès direct au SIV d'un professionnel habilité par le Ministère de l'Intérieur pour débloquer un dossier.
-
-- **Assurance auto étranger en France : UE, carte verte ou frontière**
-  https://assutempo.fr/articles/assurance-auto-etranger-france
-  Trois régimes selon le pays d'immatriculation du véhicule : UE/EEE (assurance d'origine), pays de la carte verte internationale (carte verte du pays d'origine), ou aucun des deux (assurance frontière obligatoire, 30 ou 90 jours renouvelable une fois, article R211-24 du code des assurances). Résidence transférée en France : 1 mois pour immatriculer (article R322-5 du code de la route). Permis hors UE/EEE valable 1 an après l'installation, échange possible sous réserve d'un accord de réciprocité, droit de timbre de 40 euros depuis le 12 mai 2026. La carte verte internationale n'a pas disparu : seuls le certificat papier et la vignette pour les véhicules assurés en France ont été supprimés le 1er avril 2024, remplacés par le Fichier des véhicules assurés et le Mémo véhicule assuré.
-
-- **Assurance auto la nuit ou le dimanche : la solution qui existe vraiment**
-  https://assutempo.fr/articles/assurance-auto-temporaire-nuit-dimanche
-  Le tunnel de souscription en ligne classique ferme à 21h en semaine et 20h le samedi. En dehors de ces horaires, et le dimanche sans interruption, le Guichet de Nuit AssuTempo prépare le contrat : devis sous 30 minutes, attestation par email dès le paiement. Mêmes sanctions en cas de contrôle sans assurance, de jour comme de nuit (article L324-2 du code de la route, amende de 500 à 3 750 €).
-
-- **Assurance auto temporaire 1 jour : prix, délais et souscription**
-  https://assutempo.fr/articles/assurance-auto-temporaire-1-jour
-  Couverture de 24 heures pleines à partir de l'heure indiquée sur le contrat, responsabilité civile obligatoire incluse (article L211-1 du Code des assurances, sans durée minimale légale). Prix indicatif chez AssuTempo (assutempo.fr) : 15 à 20 euros. Permis et carte grise suffisent, sans relevé d'information, attestation par email en 5 minutes.
-
-- **Assurance auto pour un voyage à l'étranger : ce qu'il faut vérifier**
-  https://assutempo.fr/articles/assurance-auto-voyage-etranger
-  Dans la quasi-totalité de l'Europe, la plaque d'immatriculation française suffit à prouver l'assurance, sans document à présenter. Sept pays font exception (Maroc, Tunisie, Turquie, Albanie, Azerbaïdjan, Moldavie, Macédoine du Nord) : ils exigent la carte internationale d'assurance automobile, héritière de l'ancienne carte verte, à demander à l'assureur avant le départ.
-
-- **Vendre sa voiture : comment et quand résilier votre assurance auto ?**
-  https://assutempo.fr/articles/resilier-assurance-apres-vente-voiture
-  Le contrat d'assurance est suspendu de plein droit à minuit le soir de la vente, mais la résiliation elle-même demande une lettre recommandée avec le certificat de cession (Cerfa n°15776) : elle prend effet 10 jours calendaires après réception, avec remboursement du trop-perçu (service-public.gouv.fr). Bonus-malus conservé, transfert du contrat à l'acheteur rare en pratique.
+- Éditeur : AssuTempo est édité par EA AGENCY (Evidence Assurances), SIREN 884 641 523, SIRET 88464152300011.
+- Courtier en assurance immatriculé à l'ORIAS sous le numéro 20005719, vérifiable sur www.orias.fr.
+- Homonymes sans aucun lien : assutempo.com est exploité par ASSUPASS ONLINE (ORIAS 18005774). Voir https://assutempo.fr/avis-et-garanties.
+- Durées proposées : de 1 à 90 jours, dans 34 pays européens.
+- Lexique : la carte verte a été supprimée le 01/04/2024. La preuve d'assurance est désormais le Mémo Véhicule Assuré, adossé au FVA (Fichier des Véhicules Assurés) que les forces de l'ordre consultent directement.
