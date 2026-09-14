@@ -242,7 +242,7 @@ export const articleData = {
     },
     {
       type: 'text',
-      heading: 'En résumé',
+      heading: "Ce qu'il faut retenir",
       paragraphs: [
         "Vendre sa voiture arrête la garantie le soir même, mais pas le contrat sur le papier : seule une lettre recommandée avec le certificat de cession déclenche la résiliation, dix jours calendaires plus tard, et le remboursement qui va avec. Pendant ce temps, si un nouveau véhicule prend le relais, il se couvre dès la remise des clés, au besoin avec une formule temporaire le temps de choisir le bon contrat annuel.",
       ],
