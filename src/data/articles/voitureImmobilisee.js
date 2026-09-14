@@ -5,7 +5,7 @@ const jsonLd = [
     headline:
       "Voiture immobilisée pour défaut d'assurance : comment la récupérer (vite et légalement)",
     description:
-      "Véhicule immobilisé ou en fourrière pour défaut d'assurance ? Assurez-vous en 5 minutes, attestation immédiate, et récupérez votre voiture légalement.",
+      "Véhicule immobilisé pour défaut d'assurance ? Attestation valide et permis suffisent pour la mainlevée. Assurance en 5 minutes, attestation immédiate.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -103,9 +103,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'voiture-immobilisee-defaut-assurance',
   seo: {
-    title: "Voiture immobilisée pour défaut d'assurance : la récupérer",
+    title: "Voiture immobilisée sans assurance : comment la récupérer",
     description:
-      "Véhicule immobilisé ou en fourrière pour défaut d'assurance ? Assurez-vous en 5 minutes, attestation immédiate, et récupérez votre voiture légalement.",
+      "Véhicule immobilisé pour défaut d'assurance ? Attestation valide et permis suffisent pour la mainlevée. Assurance en 5 minutes, attestation immédiate.",
     canonical:
       'https://assutempo.fr/articles/voiture-immobilisee-defaut-assurance',
     jsonLd,
