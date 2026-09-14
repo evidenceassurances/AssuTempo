@@ -137,8 +137,25 @@ export const articleData = {
   updatedDate: '3 juin 2026',
   author: 'Evidence Assurances',
   headline: 'Convoyage professionnel : quelle assurance ?',
-  immediateAnswer:
-    "Pour convoyer un véhicule par la route, sur ses propres roues, il doit avoir une assurance responsabilité civile en cours, même pour un seul trajet. L'assurance temporaire couvre chaque véhicule convoyé pour la durée exacte du déplacement, sans souscrire de contrat annuel pour un véhicule qui ne fait que passer.",
+  answerCapsule: {
+    answer:
+      "Pour convoyer un véhicule par la route, sur ses propres roues, il doit être couvert en responsabilité civile, même pour un seul trajet. L'assurance temporaire couvre chaque véhicule convoyé pour la durée exacte du déplacement, sans contrat annuel.",
+    facts: [
+      {
+        anchor: "Sans engagement",
+        text: "La couverture va de 1 à 90 jours et s'arrête d'elle-même : ni contrat annuel, ni reconduction tacite.",
+      },
+      {
+        anchor: "34 pays",
+        text: "La carte internationale d'assurance couvre les convoyages transfrontaliers dans 34 pays.",
+      },
+      {
+        anchor: "Depuis avril 2024",
+        text: "La carte verte n'existe plus. La preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA).",
+      },
+    ],
+    updated: "3 juin 2026",
+  },
   sections: [
     {
       type: 'alert',

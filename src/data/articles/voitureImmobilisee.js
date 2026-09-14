@@ -116,8 +116,25 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline:
     "Voiture immobilisée pour défaut d'assurance : comment la récupérer (vite et légalement)",
-  immediateAnswer:
-    "Vous venez d'être contrôlé sans assurance, votre voiture est immobilisée - peut-être déjà partie en fourrière - et les questions se bousculent. Respirez. La sortie tient en une phrase : pour récupérer votre véhicule, il faut présenter une attestation d'assurance valide. Et ça, vous pouvez l'obtenir en ligne en moins de 5 minutes, avec une attestation immédiate par email, présentable sur-le-champ à l'agent ou au commissariat. On vous explique exactement quoi faire, dans le bon ordre.",
+  answerCapsule: {
+    answer:
+      "Pour obtenir la mainlevée et récupérer un véhicule immobilisé, vous devez présenter une attestation d'assurance valide et votre permis de conduire. Une assurance temporaire, dès 1 jour, suffit et délivre une attestation immédiate.",
+    facts: [
+      {
+        anchor: "Fiche d'immobilisation",
+        text: "Elle fixe le nombre de jours minimum à couvrir. En pratique, prévoyez le temps des démarches et du rapatriement du véhicule.",
+      },
+      {
+        anchor: "Jusqu'à 3 750 €",
+        text: "Le défaut d'assurance expose à cette amende, à des peines complémentaires et à une inscription au fichier AGIRA.",
+      },
+      {
+        anchor: "1 à 90 jours",
+        text: "La responsabilité civile obligatoire est couverte sur la durée choisie, avec attestation immédiate par email.",
+      },
+    ],
+    updated: "2 juin 2026",
+  },
   sections: [
     {
       type: 'text',

@@ -133,10 +133,26 @@ export const articleData = {
   readTime: '5 min',
   updatedDate: '3 juin 2026',
   author: 'Evidence Assurances',
-  immediateAnswerLabel: "L'essentiel",
   headline: "Véhicule ou permis étranger : rouler assuré en France",
-  immediateAnswer:
-    "Un véhicule à plaque étrangère doit être assuré pour circuler en France, et si vous y résidez, immatriculé en France dans le mois suivant son arrivée ou son achat (article R322-5). En attendant l'immatriculation, une assurance temporaire, de 1 à 90 jours, vous couvre légalement avec une attestation immédiate, à partir de la plaque étrangère ou du numéro de châssis.",
+  answerCapsule: {
+    answer:
+      "Un véhicule immatriculé à l'étranger ou conduit avec un permis étranger peut être assuré en France de façon temporaire. La responsabilité civile est couverte dès le premier jour, avec une carte internationale d'assurance valable dans 34 pays.",
+    facts: [
+      {
+        anchor: "Un mois",
+        text: "Délai pour immatriculer en France quand on y réside (article R322-5). Au-delà, l'amende encourue est de 135 euros.",
+      },
+      {
+        anchor: "Plaque ou châssis",
+        text: "La souscription se fait à partir de la plaque étrangère ou du numéro de châssis, sans attendre la carte grise française.",
+      },
+      {
+        anchor: "Jusqu'à 3 750 euros",
+        text: "Montant encouru pour défaut d'assurance, avec immobilisation possible du véhicule.",
+      },
+    ],
+    updated: "3 juin 2026",
+  },
   sections: [
     {
       type: 'text',

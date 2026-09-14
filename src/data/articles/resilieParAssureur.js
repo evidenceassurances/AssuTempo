@@ -113,8 +113,25 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline:
     "Résilié par votre assureur : quelles solutions, et quand l'assurance temporaire dépanne",
-  immediateAnswer:
-    "Être résilié ne vous dispense pas d'assurer votre véhicule : la responsabilité civile reste obligatoire (article L211-1 du Code des assurances). La bonne nouvelle, c'est que tout dépend du motif. Résilié pour un simple impayé ou un oubli de renouvellement ? Une assurance temporaire peut vous couvrir immédiatement, attestation par email en quelques minutes, le temps de retrouver un contrat annuel. Résilié pour sinistres ou pour fausse déclaration ? La solution passe plutôt par un assureur spécialisé ou le Bureau central de tarification. On fait le tri, honnêtement.",
+  answerCapsule: {
+    answer:
+      "La responsabilité civile reste obligatoire (article L211-1). Résilié pour impayé ou non-renouvellement, une assurance temporaire peut vous couvrir immédiatement ; résilié pour sinistre, la solution passe par un assureur spécialisé ou le Bureau central de tarification.",
+    facts: [
+      {
+        anchor: "2 ans",
+        text: "Durée habituelle de l'inscription au fichier AGIRA des résiliés après un non-paiement.",
+      },
+      {
+        anchor: "Jusqu'à 5 ans",
+        text: "Durée d'inscription possible après des sinistres responsables répétés.",
+      },
+      {
+        anchor: "Le motif décide",
+        text: "Résiliation pour impayé ou non-renouvellement : le temporaire dépanne. Pour sinistres : assureur spécialisé ou Bureau central de tarification.",
+      },
+    ],
+    updated: "23 juin 2026",
+  },
   sections: [
     {
       type: 'text',

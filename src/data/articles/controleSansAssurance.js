@@ -102,8 +102,25 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline:
     "Contrôlé sans assurance : risques, amende et que faire tout de suite",
-  immediateAnswer:
-    "Vous venez d'être contrôlé sans assurance, ou vous craignez de l'être ? Soyons clairs : rouler sans assurance est un délit, et la facture peut grimper de 500 € à 3 750 €. Mais la situation se règle vite. En souscrivant une assurance temporaire en ligne, vous obtenez une attestation immédiate, présentable sur-le-champ - et vous évitez l'essentiel des conséquences. Voici ce que vous risquez exactement, et quoi faire dans la foulée.",
+  answerCapsule: {
+    answer:
+      "Rouler sans assurance est un délit (article L324-2 du Code de la route), pas une simple contravention : il expose à une forte amende et à des peines complémentaires comme la suspension du permis. Une assurance temporaire souscrite en ligne vous remet en règle immédiatement.",
+    facts: [
+      {
+        anchor: "500 € à 3 750 €",
+        text: "Fourchette de l'amende encourue, avec immobilisation possible du véhicule.",
+      },
+      {
+        anchor: "Aucun retrait de points",
+        text: "Le défaut d'assurance n'est pas une infraction à points, mais une condamnation peut être inscrite au bulletin n°1 du casier judiciaire.",
+      },
+      {
+        anchor: "Article L324-2",
+        text: "C'est ce texte du Code de la route qui qualifie le défaut d'assurance de délit.",
+      },
+    ],
+    updated: "2 juin 2026",
+  },
   sections: [
     {
       type: 'text',

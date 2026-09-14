@@ -4,7 +4,33 @@ import { Helmet } from 'react-helmet-async';
 import { m } from 'framer-motion';
 import { fadeUp, stagger } from '../animations';
 import AccordionItem from '../components/ui/AccordionItem';
+import AnswerCapsule from '../components/articles/AnswerCapsule';
 import { jsonLd } from '../lib/seo';
+
+/* Reponse en bref : meme composant que les articles, pour que le format cite
+   par les moteurs generatifs soit le meme partout. Chaque element est repris
+   des reponses affichees dans l'accordeon ci-dessous, sans y ajouter un fait
+   qui ne serait pas deja sur la page (commentaire de code, donc sans accents,
+   comme le reste du depot ; le contenu affiche, lui, est accentue). */
+const capsuleFaq = {
+  answer:
+    "Une assurance auto temporaire couvre un véhicule pour une durée de moins de 90 jours, avec une validité immédiate. Elle comprend la responsabilité civile, la défense recours après accident et l'assistance dépannage, mais ni le vol ni le bris de glace.",
+  facts: [
+    {
+      anchor: '20 ans minimum',
+      text: "Souscription ouverte aux particuliers comme aux professionnels, à partir de 20 ans et avec un permis de plus de 2 ans.",
+    },
+    {
+      anchor: 'Ni vol ni bris de glace',
+      text: "La couverture comprend la responsabilité civile, la défense recours suite à accident et l'assistance dépannage, rien de plus.",
+    },
+    {
+      anchor: 'Moins de 90 jours',
+      text: "La durée est ponctuelle, renouvelable, et la validité est immédiate à 15 minutes près.",
+    },
+  ],
+  updated: '12 août 2026',
+};
 
 const faqs = [
   {
@@ -170,7 +196,13 @@ function Faq() {
         </m.div>
       </section>
 
-      <section style={{ background: 'var(--bg)', padding: '80px 24px' }}>
+      <section style={{ background: 'var(--bg)', padding: '0 24px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <AnswerCapsule capsule={capsuleFaq} />
+        </div>
+      </section>
+
+      <section style={{ background: 'var(--bg)', padding: '48px 24px 80px' }}>
         <m.div
           variants={stagger}
           initial="hidden"

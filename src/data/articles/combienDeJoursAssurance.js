@@ -133,11 +133,27 @@ export const articleData = {
   readTime: '4 min',
   updatedDate: '3 juin 2026',
   author: 'Evidence Assurances',
-  immediateAnswerLabel: "L'essentiel",
   headline:
     "Sortie de fourrière : combien de jours d'assurance faut-il souscrire ?",
-  immediateAnswer:
-    "Pour lever l'immobilisation d'un véhicule placé en fourrière pour défaut d'assurance, vous devez souscrire au minimum le nombre de jours d'assurance indiqué sur la fiche d'immobilisation remise par les forces de l'ordre. Souvent 3 jours suffisent, mais pas toujours : appelez l'autorité indiquée sur la fiche pour confirmer. Une assurance temporaire, de 1 à 90 jours, délivre une attestation immédiate, suffisante pour récupérer votre véhicule.",
+  answerCapsule: {
+    answer:
+      "Aucune durée minimale n'est imposée par la loi : il suffit de présenter une attestation d'assurance valide le jour de la récupération. Une formule temporaire dès 1 jour permet de ressortir le véhicule légalement.",
+    facts: [
+      {
+        anchor: "Souvent 3 jours",
+        text: "C'est le minimum le plus fréquemment porté sur la fiche d'immobilisation, mais pas une règle : confirmez auprès de l'autorité qu'elle indique.",
+      },
+      {
+        anchor: "La fiche fait foi",
+        text: "Le nombre de jours à couvrir est celui inscrit sur la fiche d'immobilisation remise par les forces de l'ordre.",
+      },
+      {
+        anchor: "1 à 90 jours",
+        text: "La durée s'ajuste au jour près, avec attestation immédiate à présenter à la fourrière.",
+      },
+    ],
+    updated: "3 juin 2026",
+  },
   sections: [
     {
       type: 'text',
