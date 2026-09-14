@@ -84,17 +84,20 @@ const ROUTES = [
   '/assurance-internationale',
   '/guichet-de-nuit',
   '/urgence',
-  '/importer-exporter-un-vehicule-etranger',
-  '/liste-des-situations-necessitant-une-assurance-temporaire',
 ];
 
-// Routes prerendues mais volontairement absentes du sitemap : /urgence et les
-// deux URL heritees ci-dessous sont de simples redirections client-side
-// (noindex) vers leur equivalent actuel.
+// Routes prerendues mais volontairement absentes du sitemap : /urgence est une
+// redirection client-side (noindex) vers son equivalent actuel. Les deux URL
+// heritees qui figuraient ici sont passees en vraies 301 dans vercel.json le
+// 14 septembre 2026 : elles n'ont plus ni route, ni page, ni prerendu.
 const SITEMAP_EXCLUDE = new Set([
   '/urgence',
-  '/importer-exporter-un-vehicule-etranger',
-  '/liste-des-situations-necessitant-une-assurance-temporaire',
+  // Ces deux pages portent `robots: noindex, follow` (CGV.jsx, Cookies.jsx).
+  // Une URL noindex listee au sitemap est une contradiction que Google signale
+  // ("Envoyee, marquee noindex") et qui use du budget de crawl pour rien. On
+  // retire du sitemap sans toucher a la politique d'indexation elle-meme.
+  '/conditions-generales',
+  '/cookies',
 ]);
 
 // Les 3 pages locales partagent le meme composant (VilleLocale.jsx) : leur
