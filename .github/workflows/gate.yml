@@ -245,6 +245,84 @@ jobs:
           done
           echo "mergeable=$etat" >> "$GITHUB_OUTPUT"
 
+      # `gh pr update-branch` ne sait pas resoudre un conflit, et dans ce depot
+      # il y en a un garanti des que deux PR se chevauchent : dist/ est COMMITE,
+      # donc deux branches qui lancent `npm run build` produisent deux versions
+      # differentes de chaque fichier prerendu. C'est ce qui a bloque la PR #60
+      # le 14 septembre 2026 (241 fichiers en conflit, tous sous dist/, sources
+      # fusionnees sans une seule collision) alors que le portique etait vert.
+      # Avec une usine et un chantier qui publient deux fois par semaine chacun,
+      # le cas se represente en permanence.
+      #
+      # Un artefact de build ne se fusionne pas, il se REGENERE. On fait donc un
+      # vrai `git merge origin/main` (jamais une recopie de fichiers : le diff
+      # trois-points du portique verrait alors les fichiers de main comme
+      # modifies par la PR), et on ne resout QUE si tous les conflits sont sous
+      # dist/. Un seul conflit de source et on s'arrete : c'est un arbitrage
+      # humain, pas un artefact.
+      #
+      # L'etape est en continue-on-error : si elle renonce, la suite se deroule
+      # normalement, `gh pr merge` echoue et l'etape de signalement pose le
+      # label hold avec son commentaire. Pousser avec le GITHUB_TOKEN ne
+      # redeclenche aucun workflow (anti-boucle GitHub) : pas de boucle de Gate.
+      - name: Recuperer la branche a fusionner
+        id: checkout_conflit
+        if: steps.perimetre.outputs.bloque != 'true' && steps.rattrapage.outputs.mergeable == 'CONFLICTING'
+        continue-on-error: true
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.contexte.outputs.branche }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        if: steps.checkout_conflit.outcome == 'success'
+        continue-on-error: true
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Resoudre le conflit en regenerant dist/
+        id: resolution_dist
+        if: steps.checkout_conflit.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GATE_AUTHOR: ${{ needs.contexte.outputs.auteur }}
+          BRANCHE: ${{ needs.contexte.outputs.branche }}
+          PR: ${{ needs.contexte.outputs.pr }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git merge origin/main --no-edit; then
+            restants=$(git diff --name-only --diff-filter=U | grep -v '^dist/' || true)
+            if [ -n "$restants" ]; then
+              echo "Conflits hors dist/, arbitrage humain necessaire :"
+              echo "$restants"
+              git merge --abort
+              exit 1
+            fi
+            echo "Conflits limites a dist/ ($(git diff --name-only --diff-filter=U | wc -l) fichiers) : regeneration."
+            rm -rf dist
+          fi
+          npm ci
+          npm run build
+          git add -A
+          # Le merge sans conflit a deja produit son commit ; apres resolution il
+          # reste l'index a valider. Rien a committer = branche deja alignee.
+          git diff --cached --quiet || git commit -m "Fusion de main : dist/ regenere (artefact de build, non fusionnable)"
+          # Le job gate a controle la tete PRECEDENTE : on rejoue le portique sur
+          # le resultat avant de pousser quoi que ce soit.
+          node scripts/quality-gate.mjs
+          git push origin HEAD:"$BRANCHE"
+          for i in $(seq 1 12); do
+            etat=$(gh pr view "$PR" --repo "$REPO" --json mergeable --jq '.mergeable')
+            echo "  verdict apres regeneration (tentative $i) : $etat"
+            [ "$etat" != "UNKNOWN" ] && break
+            sleep 5
+          done
+
       - name: Merge automatique (squash + suppression de branche)
         id: merge
         if: steps.perimetre.outputs.bloque != 'true'
