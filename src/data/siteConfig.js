@@ -114,3 +114,29 @@ export const siteConfig = {
 export const navLinks = siteConfig.navLinks;
 export const faqItems = siteConfig.faqItems;
 export const pricingPlans = siteConfig.pricingPlans;
+
+/* Pages en marque blanche JL Assure.
+   Sur ces pages, le parcours de souscription est gere par les equipes de JL
+   Assure pour le compte du cabinet : elles ne doivent afficher AUCUNE
+   coordonnee exterieure au parcours (telephone du cabinet, WhatsApp, autre
+   canal). Le client n'a qu'un seul interlocuteur, joignable via le numero
+   dedie affiche a l'interieur du tunnel. Demande ecrite de JL Assure du
+   14 septembre 2026, applicable au plus tard le 1er octobre 2026.
+
+   Toute nouvelle page qui integre l'iframe JL Assure doit etre ajoutee ici.
+   La contrainte ne vise PAS l'iframe Certimat de /carte-grise, qui releve
+   d'un autre partenaire. */
+export const ROUTES_MARQUE_BLANCHE = ['/tarification'];
+
+export const estRouteMarqueBlanche = (pathname = '') => {
+  const p = String(pathname).toLowerCase().split('?')[0].replace(/\/+$/, '') || '/';
+  return ROUTES_MARQUE_BLANCHE.includes(p);
+};
+
+/* Formulation de remplacement des coordonnees sur ces pages : on ne perd pas
+   l'effet rassurant du telephone, on le deplace la ou il doit etre. */
+export const CONTACT_TUNNEL = {
+  titre: 'Un conseiller vous accompagne',
+  texte: "Votre numéro dédié s'affiche directement dans le tunnel de souscription, avec l'équipe qui suit votre dossier de bout en bout.",
+  note: 'Un seul interlocuteur, du devis à votre attestation.',
+};

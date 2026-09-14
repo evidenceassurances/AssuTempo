@@ -81,6 +81,30 @@ Aider l'utilisateur à comprendre l'offre et l'orienter vers la souscription (de
 // Bloc systeme final : persona + regles, puis la base de connaissances.
 const SYSTEM_TEXT = SYSTEM_PROMPT + '\n\n' + KNOWLEDGE;
 
+/* Pages qui portent l'iframe JL Assure. Sur celles-la, le parcours est gere
+   par les equipes du partenaire pour le compte du cabinet : aucune coordonnee
+   exterieure au tunnel ne doit etre communiquee au client, l'assistant compris
+   (demande ecrite du partenaire du 14 septembre 2026, applicable au
+   1er octobre). La liste est volontairement dupliquee ici plutot qu'importee
+   de src/data/siteConfig.js : ce fichier est une fonction serverless CommonJS,
+   elle ne doit pas dependre du bundle client. Toute page ajoutee la-bas doit
+   l'etre ici aussi. */
+const ROUTES_MARQUE_BLANCHE = ['/tarification'];
+const estRouteMarqueBlanche = (page) => {
+  const p = String(page || '').toLowerCase().split('?')[0].replace(/\/+$/, '') || '/';
+  return ROUTES_MARQUE_BLANCHE.includes(p);
+};
+
+/* Consigne ajoutee en SECOND bloc systeme, jamais concatenee au premier : le
+   bloc stable garde ainsi son cache_control et reste mis en cache a
+   l'identique d'un appel a l'autre. */
+const CONSIGNE_MARQUE_BLANCHE = `CONTEXTE DE PAGE (prioritaire sur la base de connaissances)
+Le visiteur est sur la page du tunnel de souscription, operee en marque blanche par le partenaire assureur.
+Sur cette page uniquement :
+- Ne donne JAMAIS le numero de telephone du cabinet, ni l'adresse email de contact, ni aucun autre moyen de contact exterieur au tunnel, meme si le visiteur le demande explicitement.
+- S'il veut parler a quelqu'un, reponds que son numero dedie s'affiche directement dans le tunnel de souscription, avec l'equipe qui suit son dossier du devis jusqu'a l'attestation.
+- Tu continues normalement a repondre a toutes les questions sur l'assurance temporaire et a guider vers la souscription.`;
+
 // Garde-fou de debit best-effort, en memoire (par IP). Sur Vercel, la memoire
 // n'est pas partagee entre instances : pour un vrai rate-limiting persistant,
 // utiliser Vercel KV / Upstash Redis.
@@ -126,6 +150,11 @@ module.exports = async function handler(req, res) {
   // Validation stricte du body : roles {user, assistant} uniquement, content
   // chaine. On plafonne a 16 messages et 4000 caracteres par message.
   let { messages } = req.body || {};
+  // `page` vient du client : on ne s'en sert QUE pour decider de restreindre
+  // davantage l'assistant, jamais pour l'elargir. Une valeur absente ou
+  // fantaisiste retombe donc sur le comportement normal, et une valeur forgee
+  // ne peut que taire des coordonnees, pas en reveler.
+  const marqueBlanche = estRouteMarqueBlanche((req.body || {}).page);
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: 'bad_request' });
   }
@@ -160,9 +189,14 @@ module.exports = async function handler(req, res) {
         thinking: { type: 'disabled' },
         // Streaming : le texte part vers le widget au fil de la generation.
         stream: true,
-        system: [
-          { type: 'text', text: SYSTEM_TEXT, cache_control: { type: 'ephemeral' } },
-        ],
+        system: marqueBlanche
+          ? [
+            { type: 'text', text: SYSTEM_TEXT, cache_control: { type: 'ephemeral' } },
+            { type: 'text', text: CONSIGNE_MARQUE_BLANCHE },
+          ]
+          : [
+            { type: 'text', text: SYSTEM_TEXT, cache_control: { type: 'ephemeral' } },
+          ],
         messages,
       }),
     });

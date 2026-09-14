@@ -19,6 +19,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSISTANT_CSS } from './styles';
 import { TOUR_FLOWS } from './tourSteps';
 import { trackEvent } from '../lib/analytics';
+import { estRouteMarqueBlanche } from '../data/siteConfig';
 
 // Ambiance cosmos (canvas + boucle requestAnimationFrame) : DESKTOP UNIQUEMENT.
 // Import dynamique => le code cosmos n'est jamais charge ni execute sur mobile
@@ -30,8 +31,21 @@ const STYLE_ID = 'atp-styles';
 const WELCOME =
   `Bonjour, je suis Tempo, votre concierge Assutempo. Je réponds à vos questions sur l'assurance auto temporaire et la carte grise, et je peux vous guider pas à pas jusqu'à la souscription. Comment puis-je vous aider ?`;
 
-const ERROR_MSG =
-  `Je rencontre un souci technique à l'instant. Je peux toutefois vous accompagner pas à pas jusqu'au formulaire, ou vous pouvez joindre un conseiller au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h).`;
+/* Sur les pages qui portent l'iframe JL Assure, le parcours est gere par les
+   equipes du partenaire pour le compte du cabinet : aucune coordonnee
+   exterieure au tunnel ne doit etre communiquee, y compris par l'assistant
+   (demande ecrite du 14 septembre 2026). Tempo reste disponible partout, il
+   renvoie simplement vers le numero dedie affiche dans le tunnel au lieu de
+   donner celui du cabinet. Les trois messages en dur ci-dessous sont donc
+   fonction de la page courante, comme le prompt systeme cote serveur. */
+const RENVOI_TUNNEL =
+  `votre numéro dédié, affiché directement dans le tunnel de souscription`;
+const RENVOI_CABINET =
+  `l'équipe au 09 74 19 78 20 (Lun-Ven 9h-21h, Sam 9h-20h)`;
+const renvoiContact = (page) => (estRouteMarqueBlanche(page) ? RENVOI_TUNNEL : RENVOI_CABINET);
+
+const errorMsg = (page) =>
+  `Je rencontre un souci technique à l'instant. Je peux toutefois vous accompagner pas à pas jusqu'au formulaire, ou vous pouvez joindre ${renvoiContact(page)}.`;
 
 const STARTERS = [
   `Qu'est-ce que l'assurance temporaire ?`,
@@ -45,12 +59,12 @@ const STARTERS = [
 const MAX_MESSAGES_UTILISATEUR = 12;
 
 // Reponse fixe (sans appel API) quand le visiteur repose une question identique.
-const DOUBLON_MSG =
-  `Vous m'avez déjà posé cette question. Pour un cas précis ou personnalisé, le mieux est d'appeler l'équipe au 09 74 19 78 20 ou d'obtenir un devis en ligne.`;
+const doublonMsg = (page) =>
+  `Vous m'avez déjà posé cette question. Pour un cas précis ou personnalisé, le mieux est de joindre ${renvoiContact(page)}, ou d'obtenir un devis en ligne.`;
 
 // Message de cloture (plafond atteint ou marqueur [FIN] detecte).
-const CLOTURE_MSG =
-  `Pour aller plus loin sur votre situation, contactez l'équipe au 09 74 19 78 20 (Lun-Ven 9h à 21h, Sam 9h à 20h) ou obtenez votre devis en ligne.`;
+const clotureMsg = (page) =>
+  `Pour aller plus loin sur votre situation, contactez ${renvoiContact(page)}, ou obtenez votre devis en ligne.`;
 
 // Normalisation pour l'anti-doublon : minuscules, ponctuation retiree, espaces
 // reduits. \p{L}\p{N} (avec /u) garde lettres accentuees et chiffres.
@@ -320,6 +334,12 @@ export default function AssistantAssutempo() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  /* Page courante tenue dans une ref : les callbacks de conversation ont des
+     dependances vides et doivent lire la route au moment ou elles s'executent,
+     pas celle du montage. Sert a taire les coordonnees du cabinet sur les pages
+     en marque blanche, cote client comme cote serveur. */
+  const pageRef = useRef(location.pathname);
+  pageRef.current = location.pathname;
   const reducedRef = useRef(false);
   const listRef = useRef(null);
   const inputRef = useRef(null);
@@ -676,7 +696,7 @@ export default function AssistantAssutempo() {
     if (closedRef.current) return;
     closedRef.current = true;
     setClosed(true);
-    setMessages((m) => [...m, { role: 'assistant', content: CLOTURE_MSG }]);
+    setMessages((m) => [...m, { role: 'assistant', content: clotureMsg(pageRef.current) }]);
   }, []);
 
   const send = useCallback(
@@ -697,7 +717,7 @@ export default function AssistantAssutempo() {
         setMessages((m) => [
           ...m,
           { role: 'user', content },
-          { role: 'assistant', content: DOUBLON_MSG },
+          { role: 'assistant', content: doublonMsg(pageRef.current) },
         ]);
         setInput('');
         setShowFlows(false);
@@ -721,7 +741,7 @@ export default function AssistantAssutempo() {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ messages: apiMessages }),
+          body: JSON.stringify({ messages: apiMessages, page: pageRef.current }),
         });
         if (!res.ok || !res.body) throw new Error('http');
 
@@ -781,7 +801,7 @@ export default function AssistantAssutempo() {
         // partielle avant d'afficher le message d'erreur.
         setMessages((m) => {
           const copie = bulleRef.current ? m.slice(0, -1) : m.slice();
-          copie.push({ role: 'assistant', content: ERROR_MSG });
+          copie.push({ role: 'assistant', content: errorMsg(pageRef.current) });
           return copie;
         });
       } finally {

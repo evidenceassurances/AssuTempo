@@ -23,7 +23,7 @@ const TRUST = [
   { icon: Clock, title: `Attestation immédiate`, text: `Reçue par email juste après le paiement.` },
   { icon: ShieldCheck, title: `Sans reconduction tacite`, text: `Durée fixe : le contrat s'arrête de lui-même.` },
   { icon: Lock, title: `Paiement 100 % sécurisé`, text: `Transaction chiffrée de bout en bout.` },
-  { icon: Globe, title: `34 pays européens`, text: `Couverture avec carte verte incluse.` },
+  { icon: Globe, title: `34 pays européens`, text: `Carte internationale d'assurance incluse.` },
 ];
 
 // Grille tarifaire : memes fourchettes que l'article /articles/prix-assurance-auto-temporaire
@@ -72,7 +72,7 @@ const FAQ = [
   },
   {
     q: `Puis-je rouler à l'étranger avec ce contrat ?`,
-    a: `Oui. La couverture s'étend à 34 pays européens, avec la carte verte correspondante. Pensez à vérifier la durée nécessaire avant votre départ.`,
+    a: `Oui. La couverture s'étend à 34 pays européens, avec la carte internationale d'assurance correspondante. Pensez à vérifier la durée nécessaire avant votre départ.`,
   },
   {
     q: `Le contrat se renouvelle-t-il automatiquement ?`,
@@ -84,7 +84,7 @@ const FAQ = [
   },
   {
     q: `J'ai une question pendant la souscription, que faire ?`,
-    a: `Notre concierge Tempo vous répond en direct dans le chat, en bas à droite de votre écran. Vous pouvez aussi nous appeler au 09 74 19 78 20, du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.`,
+    a: `Notre concierge Tempo vous répond en direct dans le chat, en bas à droite de votre écran. Et dès que vous entrez dans le tunnel, votre numéro dédié s'affiche à l'intérieur du parcours : l'équipe qui suit votre dossier vous répond directement, du devis à votre attestation.`,
   },
 ];
 
@@ -232,11 +232,8 @@ function Pricing() {
             Obtenez votre devis d'assurance auto temporaire instantanément. De 1 à 90 jours, pour
             particuliers et professionnels. Souscription 100 % en ligne, attestation immédiate par email.
             <br /><br />
-            Besoin d'aide ? Appelez-nous au{' '}
-            <a href="tel:0974197820" style={{ color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
-              09 74 19 78 20
-            </a>
-            {' '}du lundi au vendredi de 9h à 21h et le samedi de 9h à 20h.
+            Besoin d'aide ? Votre numéro dédié s'affiche directement dans le tunnel de
+            souscription, avec l'équipe qui suit votre dossier.
           </p>
         </m.div>
 
@@ -397,20 +394,27 @@ function Pricing() {
               </button>
             </div>
 
-            {/* Carte telephone */}
+            {/* Carte "conseiller dedie".
+                Cette page porte l'iframe JL Assure : elle ne doit afficher aucune
+                coordonnee exterieure au parcours (demande ecrite du partenaire du
+                14 septembre 2026). Le numero du cabinet est donc retire d'ici, et
+                remplace par ce qu'il apportait vraiment, la certitude d'avoir
+                quelqu'un au bout du fil : le numero dedie existe bien, il vit a
+                l'interieur du tunnel. Ne pas y remettre de lien tel:. */}
             <div style={{ ...cardBase, textAlign: 'center' }}>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 6px' }}>
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: '0 0 8px' }}>
                 Vous préférez la voix ?
               </p>
-              <a
-                href="tel:0974197820"
-                style={{ fontSize: 20, fontWeight: 700, color: 'var(--gold)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-              >
+              <p style={{
+                fontSize: 15, fontWeight: 700, color: 'var(--gold)', margin: 0,
+                display: 'inline-flex', alignItems: 'center', gap: 8, lineHeight: 1.5,
+              }}>
                 <Phone size={18} strokeWidth={1.75} aria-hidden />
-                09 74 19 78 20
-              </a>
-              <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '8px 0 0' }}>
-                Lun-Ven 9h-21h | Sam 9h-20h
+                Votre numéro dédié
+              </p>
+              <p style={{ fontSize: 12.5, color: 'var(--text-subtle)', margin: '8px 0 0', lineHeight: 1.6 }}>
+                Il s&apos;affiche dans le tunnel de souscription, avec l&apos;équipe qui suit
+                votre dossier du devis à l&apos;attestation.
               </p>
             </div>
 
@@ -598,9 +602,9 @@ function Pricing() {
           <p style={{ fontSize: 15.5, color: 'var(--text-muted)', lineHeight: 1.8, margin: 0 }}>
             Tout se règle en ligne : vous renseignez votre besoin, vous voyez votre tarif
             immédiatement, vous payez de façon sécurisée et vous recevez votre attestation par email
-            en quelques minutes. La garantie est valable dans 34 pays européens, carte verte incluse.
-            Une question pendant le parcours ? Le concierge Tempo répond dans le chat, ou un conseiller
-            au téléphone.
+            en quelques minutes. La garantie est valable dans 34 pays européens, avec la carte
+            internationale d&apos;assurance. Une question pendant le parcours ? Le concierge Tempo
+            répond dans le chat, et votre numéro dédié s&apos;affiche dans le tunnel de souscription.
           </p>
         </m.section>
 
