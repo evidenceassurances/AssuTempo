@@ -140,3 +140,7 @@ Souscription de nuit : au-dela de ces horaires, AssuTempo tient un guichet de nu
 - **Assurance auto pour un voyage à l'étranger : ce qu'il faut vérifier**
   https://assutempo.fr/articles/assurance-auto-voyage-etranger
   Dans la quasi-totalité de l'Europe, la plaque d'immatriculation française suffit à prouver l'assurance, sans document à présenter. Sept pays font exception (Maroc, Tunisie, Turquie, Albanie, Azerbaïdjan, Moldavie, Macédoine du Nord) : ils exigent la carte internationale d'assurance automobile, héritière de l'ancienne carte verte, à demander à l'assureur avant le départ.
+
+- **Vendre sa voiture : comment et quand résilier votre assurance auto ?**
+  https://assutempo.fr/articles/resilier-assurance-apres-vente-voiture
+  Le contrat d'assurance est suspendu de plein droit à minuit le soir de la vente, mais la résiliation elle-même demande une lettre recommandée avec le certificat de cession (Cerfa n°15776) : elle prend effet 10 jours calendaires après réception, avec remboursement du trop-perçu (service-public.gouv.fr). Bonus-malus conservé, transfert du contrat à l'acheteur rare en pratique.

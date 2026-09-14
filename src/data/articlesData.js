@@ -441,4 +441,19 @@ export const articles = [
     updatedAtISO: '2026-09-08',
     hasPage: true,
   },
+  {
+    slug: 'resilier-assurance-apres-vente-voiture',
+    titre: 'Vendre sa voiture : comment et quand résilier votre assurance auto ?',
+    extrait:
+      "Le contrat est suspendu à minuit le soir de la vente, mais pas résilié pour autant. Délai, lettre recommandée et remboursement expliqués.",
+    reponseRapide:
+      "Votre contrat d'assurance auto est suspendu de plein droit à minuit, le soir de la vente, sans démarche à faire pour cela. Mais pour résilier réellement le contrat et être remboursé du trop-perçu, il faut prévenir l'assureur par lettre recommandée avec le certificat de cession : la résiliation prend effet 10 jours calendaires après réception.",
+    icone: Handshake,
+    accent: '#C98A3C',
+    categorie: 'Vente véhicule',
+    readTime: '7 min',
+    updatedAt: '10 septembre 2026',
+    updatedAtISO: '2026-09-10',
+    hasPage: true,
+  },
 ];
