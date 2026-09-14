@@ -107,3 +107,43 @@ chantier 3 avec d'autres communes du 94.**
 structuré supplémentaire dans ce run.
 
 ---
+
+## Session du 14 septembre 2026 : chantier GEO (hors numerotation des chantiers structurels)
+
+Prompt d'Ayoub en 6 chantiers, fonde sur un audit externe passe par un convertisseur
+HTML vers Markdown. Cet audit n'a vu ni les balises `<script>`, ni les en-tetes HTTP, et
+decrivait le site comme un projet Next.js. Verification faite avant d'agir : 4 des 6
+constats etaient faux ou deja traites. Ce qui a ete fait porte donc sur le reel.
+
+| Chantier | Constat de l'audit | Realite mesuree | Livraison |
+|---|---|---|---|
+| 1. llms.txt | absent | present, 200, text/plain, mais liste ecrite a la main : 21 articles sur 30 | PR #62 mergee : liste generee au build depuis articlesData.js + section legale |
+| 2. JSON-LD | aucune donnee structuree | 0 page sans JSON-LD sur 88, InsuranceAgency + ORIAS, prerendu | rien a faire |
+| 3. 301 heritees | 6 URL a traiter | 4 deja en 301 ; href /www.assutempo.fr deja corriges | commit direct 06eb032e : les 2 dernieres passees en 301, /cookies et /conditions-generales sortis du sitemap |
+| 4. E-E-A-T | trous sur 2 articles | 30 articles sur 30 complets, y compris les 2 cites | rien a faire |
+| 5. Reponse en bref | absente sur une partie | les 9 articles avaient le bloc HISTORIQUE "Reponse immediate" : deux formats concurrents | PR #63 mergee : 30/30 sur AnswerCapsule, plus /faq |
+| 6. CTR | 2 pages a reecrire | les 2 etaient deja conformes (47 et 58 c de title) : probleme d'angle, pas technique | PR #64, mergee par erreur au lieu d'attendre le label hold |
+
+Points a connaitre pour les prochains runs :
+
+- **vercel.json est en zone interdite du portique** : une PR qui y touche est refusee. C'est
+  pour cela que les 2 dernieres URL heritees etaient restees en redirection client-side
+  depuis le 4 septembre. Ce type de correctif passe par une session locale sur main.
+- **Le portique analyse le DIFF COMMITE** (`git diff origin/main...HEAD`), pas les fichiers
+  du disque : le lancer avant de committer renvoie "tout est vert" sans rien avoir lu.
+- **Compter les caracteres d'un title sur le HTML rendu est faux** : `&#x27;` compte pour 6
+  caracteres au lieu d'un. Toujours mesurer sur la source.
+- **Le label hold doit etre pose AVANT d'ouvrir la PR**, pas apres : l'evenement d'ouverture
+  suffit a declencher le Gate, qui merge dans la foulee. Vecu sur la PR #64.
+- **Le dossier projet est synchronise** (Desktop) : des doublons " 2" apparaissent, y compris
+  dans .git/refs, ou ils cassent `git fetch` (bad object). Deux fichiers source orphelins et
+  une ref `origin/main 2` ont ete supprimes dans cette session.
+
+Restent ouverts, signales et non forces :
+- `/tarification` : capsule "reponse en bref" non posee, la page est en zone interdite.
+- Les 34 fiches pays : capsule a generer depuis les donnees pays, merite son propre chantier.
+- Deux articles portent encore un titre de section "En resume", expression bannie par le
+  portique : `controleSansAssurance` et `combienDeJoursAssurance`. Anterieurs a la regle,
+  donc invisibles pour le portique qui n'analyse que les lignes ajoutees.
+
+---
