@@ -107,10 +107,12 @@ jobs:
                 puis npm run build. Si le build échoue à cause de ton article, corrige-le. Si le
                 build échoue pour une raison étrangère à ton travail, ouvre quand même la PR et
                 décris l'échec dans sa description.
-            12. PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : après le build, lance
-                `node scripts/quality-gate.mjs` sur ta branche (il compare à origin/main et
-                imprime fichier:ligne pour chaque problème). Tant qu'il sort en erreur, corrige
-                et relance. N'ouvre la PR qu'une fois le portique vert : sinon la PR reste
+            12. PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : commite d'abord (le portique
+                analyse le DIFF COMMITÉ face à origin/main, pas les fichiers du disque : lancé
+                avant le commit, il te dira « tout est vert » sans avoir rien lu de ton
+                travail), puis lance `node scripts/quality-gate.mjs`, qui imprime fichier:ligne
+                pour chaque problème. Tant qu'il sort en erreur, corrige, commite à nouveau et
+                relance. N'ouvre la PR qu'une fois le portique vert : sinon la PR reste
                 ouverte sans être mergée, et l'article n'est jamais publié. C'est très
                 exactement ce qui a immobilisé la PR #60 du 10 au 14 septembre 2026, pour un
                 seul « En résumé » en titre de section.

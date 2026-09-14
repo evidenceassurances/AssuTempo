@@ -96,9 +96,11 @@ jobs:
               est de constater ». Pour conclure, écris « Ce qu'il faut retenir » ou
               « L'essentiel ». Aucun tiret cadratin ni demi-cadratin nulle part.
             - npm ci, puis npm run lint, puis npm run build. Corrige ce que ton chantier casse.
-            - PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : après le build, lance
-              `node scripts/quality-gate.mjs` (il compare ta branche à origin/main et imprime
-              fichier:ligne pour chaque problème). Tant qu'il sort en erreur, corrige et relance.
+            - PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : commite d'abord (le portique
+              analyse le DIFF COMMITÉ face à origin/main, pas les fichiers du disque : lancé
+              avant le commit, il annonce « tout est vert » sans avoir rien lu de ton travail),
+              puis lance `node scripts/quality-gate.mjs`, qui imprime fichier:ligne pour chaque
+              problème. Tant qu'il sort en erreur, corrige, commite a nouveau et relance.
               N'ouvre la PR qu'une fois le portique vert : une PR qui échoue au portique reste
               ouverte sans jamais être mergée, et ton chantier n'arrive jamais en production.
             - Mets à jour .claude/chantiers-state.md : chantier traité, ce qui a été fait, ce qui
