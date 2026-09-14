@@ -113,8 +113,25 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline:
     "Déménager avec un utilitaire : comment être bien assuré, à la journée",
-  immediateAnswer:
-    "Un utilitaire reste un véhicule à moteur : il doit être assuré au minimum en responsabilité civile pour circuler (article L211-1 du Code des assurances), même pour un simple aller-retour de déménagement. Si vous louez en agence, l'assurance est le plus souvent incluse : vérifiez les garanties et la franchise. Si vous empruntez la camionnette d'un proche ou d'un professionnel, ou si vous venez d'en acheter une, une assurance temporaire vous couvre pour la durée exacte du déménagement, attestation immédiate par email. Pas besoin d'un contrat à l'année pour un week-end.",
+  answerCapsule: {
+    answer:
+      "Un utilitaire doit être assuré au minimum en responsabilité civile, même pour un aller-retour (article L211-1). En location, l'assurance est souvent incluse ; pour un utilitaire prêté ou acheté, une assurance temporaire à votre nom vous couvre pour la durée du déménagement.",
+    facts: [
+      {
+        anchor: "3,5 tonnes de PTAC",
+        text: "Le permis B suffit jusqu'à ce seuil, qui couvre la quasi-totalité des camionnettes de déménagement. Au-delà, il faut le permis C.",
+      },
+      {
+        anchor: "Jusqu'à 3 750 €",
+        text: "Rouler sans assurance reste un délit, même pour un seul trajet, avec immobilisation possible du véhicule.",
+      },
+      {
+        anchor: "La durée réelle",
+        text: "Couvrez le chargement, le trajet, le déchargement et la marge de restitution : de 1 à 90 jours, au jour près.",
+      },
+    ],
+    updated: "23 juin 2026",
+  },
   sections: [
     {
       type: 'text',

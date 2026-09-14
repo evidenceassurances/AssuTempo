@@ -113,8 +113,25 @@ export const articleData = {
   author: 'Evidence Assurances',
   headline:
     "Assurer la voiture d'un proche décédé : ce que dit la loi, et comment rouler couvert",
-  immediateAnswer:
-    "Au décès du propriétaire, le contrat d'assurance auto ne s'éteint pas automatiquement : il se transmet de plein droit aux héritiers (article L121-10 du Code des assurances), qui reprennent les obligations, dont le paiement des primes. Mais en pratique, l'héritier qui prend le volant n'est pas toujours un conducteur déclaré au contrat, et parfois le contrat est inconnu, suspendu ou déjà résilié. Pour déplacer ou vendre le véhicule sereinement, une assurance temporaire à votre nom vous couvre immédiatement, sans dépendre du contrat du défunt ni engager un contrat annuel pour une voiture que vous allez céder.",
+  answerCapsule: {
+    answer:
+      "Au décès, le contrat se transmet de plein droit aux héritiers (article L121-10), mais l'héritier qui conduit n'est pas toujours couvert. Une assurance temporaire à votre nom vous couvre immédiatement pour déplacer ou vendre le véhicule.",
+    facts: [
+      {
+        anchor: "Article L121-10",
+        text: "Le contrat du défunt se transmet de plein droit aux héritiers, qui en reprennent les obligations, dont le paiement des primes.",
+      },
+      {
+        anchor: "Conducteur non déclaré",
+        text: "L'héritier qui prend le volant n'est pas nécessairement un conducteur déclaré au contrat : la couverture peut être incertaine, à vérifier auprès de l'assureur.",
+      },
+      {
+        anchor: "6 mois",
+        text: "Après une cession, le contrat est suspendu le lendemain à minuit, résiliable avec 10 jours de préavis, et résilié de plein droit au bout de 6 mois (L121-11).",
+      },
+    ],
+    updated: "23 juin 2026",
+  },
   sections: [
     {
       type: 'text',

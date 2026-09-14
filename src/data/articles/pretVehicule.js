@@ -137,8 +137,25 @@ export const articleData = {
   updatedDate: '3 juin 2026',
   author: 'Evidence Assurances',
   headline: 'Prêter ou emprunter un véhicule en toute sécurité',
-  immediateAnswer:
-    "Prêter votre voiture semble anodin, mais en cas d'accident responsable de l'emprunteur, c'est votre contrat et votre bonus-malus à vous qui trinquent. L'assurance temporaire permet à celui qui emprunte de rouler couvert le temps du prêt, sans toucher au contrat annuel du propriétaire.",
+  answerCapsule: {
+    answer:
+      "Prêter son véhicule est possible, mais selon le contrat un accident causé par l'emprunteur peut entraîner une franchise prêt de volant et affecter le bonus du propriétaire. Une assurance temporaire au nom de l'emprunteur couvre la durée du prêt.",
+    facts: [
+      {
+        anchor: "Bonus-malus préservé",
+        text: "L'assurance temporaire est souscrite au nom de l'emprunteur : le contrat annuel du propriétaire n'est pas engagé.",
+      },
+      {
+        anchor: "Depuis avril 2024",
+        text: "La carte verte n'existe plus. La preuve d'assurance se fait à la plaque, via le Fichier des Véhicules Assurés (FVA).",
+      },
+      {
+        anchor: "1 à 90 jours",
+        text: "La durée se cale sur celle du prêt, avec attestation immédiate par email.",
+      },
+    ],
+    updated: "3 juin 2026",
+  },
   sections: [
     {
       type: 'alert',
