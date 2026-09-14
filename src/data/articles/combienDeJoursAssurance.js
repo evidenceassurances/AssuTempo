@@ -249,6 +249,19 @@ export const articleData = {
       heading: "La fourrière ouvre avant les assureurs : comment être couvert à l'aube ?",
       paragraphs: [
         "C'est le décalage qui coûte le plus cher : beaucoup de fourrières ouvrent tôt le matin, quand la souscription en ligne classique, elle, ne rouvre qu'à 9h. Une journée de gardiennage de plus, pour une heure d'attente. Le Guichet de Nuit AssuTempo existe pour ce trou-là : il reçoit les demandes de 21h à 9h du lundi au samedi et toute la journée du dimanche, prépare le contrat pendant la nuit, et l'attestation arrive par mail dès le paiement. Vous vous présentez à l'ouverture avec le document en main.",
+        [
+          "Le même décalage se retrouve partout : à ",
+          { to: '/assurance-temporaire-carte-grise-lyon', texte: 'Lyon' },
+          ", à ",
+          { to: '/assurance-temporaire-carte-grise-marseille', texte: 'Marseille' },
+          ", ou dans le Val-de-Marne à ",
+          { to: '/assurance-temporaire-carte-grise-alfortville', texte: 'Alfortville' },
+          ", ",
+          { to: '/assurance-temporaire-carte-grise-vitry-sur-seine', texte: 'Vitry-sur-Seine' },
+          " et ",
+          { to: '/assurance-temporaire-carte-grise-ivry-sur-seine', texte: 'Ivry-sur-Seine' },
+          ".",
+        ],
       ],
       relatedLink: {
         text: 'Le Guichet de Nuit : votre contrat préparé entre 21h et 9h',

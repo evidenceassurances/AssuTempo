@@ -166,6 +166,19 @@ export const articleData = {
       paragraphs: [
         "Le site de l'ANTS reste ouvert à tous, sans intermédiaire obligatoire. Le délai de traitement varie fortement selon le département et la charge du service instructeur, en général de quelques jours à plusieurs semaines. Un professionnel habilité ne contourne pas cette file d'attente institutionnelle : il pré-vérifie le dossier, CERFA, pièces, calcul des taxes, avant de le transmettre, ce qui réduit le risque de rejet.",
         "Un dossier rejeté pour une pièce manquante ou une photo illisible repart en bas de la pile. C'est cet aller-retour, plus que la fabrication du titre elle-même, qui allonge le plus souvent le délai réellement ressenti par le nouveau propriétaire.",
+        [
+          "Cette variation selon le département se retrouve aussi bien à ",
+          { to: '/assurance-temporaire-carte-grise-paris', texte: 'Paris' },
+          " que dans le Val-de-Marne, à ",
+          { to: '/assurance-temporaire-carte-grise-alfortville', texte: 'Alfortville' },
+          ", ",
+          { to: '/assurance-temporaire-carte-grise-vitry-sur-seine', texte: 'Vitry-sur-Seine' },
+          ", ",
+          { to: '/assurance-temporaire-carte-grise-maisons-alfort', texte: 'Maisons-Alfort' },
+          " ou ",
+          { to: '/assurance-temporaire-carte-grise-charenton-le-pont', texte: 'Charenton-le-Pont' },
+          ", où le point d'accueil numérique de la préfecture reste basé à Créteil.",
+        ],
       ],
       relatedLink: {
         text: "Dossier bloqué sur l'ANTS : les causes fréquentes et comment le débloquer",

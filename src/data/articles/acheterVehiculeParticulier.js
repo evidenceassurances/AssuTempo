@@ -233,6 +233,13 @@ export const articleData = {
       heading: 'Que risque-t-on en roulant sans assurance ?',
       paragraphs: [
         "Rouler sans assurance est un délit : amende, et surtout prise en charge personnelle de tous les dommages en cas d'accident.",
+        [
+          "Le principe reste identique partout, y compris à ",
+          { to: '/assurance-temporaire-carte-grise-vitry-sur-seine', texte: 'Vitry-sur-Seine' },
+          " et à ",
+          { to: '/assurance-temporaire-carte-grise-maisons-alfort', texte: 'Maisons-Alfort' },
+          ".",
+        ],
       ],
       relatedLink: {
         text: 'Contrôlé sans assurance : risques, amende et que faire',

@@ -208,6 +208,15 @@ export const articleData = {
       heading: 'Rouler légal après l\'achat : le lien entre assurance et carte grise',
       paragraphs: [
         "Le jour de l'achat déclenche deux démarches distinctes, sur deux horloges différentes : l'assurance, à traiter avant le premier trajet, et la carte grise, comptée en semaines. Traiter les deux en parallèle, plutôt que l'une après l'autre, évite de se retrouver en infraction sur l'une pendant que l'autre progresse.",
+        [
+          "La procédure de changement de titulaire ne varie pas d'une ville à l'autre : elle se déroule à l'identique à ",
+          { to: '/assurance-temporaire-carte-grise-lyon', texte: 'Lyon' },
+          ", à ",
+          { to: '/assurance-temporaire-carte-grise-creteil', texte: 'Créteil' },
+          " ou à ",
+          { to: '/assurance-temporaire-carte-grise-maisons-alfort', texte: 'Maisons-Alfort' },
+          ".",
+        ],
       ],
       relatedLink: { text: 'Le rétroplanning complet de J0 à J+30', href: '/roulez-legal-apres-achat' },
     },

@@ -217,6 +217,15 @@ export const articleData = {
       heading: 'Combien ça coûte ?',
       paragraphs: [
         "Deux postes : les frais de fourrière (enlèvement + gardiennage par jour) varient selon la commune et augmentent chaque jour - d'où l'intérêt d'agir vite. L'assurance temporaire, elle, est à prix fixe et transparent, affiché dès le devis selon le véhicule et la durée. Aucune surprise.",
+        [
+          "Le tarif et l'interlocuteur du gardiennage dépendent du secteur : à ",
+          { to: '/assurance-temporaire-carte-grise-paris', texte: 'Paris' },
+          ", à ",
+          { to: '/assurance-temporaire-carte-grise-alfortville', texte: 'Alfortville' },
+          " ou à ",
+          { to: '/assurance-temporaire-carte-grise-charenton-le-pont', texte: 'Charenton-le-Pont' },
+          ", ce n'est pas la même organisation qu'en zone rurale.",
+        ],
       ],
     },
     {
