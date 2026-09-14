@@ -302,7 +302,7 @@ await build({
 // ── 2. Charger le bundle et le template ──────────────────────────────────────
 const require = createRequire(import.meta.url);
 // eslint-disable-next-line import/no-dynamic-require
-const { render } = require(path.join(distSsr, 'entry-server.js'));
+const { render, articles: ARTICLES } = require(path.join(distSsr, 'entry-server.js'));
 
 const templatePath = path.join(root, 'dist/index.html');
 if (!existsSync(templatePath)) {
@@ -570,6 +570,40 @@ if (gitFiable) {
   writeFileSync(LASTMOD_MAP_PATH, `${JSON.stringify(trie, null, 2)}\n`);
   const distinctes = new Set(Object.values(trie)).size;
   console.log(`🗓️  sitemap-lastmod.json : ${Object.keys(trie).length} routes, ${distinctes} dates distinctes.`);
+}
+
+/* ── llms.txt : section "## Articles" regeneree ─────────────────────────────
+   Le fichier public/llms.txt porte les sections redigees a la main et un
+   marqueur [[ARTICLES_AUTO]] a la place de la liste d'articles. Ecrite a la
+   main, cette liste se perimait en silence : au 14 septembre 2026 elle portait
+   21 articles sur 30, les 9 manquants etant precisement les plus recents, ceux
+   que l'usine publie deux fois par semaine. Meme principe que le sitemap : la
+   source de verite est src/data/articlesData.js, jamais une liste recopiee. */
+const LLMS_MARQUEUR = '[[ARTICLES_AUTO]]';
+const llmsSource = path.join(root, 'public/llms.txt');
+
+if (existsSync(llmsSource)) {
+  const brut = readFileSync(llmsSource, 'utf-8');
+  if (!brut.includes(LLMS_MARQUEUR)) {
+    console.error(`❌  llms.txt : marqueur ${LLMS_MARQUEUR} introuvable, section Articles non generee.`);
+    process.exit(1);
+  }
+  const publies = ARTICLES.filter((a) => a.hasPage !== false);
+  const liste = publies.map((a) => [
+    `- **${a.titre}**`,
+    `  ${SITE}/articles/${a.slug}`,
+    `  ${a.extrait}`,
+  ].join('\n')).join('\n\n');
+
+  // Le commentaire d'entretien qui precede le marqueur n'a rien a faire dans le
+  // fichier servi : il est retire avec lui.
+  const rendu = brut.replace(
+    /<!-- Section regeneree[\s\S]*?-->\n\[\[ARTICLES_AUTO\]\]/,
+    liste,
+  ).replace(LLMS_MARQUEUR, liste);
+
+  writeFileSync(path.join(root, 'dist/llms.txt'), rendu);
+  console.log(`🤖  llms.txt : ${publies.length} articles listes.`);
 }
 
 // ── 5. Nettoyage ─────────────────────────────────────────────────────────────

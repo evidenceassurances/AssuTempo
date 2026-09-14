@@ -110,6 +110,11 @@ const PAGES = {
   NotFound,
 };
 
+/* Expose la liste des articles au script de prerendu : scripts/prerender.mjs
+   require() ce bundle et y regenere la section "## Articles" de llms.txt, pour
+   qu'elle ne se perime plus. Ce reexport ne change rien au rendu. */
+export { articles } from './data/articlesData';
+
 export function render(url) {
   const helmetContext = {};
   const html = renderToString(
