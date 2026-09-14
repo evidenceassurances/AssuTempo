@@ -52,12 +52,54 @@ Vérifié aussi : `/quisommesnous` vers `/qui-sommes-nous` (301, vercel.json) ; 
 donne 410 Gone via `api/gone.js` (testé en direct : HTTP 410 confirmé) ; sitemap propre (aucune
 de ces URL n'y figure). Rien à faire ici pour l'instant.
 
-## Chantier 3: Pages locales 94 : PAS COMMENCÉ
+## Chantier 3: Pages locales 94 : 6 villes livrées le 11 septembre 2026, vérifié en ligne
+avant démarrage (les 6 rendaient 404, sitemap sans aucune ville du Val-de-Marne)
 
-Aucune page de proximité (Alfortville, Créteil, Maisons-Alfort, Vitry, Ivry, Charenton…)
-n'existe. Seules 3 pages villes existent (`VilleLocale.jsx` : Paris, Lyon, Marseille, routes
-`/assurance-temporaire-carte-grise-{paris,lyon,marseille}`), aucune n'est dans le 94.
-**Prochain chantier à prendre.**
+Ajout d'Alfortville, Créteil, Vitry-sur-Seine, Ivry-sur-Seine, Maisons-Alfort et
+Charenton-le-Pont au pattern `VilleLocale.jsx` existant (Paris/Lyon/Marseille), toutes les
+données dans `src/data/villesLocales.js`. Routes câblées dans `AppShell.jsx` (ROUTE_TABLE),
+`scripts/prerender.mjs` (ROUTES, VILLE_LOCALE_ROUTES, ROUTE_MODULES : les 6 sont donc dans le
+sitemap avec lastmod suivant villesLocales.js), lien entrant depuis la page pilier
+`roulez-legal-apres-achat.jsx`, entrée GEO ajoutée dans `public/llms.txt`.
+
+Faits vérifiés par recherche web le 11 septembre 2026 (6 agents dédiés, un par ville, sources
+officielles uniquement : sites des mairies, val-de-marne.gouv.fr, metropolegrandparis.fr) :
+- **Constat commun important, à retenir pour toute page locale de petite couronne future** :
+  contrairement à Paris/Lyon/Marseille (qui ont chacune leur propre fourrière municipale bien
+  documentée), AUCUNE des 6 communes du Val-de-Marne ne publie de fourrière municipale propre.
+  Le gardiennage y est confié à des prestataires privés agréés PAR SECTEUR par la préfecture du
+  Val-de-Marne (liste des fourriéristes par secteur, publiée le 16/10/2023). Des annuaires SEO
+  tiers non officiels (fourrieres.fr, alternativi.fr, mise-en-fourriere.fr...) affichent des
+  adresses de fourrière pour ces villes : elles se sont révélées être des recopiages erronés
+  (adresses de commissariats, de mairies, ou d'adresses divergentes d'un annuaire à l'autre).
+  Décision prise : ne jamais publier ces adresses, formuler honnêtement le mécanisme réel
+  (contact du commissariat/police municipale du lieu d'enlèvement) plutôt que fabriquer une
+  fausse précision. C'est aussi devenu le point différenciant honnête de ces 6 pages.
+- ZFE Métropole du Grand Paris : intégrale à Alfortville, Ivry-sur-Seine (depuis le 1er octobre
+  2021) et Charenton-le-Pont (depuis juin 2021) ; partielle (secteur intra-A86 uniquement) à
+  Créteil, Vitry-sur-Seine et Maisons-Alfort. Période pédagogique sans sanction reconduite pour
+  toute l'année 2026 (annonce du 22 décembre 2025), cohérent avec la page Paris déjà en ligne.
+- Carte grise : guichet préfecture fermé nationalement le 6 novembre 2017 (PPNG), préfecture du
+  Val-de-Marne à Créteil (21-29 avenue du Général-de-Gaulle), qui maintient un point d'accueil
+  numérique sur rendez-vous (sans délivrer de titre elle-même).
+- Un fait local distinctif et sourcé par ville pour éviter le gabarit copié-collé : presqu'île
+  Seine/Marne et Chinagora (Alfortville), lac artificiel + statut de préfecture (Créteil), zone
+  industrielle des Ardoines (Vitry-sur-Seine), projet urbain Ivry Confluences 145 ha (Ivry-sur-
+  Seine), École nationale vétérinaire d'Alfort + vote municipal anti-ZFE du 30/09/2024 (Maisons-
+  Alfort), quartier Charenton-Bercy en réaménagement (Charenton-le-Pont).
+
+Contrôles : `npm run lint` (0 erreur, 17 warnings set-state-in-effect préexistants, aucun sur
+les fichiers touchés), `npm run build` propre (90 routes prérendues, sitemap 87 URLs contre 81
+avant, aucun tiret interdit ni expression bannie dans les lignes ajoutées).
+
+Reste pour un prochain passage : les 6 pages ne se lient pas entre elles (pas de maillage
+ville-vers-ville, cohérent avec le choix déjà fait pour Paris/Lyon/Marseille) ; d'autres villes
+du 94 restent possibles (Le Perreux-sur-Marne, Nogent-sur-Marne, Fontenay-sous-Bois...) si
+Ayoub le souhaite ; adresse de fourrière à publier si Ayoub obtient une confirmation écrite
+directe d'une mairie ou de la préfecture (aucune trouvée par recherche web à ce jour).
+
+**Prochain run : chantier 4 (maillage interne), sauf si Ayoub demande de compléter le
+chantier 3 avec d'autres communes du 94.**
 
 ## Chantier 4: Maillage interne : pas audité spécifiquement dans ce run
 
@@ -65,4 +107,3 @@ n'existe. Seules 3 pages villes existent (`VilleLocale.jsx` : Paris, Lyon, Marse
 structuré supplémentaire dans ce run.
 
 ---
-**Prochain run : chantier 3 (pages locales 94).**

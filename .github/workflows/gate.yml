@@ -80,6 +80,15 @@ jobs:
     needs: contexte
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      # Indispensable a l'etape "Ecrire le verdict sur la PR" : sans elle, un
+      # portique rouge ne laisse aucune trace ailleurs que dans l'onglet
+      # Actions, que personne ne consulte. La PR #60 (un seul "En resume" en
+      # titre de section) est ainsi restee ouverte et muette du 10 au 14
+      # septembre 2026, et l'usine a articles a paru morte alors qu'elle
+      # produisait : c'est la publication qui etait bloquee, pas la redaction.
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -94,9 +103,40 @@ jobs:
       - name: Build complet (Vite + prerender)
         run: npm run build
       - name: Controles qualite
+        id: portique
         env:
           GATE_AUTHOR: ${{ needs.contexte.outputs.auteur }}
-        run: node scripts/quality-gate.mjs
+        run: |
+          set -o pipefail
+          node scripts/quality-gate.mjs 2>&1 | tee "${RUNNER_TEMP}/portique.txt"
+
+      # Le rapport du portique nomme fichier et ligne : le recopier sur la PR
+      # rend la correction immediate, pour Ayoub comme pour une mission relancee
+      # par commentaire. On ne pose PAS le label hold ici : la PR doit pouvoir
+      # se remerger seule des que la branche est corrigee.
+      - name: Ecrire le verdict sur la PR
+        if: failure() && steps.portique.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ needs.contexte.outputs.pr }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Le rapport cite des extraits du diff (titles, expressions trouvees) :
+          # sur un depot PUBLIC, ce texte peut venir d'une PR exterieure. Il ne
+          # doit donc traverser NI un heredoc, NI une chaine interpretee par le
+          # shell, sinon un backtick ou un $(...) place dans un fichier source
+          # s'executerait sur le runner. On ecrit un fichier, on le passe a
+          # --body-file : le contenu n'est jamais evalue.
+          corps="${RUNNER_TEMP}/verdict.md"
+          {
+            printf '%s\n\n' "Portique qualite **rouge** : cette PR ne sera pas mergee automatiquement tant que la branche n'est pas corrigee."
+            printf '```text\n'
+            head -c 3000 "${RUNNER_TEMP}/portique.txt"
+            printf '\n```\n\n'
+            printf '%s\n' "Corrigez la branche puis poussez : le Gate se relance seul et l'auto-merge reprend. Journal complet du run : ${RUN_URL}"
+          } > "$corps"
+          gh pr comment "$PR" --repo "$REPO" --body-file "$corps" || true
 
   automerge:
     needs: [contexte, gate]
