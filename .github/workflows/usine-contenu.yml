@@ -37,7 +37,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          claude_args: '--max-turns 80 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
+          # 80 tours ne suffisent pas : les runs des 1, 3, 8 et 10 septembre 2026 ont
+          # consomme 90 a 99 tours et sont tous morts sur le plafond, APRES avoir ecrit
+          # l'article (PR ouverte de justesse) ou AVANT (travail perdu). Meme lecon que
+          # claude.yml le 11 juillet 2026 : une mission redactionnelle avec verifications
+          # web coute plus de 100 tours. Le garde-fou reste timeout-minutes, pas ce plafond.
+          claude_args: '--max-turns 200 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
           prompt: |
             Tu es l'usine à contenu d'AssuTempo (assutempo.fr — courtier Evidence Assurances,
             ORIAS 20005719, SIREN 884 641 523). Tu tournes seul dans un runner GitHub Actions :
@@ -91,18 +96,35 @@ jobs:
                modèle d'un article récent plutôt que d'inventer un format). Mets à jour
                .claude/usine-journal.md : une ligne datée « JJ/MM/AAAA — slug — type
                (production ou renforcement) — requête cible ».
-            10. Vérifie que le projet compile avant d'ouvrir la PR : npm ci puis npm run lint
+            10. STYLE : le portique qualité refuse la PR, donc l'article, si une seule de ces
+                expressions apparaît dans ce que tu ajoutes, titre de section compris :
+                « dans un monde où », « il est important de noter », « de nos jours »,
+                « n'hésitez pas », « en résumé », « force est de constater ». Pour conclure,
+                écris « Ce qu'il faut retenir » ou « L'essentiel ». Aucun tiret cadratin
+                (U+2014) ni demi-cadratin (U+2013) nulle part : deux-points, virgule ou
+                parenthèses.
+            11. Vérifie que le projet compile avant d'ouvrir la PR : npm ci puis npm run lint
                 puis npm run build. Si le build échoue à cause de ton article, corrige-le. Si le
                 build échoue pour une raison étrangère à ton travail, ouvre quand même la PR et
                 décris l'échec dans sa description.
+            12. PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : après le build, lance
+                `node scripts/quality-gate.mjs` sur ta branche (il compare à origin/main et
+                imprime fichier:ligne pour chaque problème). Tant qu'il sort en erreur, corrige
+                et relance. N'ouvre la PR qu'une fois le portique vert : sinon la PR reste
+                ouverte sans être mergée, et l'article n'est jamais publié. C'est très
+                exactement ce qui a immobilisé la PR #60 du 10 au 14 septembre 2026, pour un
+                seul « En résumé » en titre de section.
 
             LIVRAISON — OUVRE LA PULL REQUEST TOI-MÊME
-            11. Crée une branche nommée draft/<slug-de-l-article> (le préfixe draft/ est
+            13. Crée une branche nommée draft/<slug-de-l-article> (le préfixe draft/ est
                 obligatoire : c'est lui que le workflow Gate surveille pour merger
                 automatiquement), commite ton travail, pousse la branche, puis ouvre la pull
                 request vers la branche par défaut avec la commande gh (le token est déjà dans
-                l'environnement, variable GH_TOKEN).
-            12. Titre de la PR : « Article : <titre de l'article> ». Description : requête cible,
+                l'environnement, variable GH_TOKEN). La ligne ajoutée à
+                .claude/usine-journal.md doit faire partie de ce commit : sans elle, l'anti
+                duplication est aveugle et un prochain run peut réécrire le même sujet. Les
+                runs des 8 et 10 septembre 2026 ont oublié cette ligne.
+            14. Titre de la PR : « Article : <titre de l'article> ». Description : requête cible,
                 type (production ou renforcement), sources citées, liens internes ajoutés, et
                 résultat du build. Ne merge jamais toi-même : le Gate décide, et Ayoub garde son
                 veto avec le label hold.

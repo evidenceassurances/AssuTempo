@@ -36,7 +36,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          claude_args: '--max-turns 80 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
+          # 80 tours ne suffisent pas : les runs des 1, 3, 8 et 10 septembre 2026 ont
+          # consomme 90 a 99 tours et sont tous morts sur le plafond, APRES avoir ecrit
+          # l'article (PR ouverte de justesse) ou AVANT (travail perdu). Meme lecon que
+          # claude.yml le 11 juillet 2026 : une mission redactionnelle avec verifications
+          # web coute plus de 100 tours. Le garde-fou reste timeout-minutes, pas ce plafond.
+          claude_args: '--max-turns 200 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch"'
           prompt: |
             Tu es le chantier structurel d'AssuTempo (assutempo.fr — Evidence Assurances,
             ORIAS 20005719). Tu tournes seul dans un runner GitHub Actions : personne ne te
@@ -85,9 +90,20 @@ jobs:
               sitemap comme le sont ses voisines.
 
             AVANT LA PR
+            - STYLE : le portique qualité refuse la PR si une seule de ces expressions apparaît
+              dans ce que tu ajoutes, titre de section compris : « dans un monde où », « il est
+              important de noter », « de nos jours », « n'hésitez pas », « en résumé », « force
+              est de constater ». Pour conclure, écris « Ce qu'il faut retenir » ou
+              « L'essentiel ». Aucun tiret cadratin ni demi-cadratin nulle part.
             - npm ci, puis npm run lint, puis npm run build. Corrige ce que ton chantier casse.
+            - PASSE LE PORTIQUE TOI-MÊME, c'est obligatoire : après le build, lance
+              `node scripts/quality-gate.mjs` (il compare ta branche à origin/main et imprime
+              fichier:ligne pour chaque problème). Tant qu'il sort en erreur, corrige et relance.
+              N'ouvre la PR qu'une fois le portique vert : une PR qui échoue au portique reste
+              ouverte sans jamais être mergée, et ton chantier n'arrive jamais en production.
             - Mets à jour .claude/chantiers-state.md : chantier traité, ce qui a été fait, ce qui
-              reste dans ce chantier, et le prochain chantier à prendre.
+              reste dans ce chantier, et le prochain chantier à prendre. Cette mise à jour doit
+              faire partie du commit : sans elle, le prochain run refait le même chantier.
 
             LIVRAISON — OUVRE LA PULL REQUEST TOI-MÊME
             - Crée une branche draft/chantier-<numéro>-<courte-description> (le préfixe draft/
