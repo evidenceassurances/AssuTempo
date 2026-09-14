@@ -22,6 +22,9 @@
  *  8. Tout bloc application/ld+json est analysable (controle global).
  *  9. Aucun lien interne mort, ni lien interne qui ne marche qu'a travers une
  *     redirection 301 (controle global).
+ * 10. Aucune coordonnee exterieure (tel:, mailto:, numero du cabinet,
+ *     WhatsApp) sur les pages qui portent l'iframe JL Assure : engagement
+ *     contractuel du 14 septembre 2026. Voir la regle 10 plus bas.
  *
  * Les regles 6 et 7 se limitent aux pages touchees : une PR qui ajoute un
  * article ne doit pas echouer a cause d'une dette ancienne ailleurs. Les
@@ -180,6 +183,52 @@ for (const line of diff.split('\n')) {
       if (norm.includes(normalize(phrase))) {
         problems.push(`[expression bannie] ${file}:${current} contient "${phrase}"`);
       }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Regle 10 : aucune coordonnee exterieure sur les pages en marque blanche
+//
+// /tarification porte l'iframe de souscription JL Assure. Le partenaire a
+// demande par ecrit le 14 septembre 2026, avec effet au 1er octobre, que ces
+// pages n'affichent AUCUN moyen de contact exterieur au parcours : le client
+// qui entre dans le tunnel ne doit avoir qu'un seul interlocuteur, joignable
+// par le numero dedie affiche a l'interieur du tunnel.
+//
+// C'est un engagement contractuel, pas une preference de redaction : une
+// mission automatique qui remettrait un numero sur cette page nous mettrait en
+// faute sans que personne le voie. Le controle porte sur le HTML REELLEMENT
+// SERVI, blocs ld+json exclus : le JSON-LD Organization du gabarit porte
+// legitimement le telephone et l'email de l'editeur sur les 86 pages, c'est
+// une donnee d'identite d'entreprise et non une invitation a contacter.
+//
+// Pour ajouter une page ici, l'ajouter AUSSI a ROUTES_MARQUE_BLANCHE dans
+// src/data/siteConfig.js et dans api/chat.js (l'assistant doit se taire aussi).
+// ---------------------------------------------------------------------------
+const PAGES_MARQUE_BLANCHE = ['tarification'];
+const CONTACTS_INTERDITS = [
+  { motif: /tel:\s*\+?[\d\s().-]{6,}/i, nom: 'lien tel:' },
+  { motif: /mailto:/i, nom: 'lien mailto:' },
+  { motif: /0\s?9\s?74\s?19\s?78\s?20/, nom: 'numero du cabinet' },
+  { motif: /\bwa\.me\b|\bwhatsapp\b/i, nom: 'WhatsApp' },
+];
+
+for (const page of PAGES_MARQUE_BLANCHE) {
+  const f = path.join(root, 'dist', page, 'index.html');
+  if (!existsSync(f)) continue;
+  // Les scripts (donc les blocs ld+json) et les commentaires HTML sortent du
+  // perimetre : seul compte ce que le visiteur peut lire et cliquer.
+  const visible = readFileSync(f, 'utf-8')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
+  for (const { motif, nom } of CONTACTS_INTERDITS) {
+    if (motif.test(visible)) {
+      problems.push(
+        `[marque blanche] /${page} affiche un ${nom} : cette page porte l'iframe JL Assure `
+        + 'et ne doit presenter aucune coordonnee exterieure au tunnel de souscription '
+        + '(engagement du 14 septembre 2026). Renvoyer vers le numero dedie du tunnel.',
+      );
     }
   }
 }
