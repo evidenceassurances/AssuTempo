@@ -4,7 +4,7 @@ const jsonLd = [
     '@type': 'Article',
     headline: 'Prix assurance auto temporaire : la grille tarifaire complète',
     description:
-      "Combien coûte une assurance auto temporaire ? En général 15 à 90 € selon la durée, de 1 à 90 jours, à tarif fixe affiché avant paiement.",
+      "Combien coûte une assurance auto temporaire en 2026 ? Grille de prix 1 à 90 jours, comparatif honnête et tarif fixe affiché avant paiement.",
     author: { '@type': 'Organization', name: 'Evidence Assurances' },
     publisher: {
       '@type': 'Organization',
@@ -72,9 +72,9 @@ const jsonLd = [
 export const articleData = {
   slug: 'prix-assurance-auto-temporaire',
   seo: {
-    title: 'Prix assurance auto temporaire : combien ça coûte en 2026',
+    title: 'Prix assurance auto temporaire : la grille 2026',
     description:
-      "Combien coûte une assurance auto temporaire ? En général 15 à 90 € selon la durée, de 1 à 90 jours, à tarif fixe affiché avant paiement.",
+      "Combien coûte une assurance auto temporaire en 2026 ? Grille de prix 1 à 90 jours, comparatif honnête et tarif fixe affiché avant paiement.",
     canonical: 'https://assutempo.fr/articles/prix-assurance-auto-temporaire',
     jsonLd,
   },
