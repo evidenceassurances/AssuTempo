@@ -300,6 +300,13 @@ export const articleData = {
       paragraphs: [
         "Le délai légal d'un mois calendaire pour immatriculer un véhicule après achat ne s'arrête pas parce que le dossier est bloqué sur l'ANTS (article R322-5 du code de la route). Ce que la loi sanctionne, c'est le fait de maintenir le véhicule en circulation sans certificat d'immatriculation à jour, indépendamment de la raison du retard.",
         "Un contrôle routier expose alors à une amende forfaitaire de 135 €, jusqu'à 750 € devant le tribunal, plafond des contraventions de 4e classe (article 131-13 du code pénal). Ces montants sont ceux communément cités pour ce type d'infraction : à vérifier sur service-public.gouv.fr avant tout paiement, les barèmes pouvant évoluer.",
+        [
+          "Le constat est le même partout, qu'un dossier bloqué concerne un habitant de ",
+          { to: '/assurance-temporaire-carte-grise-marseille', texte: 'Marseille' },
+          " ou de ",
+          { to: '/assurance-temporaire-carte-grise-creteil', texte: 'Créteil' },
+          ", siège de la préfecture du Val-de-Marne.",
+        ],
       ],
       relatedLink: {
         text: 'Les délais réels du certificat provisoire et de la carte grise définitive',

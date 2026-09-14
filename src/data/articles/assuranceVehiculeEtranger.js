@@ -246,6 +246,13 @@ export const articleData = {
       heading: "Qui peut souscrire ?",
       paragraphs: [
         "Sous conditions habituelles (au moins 20 ans, permis depuis plus de 2 ans, profil sans antécédents lourds), et selon le pays d'origine du véhicule et du permis. L'éligibilité s'affiche au devis, et l'équipe répond au téléphone en cas de doute.",
+        [
+          "Cela vaut de la même façon à ",
+          { to: '/assurance-temporaire-carte-grise-marseille', texte: 'Marseille' },
+          " qu'à ",
+          { to: '/assurance-temporaire-carte-grise-ivry-sur-seine', texte: 'Ivry-sur-Seine' },
+          ".",
+        ],
       ],
     },
     {

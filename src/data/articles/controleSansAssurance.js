@@ -147,6 +147,15 @@ export const articleData = {
       heading: 'Et votre véhicule ? Immobilisation et fourrière',
       paragraphs: [
         "Lors du contrôle, les forces de l'ordre peuvent immobiliser le véhicule sur-le-champ et vous remettre une fiche d'immobilisation. Sans régularisation, il peut partir en fourrière au bout de 48 heures - et les frais tombent chaque jour.",
+        [
+          "La procédure d'enlèvement dépend du secteur où le contrôle a lieu : l'interlocuteur n'est pas le même à ",
+          { to: '/assurance-temporaire-carte-grise-paris', texte: 'Paris' },
+          ", à ",
+          { to: '/assurance-temporaire-carte-grise-creteil', texte: 'Créteil' },
+          " ou à ",
+          { to: '/assurance-temporaire-carte-grise-charenton-le-pont', texte: 'Charenton-le-Pont' },
+          ".",
+        ],
       ],
       relatedLink: {
         text: "Voiture immobilisée ? Suivez notre guide complet pour la récupérer",

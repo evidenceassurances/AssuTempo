@@ -101,7 +101,51 @@ directe d'une mairie ou de la préfecture (aucune trouvée par recherche web à 
 **Prochain run : chantier 4 (maillage interne), sauf si Ayoub demande de compléter le
 chantier 3 avec d'autres communes du 94.**
 
-## Chantier 4: Maillage interne : pas audité spécifiquement dans ce run
+## Chantier 4: Maillage interne : lien retour vers les 9 villes locales, en cours
+
+Constat au démarrage de ce run (vérifié dans le code, pas seulement en ligne) : le maillage
+articles-vers-pages (clusters `src/data/articleClusters.js`, chantier du 1er août 2026) est
+déjà complet, les 30 articles y appartiennent tous. Les fils d'Ariane sont déjà posés sur
+toutes les pages qui en ont besoin (`Breadcrumb`, `ArticleLayout`, `VilleLocale`...). Le vrai
+point faible trouvé : **les 9 pages villes locales (chantier 3, Paris/Lyon/Marseille + les 6
+du Val-de-Marne du 11 septembre) ne reçoivent un lien entrant que d'un seul et unique
+endroit, le paragraphe de maillage de `/roulez-legal-apres-achat`.** Une page à un seul lien
+entrant reste fragile (crawl, PageRank interne), alors que ces 9 pages linkent chacune, en
+sortant, vers 3-4 articles précis (`ville.maillage` dans `villesLocales.js`) : le lien n'était
+jamais rendu réciproque.
+
+Corrigé : calcul de la relation inverse exacte (quelle ville linke quel article, dans
+`villesLocales.js`) puis ajout, dans chacun des 9 articles concernés, d'UNE phrase de liaison
+contextuelle vers les villes qui le citent déjà (mécanisme `ParagrapheContenu` existant dans
+`ArticleLayout.jsx`, fragments `{ to, texte }` insérés dans un paragraphe, pas un bouton de
+navigation : le commentaire du composant précise que c'est la forme lue par Google comme une
+citation, pas comme un lien de nav). Fichiers touchés (tous dans `src/data/articles/`) :
+`voitureImmobilisee.js` (Paris, Alfortville, Charenton-le-Pont), `controleSansAssurance.js`
+(Paris, Créteil, Charenton-le-Pont), `delaiCarteGrise.js` (Paris, Alfortville,
+Vitry-sur-Seine, Maisons-Alfort, Charenton-le-Pont), `rouleSansCarteGriseNom.js` (Lyon,
+Ivry-sur-Seine), `changementTitulaireCarteGrise.js` (Lyon, Créteil, Maisons-Alfort),
+`combienDeJoursAssurance.js` (Lyon, Marseille, Alfortville, Vitry-sur-Seine, Ivry-sur-Seine),
+`assuranceVehiculeEtranger.js` (Marseille, Ivry-sur-Seine), `carteGriseAntsBloquee.js`
+(Marseille, Créteil), `acheterVehiculeParticulier.js` (Vitry-sur-Seine, Maisons-Alfort).
+Chaque phrase reste factuelle (règles nationales du code de la route, qui s'appliquent
+partout : rien n'est réinventé au niveau local) et insérée dans une section déjà thématiquement
+proche (coût de fourrière, blocage ANTS, délai préfecture...), pas ajoutée en vrac en fin
+d'article.
+
+Vérifié : `npm run lint` 0 erreur (mêmes 17 warnings préexistants), `npm run build` propre
+(86 routes, sitemap 86 URLs), liens confirmés présents dans le HTML prérendu de 2 articles
+échantillon (`voiture-immobilisee-defaut-assurance`, `combien-de-jours-assurance-sortir-fourriere`).
+
+Reste dans ce chantier pour un prochain passage : les 9 pages villes ne se lient toujours pas
+entre elles (ville-à-ville), et n'ont pas d'autre lien entrant que ces articles + le pilier ;
+`/faq` et la Home ne les mentionnent pas non plus ; les hubs de cluster restent des paragraphes
+de liens, pas des grilles de cartes dédiées (choix cohérent avec le style existant du site,
+pas nécessairement un manque). Décision : chantier 4 marqué "en cours" plutôt que "terminé",
+un futur run peut soit approfondir ce chantier (maillage FAQ/Home vers les villes), soit
+enchaîner sur le chantier 5.
+
+## Chantier 5: Hub FAQ : `/faq` existe déjà (page dédiée + FAQPage), pas audité pour un hub
+structuré supplémentaire dans ce run.
 
 ## Chantier 5: Hub FAQ : `/faq` existe déjà (page dédiée + FAQPage), pas audité pour un hub
 structuré supplémentaire dans ce run.

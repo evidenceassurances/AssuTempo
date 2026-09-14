@@ -203,6 +203,13 @@ export const articleData = {
       paragraphs: [
         "Le cas le plus fréquent n'est pas le contrôle routier de routine, plutôt rare sur ce point précis, mais l'accident. Un sinistre révèle immédiatement une situation irrégulière : véhicule non assuré, non immatriculé au bon nom, parfois les deux à la fois. C'est à ce moment que les deux infractions se cumulent, avec des conséquences plus lourdes qu'un simple rappel à l'ordre.",
         "Le réflexe honnête reste le même dans presque tous les cas : traiter les deux sujets, assurance et carte grise, dès la sortie du parking, plutôt que de miser sur la discrétion d'un trajet du quotidien.",
+        [
+          "La règle du mois calendaire est nationale, elle s'applique à l'identique à ",
+          { to: '/assurance-temporaire-carte-grise-lyon', texte: 'Lyon' },
+          " comme à ",
+          { to: '/assurance-temporaire-carte-grise-ivry-sur-seine', texte: 'Ivry-sur-Seine' },
+          ".",
+        ],
       ],
     },
   ],
