@@ -17,7 +17,7 @@ const jsonLd = [
     mainEntityOfPage:
       'https://assutempo.fr/articles/assurance-temporaire-resilie-par-assureur',
     datePublished: '2026-06-23',
-    dateModified: '2026-06-23',
+    dateModified: '2026-09-15',
   },
   {
     '@context': 'https://schema.org',
@@ -93,6 +93,14 @@ const jsonLd = [
           text: "Non. C'est un pont : elle vous remet en règle immédiatement, le temps de retrouver un contrat annuel adapté à votre profil. Elle n'a pas vocation à remplacer une assurance à l'année sur le long terme.",
         },
       },
+      {
+        '@type': 'Question',
+        name: "Comment obtenir son relevé d'information après une résiliation ?",
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: "Il suffit d'une demande écrite ou orale à l'ancien assureur, qui doit le transmettre gratuitement sous 15 jours (article A121-1 du Code des assurances, service-public.gouv.fr). Le document détaille les sinistres des 5 dernières années et accélère l'étude d'un nouveau dossier.",
+        },
+      },
     ],
   },
 ];
@@ -108,8 +116,8 @@ export const articleData = {
     jsonLd,
   },
   category: 'Résiliation',
-  readTime: '5 min',
-  updatedDate: '23 juin 2026',
+  readTime: '6 min',
+  updatedDate: '15 septembre 2026',
   author: 'Evidence Assurances',
   headline:
     "Résilié par votre assureur : quelles solutions, et quand l'assurance temporaire dépanne",
@@ -130,7 +138,7 @@ export const articleData = {
         text: "Résiliation pour impayé ou non-renouvellement : le temporaire dépanne. Pour sinistres : assureur spécialisé ou Bureau central de tarification.",
       },
     ],
-    updated: "23 juin 2026",
+    updated: "15 septembre 2026",
   },
   sections: [
     {
@@ -233,10 +241,19 @@ export const articleData = {
     },
     {
       type: 'text',
+      heading: "Le relevé d'information : le document à réclamer sans attendre",
+      paragraphs: [
+        "Dès la résiliation notifiée, une démarche simple accélère tout le reste : demander à l'ancien assureur son relevé d'information. Une demande écrite ou même orale suffit, et l'assureur n'a pas le droit de la refuser ni de la facturer. Il dispose de 15 jours pour le transmettre (article A121-1 du Code des assurances, à vérifier sur service-public.gouv.fr).",
+        "Ce document liste, sur les 5 dernières années, le nombre et la nature des sinistres, leur date et le niveau de responsabilité retenu pour chacun. C'est exactement ce que tout nouvel assureur va demander avant d'établir un devis : l'avoir en main dès le départ raccourcit le dossier, au lieu de le découvrir plus tard quand une compagnie le réclame.",
+        "Un intérêt souvent oublié : le relevé permet aussi de vérifier que l'historique inscrit correspond bien à la réalité. Un sinistre classé à tort comme responsable, ou un accident sans tiers identifié mal codé, pèse directement sur le calcul du coefficient. Le repérer tôt permet de le contester auprès de l'assureur avant qu'il ne bloque une nouvelle souscription.",
+      ],
+    },
+    {
+      type: 'text',
       heading: "Le temporaire est un pont, pas une destination",
       paragraphs: [
         "Soyons honnêtes : enchaîner les assurances temporaires n'est pas une stratégie de long terme. Leur rôle est de vous garder en règle pendant la période sensible qui suit une résiliation, pas de remplacer un contrat à l'année. Profitez de ce répit pour comparer les assureurs spécialisés dans les profils résiliés.",
-        "Si aucun assureur n'accepte de vous couvrir pour la responsabilité civile, vous pouvez saisir le Bureau central de tarification : dès lors que deux assureurs ont refusé, il peut en désigner un et fixer le tarif. La couverture se limite alors au tiers, pour un an, mais elle vous remet durablement dans la légalité.",
+        "Si aucun assureur n'accepte de vous couvrir pour la responsabilité civile, vous pouvez saisir le Bureau central de tarification. La démarche suit un ordre précis : un assureur refuse ou reste silencieux 15 jours après votre demande de devis, vous pouvez alors le saisir par lettre recommandée avec les justificatifs du refus. Sa décision arrive sous un délai d'environ 2 mois (service-public.gouv.fr) et, si elle vous est favorable, désigne un assureur et fixe lui-même le tarif. La couverture imposée se limite à la responsabilité civile obligatoire, pour un an, mais elle vous remet durablement dans la légalité.",
       ],
       relatedLink: {
         text: 'Comprendre le coût réel du malus, chiffres à l\'appui',
@@ -245,9 +262,9 @@ export const articleData = {
     },
     {
       type: 'text',
-      heading: 'En résumé',
+      heading: "Ce qu'il faut retenir",
       paragraphs: [
-        "Une résiliation n'est pas un mur. Identifiez d'abord le motif : pour un impayé ou un non-renouvellement, une assurance temporaire vous remet en règle tout de suite, attestation immédiate, le temps de retrouver un contrat annuel. Pour une résiliation liée à des sinistres ou à une fausse déclaration, visez un assureur spécialisé, puis le Bureau central de tarification. Dans tous les cas, ne roulez jamais sans couverture en attendant.",
+        "Une résiliation n'est pas un mur. Identifiez d'abord le motif : pour un impayé ou un non-renouvellement, une assurance temporaire vous remet en règle tout de suite, attestation immédiate, le temps de retrouver un contrat annuel. Pour une résiliation liée à des sinistres ou à une fausse déclaration, visez un assureur spécialisé, puis le Bureau central de tarification. Dans tous les cas, réclamez votre relevé d'information dès la notification reçue, et ne roulez jamais sans couverture en attendant.",
       ],
       relatedLink: {
         text: "Voiture immobilisée pour défaut d'assurance : la récupérer",
@@ -283,6 +300,10 @@ export const articleData = {
     {
       q: "Le temporaire est-il une solution durable pour un résilié ?",
       a: "Non, c'est un pont qui vous remet en règle le temps de retrouver un contrat annuel adapté à votre profil.",
+    },
+    {
+      q: "Comment obtenir son relevé d'information après une résiliation ?",
+      a: "Une demande écrite ou orale suffit : l'ancien assureur doit le transmettre gratuitement sous 15 jours (article A121-1 du Code des assurances). Il détaille les sinistres des 5 dernières années et accélère l'étude d'un nouveau dossier.",
     },
   ],
 };
