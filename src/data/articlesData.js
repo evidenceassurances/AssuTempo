@@ -151,9 +151,9 @@ export const articles = [
     icone: ShieldAlert,
     accent: '#C2705A',
     categorie: 'Résiliation',
-    readTime: '5 min',
-    updatedAt: '23 juin 2026',
-    updatedAtISO: '2026-06-23',
+    readTime: '6 min',
+    updatedAt: '15 septembre 2026',
+    updatedAtISO: '2026-09-15',
     hasPage: true,
   },
   {
